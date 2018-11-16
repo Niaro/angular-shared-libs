@@ -1,0 +1,19 @@
+@import 'imports';
+
+:host mat-toolbar {
+	@include mat-elevation(15);
+	height: $toolbar-height;
+	padding: 0 $padding-h;
+	position: fixed;
+	top: 0;
+	z-index: 1;
+
+	.btn-menu {
+		margin-left: -11px;
+	}
+
+	.logo {
+		color: white;
+		margin-left: 37px;
+	}
+}

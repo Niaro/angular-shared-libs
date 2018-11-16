@@ -1,0 +1,14 @@
+{
+	"required": {
+		"default": "You must enter a value",
+		"email": "Please enter your email address",
+		"password": "Please enter your password"
+	},
+	"email": "Incorrect email address",
+	"minLength": "The value must be at least {{required}} characters",
+	"maxLength": "The value must be at most {{required}} characters",
+	"minimum": "The value must be higher than {{required}}",
+	"maximum": "The value must be less than {{required}}",
+	"pattern": "The value is invalid",
+	"excessSafeNumber": "The value must be less than 1 billion."
+}

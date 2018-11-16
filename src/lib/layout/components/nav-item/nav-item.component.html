@@ -1,0 +1,13 @@
+<a mat-list-item
+   [routerLink]="path"
+   [routerLinkActive]="path ? 'active' : ''"
+   (click)="layout.closeSidenav(); navigate.emit()">
+	<bp-svg-icon *ngIf="icon"
+	             matListIcon
+	             [name]="icon">
+	</bp-svg-icon>
+
+	<span mat-line>
+		<ng-content></ng-content>
+	</span>
+</a>

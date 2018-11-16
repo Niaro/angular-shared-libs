@@ -1,0 +1,17 @@
+bp-layout {
+	.mat-form-field-label:not(.mat-form-field-empty) {
+		transition: color $swift-ease-out-duration $swift-ease-out-timing-function !important;
+	}
+
+	.mat-form-field-appearance-legacy .mat-form-field-underline {
+		background-color: rgba(0, 0, 0, 0.12);
+	}
+
+	.mat-focused .mat-form-field-required-marker {
+		color: mat-color($danger);
+	}
+
+	.mat-nav-list .mat-list-item .mat-list-icon {
+		padding: 0;
+	}
+}

@@ -1,0 +1,11 @@
+input {
+	&:-webkit-autofill {
+		$long-time: 100000s;
+		// a trick to stop browsers autofill background coloration;
+		transition: background-color $long-time, color $long-time;
+	}
+
+	&:not(.cdk-text-field-autofilled) {
+		transition-delay: 0;
+	}
+}

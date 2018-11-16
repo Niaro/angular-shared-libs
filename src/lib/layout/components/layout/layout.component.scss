@@ -1,0 +1,20 @@
+::ng-deep {
+	html,
+	body {
+		height: 100%;
+		margin: 0;
+	}
+
+	body {
+		font-family: Roboto, 'Helvetica Neue', sans-serif;
+	}
+
+	* {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+}
+
+:host mat-sidenav-container {
+	height: 100%;
+}

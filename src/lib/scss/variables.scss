@@ -1,0 +1,52 @@
+// #region colors
+$color-light: #ccc;
+$color-semi-dark: #666;
+$color-dark: #333;
+
+$color-primary: #2578ea;
+$color-danger: #ff6666;
+
+$primary-colors: (
+	50: lighten($color-primary, 40%),
+	100: #6ea6ff,
+	500: $color-primary,
+	700: #004db7,
+	contrast: (
+		100: $dark-primary-text,
+		500: $light-primary-text,
+		700: $light-primary-text,
+	),
+);
+$danger-colors: (
+	50: lighten($color-danger, 24%),
+	100: #ff9994,
+	500: #ff6666,
+	700: #c6323c,
+	contrast: (
+		100: $dark-primary-text,
+		500: $dark-primary-text,
+		700: $light-primary-text,
+	),
+);
+$primary: mat-palette($primary-colors);
+$accent: mat-palette($mat-amber, 700, 200, 900);
+$success: mat-palette($mat-green);
+$danger: mat-palette($danger-colors);
+$warning: mat-palette($mat-orange);
+$info: mat-palette($mat-light-blue);
+$palette: (
+	primary: $primary,
+	accent: $accent,
+	success: $success,
+	danger: $danger,
+	warning: $warning,
+	info: $info,
+);
+// #endregion colors
+$transition-duration: 0.225s;
+$dark-dividers: rgba(black, 0.05);
+$toolbar-height: 55px;
+$padding-h: 40px;
+$border-radius: 10px;
+$card-elevation: 10;
+$mat-elevation-opacity: 0.4;
