@@ -1,3 +1,4 @@
 <div *ngIf="show" @slide class="alert" [ngClass]="'alert-' + type">
+	<bp-api-error *ngIf="error" [src]="error"></bp-api-error>
 	<ng-content></ng-content>
 </div>

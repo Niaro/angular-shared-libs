@@ -1,0 +1,13 @@
+<ng-container *ngIf="error.messages.length === 1; else listTpl">
+	{{ error.messages[0].message }}
+	<small *ngIf="error.messages[0].type as type">{{ type }}</small>
+</ng-container>
+
+<ng-template #listTpl>
+	<ul>
+		<li *ngFor="let item of error.messages">
+			{{ item.message }}
+			<small *ngIf="item.type">{{ item.type }}</small>
+		</li>
+	</ul>
+</ng-template>

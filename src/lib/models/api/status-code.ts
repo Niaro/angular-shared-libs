@@ -11,6 +11,7 @@ export enum StatusCode {
 	timeout = 408,
 	conflict = 409,
 	internalServerError = 500,
+	gatewayTimeout = 504,
 }
 
 export const STATUS_CODE_MESSAGES = {
@@ -20,5 +21,6 @@ export const STATUS_CODE_MESSAGES = {
 	[StatusCode.forbidden]: 'Access forbidden',
 	[StatusCode.notFound]: 'Not found',
 	[StatusCode.timeout]: 'The operation has timed out',
+	get [StatusCode.gatewayTimeout]() { return this[StatusCode.timeout]; },
 	[StatusCode.internalServerError]: 'Something is wrong!',
 };

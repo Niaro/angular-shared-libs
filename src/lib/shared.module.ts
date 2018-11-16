@@ -5,15 +5,16 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { MaterialModule } from './materials.module';
 import { LayoutModule } from './layout';
-import { PROVIDERS } from './providers';
+import { PROVIDERS, AppUpdateService } from './providers';
 import { FieldErrorComponent } from './validation';
-import { AlertComponent } from './components';
+import { AlertComponent, ApiErrorComponent } from './components';
 
 const MODULES = [CommonModule, MaterialModule, RouterModule, LayoutModule];
 
 const EXPOSED = [
 	FieldErrorComponent,
 	AlertComponent,
+	ApiErrorComponent
 ];
 
 @NgModule({
@@ -28,4 +29,6 @@ const EXPOSED = [
 	declarations: EXPOSED,
 	providers: PROVIDERS,
 })
-export class SharedModule {}
+export class SharedModule {
+	constructor(update: AppUpdateService) {}
+}
