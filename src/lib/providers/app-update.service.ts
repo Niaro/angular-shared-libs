@@ -1,15 +1,23 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { filter, flatMap } from 'rxjs/operators';
+import { flatMap, tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material';
+import { interval } from 'rxjs';
 
 @Injectable()
 export class AppUpdateService {
-	constructor(updates: SwUpdate) {
+	constructor(
+		updates: SwUpdate,
+		snackBar: MatSnackBar
+	) {
 		updates.available
 			.pipe(
-				filter(() => confirm('A new version is available. Would you like to install it?')),
+				tap(() => snackBar.open('A new version is available. The page will be reloaded in a moment.')),
 				flatMap(() => updates.activateUpdate())
 			)
 			.subscribe(() => document.location.reload());
+
+		interval(6 * 60 * 60)
+			.subscribe(() => updates.checkForUpdate());
 	}
 }
