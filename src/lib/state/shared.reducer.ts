@@ -1,6 +1,6 @@
 import { ActionReducerMap, MetaReducer, Action } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
-import { environment } from '@environment';
+import { environment } from '@bp/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { logger, appStateRestorer } from './meta-reducers';
 

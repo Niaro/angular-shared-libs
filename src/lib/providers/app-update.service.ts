@@ -3,6 +3,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { flatMap, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 import { interval } from 'rxjs';
+import { environment } from '@bp/environment';
 
 @Injectable()
 export class AppUpdateService {
@@ -10,6 +11,9 @@ export class AppUpdateService {
 		updates: SwUpdate,
 		snackBar: MatSnackBar
 	) {
+		if (environment.dev)
+			return this;
+
 		updates.available
 			.pipe(
 				tap(() => snackBar.open('A new version is available. The page will be reloaded in a moment.')),

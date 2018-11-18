@@ -22,10 +22,10 @@
 	}
 
 	::ng-deep .mat-list-icon + .mat-list-text {
-		padding-left: $padding-h / 2 !important;
+		padding-left: $layout-padding / 2 !important;
 	}
 
 	::ng-deep .mat-list-item-content {
-		padding: 0 $padding-h;
+		padding: 0 $layout-padding;
 	}
 }

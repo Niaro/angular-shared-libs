@@ -3,7 +3,7 @@
 :host mat-toolbar {
 	@include mat-elevation(15);
 	height: $toolbar-height;
-	padding: 0 $padding-h;
+	padding: 0 $layout-padding;
 	position: fixed;
 	top: 0;
 	z-index: 1;
