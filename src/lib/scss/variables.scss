@@ -1,7 +1,9 @@
 // #region colors
-$color-light    : #ccc;
-$color-semi-dark: #666;
-$color-dark     : #333;
+$color-light      : #ccc;
+$color-semi-dark  : #666;
+$color-dark       : #333;
+$color-border     : #e2e8ec;
+$dark-primary-text: $color-dark;
 
 $color-primary: #2578ea;
 $color-danger : #ff6666;
@@ -62,6 +64,9 @@ $toolbar-height  : 55px;
 $layout-max-width: 1300px;
 $layout-padding  : 40px;
 // #endregion layout
+
+$title-size          : 22px;
+$headline-line-height: 32px;
 
 $transition-duration  : 0.225s;
 $dark-dividers        : rgba(black, 0.05);

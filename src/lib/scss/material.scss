@@ -15,7 +15,16 @@ bp-layout {
 		padding: 0;
 	}
 
-	.mat-card:not([class*='mat-elevation-z']) {
-		@include mat-elevation($card-elevation);
+	.mat-drawer-container,
+	.mat-card {
+		color: $dark-primary-text;
+	}
+
+	.mat-card {
+		border-radius: $border-radius;
+
+		&:not([class*='mat-elevation-z']) {
+			@include mat-elevation($card-elevation);
+		}
 	}
 }
