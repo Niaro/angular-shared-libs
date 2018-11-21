@@ -1,6 +1,6 @@
 <bp-svg-icon-definitions></bp-svg-icon-definitions>
 
-<mat-sidenav-container>
+<mat-sidenav-container [class.fullscreen]="layout.fullscreen$ | async">
 
 	<ng-content></ng-content>
 

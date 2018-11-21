@@ -7,8 +7,4 @@ import { Component, Input } from '@angular/core';
 })
 export class SvgIconComponent {
 	@Input() name: String;
-
-	get absUrl() {
-		return window.location.href;
-	}
 }

@@ -28,9 +28,7 @@ export const COMPONENTS = [
 		CommonModule,
 		RouterModule,
 		MaterialModule,
-		StoreModule.forFeature(LAYOUT_FEATURE_KEY, reducer, {
-			initialState: initialState,
-		}),
+		StoreModule.forFeature(LAYOUT_FEATURE_KEY, reducer, { initialState }),
 		EffectsModule.forFeature([LayoutEffects]),
 	],
 	declarations: COMPONENTS,

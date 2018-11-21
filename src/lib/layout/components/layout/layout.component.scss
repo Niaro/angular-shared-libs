@@ -15,8 +15,12 @@
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 	}
+}
 
-	.mat-drawer-container .mat-drawer-content {
+:host mat-sidenav-container {
+	height: 100%;
+
+	&:not(.fullscreen) ::ng-deep .mat-drawer-content {
 		padding-top: $toolbar-height;
 
 		router-outlet + *:not(.out-of-layout) {
@@ -26,8 +30,4 @@
 			padding: $layout-padding;
 		}
 	}
-}
-
-:host mat-sidenav-container {
-	height: 100%;
 }

@@ -8,7 +8,3 @@ export const getShowSidenav = createSelector(
 	getLayoutState,
 	fromLayout.getShowSidenav
 );
-
-export const layoutQuery = {
-	getShowSidenav,
-};

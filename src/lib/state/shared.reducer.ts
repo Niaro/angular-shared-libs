@@ -1,4 +1,4 @@
-import { ActionReducerMap, MetaReducer, Action } from '@ngrx/store';
+import { ActionReducerMap, MetaReducer, Action, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 import { environment } from '@bp/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
@@ -24,3 +24,10 @@ export const sharedReducers: ActionReducerMap<ISharedState> = {
 export const metaReducers: MetaReducer<ISharedState>[] = environment.dev
 	? [appStateRestorer, storeFreeze, logger]
 	: [];
+
+export const selectRouterState = createFeatureSelector<fromRouter.RouterReducerState>('router');
+
+export const getFirstChildRouteData = createSelector(
+	selectRouterState,
+	({ state }: fromRouter.RouterReducerState) => state.root.firstChild.data
+);
