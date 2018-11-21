@@ -1,4 +1,4 @@
-import { LayoutAction, LayoutActionTypes } from './layout.actions';
+import { LayoutAction, LayoutActions } from './layout.actions';
 
 export const LAYOUT_FEATURE_KEY = 'layout-lib';
 
@@ -16,13 +16,13 @@ export const initialState: IState = {
 
 export function reducer(state: IState = initialState, action: LayoutAction): IState {
 	switch (action.type) {
-		case LayoutActionTypes.CloseSidenav:
+		case LayoutActions.CloseSidenav:
 			return {
 				...state,
 				showSidenav: false,
 			};
 
-		case LayoutActionTypes.OpenSidenav:
+		case LayoutActions.OpenSidenav:
 			return {
 				...state,
 				showSidenav: true,
