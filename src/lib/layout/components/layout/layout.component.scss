@@ -19,7 +19,7 @@
 	.mat-drawer-container .mat-drawer-content {
 		padding-top: $toolbar-height;
 
-		router-outlet + * {
+		router-outlet + *:not(.out-of-layout) {
 			display: block;
 			max-width: 1300px;
 			margin: 0 auto;
