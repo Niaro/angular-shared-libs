@@ -1,8 +1,10 @@
 import { IEnvironment } from './interface';
 import { environment as appEnvironment } from './environment.app';
 import { IS_HMR_MODE } from './hmr';
+import { constants } from './constants';
 
 export const environment: IEnvironment = {
+	name: 'dev-stg',
 	prod: false,
 	get dev() { return !this.prod; },
 	hmr: IS_HMR_MODE,
@@ -13,6 +15,7 @@ export const environment: IEnvironment = {
 
 	// by putting it always as the last property in the object we allow override any environment specific property by the apps
 	...appEnvironment,
+	...constants
 };
 
 /*
@@ -22,4 +25,4 @@ export const environment: IEnvironment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-import 'zone.js/dist/zone-error'; // Included with Angular CLIimport { appEnvironment } from './environment.app';
+import 'zone.js/dist/zone-error'; // Included with Angular CLI;

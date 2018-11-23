@@ -1,8 +1,22 @@
 import { ActionReducerMap, MetaReducer, Action, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
-import { environment } from '@bp/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
+
+import { environment } from '@bp/environment';
 import { logger, appStateRestorer } from './meta-reducers';
+import { ResponseError } from '../models';
+
+export interface IApiState<T> {
+	data: T;
+	loaded: boolean;
+	error?: ResponseError;
+}
+
+export const initialApiState: IApiState<any> = {
+	data: null,
+	loaded: false,
+	error: null
+};
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -31,3 +45,7 @@ export const getFirstChildRouteData = createSelector(
 	selectRouterState,
 	({ state }: fromRouter.RouterReducerState) => state.root.firstChild.data
 );
+
+export const getData = <T>(state: IApiState<T>) => state.data;
+export const getError = <T>(state: IApiState<T>) => state.error;
+export const getLoaded = <T>(state: IApiState<T>) => state.loaded;

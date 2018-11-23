@@ -5,7 +5,6 @@ import { filter, startWith } from 'rxjs/operators';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { environment } from '@bp/environment';
-import { MOCK_KEY } from '@bp/constants';
 
 const MOCK_RESPONSE_CODE = 'x-mock-response-code';
 const CONTENT_TYPE = 'Content-Type';
@@ -24,7 +23,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 
 	private headers = {
 		[CONTENT_TYPE]: 'application/json',
-		'x-api-key': MOCK_KEY,
+		'x-api-key': environment.mockKey,
 		[MOCK_RESPONSE_CODE]: '200',
 	};
 

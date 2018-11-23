@@ -6,7 +6,10 @@ export interface IAppEnvironment {
 }
 
 export interface IEnvironment extends IAppEnvironment {
+	name: string;
 	prod: boolean;
 	dev: boolean;
 	hmr: boolean;
+	version: string;
+	mockKey: string;
 }

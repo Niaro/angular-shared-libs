@@ -1,0 +1,92 @@
+bp-layout {
+	.mat-form-field-label:not(.mat-form-field-empty) {
+		transition: color $swift-ease-out-duration $swift-ease-out-timing-function !important;
+	}
+
+	.mat-form-field-appearance-legacy .mat-form-field-underline {
+		background-color: rgba(0, 0, 0, 0.12);
+	}
+
+	.mat-focused .mat-form-field-required-marker {
+		color: mat-color($danger);
+	}
+
+	.mat-nav-list .mat-list-item .mat-list-icon {
+		padding: 0;
+	}
+
+	.mat-drawer-container,
+	.mat-card {
+		color: $dark-primary-text;
+	}
+
+	.mat-card {
+		border-radius: $border-radius;
+		padding      : $mat-card-padding-y $mat-card-padding-x;
+		display      : flex;
+		flex-flow    : column;
+
+		mat-card-title {
+			margin-bottom: 1rem;
+		}
+
+		mat-card-content {
+			flex: 1;
+		}
+
+		mat-card-footer {
+			margin: 0 (-$mat-card-padding-x) (-$mat-card-padding-y) (-$mat-card-padding-x);
+		}
+
+		&:not([class*='mat-elevation-z']) {
+			@include mat-elevation($card-elevation);
+		}
+	}
+
+	.mat-card-content-table {
+		margin: 0 (-$mat-card-padding-x) (-$mat-card-padding-y) (-$mat-card-padding-x) !important;
+
+		table {
+			width     : 100%;
+			background: transparent;
+
+			th,
+			td {
+				color       : $dark-primary-text;
+				font-weight : $font-weight-normal;
+				font-size   : $body-font-size;
+				border-color: $color-border;
+
+				&:first-of-type {
+					padding-left: $mat-card-padding-x;
+				}
+
+				&:last-of-type {
+					padding-right: $mat-card-padding-x;
+				}
+			}
+
+			th {
+				padding: 0.5rem 0 1rem;
+			}
+
+			td {
+				border-color: transparent;
+				padding     : 0.5rem 0;
+			}
+
+			tr {
+				height: auto;
+			}
+
+			tbody tr:first-of-type td {
+				padding-top: 1rem;
+			}
+
+			tfoot tr td {
+				padding-bottom: 1rem;
+				font-weight   : $font-weight-bold;
+			}
+		}
+	}
+}

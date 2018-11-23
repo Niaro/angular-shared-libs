@@ -1,9 +1,10 @@
 @import 'imports';
 @import 'theming';
-@import 'reset';
-@import 'material';
-@import 'form';
-@import 'utils';
-@import 'typography';
-@import 'common';
-@import 'animations';
+
+@import './core/reset';
+@import './core/material';
+@import './core/form';
+@import './core/utils';
+@import './core/typography';
+@import './core/common';
+@import './core/animations';

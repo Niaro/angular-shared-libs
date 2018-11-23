@@ -2,9 +2,9 @@
 	content      : 'stub';
 	color        : transparent;
 	display      : inline-block;
-	line-height  : $title-size;
+	line-height  : $title-font-size;
 	background   : fade-out($color-light, 0.75);
 	border-radius: 5px;
 	width        : 100%;
-	animation    : flickering 3s infinite linear;
+	animation    : flickering 2s infinite ease-in-out;
 }

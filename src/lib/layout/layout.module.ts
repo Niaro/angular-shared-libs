@@ -8,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../materials.module';
 import {
 	LayoutComponent, NavItemComponent, SidenavComponent, ToolbarComponent, SvgIconComponent,
-	SvgIconDefinitionsComponent
+	SvgIconDefinitionsComponent, FooterComponent
 } from './components';
 import { LayoutFacade } from './state';
 import { LAYOUT_FEATURE_KEY, reducer, initialState } from './state/layout.reducer';
@@ -20,7 +20,8 @@ export const COMPONENTS = [
 	SidenavComponent,
 	ToolbarComponent,
 	SvgIconComponent,
-	SvgIconDefinitionsComponent
+	SvgIconDefinitionsComponent,
+	FooterComponent
 ];
 
 @NgModule({

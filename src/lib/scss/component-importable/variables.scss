@@ -61,12 +61,23 @@ $palette: (
 
 // #region layout
 $toolbar-height  : 55px;
-$layout-max-width: 1300px;
+$layout-max-width: 1350px;
 $layout-padding  : 40px;
 // #endregion layout
 
-$title-size          : 22px;
+// #region mat-cards
+$mat-card-padding-x: 1rem;
+$mat-card-padding-y: 1.25rem;
+// #endregion mat-cards
+
+// #regin typography
+$title-font-size     : 22px;
 $headline-line-height: 32px;
+$body-font-size      : 14px;
+$font-weight-slim    : 300;
+$font-weight-normal  : 400;
+$font-weight-bold    : 500;
+// #endregin typography
 
 $transition-duration  : 0.225s;
 $dark-dividers        : rgba(black, 0.05);

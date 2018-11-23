@@ -1,5 +1,5 @@
 $typography: mat-typography-config(
-	$title: mat-typography-level($title-size, $headline-line-height, 400),
+	$title: mat-typography-level($title-font-size, $headline-line-height, 400),
 	$subheading-2: mat-typography-level(18px, 28px, 400),
 	$caption: mat-typography-level(12px, 20px, 300)
 );
@@ -11,7 +11,7 @@ $typography: mat-typography-config(
 
 $card-typography: mat-typography-config(
 	$headline: mat-typography-level(18px, $headline-line-height, 400),
-	$title: mat-typography-level($title-size, $headline-line-height, 300)
+	$title: mat-typography-level($title-font-size, $headline-line-height, 300)
 );
 
 @include mat-card-typography($card-typography);
