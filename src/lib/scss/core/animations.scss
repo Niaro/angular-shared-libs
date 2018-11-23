@@ -9,3 +9,9 @@
 		opacity: 0.3;
 	}
 }
+
+@keyframes fadeOut {
+	100% {
+		opacity: 0;
+	}
+}

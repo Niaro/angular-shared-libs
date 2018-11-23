@@ -1,0 +1,62 @@
+$flicker: flickering 2s infinite ease-in-out;
+$fadeOut: fadeOut $animation-duration ease forwards;
+
+.pending-stub {
+	content      : 'stub';
+	color        : transparent;
+	display      : inline-block;
+	background   : fade-out($color-light, 0.75);
+	border-radius: 5px;
+	animation    : $flicker;
+	width        : 100%;
+}
+
+.title-pending-stubs,
+.mat-card-content-table {
+	&.loading {
+		.mat-cell {
+			&:not(:first-of-type):not(:last-of-type),
+			&:first-of-type {
+				padding-right: 0.5rem;
+			}
+		}
+
+		.mat-title,
+		.mat-cell {
+			&:before {
+				@extend .pending-stub;
+			}
+		}
+
+		.mat-title:before {
+			line-height: $title-font-size;
+		}
+	}
+
+	&.hide-pending-stubs {
+		.mat-title,
+		.mat-cell {
+			position: relative;
+
+			&:before {
+				@extend .pending-stub;
+				width: auto;
+				left: 0;
+				right: 0;
+				position : absolute;
+				animation: $flicker, $fadeOut;
+				z-index: 1;
+			}
+		}
+
+		.mat-cell {
+			&:before {
+				right: 1rem;
+			}
+
+			&:first-of-type:before {
+				left: 1rem;
+			}
+		}
+	}
+}

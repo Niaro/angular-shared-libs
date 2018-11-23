@@ -1,7 +1,7 @@
 @import 'imports';
 
 :host .mat-list-item {
-	transition: background $transition-duration, color $transition-duration;
+	transition: background $animation-duration, color $animation-duration;
 	color     : $color-semi-dark;
 	height    : 60px !important;
 
