@@ -1,6 +1,6 @@
 // #region colors
 $color-light      : #ccc;
-$color-semi-dark  : #666;
+$color-semi-dark  : #707070;
 $color-dark       : #333;
 $color-border     : #e2e8ec;
 $dark-primary-text: $color-dark;
@@ -70,16 +70,27 @@ $mat-card-padding-x: 1rem;
 $mat-card-padding-y: 1.25rem;
 // #endregion mat-cards
 
-// #regin typography
-$title-font-size     : 22px;
-$headline-line-height: 32px;
-$body-font-size      : 14px;
-$font-weight-slim    : 300;
-$font-weight-normal  : 400;
-$font-weight-bold    : 500;
-// #endregin typography
+// #region typography
+$title-font-size       : 22px;
+$headline-line-height  : 32px;
+$body-font-size        : 14px;
+$caption-font-size     : 12px;
+$font-weight-slim      : 300;
+$font-weight-normal    : 400;
+$font-weight-bold      : 500;
+$font-weight-extra-bold: 700;
+// #endregion typography
 
-$animation-duration  : 0.225s;
+// #region animation
+$animation-duration: 0.225s;
+$animation-function: ease-in-out;
+// #endregion animation
+
+// #region circle
+$circle-md-size: 14px;
+$circle-sm-size: 9px;
+// #endregion circle
+
 $dark-dividers        : rgba(black, 0.05);
 $border-radius        : 10px;
 $card-elevation       : 10;

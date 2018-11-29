@@ -17,12 +17,12 @@
 	}
 }
 
-:host mat-sidenav-container {
+:host ::ng-deep > mat-sidenav-container {
 	height   : 100%;
 	display  : flex;
 	flex-flow: column;
 
-	::ng-deep .mat-drawer-content {
+	.mat-drawer-content {
 		flex     : 1;
 		display  : flex;
 		flex-flow: column;
@@ -32,7 +32,7 @@
 		}
 	}
 
-	&:not(.fullscreen) ::ng-deep .mat-drawer-content {
+	&:not(.fullscreen) .mat-drawer-content {
 		margin-top: $toolbar-height;
 
 		router-outlet + *:not(.out-of-layout):not(bp-footer) {
@@ -47,6 +47,37 @@
 		bp-footer {
 			flex-shrink: 0;
 			min-height : 70px;
+		}
+	}
+
+	.page-header {
+		display        : flex;
+		justify-content: space-between;
+		margin-bottom  : 1.5rem;
+		align-items    : baseline;
+
+		h1 {
+			flex-shrink: 0;
+			margin-bottom: 0.25rem;
+		}
+
+		.controls {
+			flex: 1;
+			display: flex;
+
+			> .filters {
+				flex: 1;
+				display: flex;
+				justify-content: center;
+
+				> * {
+					margin-right: 1rem;
+
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+			}
 		}
 	}
 }

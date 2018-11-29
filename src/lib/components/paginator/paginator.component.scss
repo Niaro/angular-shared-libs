@@ -1,0 +1,97 @@
+@import 'imports';
+
+:host {
+	justify-content: flex-end;
+
+	&,
+	> div {
+		display    : flex;
+		align-items: baseline;
+	}
+
+	&,
+	::ng-deep .mat-select-value,
+	button {
+		color: $color-semi-dark;
+	}
+
+	> span,
+	> div > * {
+		margin-right: 4rem;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	label {
+		margin-right: 0.5rem;
+	}
+
+	::ng-deep mat-form-field {
+		width: 56px;
+
+		.mat-form-field-infix {
+			border: none;
+		}
+
+		.mat-form-field-wrapper {
+			padding-bottom: 0;
+		}
+
+		.mat-form-field-underline {
+			bottom: 0;
+		}
+	}
+
+	.buttons {
+		display: flex;
+
+		button {
+			$btn-size      : 40px;
+			background     : none;
+			border         : none;
+			padding        : 0;
+			border-radius  : $btn-size;
+			cursor         : pointer;
+			display        : flex;
+			align-items    : center;
+			justify-content: center;
+
+			&,
+			.mat-progress-spinner,
+			.mat-progress-spinner ::ng-deep svg {
+				width : $btn-size !important;
+				height: $btn-size !important;
+			}
+
+			&.next {
+				mat-icon {
+					transform: rotate(180deg);
+				}
+			}
+
+			&[disabled] {
+				cursor: not-allowed;
+				color : fade-out($color-semi-dark, 0.7);
+			}
+
+			&.progress mat-icon {
+				opacity: 0;
+			}
+
+			mat-icon {
+				$size    : 16px;
+				width    : 9px;
+				height   : $size;
+				font-size: $size;
+
+				transition: opacity $animation-duration ease-in-out;
+			}
+
+			.mat-progress-spinner {
+				position: absolute;
+			}
+		}
+	}
+}

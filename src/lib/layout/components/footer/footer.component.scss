@@ -1,6 +1,9 @@
+@import 'imports';
+
 :host {
 	display        : flex;
 	align-items    : flex-end;
 	justify-content: flex-end;
 	padding        : 1rem;
+	color          : $color-semi-dark;
 }

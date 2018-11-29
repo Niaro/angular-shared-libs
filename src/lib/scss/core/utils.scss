@@ -1877,3 +1877,23 @@
 		margin-left: auto !important;
 	}
 }
+
+.text-right {
+	text-align: right;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+.capitalized {
+	text-transform: capitalize;
+}
+
+.text-ellipsis {
+	@include text-ellipsis();
+}

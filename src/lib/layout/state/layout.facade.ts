@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 
-import { getFirstChildRouteData } from '../../state';
+import { getRouteData } from '../../state';
 import { IPartialState } from './layout.reducer';
 import { getShowSidenav } from './layout.selectors';
 import { CloseSidenav, OpenSidenav } from './layout.actions';
@@ -11,8 +11,8 @@ import { CloseSidenav, OpenSidenav } from './layout.actions';
 export class LayoutFacade {
 	showSidenav$ = this.store.pipe(select(getShowSidenav));
 	fullscreen$ = this.store.pipe(
-		select(getFirstChildRouteData),
-		map(v => !!v.fullscreen)
+		select(getRouteData),
+		map(v => !!v && v.fullscreen)
 	);
 
 	constructor(private store: Store<IPartialState>) { }

@@ -14,7 +14,12 @@ import {
 	MatMenuModule,
 	MatProgressBarModule,
 	MatSnackBarModule,
-	MatTableModule
+	MatTableModule,
+	MatPaginatorModule,
+	MatSortModule,
+	MatSelectModule,
+	MatRippleModule,
+	MatTooltipModule
 } from '@angular/material';
 
 const MODULES = [
@@ -31,7 +36,12 @@ const MODULES = [
 	MatGridListModule,
 	MatMenuModule,
 	MatSnackBarModule,
-	MatTableModule
+	MatTableModule,
+	MatPaginatorModule,
+	MatSortModule,
+	MatSelectModule,
+	MatRippleModule,
+	MatTooltipModule
 ];
 
 @NgModule({

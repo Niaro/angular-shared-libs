@@ -1,0 +1,22 @@
+.status {
+	&,
+	&-processing {
+		border-color: $color-primary;
+	}
+
+	&-declined {
+		border-color: $color-danger;
+	}
+
+	&-chargeback {
+		border-color: #9999ff;
+	}
+
+	&-approved {
+		border-color: $color-success;
+	}
+
+	&-refund {
+		border-color: $color-light;
+	}
+}

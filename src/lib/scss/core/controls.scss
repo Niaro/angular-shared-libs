@@ -1,0 +1,110 @@
+@import 'imports';
+
+.rounded-control {
+	box-sizing         : border-box;
+	width              : 150px !important;
+	border             : 1px solid $color-dark;
+	border-radius      : 15px;
+	padding            : 0.25rem 1rem;
+	transition         : $animation-duration $animation-function;
+	transition-property: background, border-color;
+}
+
+.rounded-input {
+	@extend .rounded-control;
+	color   : $color-dark;
+	position: relative;
+
+	&:not(.empty) {
+		background  : $color-primary;
+		border-color: $color-primary;
+		color       : white;
+	}
+
+	.mat-form-field-infix {
+		border : none;
+		padding: 0;
+	}
+
+	.mat-form-field-wrapper {
+		padding-bottom: 0;
+	}
+
+	.mat-form-field-underline {
+		display: none;
+	}
+
+	input {
+		@include placeholder-color($color-dark);
+		margin-top: 0 !important;
+	}
+
+	&.closable {
+		padding-right: 1.75rem;
+	}
+
+	.mat-icon-button {
+		$size          : 30px;     // the height of the input
+		width          : $size;
+		height         : $size;
+		line-height    : $size;
+		display        : flex;
+		align-items    : center;
+		justify-content: center;
+		position       : absolute;
+		top            : -1px;
+		right          : 0;
+
+		.mat-icon {
+			font-size: 18px;
+			width    : auto;
+			height   : auto;
+		}
+	}
+}
+
+.rounded-select {
+	@extend .rounded-control;
+
+	&:not(.mat-select-empty) {
+		background  : $color-primary;
+		border-color: $color-primary;
+
+		.mat-select-arrow,
+		.mat-select-value {
+			color: white;
+		}
+	}
+
+	.mat-select-arrow,
+	.mat-select-value {
+		transition: color $animation-duration $animation-function;
+	}
+
+	.mat-select-placeholder,
+	.mat-select-value {
+		color         : $color-dark;
+		text-transform: capitalize;
+	}
+
+	.mat-select-arrow {
+		margin-right: 0;
+	}
+}
+
+.more-columns-select {
+	width      : 105px !important;
+	font-weight: $font-weight-extra-bold;
+
+	.mat-select-arrow,
+	.mat-select-value {
+		color: $color-primary;
+	}
+}
+
+.mat-select-panel .status .mat-option-text {
+	text-transform : capitalize;
+	display        : flex;
+	align-items    : center;
+	justify-content: space-between;
+}

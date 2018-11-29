@@ -21,3 +21,5 @@ export type ArrayPropertyNames<T> = {
 }[keyof T];
 
 export type Filter<T, U extends T> = T extends U ? T : never;
+
+export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;

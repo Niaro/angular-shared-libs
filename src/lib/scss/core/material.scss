@@ -20,6 +20,10 @@ bp-layout {
 		color: $dark-primary-text;
 	}
 
+	.mat-paginator {
+		background: transparent;
+	}
+
 	.mat-card {
 		border-radius: $border-radius;
 		padding      : $mat-card-padding-y $mat-card-padding-x;
@@ -44,7 +48,9 @@ bp-layout {
 	}
 
 	.mat-card-content-table {
+		overflow: auto;
 		margin: 0 (-$mat-card-padding-x) (-$mat-card-padding-y) (-$mat-card-padding-x) !important;
+		$gatter: 0.75rem;
 
 		table {
 			width     : 100%;
@@ -67,12 +73,12 @@ bp-layout {
 			}
 
 			th {
-				padding: 0.5rem 0 1rem;
+				padding: 0.5rem 0 $gatter * 2;
 			}
 
 			td {
 				border-color: transparent;
-				padding     : 0.5rem 0;
+				padding     : $gatter 0;
 			}
 
 			tr {
@@ -80,13 +86,17 @@ bp-layout {
 			}
 
 			tbody tr:first-of-type td {
-				padding-top: 1rem;
+				padding-top: $gatter * 2;
 			}
 
 			tfoot tr td {
-				padding-bottom: 1rem;
+				padding-bottom: $gatter * 2;
 				font-weight   : $font-weight-bold;
 			}
 		}
 	}
+}
+
+.mat-tooltip {
+	font-size: $caption-font-size;
 }

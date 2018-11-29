@@ -1,4 +1,43 @@
+$link-color: mat-color($primary);
+
 a {
 	text-decoration: none;
-	color          : mat-color($primary);
+	color          : $link-color;
+	transition     : color $animation-duration $animation-function;
+	border-bottom  : 1px solid transparent;
+	position       : relative;
+
+	&:after {
+		content   : '';
+		position  : absolute;
+		bottom    : 0;
+		right     : 0;
+		left      : 0;
+		height    : 1px;
+		background: transparent;
+		opacity   : 0.4;
+		transition: background $animation-duration $animation-function;
+	}
+
+	.mat-row & {
+		&.table-link {
+			color: inherit;
+		}
+	}
+
+	.mat-row:hover & {
+		&.table-link {
+			&:after {
+				background: currentColor;
+			}
+
+			&:hover {
+				color: $link-color;
+
+				&:after {
+					background: $link-color;
+				}
+			}
+		}
+	}
 }

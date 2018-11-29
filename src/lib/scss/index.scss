@@ -1,10 +1,16 @@
+@import 'intl-tel-input/build/css/intlTelInput.css'; // country flags
+
 @import 'imports';
 @import 'theming';
 
 @import './core/reset';
 @import './core/material';
 @import './core/form';
+@import './core/controls';
 @import './core/utils';
 @import './core/typography';
 @import './core/pending-stubs';
 @import './core/animations';
+@import './core/circle';
+@import './core/enum-colors';
+@import './core/common';

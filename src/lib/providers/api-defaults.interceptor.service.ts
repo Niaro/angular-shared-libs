@@ -18,13 +18,16 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 	}
 	set bearerToken(value: string) {
 		this['_token_'] = value;
-		this.headers['Authorization'] = `Bearer ${value}`;
+		// this.headers['Authorization'] = `Bearer ${value}`;
 	}
 
 	private headers = {
 		[CONTENT_TYPE]: 'application/json',
+		'json-naming-strategy': 'camelcase',
 		'x-api-key': environment.mockKey,
 		[MOCK_RESPONSE_CODE]: '200',
+			// tslint:disable-next-line:max-line-length
+		'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiJjNTA2MmIxNS0xM2M3LTRiM2EtODJlYi03ZWIzNDRkNjVkYTUiLCJuYmYiOjE1NDMzMjk3MDksImV4cCI6MTU3NDg2NTcwOSwiaXNzIjoiYXBpLmJyaWRnZXJwYXkuY29tIiwiYXVkIjoiYXBpLmJyaWRnZXJwYXkuY29tIn0.qci46FUZ7g1BkBNbWJD1BUO6P8ecAMTu3fIhPoX7oHU'
 	};
 
 	constructor(private localStorage: LocalStorageService) {
@@ -32,19 +35,15 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-		console.warn('default contenttype', request.headers.get(CONTENT_TYPE));
-
-		return next.handle(
-			request.clone({
-				url: request.url.startsWith('http')
-					? request.url
-					: `${environment.api.url}${environment.api.version}/${request.url}`,
-				setHeaders: {
-					...this.headers,
-					[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],
-				},
-			})
-		);
+		return next.handle(request.clone({
+			url: request.url.startsWith('http')
+				? request.url
+				: `${environment.api.url}/${environment.api.version}/merchant/${request.url}`,
+			setHeaders: {
+				...this.headers,
+				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],
+			},
+		}));
 	}
 
 	private initMockResponseCodeHook() {
