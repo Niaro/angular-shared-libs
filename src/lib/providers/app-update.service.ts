@@ -21,7 +21,7 @@ export class AppUpdateService {
 			)
 			.subscribe(() => document.location.reload());
 
-		interval(6 * 60 * 60)
-			.subscribe(() => updates.checkForUpdate());
+		// interval(6 * 60 * 60)
+		// 	.subscribe(() => updates.checkForUpdate());
 	}
 }
