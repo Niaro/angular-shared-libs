@@ -8,18 +8,56 @@
 	padding            : 0.25rem 1rem;
 	transition         : $animation-duration $animation-function;
 	transition-property: background, border-color;
+	position           : relative;
+	overflow           : hidden;
+
+	.mat-icon-button {
+		$size          : 30px;     // the height of the input
+		width          : $size;
+		height         : $size;
+		line-height    : $size;
+		display        : flex;
+		align-items    : center;
+		justify-content: center;
+		position       : absolute;
+		top            : -1px;
+		right          : 0;
+
+		&:hover .mat-button-focus-overlay {
+			opacity: 0.1;
+		}
+
+		.mat-icon {
+			font-size: 18px;
+			width    : auto;
+			height   : auto;
+		}
+	}
 }
 
-.rounded-input {
-	@extend .rounded-control;
-	color   : $color-dark;
-	position: relative;
+.rounded-input.closable,
+.rounded-daterange {
+	&:not(.empty) {
+		padding-right: 1.8rem;
+	}
+}
 
+.rounded-input,
+.rounded-daterange {
 	&:not(.empty) {
 		background  : $color-primary;
 		border-color: $color-primary;
 		color       : white;
+
+		input {
+			caret-color: white;
+		}
 	}
+}
+
+.rounded-input {
+	@extend .rounded-control;
+	color: $color-dark;
 
 	.mat-form-field-infix {
 		border : none;
@@ -38,29 +76,12 @@
 		@include placeholder-color($color-dark);
 		margin-top: 0 !important;
 	}
+}
 
-	&.closable {
-		padding-right: 1.75rem;
-	}
-
-	.mat-icon-button {
-		$size          : 30px;     // the height of the input
-		width          : $size;
-		height         : $size;
-		line-height    : $size;
-		display        : flex;
-		align-items    : center;
-		justify-content: center;
-		position       : absolute;
-		top            : -1px;
-		right          : 0;
-
-		.mat-icon {
-			font-size: 18px;
-			width    : auto;
-			height   : auto;
-		}
-	}
+.rounded-daterange {
+	@extend .rounded-control;
+	display: flex;
+	width  : auto !important;
 }
 
 .rounded-select {

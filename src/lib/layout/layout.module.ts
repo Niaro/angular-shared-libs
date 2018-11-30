@@ -8,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { MaterialModule } from '../materials.module';
 import {
 	LayoutComponent, NavItemComponent, SidenavComponent, ToolbarComponent, SvgIconComponent,
-	SvgIconDefinitionsComponent, FooterComponent
+	SvgIconDefinitionsComponent, FooterComponent, RightDrawerComponent
 } from './components';
 import { LayoutFacade } from './state';
 import { LAYOUT_FEATURE_KEY, reducer, initialState } from './state/layout.reducer';
@@ -18,6 +18,7 @@ export const COMPONENTS = [
 	LayoutComponent,
 	NavItemComponent,
 	SidenavComponent,
+	RightDrawerComponent,
 	ToolbarComponent,
 	SvgIconComponent,
 	SvgIconDefinitionsComponent,

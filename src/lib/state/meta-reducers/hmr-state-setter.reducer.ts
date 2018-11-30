@@ -1,7 +1,7 @@
 import { ActionReducer, Action, INIT } from '@ngrx/store';
 const APP_STATE = '[BP]:APP_STATE';
 
-export function appStateRestorer<T, V extends Action = Action>(
+export function hmrAppStateRestorer<T, V extends Action = Action>(
 	reducer: ActionReducer<T, V>
 ): ActionReducer<T, V> {
 	return (state: T, action: V): any => {

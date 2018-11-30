@@ -3,25 +3,34 @@ import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 
 import { getRouteData } from '../../state';
-import { IPartialState } from './layout.reducer';
-import { getShowSidenav } from './layout.selectors';
-import { CloseSidenav, OpenSidenav } from './layout.actions';
+import { ILayoutPartialState } from './layout.reducer';
+import { getShowSidenav, getShowRightDrawer } from './layout.selectors';
+import * as Layout from './layout.actions';
 
 @Injectable()
 export class LayoutFacade {
 	showSidenav$ = this.store.pipe(select(getShowSidenav));
+	showRightDrawer$ = this.store.pipe(select(getShowRightDrawer));
 	fullscreen$ = this.store.pipe(
 		select(getRouteData),
 		map(v => !!v && v.fullscreen)
 	);
 
-	constructor(private store: Store<IPartialState>) { }
-
-	closeSidenav() {
-		this.store.dispatch(new CloseSidenav());
-	}
+	constructor(private store: Store<ILayoutPartialState>) { }
 
 	openSidenav() {
-		this.store.dispatch(new OpenSidenav());
+		this.store.dispatch(new Layout.OpenSidenav());
+	}
+
+	closeSidenav() {
+		this.store.dispatch(new Layout.CloseSidenav());
+	}
+
+	closeRightDrawer() {
+		this.store.dispatch(new Layout.CloseRightDrawer());
+	}
+
+	openRightDrawer() {
+		this.store.dispatch(new Layout.OpenRightDrawer());
 	}
 }

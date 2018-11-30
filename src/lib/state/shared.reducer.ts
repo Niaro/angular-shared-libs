@@ -1,10 +1,9 @@
 import { ActionReducerMap, MetaReducer, Action, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 import { RouterReducerState } from '@ngrx/router-store';
-import { storeFreeze } from 'ngrx-store-freeze';
 
 import { environment } from '@bp/environment';
-import { logger, appStateRestorer, initialAppStateFromLocalStorage } from './meta-reducers';
+import { logger, hmrAppStateRestorer, initialAppStateFromLocalStorage, storeFreezer } from './meta-reducers';
 import { ResponseError } from '../models';
 import { IRouterStateUrl } from './router';
 
@@ -41,7 +40,7 @@ export const sharedReducers: ActionReducerMap<ISharedState> = {
 export const metaReducers: MetaReducer<ISharedState>[] = [
 	initialAppStateFromLocalStorage,
 	...(environment.dev
-		? [appStateRestorer, storeFreeze, logger]
+		? [hmrAppStateRestorer, storeFreezer, logger]
 		: []
 	)
 ];

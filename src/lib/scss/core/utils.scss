@@ -1897,3 +1897,7 @@
 .text-ellipsis {
 	@include text-ellipsis();
 }
+
+.inline-block {
+	display: inline-block;
+}

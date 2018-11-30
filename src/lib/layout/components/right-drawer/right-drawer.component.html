@@ -1,0 +1,11 @@
+<div class="mat-drawer-backdrop"
+     (click)="layout.closeRightDrawer()"
+     [class.mat-drawer-shown]="layout.showRightDrawer$ | async">
+</div>
+
+<mat-sidenav [opened]="layout.showRightDrawer$ | async"
+             position="end"
+             [fixedInViewport]="true"
+             (keydown.escape)="layout.closeRightDrawer()">
+	<ng-content></ng-content>
+</mat-sidenav>

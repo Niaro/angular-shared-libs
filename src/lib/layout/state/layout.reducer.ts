@@ -1,36 +1,48 @@
-import { LayoutAction, LayoutActions } from './layout.actions';
+import * as Layout from './layout.actions';
 
 export const LAYOUT_FEATURE_KEY = 'layout-lib';
 
 export interface IState {
 	showSidenav: boolean;
+	showRightDrawer: boolean;
 }
 
-export interface IPartialState {
+export interface ILayoutPartialState {
 	readonly [LAYOUT_FEATURE_KEY]: IState;
 }
 
 export const initialState: IState = {
 	showSidenav: false,
+	showRightDrawer: false
 };
 
-export function reducer(state: IState = initialState, action: LayoutAction): IState {
+export function reducer(state = initialState, action: Layout.Action): IState {
 	switch (action.type) {
-		case LayoutActions.CloseSidenav:
+		case Layout.Actions.OpenSidenav:
+			return {
+				...state,
+				showSidenav: true,
+			};
+
+		case Layout.Actions.CloseSidenav:
 			return {
 				...state,
 				showSidenav: false,
 			};
 
-		case LayoutActions.OpenSidenav:
+		case Layout.Actions.OpenRightDrawer:
 			return {
 				...state,
-				showSidenav: true,
+				showRightDrawer: true,
+			};
+
+		case Layout.Actions.CloseRightDrawer:
+			return {
+				...state,
+				showRightDrawer: false,
 			};
 
 		default:
 			return state;
 	}
 }
-
-export const getShowSidenav = (state: IState) => state.showSidenav;

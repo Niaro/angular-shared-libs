@@ -54,20 +54,25 @@
 		display        : flex;
 		justify-content: space-between;
 		margin-bottom  : 1.5rem;
-		align-items    : baseline;
+		align-items    : center;
 
 		h1 {
-			flex-shrink: 0;
+			flex-shrink  : 0;
 			margin-bottom: 0.25rem;
+
+			+ p {
+				margin-bottom: 0;
+			}
 		}
 
 		.controls {
-			flex: 1;
-			display: flex;
+			flex       : 1;
+			display    : flex;
+			align-items: center;
 
 			> .filters {
-				flex: 1;
-				display: flex;
+				flex           : 1;
+				display        : flex;
 				justify-content: center;
 
 				> * {

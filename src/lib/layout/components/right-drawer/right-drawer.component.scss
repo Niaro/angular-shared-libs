@@ -1,0 +1,18 @@
+@import 'imports';
+
+:host {
+	.mat-drawer-backdrop {
+		background: transparent;
+	}
+
+	::ng-deep mat-sidenav {
+		@include mat-elevation(15);
+		min-width: 900px;
+		top      : $toolbar-height !important;
+
+		router-outlet + * {
+			max-width: none !important;
+			width    : auto !important;
+		}
+	}
+}

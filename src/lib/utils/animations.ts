@@ -1,5 +1,5 @@
 import { transition, trigger, useAnimation, animation, style, animate } from '@angular/animations';
-import { fadeIn, fadeOut, slideInUp, slideOutUp } from 'ng-animate';
+import { fadeIn, fadeOut, slideInUp, slideOutUp, slideInRight, slideOutRight } from 'ng-animate';
 
 const EASE = 'cubic-bezier(0.390, 0.575, 0.565, 1.000)';
 const FAST = { params: { timing: 0.15, ease: EASE } };
@@ -14,6 +14,11 @@ export const FADE = trigger('fade', [
 export const SLIDE_UP = trigger('slideUp', [
 	transition(':enter', useAnimation(slideInUp, FAST)),
 	transition(':leave', useAnimation(slideOutUp, FAST)),
+]);
+
+export const SLIDE_RIGHT = trigger('slideRight', [
+	transition(':enter', useAnimation(slideInRight, FAST)),
+	transition(':leave', useAnimation(slideOutRight, FAST)),
 ]);
 
 const slidedUp = {
