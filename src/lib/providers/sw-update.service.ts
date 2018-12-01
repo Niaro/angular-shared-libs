@@ -2,7 +2,7 @@ import * as m from 'moment';
 import { ApplicationRef, Injectable, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { concat, interval, NEVER, Observable, Subject } from 'rxjs';
-import { first, map, takeUntil, tap } from 'rxjs/operators';
+import { first, map, takeUntil, tap, startWith } from 'rxjs/operators';
 import { environment } from '@bp/environment';
 import { MatSnackBar } from '@angular/material';
 
@@ -27,7 +27,7 @@ export class SwUpdatesService implements OnDestroy {
 
 		// Periodically check for updates (after the app is stabilized).
 		const appIsStable$ = appRef.isStable.pipe(first(v => v));
-		concat(appIsStable$, interval(this.checkInterval))
+		concat(appIsStable$, interval(this.checkInterval).pipe(startWith(null)))
 			.pipe(
 				tap(() => this.log('Checking for update...')),
 				takeUntil(this.onDestroy)
