@@ -2,7 +2,7 @@ import * as m from 'moment';
 import { ApplicationRef, Injectable, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { concat, interval, NEVER, Observable, Subject } from 'rxjs';
-import { first, map, takeUntil, tap, startWith } from 'rxjs/operators';
+import { first, map, takeUntil, tap, startWith, delay } from 'rxjs/operators';
 import { environment } from '@bp/environment';
 import { MatSnackBar } from '@angular/material';
 
@@ -38,6 +38,7 @@ export class SwUpdatesService implements OnDestroy {
 		swu.available
 			.pipe(
 				tap(() => snackBar.open('A new version is available. The page will be reloaded in a moment.')),
+				delay(3000),
 				tap(evt => this.log(`Update available: ${JSON.stringify(evt)}`)),
 				takeUntil(this.onDestroy)
 			)
