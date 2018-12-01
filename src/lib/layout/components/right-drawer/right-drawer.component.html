@@ -1,11 +1,14 @@
-<div class="mat-drawer-backdrop"
-     (click)="layout.closeRightDrawer()"
-     [class.mat-drawer-shown]="layout.showRightDrawer$ | async">
-</div>
-
 <mat-sidenav [opened]="layout.showRightDrawer$ | async"
              position="end"
              [fixedInViewport]="true"
              (keydown.escape)="layout.closeRightDrawer()">
+	<button class="btn-close"
+	        mat-button
+	        matSuffix
+	        mat-icon-button
+	        (click)="layout.closeRightDrawer()">
+		<bp-svg-icon name="close"></bp-svg-icon>
+	</button>
+
 	<ng-content></ng-content>
 </mat-sidenav>

@@ -1,18 +1,24 @@
 @import 'imports';
 
-:host {
-	.mat-drawer-backdrop {
-		background: transparent;
+:host ::ng-deep mat-sidenav {
+	@include mat-elevation(15);
+	top      : $toolbar-height !important;
+
+	router-outlet + * {
+		max-width: none !important;
+		width    : auto !important;
 	}
 
-	::ng-deep mat-sidenav {
-		@include mat-elevation(15);
-		min-width: 900px;
-		top      : $toolbar-height !important;
+	.btn-close {
+		position: absolute;
+		top     : $layout-padding - 6px;
+		right   : $layout-padding;
+		color   : $color-semi-dark;
 
-		router-outlet + * {
-			max-width: none !important;
-			width    : auto !important;
+		::ng-deep svg {
+			$size : 20px;
+			width : $size;
+			height: $size;
 		}
 	}
 }

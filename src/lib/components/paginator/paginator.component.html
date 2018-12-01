@@ -15,7 +15,7 @@
 <div *ngIf="hasNext || hasPrevious"
      @fade>
 	<span class="state">
-		{{currentPage === 1 ? 1 : (pageSize * currentPage - pageSize + 1)}} - {{pageSize * currentPage}} of many
+		{{ currentPage === 1 ? 1 : (pageSize * currentPage - pageSize + 1) }} - {{ pageSize * currentPage }} of many
 	</span>
 
 	<div class="buttons">
