@@ -1,0 +1,14 @@
+<input #el
+       matInput
+       [placeholder]="placeholder"
+       [value]="value || ''"
+       (input)="update(el.value)">
+
+<button *ngIf="el.value"
+        @slideRight
+        mat-button
+        matSuffix
+        mat-icon-button
+        (click)="el.value=''; update(null)">
+	<mat-icon>close</mat-icon>
+</button>

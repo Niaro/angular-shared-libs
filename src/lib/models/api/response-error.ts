@@ -1,6 +1,6 @@
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 import { HttpErrorResponse } from '@angular/common/http';
-import { isArray } from 'lodash-es';
+import { isArray, camelCase } from 'lodash-es';
 
 export class ResponseError {
 	status: StatusCode;
@@ -12,7 +12,6 @@ export class ResponseError {
 	}
 
 	constructor(e: HttpErrorResponse) {
-		console.warn('error', e);
 		this.status = e.status >= 500 || e.statusText === 'Unknown Error'
 			? StatusCode.internalServerError
 			: e.status === 0 ? StatusCode.timeout : e.status;
@@ -44,6 +43,8 @@ export class ResponseError {
 			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;
 			this.messages = result ? (isArray(result) ? result : [result]) : [];
 		}
+
+		this.messages.forEach(it => it.field = camelCase(it.field));
 	}
 }
 

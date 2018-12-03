@@ -1,0 +1,31 @@
+<input class="from"
+       [class.empty]="!_value.from"
+       [matDatepicker]="fromPicker"
+       readonly
+       placeholder="From"
+       [value]="_value.from"
+       [max]="_value.to"
+       (click)="fromPicker.open()"
+       (dateChange)="update({ from: $event.value })">
+<mat-datepicker #fromPicker></mat-datepicker>
+
+<span class="separator">-</span>
+
+<input class="to"
+       [class.empty]="!_value.to"
+       [matDatepicker]="toPicker"
+       placeholder="To"
+       [value]="_value.to"
+       [min]="_value.from"
+       (click)="toPicker.open()"
+       (dateChange)="update({ to: $event.value })">
+<mat-datepicker #toPicker></mat-datepicker>
+
+<button *ngIf="_value.from || _value.to"
+        @slideRight
+        mat-button
+        matSuffix
+        mat-icon-button
+        (click)="update({ to: null, from: null })">
+	<mat-icon>close</mat-icon>
+</button>

@@ -6,3 +6,4 @@ export * from './enum';
 export * from './paged-results';
 export * from './request-query-params';
 export * from './typescript-types';
+export * from '../identity/models/user';

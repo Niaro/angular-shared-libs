@@ -1,6 +1,6 @@
 import * as Layout from './layout.actions';
 
-export const LAYOUT_FEATURE_KEY = 'layout-lib';
+export const LAYOUT_FEATURE_KEY = 'layout-feature';
 
 export interface IState {
 	showSidenav: boolean;

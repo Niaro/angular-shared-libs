@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -30,11 +30,21 @@ export const COMPONENTS = [
 		CommonModule,
 		RouterModule,
 		MaterialModule,
-		StoreModule.forFeature(LAYOUT_FEATURE_KEY, reducer, { initialState }),
-		EffectsModule.forFeature([LayoutEffects]),
+		StoreModule,
+		EffectsModule,
 	],
 	declarations: COMPONENTS,
 	exports: COMPONENTS,
-	providers: [LayoutFacade],
 })
-export class LayoutModule {}
+export class LayoutModule {
+	static forRoot(): ModuleWithProviders {
+		return {
+			ngModule: LayoutModule,
+			providers: [
+				StoreModule.forFeature(LAYOUT_FEATURE_KEY, reducer, { initialState }).providers,
+				EffectsModule.forFeature([LayoutEffects]).providers,
+				LayoutFacade
+			]
+		};
+	}
+}

@@ -5,7 +5,7 @@ import { ApiDefaultsInterceptorService } from './api-defaults.interceptor.servic
 import { ApiResponseInterceptorService } from './api-response.interceptor.service';
 import { SwUpdatesService } from './sw-update.service';
 
-export { ApiDefaultsInterceptorService, SwUpdatesService };
+export { SwUpdatesService };
 
 export const PROVIDERS: Provider[] = [
 	SwUpdatesService,

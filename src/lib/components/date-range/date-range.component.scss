@@ -1,0 +1,29 @@
+@import 'imports';
+
+:host {
+	.separator {
+		margin: 0 0.5rem;
+	}
+
+	input {
+		@include placeholder-color(currentColor);
+		width: 65px;
+		background: transparent;
+		border: none;
+		text-align: center;
+		color: currentColor;
+
+		&::placeholder,
+		&::-webkit-input-placeholder {
+			text-align: left;
+		}
+
+		&.empty {
+			width: 30px;
+		}
+	}
+}
+
+.date-range {
+
+}
