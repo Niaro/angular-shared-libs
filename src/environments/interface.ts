@@ -1,3 +1,5 @@
+import { Version } from './constants';
+
 export interface IAppEnvironment {
 	api: {
 		url: string;
@@ -10,6 +12,6 @@ export interface IEnvironment extends IAppEnvironment {
 	prod: boolean;
 	dev: boolean;
 	hmr: boolean;
-	version: string;
+	version: Version;
 	mockKey: string;
 }

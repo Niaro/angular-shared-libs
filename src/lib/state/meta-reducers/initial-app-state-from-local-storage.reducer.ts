@@ -1,15 +1,13 @@
 import { ActionReducer, INIT, UPDATE } from '@ngrx/store';
 import { keys } from 'lodash-es';
+import { environment } from '@bp/environment';
 
 export const APP_STATE_PREFIX = '[bridgerpay]';
 
-export function initialAppStateFromLocalStorage(
-	reducer: ActionReducer<any>
-): ActionReducer<any> {
+export function initialAppStateFromLocalStorage(reducer: ActionReducer<any>): ActionReducer<any> {
 	return function (state, action) {
 		const newState = reducer(state, action);
-
-		return [<string>INIT, <string>UPDATE].includes(action.type)
+		return environment.version.revision >= 1 && [<string>INIT, <string>UPDATE].includes(action.type)
 			? { ...newState, ...extractStateFromLocalStorage() }
 			: newState;
 	};
