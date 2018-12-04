@@ -21,7 +21,7 @@ import { MatSnackBar } from '@angular/material';
 	providedIn: 'root',
 })
 export class SwUpdatesService implements OnDestroy {
-	private checkInterval = 1000 * 60 * 60 * 6; // 6 hours
+	private checkInterval = 1000 * 60 * 60 * 1; // 6 hours
 	private destroyed$ = new Subject<void>();
 
 	constructor(appRef: ApplicationRef, swu: SwUpdate, snackBar: MatSnackBar) {
