@@ -44,7 +44,7 @@ $danger-colors: (
 );
 
 $primary: mat-palette($primary-colors);
-$accent : mat-palette($mat-amber, 700, 200, 900);
+$accent : mat-palette($mat-amber, 700, 100, 900);
 $success: mat-palette($success-colors);
 $danger : mat-palette($danger-colors);
 $warning: mat-palette($mat-orange);

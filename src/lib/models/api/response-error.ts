@@ -5,7 +5,7 @@ import { isArray, camelCase } from 'lodash-es';
 export class ResponseError {
 	status: StatusCode;
 	statusText: string;
-	messages: IApiErrorMessage[];
+	messages: IApiErrorMessage[] = [];
 
 	get isForbidden() {
 		return this.status === StatusCode.forbidden;
@@ -39,7 +39,7 @@ export class ResponseError {
 					type: 'Please, check your internet connection'
 				}
 			];
-		else {
+		else if (e.error) {
 			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;
 			this.messages = result ? (isArray(result) ? result : [result]) : [];
 		}

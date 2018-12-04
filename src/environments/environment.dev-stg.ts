@@ -8,10 +8,6 @@ export const environment: IEnvironment = {
 	prod: false,
 	get dev() { return !this.prod; },
 	hmr: IS_HMR_MODE,
-	api: {
-		url: 'https://api-stg.bridgerpay.com',
-		version: 'v1',
-	},
 
 	// by putting it always as the last property in the object we allow override any environment specific property by the apps
 	...appEnvironment,

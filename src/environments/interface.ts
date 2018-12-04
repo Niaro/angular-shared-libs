@@ -1,9 +1,9 @@
 import { Version } from './constants';
 
 export interface IAppEnvironment {
-	api: {
+	api?: {
 		url: string;
-		version: string;
+		version?: string;
 	};
 }
 

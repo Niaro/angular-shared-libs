@@ -57,7 +57,7 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 		this.router.events
 			.pipe(
 				filter(e => e instanceof NavigationEnd),
-				map(() => this.route.snapshot.children.find(r => r.outlet === this.outletName))
+				map(() => this.route.snapshot.firstChild.children.find(r => r.outlet === this.outletName))
 			)
 			.subscribe(outletRoute => this.urlWithOutlet = outletRoute && this.router.url);
 
@@ -72,7 +72,7 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 					const nextUrlIsLastInHistory = last(this.outletUrlHistory) === e.url;
 					nextUrlIsLastInHistory && this.outletUrlHistory.pop();
 					this.saveUrlWithOutletToHistory = !nextUrlIsLastInHistory;
-				} else {
+				} else if (this.urlWithOutlet) {
 					// If the destination url doesn't have the modal outlet that means the user
 					// intends to navigate to the page not to another modal
 					// this.urlWithModal contains the current url from which the navigation was initiated

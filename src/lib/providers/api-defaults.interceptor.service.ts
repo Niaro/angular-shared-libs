@@ -31,7 +31,8 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 		return next.handle(request.clone({
 			url: request.url.startsWith('http')
 				? request.url
-				: `${environment.api.url}/${environment.api.version}/${request.url}`,
+				// tslint:disable-next-line:max-line-length
+				: `${environment.api ? environment.api.url : ''}/api${environment.api && environment.api.version ? '/' + environment.api.version : ''}/${request.url}`,
 			setHeaders: {
 				...this.headers,
 				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],

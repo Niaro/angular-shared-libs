@@ -8,10 +8,7 @@ export const environment: IEnvironment = {
 	prod: true,
 	get dev() { return !this.prod; },
 	hmr: IS_HMR_MODE,
-	api: {
-		url: 'https://api-stg.bridgerpay.com',
-		version: 'v1',
-	},
+
 	...appEnvironment,
 	...constants
 };
