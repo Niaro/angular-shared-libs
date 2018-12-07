@@ -24,6 +24,10 @@ bp-layout {
 		background: transparent;
 	}
 
+	.mat-ripple-element {
+		background: fade-out($color-primary, 0.9);
+	}
+
 	.mat-card {
 		border-radius: $border-radius;
 		padding      : $mat-card-padding-y $mat-card-padding-x;
