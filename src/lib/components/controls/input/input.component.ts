@@ -2,7 +2,7 @@ import { Component, Input, Output, HostBinding, ChangeDetectionStrategy } from '
 import { BehaviorSubject } from 'rxjs';
 import { auditTime } from 'rxjs/operators';
 
-import { SLIDE_RIGHT } from '@bp/shared/utils';
+import { SLIDE_RIGHT } from '@bp/shared/animations';
 
 @Component({
 	selector: 'bp-input',

@@ -2,7 +2,7 @@ import { Component, OnChanges, Input, Output, EventEmitter, ChangeDetectionStrat
 import { isNil } from 'lodash-es';
 
 import { PagedResults } from '@bp/shared/models';
-import { FADE } from '@bp/shared/utils';
+import { FADE } from '@bp/shared/animations';
 
 @Component({
 	selector: 'bp-paginator',

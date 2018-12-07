@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { assign, isNumber } from 'lodash-es';
 
-import { SLIDE_RIGHT } from '@bp/shared/utils';
+import { SLIDE_RIGHT } from '@bp/shared/animations';
 
 type DataRangeValue = { from: number | m.Moment, to: number | m.Moment };
 

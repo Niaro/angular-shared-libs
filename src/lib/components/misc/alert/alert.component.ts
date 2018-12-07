@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { SLIDE } from '@bp/shared/utils';
+import { SLIDE } from '@bp/shared/animations';
 import { ResponseError } from '@bp/shared/models';
 
 @Component({

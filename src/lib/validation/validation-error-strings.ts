@@ -1,6 +1,6 @@
 import { isObject, isString } from 'lodash-es';
 
-import { chain } from '../utils/chain';
+import { chain } from '../utils';
 import { IValidationErrors, IValidationError } from './models';
 
 export class ValidationErrorStrings extends Array<string> {
