@@ -1,3 +1,31 @@
+.text-right {
+	text-align: right;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+.capitalized {
+	text-transform: capitalize;
+}
+
+.text-ellipsis {
+	@include text-ellipsis();
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.animation-stub {
+	visibility: hidden;
+}
+
 .shadow-none {
 	box-shadow: none !important;
 }
@@ -1876,28 +1904,4 @@
 	.mx-xl-auto {
 		margin-left: auto !important;
 	}
-}
-
-.text-right {
-	text-align: right;
-}
-
-.text-center {
-	text-align: center;
-}
-
-.nowrap {
-	white-space: nowrap;
-}
-
-.capitalized {
-	text-transform: capitalize;
-}
-
-.text-ellipsis {
-	@include text-ellipsis();
-}
-
-.inline-block {
-	display: inline-block;
 }

@@ -5,7 +5,7 @@ import { filter, startWith } from 'rxjs/operators';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { environment } from '@bp/environment';
-import { IdentityFacade } from '../identity';
+import { IdentityFacade } from '../features';
 
 const MOCK_RESPONSE_CODE = 'x-mock-response-code';
 const CONTENT_TYPE = 'Content-Type';

@@ -50,7 +50,7 @@ bp-layout {
 		}
 
 		&:not([class*='mat-elevation-z']) {
-			@include mat-elevation($card-elevation);
+			@include mat-elevation($mat-card-elevation);
 		}
 	}
 

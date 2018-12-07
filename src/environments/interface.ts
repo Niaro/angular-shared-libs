@@ -14,4 +14,5 @@ export interface IEnvironment extends IAppEnvironment {
 	hmr: boolean;
 	version: Version;
 	mockKey: string;
+	mockUrl: string;
 }

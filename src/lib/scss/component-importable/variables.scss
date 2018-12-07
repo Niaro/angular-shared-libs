@@ -66,14 +66,18 @@ $layout-padding  : 40px;
 // #endregion layout
 
 // #region mat-cards
-$mat-card-padding-x: 1rem;
-$mat-card-padding-y: 1.25rem;
+$mat-card-padding-x          : 1rem;
+$mat-card-padding-y          : 1.25rem;
+$mat-card-status-border-width: 5px;
+$mat-card-elevation          : 10;
+$mat-elevation-opacity       : 0.4;
 // #endregion mat-cards
 
 // #region typography
 $title-font-size       : 22px;
 $headline-line-height  : 32px;
 $body-font-size        : 14px;
+$body-line-height      : 20px;
 $caption-font-size     : 12px;
 $font-weight-slim      : 300;
 $font-weight-normal    : 400;
@@ -93,5 +97,3 @@ $circle-sm-size: 9px;
 
 $dark-dividers        : rgba(black, 0.05);
 $border-radius        : 10px;
-$card-elevation       : 10;
-$mat-elevation-opacity: 0.4;

@@ -4,17 +4,18 @@ import { RouterModule } from '@angular/router';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { MaterialModule } from './materials.module';
-import { LayoutModule } from './layout/layout.module';
+import { LayoutModule, IdentityModule } from './features';
 import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
-import { AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent } from './components';
+import { AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent } from './components';
+import { StoreModule } from '@ngrx/store';
 import { APP_STATE_PREFIX } from './state';
-import { IdentityModule } from './identity';
 
 const MODULES = [
 	CommonModule,
 	MaterialModule,
 	RouterModule,
+	StoreModule,
 	LocalStorageModule,
 	LayoutModule,
 	IdentityModule
@@ -26,7 +27,8 @@ const EXPOSED = [
 	ApiErrorComponent,
 	PaginatorComponent,
 	DateRangeComponent,
-	InputComponent
+	InputComponent,
+	CountryComponent
 ];
 
 @NgModule({
@@ -40,13 +42,13 @@ export class SharedModule {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				...PROVIDERS,
 				LocalStorageModule.withConfig({
 					prefix: APP_STATE_PREFIX,
 					storageType: 'localStorage'
 				}).providers,
 				LayoutModule.forRoot().providers,
-				IdentityModule.forRoot().providers
+				IdentityModule.forRoot().providers,
+				...PROVIDERS,
 			]
 		};
 	}

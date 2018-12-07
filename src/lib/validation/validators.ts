@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 
-import { isString, isRegExp, isArray, merge, keys, isNil } from 'lodash-es';
+import { isString, isRegExp, merge, keys, isNil } from 'lodash-es';
 import { IValidationErrors } from './models';
 
 /**

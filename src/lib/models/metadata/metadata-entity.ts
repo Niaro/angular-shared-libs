@@ -1,8 +1,15 @@
 import { PropertiesMetadata } from './properties-metadata';
-import { NonFunctionPropertyNames } from '../typescript-types';
+import { NonFunctionPropertyNames } from '../misc/typescript-types';
+import { assignWith, isNil, isArray, has, camelCase } from 'lodash-es';
+import { Enumeration } from '../misc';
 
 export abstract class MetadataEntity {
-	static readonly metadata = new PropertiesMetadata();
+	static get metadata(): PropertiesMetadata {
+		if (has(this, '_metadata'))
+			return this._metadata;
+		return this._metadata = new PropertiesMetadata();
+	}
+	private static _metadata = new PropertiesMetadata();
 
 	static getMetaPropertyNames<T>(): NonFunctionPropertyNames<T>[] {
 		return this.metadata.list.map(it => it.property) as any;
@@ -12,7 +19,26 @@ export abstract class MetadataEntity {
 		return this.metadata.get(prop).label;
 	}
 
+	constructor(data: Partial<MetadataEntity>) {
+		assignWith(this, data, this.assignCustomizer);
+	}
+
 	meta<T = this>(propName: NonFunctionPropertyNames<T>) {
 		return (<typeof MetadataEntity>this.constructor).metadata.get(propName);
+	}
+
+	protected assignCustomizer = (objValue: any, srcValue: any, key: string, objObject, srcObject) => {
+		const mapper = (<typeof MetadataEntity>this.constructor).metadata.mappers[key];
+		if (!isNil(srcValue) && mapper) {
+			const make = v => Enumeration.isDescendantType(mapper)
+				? mapper.parse(camelCase(v))
+				// if the mapper doesn't have a name we assume that this is a class is used as a mapper so we initiate it
+				: mapper.name ? new mapper(v) : mapper(v, srcObject);
+
+			return isArray(srcValue)
+					? srcValue.map(v => make(v))
+					: make(srcValue);
+		}
+		return srcValue;
 	}
 }

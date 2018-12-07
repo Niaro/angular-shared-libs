@@ -1,0 +1,56 @@
+<span>
+	<label>Items per page:</label>
+
+	<mat-form-field>
+		<mat-select [(value)]="pageSize"
+		            (valueChange)="pageSizeChange.emit($event); currentPage = 1">
+			<mat-option *ngFor="let option of pageSizeOptions"
+			            [value]="option">
+				{{ option }}
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
+</span>
+
+<div *ngIf="hasNext || hasPrevious"
+     @fade>
+	<span class="state">
+		{{ currentPage === 1 ? 1 : (pageSize * currentPage - pageSize + 1) }} - {{ pageSize * currentPage }} of many
+	</span>
+
+	<div class="buttons">
+		<button class="prev"
+		        [class.progress]="progressPrev"
+		        (click)="page.emit(pageCursors[currentPage - 1]); currentPage = currentPage - 1; progressPrev = true;"
+		        [disabled]="!hasPrevious || progress"
+		        type="button"
+		        matTooltip="Prev page"
+		        matTooltipPosition="above"
+		        matRipple
+		        matRippleCentered="centered"
+		        [matRippleDisabled]="!hasPrevious">
+			<mat-icon>arrow_back_ios</mat-icon>
+			<mat-progress-spinner *ngIf="progressPrev"
+			                      @fade
+			                      mode="indeterminate">
+			</mat-progress-spinner>
+		</button>
+
+		<button class="next"
+		        [class.progress]="progressNext"
+		        (click)="page.emit(pagedResults.nextPageCursor); currentPage = currentPage + 1; progressNext = true;"
+		        [disabled]="!hasNext || progress"
+		        type="button"
+		        matTooltip="Next page"
+		        matTooltipPosition="above"
+		        matRipple
+		        matRippleCentered="centered"
+		        [matRippleDisabled]="!hasNext">
+			<mat-icon>arrow_back_ios</mat-icon>
+			<mat-progress-spinner *ngIf="progressNext"
+			                      @fade
+			                      mode="indeterminate">
+			</mat-progress-spinner>
+		</button>
+	</div>
+</div>

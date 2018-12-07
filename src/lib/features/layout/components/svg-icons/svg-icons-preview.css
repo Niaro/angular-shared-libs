@@ -1,0 +1,27 @@
+body {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	font-family: monospace;
+}
+
+body > .svg-icons-definitions {
+	display: none;
+}
+
+svg {
+	margin-right: 10px;
+}
+
+.icons {
+	display: flex;
+	flex-flow: column wrap;
+	max-height: 100vh;
+	align-self: start;
+}
+
+.svg-wrap {
+	display: flex;
+	margin-bottom: 10px;
+	margin: 0px 40px 10px 0px;
+}

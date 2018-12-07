@@ -1,5 +1,4 @@
 import { assign } from 'lodash-es';
-import { Omit } from '../typescript-types';
 
 export class PropertyMetadata {
 	label: string;

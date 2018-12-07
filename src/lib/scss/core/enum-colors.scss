@@ -1,7 +1,9 @@
 .status {
-	&,
+	border-color: $color-primary;
+
+	&-active,
 	&-processing {
-		border-color: $color-primary;
+		border-color: $color-primary !important;
 	}
 
 	&-declined {
@@ -16,7 +18,8 @@
 		border-color: $color-success;
 	}
 
+	&-disabled,
 	&-refund {
-		border-color: $color-light;
+		border-color: $color-light !important;
 	}
 }

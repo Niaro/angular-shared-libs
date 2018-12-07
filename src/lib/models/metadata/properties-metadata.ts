@@ -1,8 +1,9 @@
+import { NonFunctionPropertyNames, Enumeration } from '../misc';
 import { PropertyMetadata } from './property-metadata';
-import { NonFunctionPropertyNames } from '../typescript-types';
 
 export class PropertiesMetadata {
 	readonly list: PropertyMetadata[] = [];
+	readonly mappers: { [property: string]: ((v: any, data: any) => any) | Enumeration | InstanceType<any>} = {};
 	private dict: { [property: string]: PropertyMetadata } = {};
 
 	push(metadata: PropertyMetadata) {

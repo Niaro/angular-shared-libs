@@ -1,4 +1,4 @@
-import { ActionReducerMap, MetaReducer, Action, createFeatureSelector, createSelector } from '@ngrx/store';
+import { ActionReducerMap, MetaReducer, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as fromRouter from '@ngrx/router-store';
 import { RouterReducerState } from '@ngrx/router-store';
 
@@ -33,16 +33,14 @@ export interface ISharedState {
  * These reducer functions are called with each dispatched action
  * and the current or initial state and return a new immutable state.
  */
-export const sharedReducers: ActionReducerMap<ISharedState> = {
+export const sharedReducer: ActionReducerMap<ISharedState> = {
 	router: fromRouter.routerReducer,
 };
 
 export const metaReducers: MetaReducer<ISharedState>[] = [
 	initialAppStateFromLocalStorage,
-	...(environment.dev
-		? [hmrAppStateRestorer, storeFreezer, logger]
-		: []
-	)
+	...(environment.dev ? [hmrAppStateRestorer, storeFreezer] : []),
+	...(environment.name === 'prod' ? [] : [logger])
 ];
 
 export const selectRouterState = createFeatureSelector<RouterReducerState<IRouterStateUrl>>('router');
