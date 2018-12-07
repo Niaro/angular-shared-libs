@@ -33,12 +33,20 @@ export abstract class MetadataEntity {
 			const make = v => Enumeration.isDescendantType(mapper)
 				? mapper.parse(camelCase(v))
 				// if the mapper doesn't have a name we assume that this is a class is used as a mapper so we initiate it
-				: mapper.name ? new mapper(v) : mapper(v, srcObject);
+				: this.isConstructor(mapper) ? new mapper(v) : mapper(v, srcObject);
 
 			return isArray(srcValue)
 					? srcValue.map(v => make(v))
 					: make(srcValue);
 		}
 		return srcValue;
+	}
+
+	private isConstructor(obj: any): boolean {
+		try {
+			return !!(new (new Proxy(obj, { construct() { return this; }}))());
+		} catch (e) {
+			return false;
+		}
 	}
 }
