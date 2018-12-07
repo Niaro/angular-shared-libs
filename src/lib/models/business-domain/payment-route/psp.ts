@@ -20,7 +20,7 @@ export class Psp extends MetadataEntity {
 	@Mapper(PaymentRouteRule)
 	rules: PaymentRouteRule[];
 
-	@Mapper(v => new Currency(v))
+	@Mapper(Currency)
 	currencies?: Currency[];
 }
 

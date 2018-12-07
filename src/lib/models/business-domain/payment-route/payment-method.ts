@@ -9,6 +9,6 @@ export class PaymentMethod extends MetadataEntity {
 	@Mapper(CardType)
 	brands?: CardType[];
 
-	@Mapper(v => new Currency(v))
+	@Mapper(Currency)
 	currencies?: Currency[];
 }

@@ -30,6 +30,11 @@
 	box-shadow: none !important;
 }
 
+.flex-column {
+	display: flex;
+	flex-flow: column;
+}
+
 .w-25 {
 	width: 25% !important;
 }

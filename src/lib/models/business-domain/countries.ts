@@ -1,6 +1,6 @@
 import { CountryCode } from 'libphonenumber-js';
 import * as intlTelInput from 'intl-tel-input';
-import { assign } from 'lodash-es';
+import { MetadataEntity } from '../metadata';
 
 // in order intlTelInputGlobals to be accessible down the code we need invoke a request to the lib,
 // otherwise intlTelInputGlobals is undefined
@@ -9,7 +9,7 @@ const initiation = intlTelInput;
 
 export { CountryCode };
 
-export class Country {
+export class Country extends MetadataEntity {
 	readonly name: string;
 	readonly displayName: string;
 	readonly code: CountryCode;
@@ -17,8 +17,8 @@ export class Country {
 	readonly lowerCaseName?: string;
 	readonly lowerCaseCode?: string;
 
-	constructor(data: Country) {
-		assign(this, data);
+	constructor(data: Partial<Country>) {
+		super(data);
 		this.lowerCaseName = this.name.toLowerCase();
 		this.lowerCaseCode = this.code.toLowerCase();
 		Object.freeze(this);

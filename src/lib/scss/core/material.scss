@@ -15,6 +15,10 @@ bp-layout {
 		padding: 0;
 	}
 
+	.mat-drawer {
+		z-index: 10;
+	}
+
 	.mat-drawer-container,
 	.mat-card {
 		color: $dark-primary-text;
