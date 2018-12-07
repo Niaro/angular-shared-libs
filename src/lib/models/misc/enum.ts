@@ -1,5 +1,4 @@
 import { forOwn, isNil, kebabCase, isNumber, isArray } from 'lodash';
-import { isFunction } from 'util';
 
 export abstract class Enumeration {
 	static list(): Enumeration[] {
@@ -34,18 +33,6 @@ export abstract class Enumeration {
 	}
 
 	static is(value: any) { return value instanceof this; }
-
-	static isDescendantType(type: any): type is typeof Enumeration {
-		if (!isFunction(type))
-			return false;
-
-		do {
-			type = Object.getPrototypeOf(type);
-			if (type === Enumeration)
-				return true;
-		}
-		while (type);
-	}
 
 	protected static shouldList(value: Enumeration) {
 		return true;
