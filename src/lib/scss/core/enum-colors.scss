@@ -1,25 +1,27 @@
 .status {
 	border-color: $color-primary;
+}
 
-	&-active,
-	&-processing {
-		border-color: $color-primary !important;
-	}
+.rule-type,
+.status-active,
+.status-processing {
+	border-color: $color-primary !important;
+}
 
-	&-declined {
-		border-color: $color-danger;
-	}
+.rule-type-block,
+.status-declined {
+	border-color: $color-danger !important;
+}
 
-	&-chargeback {
-		border-color: #9999ff;
-	}
+.status-chargeback {
+	border-color: #9999ff;
+}
 
-	&-approved {
-		border-color: $color-success;
-	}
+.status-approved {
+	border-color: $color-success;
+}
 
-	&-disabled,
-	&-refund {
-		border-color: $color-light !important;
-	}
+.status-disabled,
+.status-refund {
+	border-color: $color-light !important;
 }

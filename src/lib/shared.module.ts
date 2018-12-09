@@ -10,6 +10,7 @@ import { FieldErrorComponent } from './validation';
 import { AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent } from './components';
 import { StoreModule } from '@ngrx/store';
 import { APP_STATE_PREFIX } from './state';
+import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe } from './pipes';
 
 const MODULES = [
 	CommonModule,
@@ -28,7 +29,12 @@ const EXPOSED = [
 	PaginatorComponent,
 	DateRangeComponent,
 	InputComponent,
-	CountryComponent
+	CountryComponent,
+
+	UpperFirstPipe,
+	LowerCasePipe,
+	IsPresentPipe,
+	ToKeyValuePairsPipe
 ];
 
 @NgModule({

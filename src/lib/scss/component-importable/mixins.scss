@@ -1,24 +1,33 @@
 @mixin row($gutter) {
 	$gutter: $gutter / 2;
 	display: flex;
-	margin: 0 (-$gutter);
+	margin : 0 (-$gutter);
 
 	> * {
-		flex: 1;
+		flex  : 1;
 		margin: 0 $gutter;
 	}
 }
 
 @mixin text-ellipsis() {
-	overflow: hidden;
-	white-space: nowrap;
+	overflow     : hidden;
+	white-space  : nowrap;
 	text-overflow: ellipsis;
 }
 
 @mixin placeholder-color($color) {
+
 	&::placeholder,
 	&::-webkit-input-placeholder {
-		color: $color;
+		color     : $color;
 		transition: color $animation-duration $animation-function;
 	}
+}
+
+@mixin absolute-spread() {
+	position: absolute;
+	top     : 0;
+	bottom  : 0;
+	left    : 0;
+	right   : 0;
 }

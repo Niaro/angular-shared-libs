@@ -17,11 +17,10 @@ export class Psp extends MetadataEntity {
 	@Mapper(PaymentMethod)
 	paymentMethods: PaymentMethod[];
 
-	@Mapper(PaymentRouteRule)
-	rules: PaymentRouteRule[];
-
 	@Mapper(Currency)
 	currencies?: Currency[];
+
+	rules: PaymentRouteRule[];
 }
 
 export interface ICascadeOrder {

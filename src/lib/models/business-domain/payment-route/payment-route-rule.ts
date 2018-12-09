@@ -3,10 +3,12 @@ import { PaymentRouteRuleType } from '../enums';
 import { keys } from 'lodash-es';
 
 export class PaymentRouteRule extends MetadataEntity {
-	@Mapper(PaymentRouteRuleType)
+	pspName: string;
+
+	@Mapper(v => PaymentRouteRuleType.parse(v))
 	type: PaymentRouteRuleType;
 
-	conditions: IRuleVolumeConditions;
+	conditions: { [key: string]: string | number };
 
 	stringedConditions: string;
 
@@ -14,14 +16,4 @@ export class PaymentRouteRule extends MetadataEntity {
 		super(data);
 		this.stringedConditions = keys(this.conditions).map(k => `${k}: ${this.conditions[k]}`).join(', ');
 	}
-}
-
-export interface IRuleVolumeConditions {
-	min?: number;
-
-	max?: number;
-
-	is?: number;
-
-	above?: number;
 }
