@@ -2,13 +2,14 @@
 
 :host ::ng-deep mat-sidenav {
 	@include mat-elevation(15);
-	top      : $toolbar-height !important;
+	top: $toolbar-height !important;
 
 	.btn-close {
 		position: absolute;
 		top     : $layout-padding - 6px;
 		right   : $layout-padding;
 		color   : $color-semi-dark;
+		z-index : 2;
 
 		::ng-deep svg {
 			$size : 20px;

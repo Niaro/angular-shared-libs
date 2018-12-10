@@ -1,7 +1,7 @@
 $flicker: flickering 2s infinite ease-in-out;
 $fadeOut: fadeOut $animation-duration ease forwards;
 
-.pending-stub {
+.pending-stub:before {
 	content      : 'stub';
 	color        : transparent;
 	display      : inline-block;
@@ -15,6 +15,7 @@ $fadeOut: fadeOut $animation-duration ease forwards;
 .mat-card-content-table {
 	&.loading {
 		.mat-cell {
+
 			&:not(:first-of-type):not(:last-of-type),
 			&:first-of-type {
 				padding-right: 0.5rem;
@@ -23,9 +24,7 @@ $fadeOut: fadeOut $animation-duration ease forwards;
 
 		.mat-title,
 		.mat-cell {
-			&:before {
-				@extend .pending-stub;
-			}
+			@extend .pending-stub;
 		}
 
 		.mat-title:before {
@@ -37,15 +36,15 @@ $fadeOut: fadeOut $animation-duration ease forwards;
 		.mat-title,
 		.mat-cell {
 			position: relative;
+			@extend .pending-stub;
 
 			&:before {
-				@extend .pending-stub;
-				width: auto;
-				left: 0;
-				right: 0;
+				width    : auto;
+				left     : 0;
+				right    : 0;
 				position : absolute;
 				animation: $flicker, $fadeOut;
-				z-index: 1;
+				z-index  : 1;
 			}
 		}
 

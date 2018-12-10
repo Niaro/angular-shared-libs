@@ -27,17 +27,17 @@ export abstract class MetadataEntity {
 		return (<typeof MetadataEntity>this.constructor).metadata.get(propName);
 	}
 
-	protected assignCustomizer = (objValue: any, srcValue: any, key: string, objObject, srcObject) => {
+	protected assignCustomizer = (currValue: any, srcValue: any, key: string, currObject, srcObject) => {
 		const mapper = (<typeof MetadataEntity>this.constructor).metadata.mappers[key];
 		if (!isNil(srcValue) && mapper) {
 			const make = v => isExtensionOf(mapper, Enumeration)
 				? (<typeof Enumeration>mapper).parse(camelCase(v))
 				// if the mapper doesn't have a name we assume that this is a class is used as a mapper so we initiate it
-				: isExtensionOf(mapper, MetadataEntity) ? new mapper(v) : mapper(v, srcObject);
+				: isExtensionOf(mapper, MetadataEntity) ? new mapper(v) : mapper(v, srcObject, currObject);
 
 			return isArray(srcValue)
-					? srcValue.map(v => make(v))
-					: make(srcValue);
+				? srcValue.map(v => make(v))
+				: make(srcValue);
 		}
 		return srcValue;
 	}

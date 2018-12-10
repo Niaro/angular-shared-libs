@@ -1,15 +1,16 @@
 <ng-container *ngIf="compact; else fullTpl">
 	<div class="iti-flag"
-	     [matTooltip]="country.name"
+	     [matTooltip]="name"
 	     matTooltipClass="capitalized"
 	     matTooltipPosition="above"
-	     [ngClass]="country.lowerCaseCode">
+	     [ngClass]="klass">
 	</div>
 </ng-container>
 
 <ng-template #fullTpl>
-	<div class="iti-flag"
-	     [ngClass]="country.lowerCaseCode">
+	<div *ngIf="!isWorldwide"
+	     class="iti-flag"
+	     [ngClass]="klass">
 	</div>
-	<span>{{ country.name }}</span>
+	<span class="capitalized">{{ name }}</span>
 </ng-template>

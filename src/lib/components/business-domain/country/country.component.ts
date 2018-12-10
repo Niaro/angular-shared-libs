@@ -1,6 +1,6 @@
 import { Component, OnChanges, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 
-import { Country } from '@bp/shared/models';
+import { Country, CountryCode, Countries } from '@bp/shared/models';
 
 @Component({
 	selector: 'bp-country',
@@ -9,10 +9,23 @@ import { Country } from '@bp/shared/models';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CountryComponent implements OnChanges {
-	@Input('src') country: Country;
+	@Input() src: CountryCode | Country | 'all';
 	@Input() compact: boolean;
 
-	ngOnChanges({ compact }: SimpleChanges) {
+	country: Country;
+	isWorldwide = false;
+
+	get name() { return this.isWorldwide ? 'worldwide' : this.country.name; }
+	get klass() { return this.isWorldwide ? this.name : this.country.lowerCaseCode; }
+
+	ngOnChanges({ compact, src }: SimpleChanges) {
+		if (src) {
+			this.country = this.src instanceof Country
+				? this.src
+				: Countries.findByCode(<CountryCode>this.src);
+			this.isWorldwide = this.src === 'all';
+		}
+
 		if (compact)
 			this.compact = true;
 	}

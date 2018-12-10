@@ -39,8 +39,8 @@ export class RouterService {
 		return this.router.events.pipe(
 			filter(e => e instanceof NavigationEnd),
 			map(() => RouterService.getPrimaryBranchLastRoute(this.route).component),
-			filter(it => it === component),
-			distinctUntilChanged()
+			distinctUntilChanged(),
+			filter(it => it === component)
 		);
 	}
 }

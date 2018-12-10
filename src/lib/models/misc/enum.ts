@@ -1,4 +1,4 @@
-import { forOwn, isNil, kebabCase, isNumber, isArray } from 'lodash';
+import { camelCase, lowerCase, forOwn, isNil, kebabCase, isNumber, isArray, upperFirst } from 'lodash-es';
 
 export abstract class Enumeration {
 	static list(): Enumeration[] {
@@ -22,7 +22,7 @@ export abstract class Enumeration {
 			return data;
 		else if (isNumber(data))
 			return this.find(data);
-		return this[data];
+		return this[camelCase(data)];
 	}
 
 	static parseStrict(data: number | string | Enumeration): Enumeration {
@@ -32,7 +32,7 @@ export abstract class Enumeration {
 		return result;
 	}
 
-	static is(value: any) { return value instanceof this; }
+	static isInstance(value: any) { return value instanceof this; }
 
 	protected static shouldList(value: Enumeration) {
 		return true;
@@ -85,6 +85,7 @@ export abstract class Enumeration {
 	private init({ valueSameAsName }: { valueSameAsName: boolean } = <any>{}) {
 		this.name = this.getValueName();
 		this.cssClass = this.getCssClass();
+		this._displayName = this._displayName || upperFirst(lowerCase(this.name));
 
 		if (valueSameAsName)
 			this._value = this.name;

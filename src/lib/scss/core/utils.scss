@@ -14,12 +14,20 @@
 	text-transform: capitalize;
 }
 
+.lowercase {
+	text-transform: lowercase;
+}
+
 .text-ellipsis {
 	@include text-ellipsis();
 }
 
 .inline-block {
 	display: inline-block;
+}
+
+.line-height-1 {
+	line-height: 1;
 }
 
 .animation-stub {

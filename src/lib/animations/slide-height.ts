@@ -35,3 +35,7 @@ export const SLIDE = trigger('slide', [
 	transition(':enter', useAnimation(SLIDE_DOWN_ANIMATION)),
 	transition(':leave', useAnimation(SLIDE_UP_ANIMATION)),
 ]);
+
+export const SLIDE_IN = trigger('slideIn', [
+	transition(':enter', useAnimation(SLIDE_DOWN_ANIMATION)),
+]);
