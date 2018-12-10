@@ -1,4 +1,4 @@
-import { camelCase, lowerCase, forOwn, isNil, kebabCase, isNumber, isArray, upperFirst } from 'lodash-es';
+import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst } from 'lodash-es';
 
 export abstract class Enumeration {
 	static list(): Enumeration[] {
@@ -41,7 +41,9 @@ export abstract class Enumeration {
 	get displayName(): string { return this._displayName || this.name || this._value.toString(); }
 
 	name: string;
-	cssClass: string;
+
+	// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
+	// cssClass: string;
 
 	protected _value: number | string;
 	protected _displayName: string;
@@ -84,7 +86,7 @@ export abstract class Enumeration {
 
 	private init({ valueSameAsName }: { valueSameAsName: boolean } = <any>{}) {
 		this.name = this.getValueName();
-		this.cssClass = this.getCssClass();
+		// this.cssClass = this.getCssClass();
 		this._displayName = this._displayName || upperFirst(lowerCase(this.name));
 
 		if (valueSameAsName)
@@ -93,9 +95,9 @@ export abstract class Enumeration {
 		Object.freeze(this);
 	}
 
-	private getCssClass() {
-		return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
-	}
+	// private getCssClass() {
+	// 	return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
+	// }
 
 	private getValueName() {
 		let res: string = null;
