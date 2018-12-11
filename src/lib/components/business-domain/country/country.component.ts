@@ -9,7 +9,7 @@ import { Country, CountryCode, Countries } from '@bp/shared/models';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CountryComponent implements OnChanges {
-	@Input() src: CountryCode | Country | 'all';
+	@Input() src: CountryCode | Country | 'ALL';
 	@Input() compact: boolean;
 
 	country: Country;
@@ -23,7 +23,7 @@ export class CountryComponent implements OnChanges {
 			this.country = this.src instanceof Country
 				? this.src
 				: Countries.findByCode(<CountryCode>this.src);
-			this.isWorldwide = this.src === 'all';
+			this.isWorldwide = this.src === 'ALL';
 		}
 
 		if (compact)

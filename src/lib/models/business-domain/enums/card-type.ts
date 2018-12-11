@@ -5,7 +5,7 @@ export class CardType extends Enumeration {
 	static forbrugsforeningen = new CardType();
 	static dankort = new CardType();
 	static visa = new CardType();
-	static mastercard = new CardType();
+	static masterCard = new CardType('MasterCard');
 	static amex = new CardType();
 	static dinersclub = new CardType();
 	static discover = new CardType();

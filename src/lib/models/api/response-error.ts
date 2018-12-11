@@ -11,14 +11,14 @@ export class ResponseError {
 		return this.status === StatusCode.forbidden;
 	}
 
+	get is500ish() {
+		return this.status === StatusCode.internalServerError;
+	}
+
 	constructor(e: HttpErrorResponse) {
-		this.status = e.status >= 500 || e.statusText === 'Unknown Error'
+		this.status = e.status >= 500 || e.status === 0 || e.statusText === 'Unknown Error'
 			? StatusCode.internalServerError
 			: e.status === 0 ? StatusCode.timeout : e.status;
-
-		this.status = e.status === StatusCode.gatewayTimeout
-			? StatusCode.gatewayTimeout
-			: this.status;
 
 		this.statusText = STATUS_CODE_MESSAGES[this.status];
 
@@ -28,16 +28,9 @@ export class ResponseError {
 		if (this.status === StatusCode.internalServerError)
 			this.messages = [
 				{
-					message: 'We are sorry! The server has encountered an internal error and was unable to complete your request.',
-					type: 'Try again a little later or contact the support if the problem persists',
+					message: 'The request to the server has failed.',
+					type: 'Please check your connection and try again later or contact the support if the problem persists',
 				},
-			];
-		else if (this.status === StatusCode.gatewayTimeout)
-			this.messages = [
-				{
-					message: this.statusText,
-					type: 'Please, check your internet connection'
-				}
 			];
 		else if (e.error) {
 			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;

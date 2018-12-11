@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getRouteData } from '../../../state';
@@ -11,12 +13,18 @@ import * as Layout from './layout.actions';
 export class LayoutFacade {
 	showSidenav$ = this.store.pipe(select(getShowSidenav));
 	showRightDrawer$ = this.store.pipe(select(getShowRightDrawer));
-	fullscreen$ = this.store.pipe(
-		select(getRouteData),
-		map(v => !!v && v.fullscreen)
-	);
 
-	constructor(private store: Store<ILayoutPartialState>) { }
+	fullscreen$ = new BehaviorSubject<boolean>(false);
+	get fullscreen() { return this.fullscreen$.value; }
+
+	constructor(private store: Store<ILayoutPartialState>) {
+		this.store
+			.pipe(
+				select(getRouteData),
+				map(v => !!v && !!v.fullscreen)
+			)
+			.subscribe(this.fullscreen$);
+	}
 
 	openSidenav() {
 		this.store.dispatch(new Layout.OpenSidenav());

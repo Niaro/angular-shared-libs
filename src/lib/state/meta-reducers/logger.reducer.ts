@@ -7,7 +7,7 @@ const ERROR_LOG_STYLE = `${LOG_STYLE}${ERROR_BG_STYLE('#ff3636')}`;
 export function logger<T, V extends Action = Action>(reducer: ActionReducer<T, V>): ActionReducer<T, V> {
 	return (state: T, action: V): any => {
 		const result = reducer(state, action);
-		const logStyle = /((F|f)ailure)|((E|e)rror)/.test(action.type) ? ERROR_LOG_STYLE : LOG_STYLE;
+		const logStyle = /((F|f)ailure)|((E|e)rror)|ROUTE_ERROR/.test(action.type) ? ERROR_LOG_STYLE : LOG_STYLE;
 
 		console.groupCollapsed(`%c${action.type}`, logStyle);
 

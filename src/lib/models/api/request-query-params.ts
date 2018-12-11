@@ -5,7 +5,7 @@ export interface ISortQueryParams {
 	sortDir?: 'DESC' | 'ASC';
 }
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE = 25;
 
 export interface IPageQueryParams {
 	page?: string;

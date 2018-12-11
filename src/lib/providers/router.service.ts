@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, ActivatedRouteSnapshot, Params } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, ActivatedRouteSnapshot, Params, NavigationError } from '@angular/router';
 import { isNil, last, pickBy } from 'lodash-es';
 import { filter, distinctUntilChanged, map } from 'rxjs/operators';
+
+import { LayoutFacade } from '../features/layout';
+import { ResponseError } from '../models';
 
 @Injectable({
 	providedIn: 'root'
@@ -33,7 +36,16 @@ export class RouterService {
 		return route;
 	}
 
-	constructor(public router: Router, public route: ActivatedRoute) { }
+	constructor(
+		public router: Router,
+		public route: ActivatedRoute,
+		private layout: LayoutFacade
+	) {
+		this.router.events
+			.pipe(filter(e => e instanceof NavigationError))
+			// the request prop means that an error has occurred on loading a lazy module, so we just generalize and send to the error page
+			.subscribe((e: NavigationError) => e.error.request && this.navigateToErrorPage());
+	}
 
 	onPrimaryComponentNavigationEnd(component: any) {
 		return this.router.events.pipe(
@@ -42,5 +54,16 @@ export class RouterService {
 			distinctUntilChanged(),
 			filter(it => it === component)
 		);
+	}
+
+	tryNavigateOnResponseError(e: ResponseError) {
+		 // fullscreen pages handle errors on its own and all the non 500+ errors should be handled manually
+		if (this.layout.fullscreen || !e.is500ish)
+			return;
+		this.navigateToErrorPage();
+	}
+
+	private navigateToErrorPage() {
+		this.router.navigate(['/error'], { replaceUrl: false, skipLocationChange: true });
 	}
 }
