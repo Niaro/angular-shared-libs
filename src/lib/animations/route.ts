@@ -6,7 +6,7 @@ const optional = {
 };
 
 export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
-	transition(() => true, [
+	transition(getTrue, [
 		query('router-outlet + :enter > *', style({ opacity: 0, position: 'fixed' }), optional),
 
 		query(`router-outlet + :enter .${onNavigationAnimated}`, style({ opacity: 0 }), optional),
@@ -54,3 +54,7 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 		)
 	])
 ]);
+
+export function getTrue() {
+	return true;
+}
