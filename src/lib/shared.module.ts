@@ -7,7 +7,7 @@ import { MaterialModule } from './materials.module';
 import { LayoutModule, IdentityModule } from './features';
 import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
-import { AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent } from './components';
+import { AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent, CreditCardComponent } from './components';
 import { StoreModule } from '@ngrx/store';
 import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe } from './pipes';
@@ -23,14 +23,21 @@ const MODULES = [
 ];
 
 const EXPOSED = [
+	// misc
 	FieldErrorComponent,
 	AlertComponent,
 	ApiErrorComponent,
 	PaginatorComponent,
+
+	// controls
 	DateRangeComponent,
 	InputComponent,
-	CountryComponent,
 
+	// business
+	CountryComponent,
+	CreditCardComponent,
+
+	// pipes
 	UpperFirstPipe,
 	LowerCasePipe,
 	IsPresentPipe,

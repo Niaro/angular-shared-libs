@@ -24,6 +24,8 @@ export class CountryComponent implements OnChanges {
 				? this.src
 				: Countries.findByCode(<CountryCode>this.src);
 			this.isWorldwide = this.src === 'ALL';
+			if (!this.isWorldwide && !this.country)
+				throw new Error('The country code is not iso2 code');
 		}
 
 		if (compact)

@@ -1,5 +1,5 @@
 import { MetadataEntity, Mapper } from '../../metadata';
-import { PaymentRouteMethodType, CardType } from '../enums';
+import { PaymentRouteMethodType, CreditCardType } from '../enums';
 import { Currency } from '../currency';
 
 export class PaymentMethod extends MetadataEntity {
@@ -18,8 +18,8 @@ export class PaymentMethod extends MetadataEntity {
 	@Mapper(PaymentRouteMethodType)
 	type: PaymentRouteMethodType;
 
-	@Mapper(CardType)
-	brands?: CardType[];
+	@Mapper(CreditCardType)
+	brands?: CreditCardType[];
 
 	@Mapper(Currency)
 	currencies?: Currency[];

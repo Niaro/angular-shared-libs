@@ -47,6 +47,11 @@
 	flex-flow: column;
 }
 
+.flex-between {
+	display: flex;
+	justify-content: space-between;
+}
+
 .w-25 {
 	width: 25% !important;
 }
