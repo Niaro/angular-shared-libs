@@ -2,7 +2,7 @@ import { Enumeration } from '../../misc';
 
 export class CreditCardType extends Enumeration {
 	static maestro = new CreditCardType();
-	static hipercard = new CreditCardType();
+	static hypercard = new CreditCardType();
 	static elo = new CreditCardType();
 	static alipay = new CreditCardType();
 	static forbrugsforeningen = new CreditCardType();
