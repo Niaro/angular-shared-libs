@@ -33,7 +33,7 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 						[
 							style({
 								transform: 'translateY(-3%)',
-								opacity: 1,
+								opacity: 0,
 								position: 'static'
 							}),
 							animate(
@@ -48,7 +48,7 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 						[
 							style({
 								transform: 'translateY(-10%)',
-								opacity: 1
+								opacity: 0
 							}),
 							animate(
 								'0.5s ease-in-out',
