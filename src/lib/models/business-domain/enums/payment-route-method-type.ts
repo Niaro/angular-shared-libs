@@ -5,4 +5,5 @@ export class PaymentRouteMethodType extends Enumeration {
 	static voucher = new PaymentRouteMethodType();
 	static wireTransfer = new PaymentRouteMethodType('Wire Transfer');
 	static bitcoin = new PaymentRouteMethodType();
+	static cap = new PaymentRouteMethodType('CAP');
 }
