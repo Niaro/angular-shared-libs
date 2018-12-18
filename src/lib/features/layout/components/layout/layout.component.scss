@@ -1,7 +1,6 @@
 @import 'imports';
 
 ::ng-deep {
-
 	html,
 	body {
 		height: 100%;
@@ -36,12 +35,6 @@
 	&:not(.fullscreen) .mat-drawer-content {
 		margin-top: $toolbar-height;
 
-		router-outlet ~ *:not(.out-of-layout):not(bp-footer) {
-			display: block;
-			padding: $layout-padding;
-
-		}
-
 		> router-outlet ~ *:not(.out-of-layout):not(bp-footer) {
 			max-width: $layout-max-width;
 			margin   : 0 auto;
@@ -52,6 +45,14 @@
 		> bp-footer {
 			flex-shrink: 0;
 			min-height : 70px;
+		}
+	}
+
+	&:not(.fullscreen) .mat-drawer-content,
+	&:not(.fullscreen) .mat-drawer-inner-container {
+		> router-outlet ~ *:not(.out-of-layout):not(bp-footer) {
+			display: block;
+			padding: $layout-padding;
 		}
 	}
 

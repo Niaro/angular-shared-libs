@@ -1,10 +1,12 @@
-import { Component, ChangeDetectionStrategy, ContentChild, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ContentChild, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { Router, RouterOutlet, NavigationEnd, PRIMARY_OUTLET, RoutesRecognized, ActivatedRoute } from '@angular/router';
 import { filter, map, first, takeUntil } from 'rxjs/operators';
-import { mapValues, last } from 'lodash-es';
+import { last, unset, has } from 'lodash-es';
 import { LayoutFacade } from '../../state';
 import { fromEvent, AsyncSubject } from 'rxjs';
+
+export type RightDrawerNames = 'primary' | 'root';
 
 @Component({
 	selector: 'bp-right-drawer',
@@ -13,15 +15,19 @@ import { fromEvent, AsyncSubject } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RightDrawerComponent implements OnInit, OnDestroy {
+	@Input() name: RightDrawerNames;
 	@ContentChild(RouterOutlet) outlet: RouterOutlet;
 	@ViewChild(MatSidenav) drawer: MatSidenav;
 
-	private urlPrimary: string;
 	private urlWithOutlet: string;
 	private outletUrlHistory: string[] = [];
 	private saveUrlWithOutletToHistory = true;
+
+	private navigation = false;
+	private destinationUrl: string;
 	private get outletName() { return this.outlet['name']; }
 	private destroyed$ = new AsyncSubject();
+	private drawerOutletUrlTreePath: string;
 
 	constructor(
 		public layout: LayoutFacade,
@@ -30,12 +36,14 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit() {
+		this.drawerOutletUrlTreePath = this.getDrawerOutletUrlTreePath();
+
 		fromEvent<KeyboardEvent>(window, 'keydown')
 			.pipe(
 				filter(it => this.drawer.opened && it.key === 'Escape'),
 				takeUntil(this.destroyed$)
 			)
-			.subscribe(() => this.layout.closeRightDrawer());
+			.subscribe(() => this.layout.closeRightDrawer(this.name));
 
 		this.outlet.activateEvents.subscribe(() => this.outletActivate());
 		this.outlet.deactivateEvents.subscribe(() => this.outletDeactivate());
@@ -51,10 +59,6 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 		// 	.subscribe(([prevOutlet]) => this.drawer['_enableAnimations'] = prevOutlet !== this.outletName);
 
 		this.router.events
-			.pipe(filter(e => e instanceof NavigationEnd))
-			.subscribe(() => this.urlPrimary = this.parseUrl(this.router.url)[PRIMARY_OUTLET]);
-
-		this.router.events
 			.pipe(
 				filter(e => e instanceof NavigationEnd),
 				map(() => this.route.snapshot.firstChild.children.find(r => r.outlet === this.outletName))
@@ -67,8 +71,7 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 		this.router.events
 			.pipe(filter(e => e instanceof RoutesRecognized && this.drawer.opened))
 			.subscribe((e: RoutesRecognized) => {
-				const outletUrls = this.parseUrl(e.url);
-				if (outletUrls[this.outletName]) {
+				if (this.hasUrlDrawerOutlet(e.url)) {
 					const nextUrlIsLastInHistory = last(this.outletUrlHistory) === e.url;
 					nextUrlIsLastInHistory && this.outletUrlHistory.pop();
 					this.saveUrlWithOutletToHistory = !nextUrlIsLastInHistory;
@@ -79,9 +82,10 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 					// since it's updated only on NavigationEnd, but we are still processing RoutesRecognized.
 					// We interrupt navigating to the destination url by renavigating back to the current url.
 					this.router.navigateByUrl(this.urlWithOutlet);
-					this.urlPrimary = outletUrls[PRIMARY_OUTLET];
 					this.outletUrlHistory = [];
-					this.layout.closeRightDrawer(); // the handler on the close event will actually navigate to the destination url
+					this.navigation = true;
+					this.destinationUrl = e.url;
+					this.layout.closeRightDrawer(this.name); // the handler on the close event will actually navigate to the destination url
 				}
 			});
 	}
@@ -92,8 +96,9 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 	}
 
 	private outletActivate() {
+		this.navigation = false;
 		this.saveUrlWithOutletToHistory = true;
-		this.layout.openRightDrawer();
+		this.layout.openRightDrawer(this.name);
 
 		// closed by click on backdrop, or by esc, or somewhere else programmatically
 		this.drawer.closedStart
@@ -101,26 +106,36 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 				filter(() => this.outletUrlHistory.length > 0),
 				first()
 			)
-			.subscribe(() => this.navigateToPrevOpenInDrawerRoute());
+			.subscribe(() => this.navigateToPrevOpenInDrawerRouteOrToDestUrl());
 
 		this.drawer._closedStream
 			.pipe(first())
-			.subscribe(() => this.navigateToPrevOpenInDrawerRoute());
+			.subscribe(() => this.navigateToPrevOpenInDrawerRouteOrToDestUrl());
 	}
 
-	private navigateToPrevOpenInDrawerRoute() {
+	private navigateToPrevOpenInDrawerRouteOrToDestUrl() {
 		this.saveUrlWithOutletToHistory = false;
-		this.router.navigateByUrl(this.outletUrlHistory.pop() || this.urlPrimary);
+		this.router.navigateByUrl(this.navigation ? this.destinationUrl : (this.outletUrlHistory.pop() || this.getUrlWithoutCurrentOutlet()));
 	}
 
 	private outletDeactivate() {
 		this.saveUrlWithOutletToHistory && this.outletUrlHistory.push(this.urlWithOutlet);
 	}
 
-	private parseUrl(url: string): { [outlet: string]: string } {
-		return mapValues(
-			this.router.parseUrl(url).root.children,
-			value => value.toString()
-		);
+	private getUrlWithoutCurrentOutlet() {
+		const urlTree = this.router.parseUrl(this.router.url);
+		unset(urlTree, this.drawerOutletUrlTreePath);
+		return urlTree.toString();
+	}
+
+	private hasUrlDrawerOutlet(url: string): boolean {
+		const urlTree = this.router.parseUrl(url);
+		return has(urlTree, this.drawerOutletUrlTreePath);
+	}
+
+	private getDrawerOutletUrlTreePath() {
+		return 'root.children.' + (this.name === 'root'
+			? this.outletName
+			: `${PRIMARY_OUTLET}.children.${this.outletName}`);
 	}
 }

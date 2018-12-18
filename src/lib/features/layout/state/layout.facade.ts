@@ -5,14 +5,15 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getRouteData } from '../../../state';
+import { RightDrawerNames } from '../components/right-drawer';
 import { ILayoutPartialState } from './layout.reducer';
-import { getShowSidenav, getShowRightDrawer } from './layout.selectors';
+import { getShowSidenav, getRightDrawers } from './layout.selectors';
 import * as Layout from './layout.actions';
 
 @Injectable()
 export class LayoutFacade {
 	showSidenav$ = this.store.pipe(select(getShowSidenav));
-	showRightDrawer$ = this.store.pipe(select(getShowRightDrawer));
+	rightDrawers$ = this.store.pipe(select(getRightDrawers));
 
 	fullscreen$ = new BehaviorSubject<boolean>(false);
 	get fullscreen() { return this.fullscreen$.value; }
@@ -34,11 +35,12 @@ export class LayoutFacade {
 		this.store.dispatch(new Layout.CloseSidenav());
 	}
 
-	closeRightDrawer() {
-		this.store.dispatch(new Layout.CloseRightDrawer());
+	openRightDrawer(name: RightDrawerNames) {
+		this.store.dispatch(new Layout.OpenRightDrawer(name));
 	}
 
-	openRightDrawer() {
-		this.store.dispatch(new Layout.OpenRightDrawer());
+	closeRightDrawer(name?: RightDrawerNames) {
+		const drawerNames: RightDrawerNames[] = name ? [name] : ['primary', 'root'];
+		drawerNames.forEach(it => this.store.dispatch(new Layout.CloseRightDrawer(it)));
 	}
 }

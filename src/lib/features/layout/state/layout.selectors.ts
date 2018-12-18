@@ -8,7 +8,7 @@ export const getShowSidenav = createSelector(
 	it => it.showSidenav
 );
 
-export const getShowRightDrawer = createSelector(
+export const getRightDrawers = createSelector(
 	getLayoutState,
-	it => it.showRightDrawer
+	it => it.rightDrawers
 );

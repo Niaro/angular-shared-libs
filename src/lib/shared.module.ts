@@ -7,10 +7,13 @@ import { MaterialModule } from './materials.module';
 import { LayoutModule, IdentityModule } from './features';
 import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
-import { AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent, CreditCardComponent } from './components';
+import {
+	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
+	CreditCardComponent
+} from './components';
 import { StoreModule } from '@ngrx/store';
 import { APP_STATE_PREFIX } from './state';
-import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe } from './pipes';
+import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
 
 const MODULES = [
 	CommonModule,
@@ -42,7 +45,8 @@ const EXPOSED = [
 	LowerCasePipe,
 	IsPresentPipe,
 	ToKeyValuePairsPipe,
-	MomentPipe
+	MomentPipe,
+	SafePipe
 ];
 
 @NgModule({

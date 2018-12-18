@@ -17,10 +17,12 @@ export class CloseSidenav implements Action {
 
 export class OpenRightDrawer implements Action {
 	readonly type = Actions.OpenRightDrawer;
+	constructor(public payload: string) { }
 }
 
 export class CloseRightDrawer implements Action {
 	readonly type = Actions.CloseRightDrawer;
+	constructor(public payload: string) { }
 }
 
 export type Action = OpenSidenav

@@ -1,12 +1,13 @@
-<mat-sidenav [opened]="layout.showRightDrawer$ | async"
+<mat-sidenav [opened]="(layout.rightDrawers$ | async)[name]?.show"
+             [style.z-index]="(layout.rightDrawers$ | async)[name]?.zindex"
              position="end"
              [fixedInViewport]="true"
-             (keydown.escape)="layout.closeRightDrawer()">
+             (keydown.escape)="layout.closeRightDrawer(name)">
 	<button class="btn-close"
 	        mat-button
 	        matSuffix
 	        mat-icon-button
-	        (click)="layout.closeRightDrawer()">
+	        (click)="layout.closeRightDrawer(name)">
 		<bp-svg-icon name="close"></bp-svg-icon>
 	</button>
 
