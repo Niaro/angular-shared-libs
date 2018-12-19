@@ -20,7 +20,8 @@ import {
 	MatSelectModule,
 	MatRippleModule,
 	MatTooltipModule,
-	MatDatepickerModule
+	MatDatepickerModule,
+	MatAutocompleteModule
 } from '@angular/material';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -46,7 +47,8 @@ const MODULES = [
 	MatRippleModule,
 	MatTooltipModule,
 	MatDatepickerModule,
-	MatMomentDateModule
+	MatMomentDateModule,
+	MatAutocompleteModule
 ];
 
 @NgModule({

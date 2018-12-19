@@ -2,6 +2,8 @@
        matInput
        [placeholder]="placeholder"
        [value]="value || ''"
+       [matAutocomplete]="autocomplete"
+       [matAutocompleteConnectedTo]="autocompleteOrigin"
        (input)="update(el.value)">
 
 <button *ngIf="el.value"

@@ -49,8 +49,19 @@
 		border-color: $color-primary;
 		color       : white;
 
+		&.ng-dirty.ng-invalid {
+			background  : $color-danger;
+			border-color: $color-danger;
+		}
+
 		input {
+			color : white;
 			caret-color: white;
+
+			&::selection {
+				background: rgba(255, 255, 255, 0.99);
+				color: $color-primary;
+			}
 		}
 	}
 }
@@ -75,6 +86,8 @@
 	input {
 		@include placeholder-color($color-dark);
 		margin-top: 0 !important;
+		border: none;
+		background: transparent;
 	}
 }
 

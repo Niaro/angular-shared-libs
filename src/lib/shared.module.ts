@@ -9,7 +9,7 @@ import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
-	CreditCardComponent
+	CreditCardComponent, CountrySelectorComponent
 } from './components';
 import { StoreModule } from '@ngrx/store';
 import { APP_STATE_PREFIX } from './state';
@@ -35,6 +35,7 @@ const EXPOSED = [
 	// controls
 	DateRangeComponent,
 	InputComponent,
+	CountrySelectorComponent,
 
 	// business
 	CountryComponent,

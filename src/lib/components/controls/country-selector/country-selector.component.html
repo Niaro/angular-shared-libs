@@ -1,0 +1,15 @@
+<bp-input class="rounded-input"
+          [class.ng-dirty]="dirty"
+          [class.ng-invalid]="invalid"
+          placeholder="Country"
+          [autocomplete]="countryAutocomplete"
+          [value]="country?.name || inputValue"
+          (valueChange)="onCountryNameChange($event)">
+</bp-input>
+
+<mat-autocomplete #countryAutocomplete="matAutocomplete">
+	<mat-option *ngFor="let country of countries"
+	            [value]="country.name">
+		{{ country.name }}
+	</mat-option>
+</mat-autocomplete>
