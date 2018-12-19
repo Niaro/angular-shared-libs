@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, Input, HostBinding, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, Input, HostBinding, EventEmitter } from '@angular/core';
 import { Countries, Country } from '@bp/shared/models';
 
 @Component({
