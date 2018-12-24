@@ -1,10 +1,9 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, FormControl, ValidatorFn, AbstractControl, ValidationErrors, NG_VALIDATORS } from '@angular/forms';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { NG_VALUE_ACCESSOR, FormControl, NG_VALIDATORS } from '@angular/forms';
 
 import { Validators } from '@bp/shared/validation';
 
 import { InputBasedComponent } from '../input-based.component';
-import { TextMaskConfig } from '@bp/shared/directives';
 
 @Component({
 	selector: 'bp-ip-input',
