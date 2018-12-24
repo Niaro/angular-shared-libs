@@ -12,7 +12,7 @@
 	overflow           : hidden;
 
 	.mat-icon-button {
-		$size          : 30px;     // the height of the input
+		$size          : 30px;      // the height of the input
 		width          : $size;
 		height         : $size;
 		line-height    : $size;
@@ -33,6 +33,10 @@
 			height   : auto;
 		}
 	}
+
+	input {
+		color: inherit !important;
+	}
 }
 
 .rounded-input.closable,
@@ -44,23 +48,38 @@
 
 .rounded-input,
 .rounded-daterange {
+
+	.control.ng-dirty.ng-invalid &,
+	&.ng-dirty.ng-invalid {
+		background  : $color-danger;
+		border-color: $color-danger;
+
+		input::selection {
+			color: $color-danger;
+		}
+	}
+
 	&:not(.empty) {
 		background  : $color-primary;
 		border-color: $color-primary;
-		color       : white;
 
-		&.ng-dirty.ng-invalid {
-			background  : $color-danger;
-			border-color: $color-danger;
+		input::selection {
+			color: $color-primary;
 		}
+	}
+
+	.control.ng-dirty.ng-invalid &,
+	&.ng-dirty.ng-invalid,
+	&:not(.empty) {
+		color: white;
 
 		input {
-			color : white;
+			@include placeholder-color(white);
+			color      : white;
 			caret-color: white;
 
 			&::selection {
 				background: rgba(255, 255, 255, 0.99);
-				color: $color-primary;
 			}
 		}
 	}
@@ -86,7 +105,7 @@
 	input {
 		@include placeholder-color($color-dark);
 		margin-top: 0 !important;
-		border: none;
+		border    : none;
 		background: transparent;
 	}
 }

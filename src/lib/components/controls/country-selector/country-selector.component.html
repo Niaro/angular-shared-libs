@@ -1,10 +1,7 @@
 <bp-input class="rounded-input"
-          [class.ng-dirty]="dirty"
-          [class.ng-invalid]="invalid"
+          [formControl]="inputControl"
           placeholder="Country"
-          [autocomplete]="countryAutocomplete"
-          [value]="value?.name || inputValue"
-          (valueChange)="onCountryNameChange($event)">
+          [autocomplete]="countryAutocomplete">
 </bp-input>
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete">

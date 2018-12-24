@@ -1,7 +1,9 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { StoreModule } from '@ngrx/store';
 
 import { MaterialModule } from './materials.module';
 import { LayoutModule, IdentityModule } from './features';
@@ -9,11 +11,11 @@ import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
-	CreditCardComponent, CountrySelectorComponent
+	CreditCardComponent, CountrySelectorComponent, IpInputComponent
 } from './components';
-import { StoreModule } from '@ngrx/store';
 import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
+import { TextMaskDirective } from './directives';
 
 const MODULES = [
 	CommonModule,
@@ -21,6 +23,8 @@ const MODULES = [
 	RouterModule,
 	StoreModule,
 	LocalStorageModule,
+	ReactiveFormsModule,
+
 	LayoutModule,
 	IdentityModule
 ];
@@ -32,10 +36,14 @@ const EXPOSED = [
 	ApiErrorComponent,
 	PaginatorComponent,
 
+	// directives
+	TextMaskDirective,
+
 	// controls
 	DateRangeComponent,
 	InputComponent,
 	CountrySelectorComponent,
+	IpInputComponent,
 
 	// business
 	CountryComponent,

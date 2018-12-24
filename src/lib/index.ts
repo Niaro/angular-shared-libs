@@ -6,6 +6,7 @@ export * from './pages';
 export * from './pipes';
 export * from './providers';
 export * from './state';
+export * from './rxjs';
 export * from './utils';
 export * from './validation';
 export * from './errors.module';
