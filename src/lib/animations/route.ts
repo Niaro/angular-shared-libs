@@ -4,7 +4,7 @@ const onNavigationAnimated = 'on-navigation-animated';
 const optional = {
 	optional: true
 };
-const except = ':not(mat-toolbar):not(bp-toolbar):not(bp-right-drawer):not(bp-menu):not(router-outlet)';
+const except = ':not(mat-toolbar):not(bp-toolbar):not(bp-right-drawer):not(bp-menu):not(router-outlet):not(.ignore-route-animation)';
 export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 	transition(getTrue, [
 		// TODO uncomment the code below upon https://github.com/angular/material2/issues/8057 merging

@@ -8,7 +8,7 @@ import { LayoutFacade } from '../../state';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavItemComponent {
-	@Input() icon;
+	@Input() icon: string;
 	@Input() path: string | any[];
 	@Output() navigate = new EventEmitter();
 
