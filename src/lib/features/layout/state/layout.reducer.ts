@@ -31,7 +31,7 @@ export function reducer(state = initialState, action: Layout.Action): IState {
 				showSidenav: action.type === Layout.Actions.OpenSidenav,
 			};
 
-		case Layout.Actions.OpenRightDrawer:{
+		case Layout.Actions.OpenRightDrawer: {
 			const maxCurrentZIndex = max(map(state.rightDrawers, ({ zindex }) => zindex)) || 10;
 			return {
 				...state,
