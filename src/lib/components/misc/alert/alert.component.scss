@@ -5,7 +5,7 @@
 	overflow: hidden;
 	padding: 1em 1.25em;
 	margin-bottom: 1em;
-	border-radius: $border-radius / 2;
+	border-radius: $border-card-radius / 2;
 
 	@each $type, $scheme in $palette {
 		&.alert-#{$type} ::ng-deep {

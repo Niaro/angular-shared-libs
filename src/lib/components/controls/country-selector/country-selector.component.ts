@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Countries, Country } from '@bp/shared/models';
 import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { isArray } from 'lodash-es';
+
 import { InputBasedComponent } from '../input-based.component';
 
 @Component({
@@ -24,14 +26,23 @@ import { InputBasedComponent } from '../input-based.component';
 		}
 	]
 })
-export class CountrySelectorComponent extends InputBasedComponent<Country> {
+export class CountrySelectorComponent extends InputBasedComponent<Country> implements OnChanges {
+	@Input() excluded: Country[];
 	countries = Countries.list;
+	filtered = this.countries;
 
 	constructor() {
 		super();
 
 		this.inputControl.valueChanges
 			.subscribe(it => this.onCountryNameChange(it));
+	}
+
+	ngOnChanges({ excluded }: SimpleChanges) {
+		if (excluded)
+			this.countries = isArray(this.excluded)
+				? Countries.list.filter(it => !this.excluded.includes(it))
+				: Countries.list;
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -55,9 +66,9 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> {
 
 	onCountryNameChange(input: string) {
 		const loweredCountryName = input && input.toLowerCase();
-		this.countries = loweredCountryName
-			? Countries.list.filter(it => it.lowerCaseName.includes(loweredCountryName))
-			: Countries.list;
+		this.filtered = loweredCountryName
+			? this.countries.filter(it => it.lowerCaseName.includes(loweredCountryName))
+			: this.countries;
 
 		const country = input && Countries.find(input);
 		if (country !== this.value) {

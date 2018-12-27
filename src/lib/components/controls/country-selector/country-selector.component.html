@@ -5,7 +5,7 @@
 </bp-input>
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete">
-	<mat-option *ngFor="let country of countries"
+	<mat-option *ngFor="let country of filtered"
 	            [value]="country.name">
 		{{ country.name }}
 	</mat-option>

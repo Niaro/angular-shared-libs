@@ -33,7 +33,7 @@ bp-layout {
 	}
 
 	.mat-card {
-		border-radius: $border-radius;
+		border-radius: $border-card-radius;
 		padding      : $mat-card-padding-y $mat-card-padding-x;
 		display      : flex;
 		flex-flow    : column;
