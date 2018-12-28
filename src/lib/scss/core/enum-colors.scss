@@ -1,10 +1,15 @@
 .rule-type,
+.status-inProcess,
 .status-active,
 .status-processing {
 	border-color: $color-primary !important;
 }
 
 .payment-route-rule-type-block,
+.status-declinedDueTo3DAuthFailure,
+.status-declinedDoNotTryAgain,
+.status-declinedByTimeout,
+.status-declinedDueToInvalidCreditCard,
 .status-declined {
 	border-color: $color-danger !important;
 }
