@@ -10,7 +10,7 @@ export class VolumeConditionType extends Enumeration {
 export class TransactionConditionType extends Enumeration {
 	static equalTo = new TransactionConditionType();
 	static greaterThan = new TransactionConditionType();
-	static lessThan = new TransactionConditionType();
+	static lowerThan = new TransactionConditionType();
 	static between = new TransactionConditionType();
 }
 
