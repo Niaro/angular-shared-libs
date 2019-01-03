@@ -13,8 +13,8 @@ export class PaymentRoute extends MetadataEntity {
 
 	name: string;
 
-	@Mapper(v => v instanceof Country || v === 'all' ? v : Countries.findByCode(v))
-	country: Country | 'all';
+	@Mapper(v => v instanceof Country || v === 'ALL' ? v : Countries.findByCode(v))
+	country: Country | 'ALL';
 
 	@Mapper(PaymentRouteStatus)
 	status: PaymentRouteStatus;
