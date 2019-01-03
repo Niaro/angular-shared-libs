@@ -27,4 +27,5 @@ export class BlockConditionType extends Enumeration {
 	static bin = new BlockConditionType();
 	static ip = new BlockConditionType('IP');
 	static country = new BlockConditionType();
+	static brand = new BlockConditionType();
 }

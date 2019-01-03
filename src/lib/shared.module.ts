@@ -11,7 +11,7 @@ import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
-	CreditCardComponent, CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective
+	PaymentMethodBrandComponent, CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective
 } from './components';
 import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
@@ -49,7 +49,7 @@ const EXPOSED = [
 
 	// business
 	CountryComponent,
-	CreditCardComponent,
+	PaymentMethodBrandComponent,
 
 	// pipes
 	UpperFirstPipe,

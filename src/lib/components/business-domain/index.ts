@@ -1,2 +1,2 @@
 export * from './country';
-export * from './credit-card';
+export * from './payment-method-brand';

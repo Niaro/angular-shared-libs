@@ -22,23 +22,3 @@
 	bottom: 0;
 	width: $mat-card-status-border-width;
 }
-
-::ng-deep .status-bar-top,
-::ng-deep .status-bar-left {
-	position: relative;
-	overflow: unset !important;
-}
-
-::ng-deep .status-bar-top {
-	border-top-left-radius: 0 !important;
-	border-top-right-radius: 0 !important;
-	border-top-width: $mat-card-status-border-width;
-	border-top-style: solid;
-}
-
-::ng-deep .status-bar-left {
-	border-top-left-radius: 0 !important;
-	border-bottom-left-radius: 0 !important;
-	border-left-width: $mat-card-status-border-width;
-	border-left-style: solid;
-}

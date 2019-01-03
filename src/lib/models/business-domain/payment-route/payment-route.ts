@@ -31,8 +31,10 @@ export class PaymentRoute extends MetadataEntity {
 	constructor(data: Partial<PaymentRoute>) {
 		super(data);
 
-		if (this.paymentRules)
+		if (this.paymentRules) {
+			this.globalPaymentRules = [...(this.globalPaymentRules || []), ...this.paymentRules.filter(it => !it.pspName)];
 			for (const psp of this.psps)
 				psp.rules = this.paymentRules.filter(it => it.pspName === psp.name);
+		}
 	}
 }
