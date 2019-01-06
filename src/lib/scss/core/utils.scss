@@ -10,7 +10,7 @@
 	white-space: nowrap;
 }
 
-.capitalized {
+.capitalized::first-letter {
 	text-transform: capitalize;
 }
 

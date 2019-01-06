@@ -137,7 +137,10 @@
 	.mat-select-placeholder,
 	.mat-select-value {
 		color         : $color-dark;
-		text-transform: capitalize;
+
+		&::first-letter {
+			text-transform: capitalize;
+		}
 	}
 
 	.mat-select-arrow {
@@ -156,8 +159,11 @@
 }
 
 .mat-select-panel .status .mat-option-text {
-	text-transform : capitalize;
 	display        : flex;
 	align-items    : center;
 	justify-content: space-between;
+
+	&::first-letter {
+		text-transform : capitalize;
+	}
 }

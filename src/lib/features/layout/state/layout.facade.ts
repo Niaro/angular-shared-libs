@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { select, Store } from '@ngrx/store';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { getRouteData } from '../../../state';
@@ -15,10 +16,15 @@ export class LayoutFacade {
 	showSidenav$ = this.store.pipe(select(getShowSidenav));
 	rightDrawers$ = this.store.pipe(select(getRightDrawers));
 
+	hasOpenedDialogs$ = merge(
+		this.dialog.afterOpen.pipe(map(() => true)),
+		this.dialog.afterAllClosed.pipe(map(() => false)),
+	);
+
 	fullscreen$ = new BehaviorSubject<boolean>(false);
 	get fullscreen() { return this.fullscreen$.value; }
 
-	constructor(private store: Store<ILayoutPartialState>) {
+	constructor(private store: Store<ILayoutPartialState>, private dialog: MatDialog) {
 		this.store
 			.pipe(
 				select(getRouteData),

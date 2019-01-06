@@ -1,6 +1,7 @@
 <bp-svg-icon-definitions></bp-svg-icon-definitions>
 
 <mat-sidenav-container [class.fullscreen]="layout.fullscreen$ | async"
+						[class.has-opened-dialogs]="layout.hasOpenedDialogs$ | async"
                        (keydown.escape)="layout.closeRightDrawer()">
 
 	<ng-content></ng-content>

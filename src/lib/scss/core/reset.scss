@@ -9,8 +9,10 @@ hr {
 }
 
 * {
+	box-sizing: border-box;
+
 	&:active,
-	 :focus {
+	&:focus {
 		outline: none !important;
 	}
 }

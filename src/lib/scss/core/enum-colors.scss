@@ -1,6 +1,7 @@
 .rule-type,
 .status-inProcess,
 .status-active,
+.status-connected,
 .status-processing {
 	border-color: $color-primary !important;
 }
@@ -22,7 +23,9 @@
 	border-color: $color-success;
 }
 
+.status-inactive,
 .status-disabled,
+.status-notConnected,
 .status-refund {
 	border-color: $color-light !important;
 }

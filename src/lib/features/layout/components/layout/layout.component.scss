@@ -21,6 +21,11 @@
 	height   : 100%;
 	display  : flex;
 	flex-flow: column;
+	transition: filter $animation-duration $animation-function;
+
+	&.has-opened-dialogs {
+		filter: blur(5px);
+	}
 
 	.mat-drawer-content {
 		flex     : 1;
