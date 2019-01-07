@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { LayoutFacade } from '../../state';
+import { environment } from '@bp/environment';
 
 @Component({
 	selector: 'bp-toolbar',
@@ -8,5 +9,7 @@ import { LayoutFacade } from '../../state';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToolbarComponent {
+	get isNotProd() { return environment.name !== 'prod'; }
+
 	constructor(public layout: LayoutFacade) {}
 }
