@@ -1,14 +1,24 @@
-$flicker: flickering 2s infinite ease-in-out;
+$pendingStubAnimation: pendingStubAnimation 2s linear infinite;
 $fadeOut: fadeOut $animation-duration ease forwards;
+$bg-width: 250px;
+$bg-color: fade-out($color-light, 0.7);
 
 .pending-stub:before {
 	content      : 'stub';
 	color        : transparent;
 	display      : inline-block;
-	background   : fade-out($color-light, 0.75);
 	border-radius: 5px;
-	animation    : $flicker;
 	width        : 100%;
+	$gradient    : -45deg,
+		$bg-color 0%,
+		$bg-color 15%,
+		lighten($bg-color, 18%) 50%,
+		lighten($bg-color, 18%) 60%,
+		$bg-color 95%,
+		$bg-color 100%;
+	background-image: linear-gradient($gradient);
+	background-size: $bg-width 55px;
+	animation: $pendingStubAnimation;
 }
 
 .title-pending-stubs,
@@ -43,7 +53,7 @@ $fadeOut: fadeOut $animation-duration ease forwards;
 				left     : 0;
 				right    : 0;
 				position : absolute;
-				animation: $flicker, $fadeOut;
+				animation: $pendingStubAnimation, $fadeOut;
 				z-index  : 1;
 			}
 		}
@@ -57,5 +67,11 @@ $fadeOut: fadeOut $animation-duration ease forwards;
 				left: 1rem;
 			}
 		}
+	}
+}
+
+@keyframes pendingStubAnimation {
+	100% {
+		background-position: $bg-width 0;
 	}
 }

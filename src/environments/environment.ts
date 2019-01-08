@@ -17,7 +17,7 @@ export const environment: IEnvironment = {
 		version: 'v1',
 	},
 
-	// by putting it always as the last property in the object we allow override any environment specific property by the apps
+	// by putting this always as the last property in the object we allow overriding of any environment specific property by the apps
 	...appEnvironment,
 	...constants
 };

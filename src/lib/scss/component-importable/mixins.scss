@@ -10,10 +10,10 @@
 }
 
 @mixin row-wrap($gutter) {
-	$gutter: $gutter / 2;
-	display: flex;
+	$gutter  : $gutter / 2;
+	display  : flex;
 	flex-wrap: wrap;
-	margin : -$gutter;
+	margin   : -$gutter;
 
 	> * {
 		margin: $gutter;
@@ -27,12 +27,31 @@
 }
 
 @mixin placeholder-color($color) {
-
 	&::placeholder,
 	&::-webkit-input-placeholder {
 		color     : $color;
 		transition: color $animation-duration $animation-function;
 	}
+}
+
+@mixin bg-stripes($color1, $color2) {
+	$gradient: -45deg,
+		$color2 25%,
+		transparent 25%,
+		transparent 50%,
+		$color2 50%,
+		$color2 75%,
+		transparent 75%,
+		transparent;
+	background-color: $color1;
+	background-image: -webkit-linear-gradient($gradient);  /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
+	background-image: linear-gradient($gradient);
+	background-size : 55px 55px;
+}
+
+@mixin progress($bg: transparent, $color: white, $opacity: 0.15) {
+	@include bg-stripes($bg, fade-out($color, $opacity));
+	animation: rollingBackground 1.4s linear infinite;
 }
 
 @mixin absolute-spread() {
