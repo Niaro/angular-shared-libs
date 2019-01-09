@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, ActivatedRouteSnapshot, Params, NavigationError } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, ActivatedRouteSnapshot, Params, NavigationError, NavigationStart } from '@angular/router';
 import { isNil, last, pickBy } from 'lodash-es';
-import { filter, distinctUntilChanged, map } from 'rxjs/operators';
+import { filter, distinctUntilChanged, map, share } from 'rxjs/operators';
 
 import { LayoutFacade } from '../features/layout';
 import { ResponseError } from '../models';
@@ -35,6 +35,11 @@ export class RouterService {
 			route = route.firstChild as T;
 		return route;
 	}
+
+	navigationStart$ = this.router.events.pipe(
+		filter(it => it instanceof NavigationStart),
+		share()
+	);
 
 	constructor(
 		public router: Router,
