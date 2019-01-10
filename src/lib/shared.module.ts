@@ -15,7 +15,7 @@ import {
 } from './components';
 import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
-import { TextMaskDirective } from './directives';
+import { TextMaskDirective, TargetBlankDirective } from './directives';
 
 const MODULES = [
 	CommonModule,
@@ -40,6 +40,7 @@ const EXPOSED = [
 	// directives
 	TextMaskDirective,
 	StatusBarContainerDirective,
+	TargetBlankDirective,
 
 	// controls
 	DateRangeComponent,
