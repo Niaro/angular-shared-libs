@@ -15,4 +15,5 @@ export interface IEnvironment extends IAppEnvironment {
 	version: Version;
 	mockKey: string;
 	mockUrl: string;
+	cashierWidgetUrl: string;
 }
