@@ -12,8 +12,8 @@ export class RouterStateCustomSerializer implements RouterStateSerializer<IRoute
 			route = route.firstChild;
 
 		const { url, root: { queryParams } } = routerState;
-		const { params, data } = route;
+		const { params, data, routeConfig } = route;
 
-		return { url, data, params, queryParams };
+		return { url, data, params, queryParams, routeConfig };
 	}
 }

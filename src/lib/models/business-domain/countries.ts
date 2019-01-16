@@ -23,6 +23,10 @@ export class Country extends MetadataEntity {
 		this.lowerCaseCode = this.code.toLowerCase();
 		Object.freeze(this);
 	}
+
+	valueOf(): any {
+		return this.code;
+	}
 }
 
 export class Countries {

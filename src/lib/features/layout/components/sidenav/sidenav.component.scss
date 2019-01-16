@@ -5,8 +5,7 @@
 		background: transparent;
 	}
 
-	::ng-deep mat-sidenav {
-		@include mat-elevation(15);
+	::ng-deep .mat-sidenav {
 		min-width: 350px;
 		top: $toolbar-height !important;
 

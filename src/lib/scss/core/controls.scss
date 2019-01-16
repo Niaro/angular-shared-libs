@@ -39,7 +39,7 @@
 	}
 }
 
-.rounded-input.closable,
+.rounded-input,
 .rounded-daterange {
 	&:not(.empty) {
 		padding-right: 1.8rem;
@@ -48,7 +48,6 @@
 
 .rounded-input,
 .rounded-daterange {
-
 	.control.ng-dirty.ng-invalid &,
 	&.ng-dirty.ng-invalid {
 		background  : $color-danger;

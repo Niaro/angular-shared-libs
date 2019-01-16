@@ -1,10 +1,10 @@
 <input class="from"
-       [class.empty]="!_value.from"
+       [class.empty]="!value.from"
        [matDatepicker]="fromPicker"
        readonly
        placeholder="From"
-       [value]="_value.from"
-       [max]="_value.to"
+       [value]="value.from"
+       [max]="value.to"
        (click)="fromPicker.open()"
        (dateChange)="update({ from: $event.value })">
 <mat-datepicker #fromPicker></mat-datepicker>
@@ -12,16 +12,16 @@
 <span class="separator">-</span>
 
 <input class="to"
-       [class.empty]="!_value.to"
+       [class.empty]="!value.to"
        [matDatepicker]="toPicker"
        placeholder="To"
-       [value]="_value.to"
-       [min]="_value.from"
+       [value]="value.to"
+       [min]="value.from"
        (click)="toPicker.open()"
        (dateChange)="update({ to: $event.value })">
 <mat-datepicker #toPicker></mat-datepicker>
 
-<button *ngIf="_value.from || _value.to"
+<button *ngIf="!value.empty"
         @slideRight
         mat-button
         matSuffix

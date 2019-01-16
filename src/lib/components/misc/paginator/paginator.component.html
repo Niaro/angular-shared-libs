@@ -2,8 +2,8 @@
 	<label>Items per page:</label>
 
 	<mat-form-field>
-		<mat-select [(value)]="pageSize"
-		            (valueChange)="pageSizeChange.emit($event); currentPage = 1">
+		<mat-select [value]="pageSize$ | async"
+		            (valueChange)="pageSize$.next($event); currentPage = 1">
 			<mat-option *ngFor="let option of pageSizeOptions"
 			            [value]="option">
 				{{ option }}

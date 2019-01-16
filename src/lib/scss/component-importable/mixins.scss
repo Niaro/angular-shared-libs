@@ -20,6 +20,26 @@
 	}
 }
 
+@mixin three-mat-cards-in-row-wrap() {
+	@include row-wrap($mat-card-grid-aisle);
+
+	> mat-card {
+		flex     : 1;
+		max-width: 31.57%;
+		min-width: 320px;
+	}
+}
+
+@mixin four-mat-cards-in-row-wrap() {
+	@include row-wrap($mat-card-grid-aisle);
+
+	> mat-card {
+		flex     : 1;
+		max-width: 23.26%;
+		min-width: 255px;
+	}
+}
+
 @mixin text-ellipsis() {
 	overflow     : hidden;
 	white-space  : nowrap;
@@ -27,6 +47,7 @@
 }
 
 @mixin placeholder-color($color) {
+
 	&::placeholder,
 	&::-webkit-input-placeholder {
 		color     : $color;
@@ -44,7 +65,8 @@
 		transparent 75%,
 		transparent;
 	background-color: $color1;
-	background-image: -webkit-linear-gradient($gradient);  /* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
+	background-image: -webkit-linear-gradient($gradient);
+	/* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
 	background-image: linear-gradient($gradient);
 	background-size : 55px 55px;
 }
