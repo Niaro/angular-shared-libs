@@ -56,7 +56,7 @@ export class DateRange {
 		return new DateRange(this);
 	}
 
-	valueOf() {
+	valueOf(): any {
 		return this.unixText;
 	}
 
