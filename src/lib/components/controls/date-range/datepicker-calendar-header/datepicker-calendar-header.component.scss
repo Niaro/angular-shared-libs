@@ -1,0 +1,12 @@
+.mat-calendar-today-button:after {
+	margin: 12px;
+	background: currentColor;
+	border-radius: 102px;
+	box-shadow: inset 0 0 0 2px white;
+	border: 1px solid currentColor;
+	transform: none;
+}
+
+.mat-calendar-clear-button {
+	padding: 0 11px;
+}

@@ -12,7 +12,7 @@ import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
 	PaymentMethodBrandComponent, CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent
 } from './components';
 import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
@@ -48,6 +48,7 @@ const EXPOSED = [
 
 	// controls
 	DateRangeComponent,
+	DatepickerCalendarHeaderComponent,
 	InputComponent,
 	CountrySelectorComponent,
 	IpInputComponent,
@@ -68,7 +69,8 @@ const EXPOSED = [
 @NgModule({
 	imports     : MODULES,
 	exports     : [...EXPOSED, ...MODULES],
-	declarations: EXPOSED
+	declarations: EXPOSED,
+	entryComponents: [DatepickerCalendarHeaderComponent]
 })
 export class SharedModule {
 

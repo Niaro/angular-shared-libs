@@ -5,6 +5,7 @@ import { isEqual } from 'lodash-es';
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { ControlComponent } from '../control.component';
 import { DateRange } from '../../../models/misc/date-range';
+import { DatepickerCalendarHeaderComponent } from './datepicker-calendar-header';
 
 type DateRangeValue = { from: number, to: number };
 
@@ -23,6 +24,8 @@ type DateRangeValue = { from: number, to: number };
 	]
 })
 export class DateRangeComponent extends ControlComponent<DateRange> {
+	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
+
 	@HostBinding('class.empty') get empty() { return this.value.empty; }
 
 	value = new DateRange();

@@ -166,3 +166,32 @@
 		text-transform : capitalize;
 	}
 }
+
+.text-like-select.mat-select {
+	display: inline;
+	width: auto;
+	font-weight: $font-weight-normal;
+
+	.mat-select-value {
+		display: inline;
+		width: auto;
+		color: $color-primary;
+
+		.mat-select-placeholder {
+			color: currentColor;
+		}
+	}
+
+	.mat-select-trigger {
+		border-bottom: 1px solid fade-out($color-primary, 0.8);
+		transition: border $animation-duration $animation-function;
+
+		&:hover {
+			border-bottom-color: transparent;
+		}
+	}
+
+	.mat-select-arrow-wrapper {
+		display: none;
+	}
+}

@@ -3,8 +3,8 @@ import {
 	ChangeDetectionStrategy
 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, BehaviorSubject, combineLatest, merge, asapScheduler } from 'rxjs';
-import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime } from 'rxjs/operators';
+import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
+import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
 import { isEmpty, transform, isNil } from 'lodash-es';
 
 import { UrlHelper, chain } from '@bp/shared/utils';
@@ -69,10 +69,10 @@ export class FilterComponent implements OnChanges, AfterContentInit {
 		 * Update the filter controls on the route params change
 		 */
 		combineLatest(
-				filterControls$,
-				this.type === 'matrix' ? this.route.params : this.route.queryParams,
-				this.defaultsStringed$
-			)
+			filterControls$,
+			this.type === 'matrix' ? this.route.params : this.route.queryParams,
+			this.defaultsStringed$
+		)
 			.pipe(
 				map(([controls, params, defaults]) => controls.map(control => ({
 					control,
@@ -117,14 +117,15 @@ export class FilterComponent implements OnChanges, AfterContentInit {
 		 */
 		filterControls$
 			.pipe(
-				switchMap(controls => merge(
-					...controls.map(c => c.value$.pipe(map((value): [string, any] => [c.name, value]))),
+				switchMap(controls => merge(...controls.map(c => c.value$.pipe(
+					map((value): [string, any] => [c.name, value]),
+
 					// if more than one the filter control emits a value during the same event loop,
 					// the router will navigate only to the last fired one, but we need to proceed all of them.
 					// Thus in order to update the url for the each value of the each changed filter control
 					// we schedule it at the end of the current event loop
-					asapScheduler
-				)),
+					observeOn(asyncScheduler)
+				)))),
 				map(([controlName, value]): [Params, string, string] => [
 					this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route),
 					controlName,

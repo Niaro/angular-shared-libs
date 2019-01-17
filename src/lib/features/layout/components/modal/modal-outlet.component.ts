@@ -2,12 +2,13 @@ import { Component, OnInit, ChangeDetectionStrategy, ContentChild } from '@angul
 import { RouterOutlet, Router, ActivatedRoute, PRIMARY_OUTLET, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { filter, map } from 'rxjs/operators';
-import { unset } from 'lodash-es';
+import { unset, has } from 'lodash-es';
 
 import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 
 export const MODAL_OUTLET = 'modal';
+const URL_TREE_MODAL_OUTLET_PATH = `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`;
 
 @Component({
 	selector: 'bp-modal-outlet',
@@ -45,6 +46,9 @@ export class ModalOutletComponent implements OnInit {
 		this.router.events
 			.pipe(filter(e => e instanceof RoutesRecognized && !!this.activeDialog))
 			.subscribe((e: RoutesRecognized) => {
+				if (this.hasUrlModalOutlet(e.url))
+					return;
+
 				// If the destination url doesn't have the modal outlet that means the user
 				// intends to navigate to the page not to another modal
 				// this.urlWithModal contains the current url from which the navigation was initiated
@@ -60,8 +64,11 @@ export class ModalOutletComponent implements OnInit {
 	private outletActivate(cmpt: IModalHostComponent) {
 		if (!(cmpt.modal instanceof ModalComponent))
 			throw new Error('The component attached to the modal router outlet must implement the IHostModalComponent interface');
+
 		this.navigation = false;
-		this.activeDialog = this.dialogsManager.open(cmpt.modal.template);
+		this.activeDialog = this.dialogsManager.open(cmpt.modal.template, {
+			panelClass: [cmpt.panelClass, 'mat-typography']
+		});
 
 		this.activeDialog
 			.beforeClosed()
@@ -73,7 +80,12 @@ export class ModalOutletComponent implements OnInit {
 
 	private getUrlWithoutModalOutlet() {
 		const urlTree = this.router.parseUrl(this.router.url);
-		unset(urlTree, `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`);
+		unset(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 		return urlTree.toString();
+	}
+
+	private hasUrlModalOutlet(url: string): boolean {
+		const urlTree = this.router.parseUrl(url);
+		return has(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 	}
 }

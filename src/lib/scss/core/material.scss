@@ -128,10 +128,15 @@ bp-layout {
 
 	.mat-dialog-container {
 		border-radius: $border-card-radius;
+		padding      : $mat-dialog-padding;
+
+		h1 {
+			margin-top: 0;
+		}
 
 		.btn-icon-close {
-			top  : $mat-dialog-padding - 6px;
-			right: $mat-dialog-padding;
+			top  : $mat-dialog-padding-v - 2px;
+			right: $mat-dialog-padding-v;
 		}
 	}
 }

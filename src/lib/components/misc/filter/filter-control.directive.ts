@@ -1,5 +1,5 @@
 import { Directive, Input, Self, Inject, Optional } from '@angular/core';
-import { MatSelect } from '@angular/material';
+import { MatSelect, MatSelectChange } from '@angular/material';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
@@ -23,11 +23,11 @@ export class FilterControlDirective {
 		if (!this.control)
 			throw new Error('FilterControlDirective must be used on a component which implements ControlValuesAccessor interface');
 
-		this.control.registerOnChange(value => {
-			value = value && value.valueOf();
-			if ((value && UrlHelper.toRouteString(value)) !== (this.value && UrlHelper.toRouteString(this.value.valueOf())))
-				this.value$.next(value);
-		});
+		if (this.select)
+			this.select.selectionChange
+				.subscribe((v?: MatSelectChange) => this.emit(v && v.value));
+		else
+			this.control.registerOnChange(v => this.emit(v));
 	}
 
 	setValue(value: any) {
@@ -36,5 +36,11 @@ export class FilterControlDirective {
 			this.select.value = value;
 		else
 			this.control.writeValue(value);
+	}
+
+	private emit(value?: any) {
+		value = value && value.valueOf();
+		if ((value && UrlHelper.toRouteString(value)) !== (this.value && UrlHelper.toRouteString(this.value.valueOf())))
+			this.value$.next(value);
 	}
 }

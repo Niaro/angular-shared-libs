@@ -6,8 +6,11 @@
        [value]="value.from"
        [max]="value.to"
        (click)="fromPicker.open()"
-       (dateChange)="update({ from: $event.value })">
-<mat-datepicker #fromPicker></mat-datepicker>
+	   (dateChange)="update({ from: $event.value })">
+
+<mat-datepicker #fromPicker
+                [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+</mat-datepicker>
 
 <span class="separator">-</span>
 
@@ -18,8 +21,11 @@
        [value]="value.to"
        [min]="value.from"
        (click)="toPicker.open()"
-       (dateChange)="update({ to: $event.value })">
-<mat-datepicker #toPicker></mat-datepicker>
+	   (dateChange)="update({ to: $event.value })">
+
+<mat-datepicker #toPicker
+                [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+</mat-datepicker>
 
 <button *ngIf="!value.empty"
         @slideRight
