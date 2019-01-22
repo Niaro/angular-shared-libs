@@ -1,4 +1,4 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Dictionary } from 'lodash';
 import { uniqueId } from 'lodash-es';
 import * as LogRocket from 'logrocket';
@@ -26,7 +26,7 @@ if (environment.prod) {
 @Injectable({
 	providedIn: 'root'
 })
-export class TelemetryService implements ErrorHandler {
+export class TelemetryService {
 
 	static logrocketMetaReducer = createNgrxMiddleware(LogRocket);
 
@@ -45,9 +45,5 @@ export class TelemetryService implements ErrorHandler {
 
 	registerUser(email: string) {
 		LogRocket.identify(uniqueId(), { email });
-	}
-
-	handleError(error) {
-		LogRocket.captureMessage(error.originalError || error, { tags: { source: 'app' } });
 	}
 }
