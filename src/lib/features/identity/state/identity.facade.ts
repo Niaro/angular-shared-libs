@@ -12,7 +12,7 @@ export class IdentityFacade {
 	user$ = this.store.pipe(select(getUser));
 
 	constructor(private store: Store<IIdentityPartialState>, private telemetry: TelemetryService) {
-		this.user$.subscribe(user => this.telemetry.registerUser(user.userName));
+		this.user$.subscribe(user => user && this.telemetry.registerUser(user.userName));
 	}
 
 	init(user: User) {
