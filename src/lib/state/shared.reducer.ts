@@ -3,10 +3,11 @@ import * as fromRouter from '@ngrx/router-store';
 import { RouterReducerState } from '@ngrx/router-store';
 
 import { environment } from '@bp/environment';
-import { logger, hmrAppStateRestorer, initialAppStateFromLocalStorage, storeFreezer } from './meta-reducers';
 import { ResponseError } from '../models';
-import { IRouterStateUrl } from './router';
+import { TelemetryService } from '../providers';
 
+import { logger, hmrAppStateRestorer, initialAppStateFromLocalStorage, storeFreezer } from './meta-reducers';
+import { IRouterStateUrl } from './router';
 
 export interface IApiState<T> {
 	data: T;
@@ -40,7 +41,7 @@ export const sharedReducer: ActionReducerMap<ISharedState> = {
 export const metaReducers: MetaReducer<ISharedState>[] = [
 	initialAppStateFromLocalStorage,
 	...(environment.dev ? [hmrAppStateRestorer, storeFreezer] : []),
-	...(environment.name === 'prod' ? [] : [logger])
+	...(environment.name === 'prod' ? [TelemetryService.logrocketMetaReducer] : [logger])
 ];
 
 export const selectRouterState = createFeatureSelector<RouterReducerState<IRouterStateUrl>>('router');
