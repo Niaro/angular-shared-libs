@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 
-import { TelemetryService } from '../../../providers';
+import { TelemetryService } from '../../../providers/telemetry.service';
 import { User } from '../models';
 import { IIdentityPartialState } from './identity.reducer';
 import { getUser } from './identity.selectors';
