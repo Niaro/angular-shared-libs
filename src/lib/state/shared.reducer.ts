@@ -4,7 +4,7 @@ import { RouterReducerState } from '@ngrx/router-store';
 
 import { environment } from '@bp/environment';
 import { ResponseError } from '../models';
-import { TelemetryService } from '../providers';
+import { TelemetryService } from '../providers/telemetry.service';
 
 import { logger, hmrAppStateRestorer, initialAppStateFromLocalStorage, storeFreezer } from './meta-reducers';
 import { IRouterStateUrl } from './router';
