@@ -3,8 +3,8 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEqual } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { DateRange, DateRangeInput } from '@bp/shared/models/misc/date-range';
 import { ControlComponent } from '../control.component';
-import { DateRange } from '../../../models/misc/date-range';
 import { DatepickerCalendarHeaderComponent } from './datepicker-calendar-header';
 
 type DateRangeValue = { from: number, to: number };
@@ -45,7 +45,7 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	update(v: Partial<DateRange>) {
+	update(v: DateRangeInput) {
 		const value = new DateRange({ ...this.value, ...v });
 
 		if (!isEqual(value, this.value)) {

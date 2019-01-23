@@ -5,6 +5,8 @@ import { chain } from '@bp/shared/utils';
 
 const RANGE_DELIMITER = ':';
 
+export type DateRangeInput = { from?: m.MomentInput, to?: m.MomentInput };
+
 export class DateRange {
 
 	/**
@@ -44,7 +46,7 @@ export class DateRange {
 	private _to: m.Moment;
 	private unixText: string;
 
-	constructor(config?: { from?: m.MomentInput, to?: m.MomentInput } | string) {
+	constructor(config?: DateRangeInput | string) {
 		if (isString(config))
 			return DateRange.parse(config);
 
