@@ -3,9 +3,9 @@ import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http'
 import { Observable } from 'rxjs';
 import { filter, startWith } from 'rxjs/operators';
 import { LocalStorageService } from 'angular-2-local-storage';
+import { Dictionary } from 'lodash';
 
 import { environment } from '@bp/environment';
-import { IdentityFacade } from '../features';
 
 const MOCK_RESPONSE_CODE = 'x-mock-response-code';
 const CONTENT_TYPE = 'Content-Type';
@@ -14,17 +14,22 @@ const CONTENT_TYPE = 'Content-Type';
 	providedIn: 'root',
 })
 export class ApiDefaultsInterceptorService implements HttpInterceptor {
+	private static instance;
 
-	private headers: { [key: string]: string } = {
+	headers: Dictionary<string> = {
 		[CONTENT_TYPE]        : 'application/json',
 		'json-naming-strategy': 'camelcase',
 		'x-api-key'           : environment.mockKey,
 		[MOCK_RESPONSE_CODE]  : '200'
 	};
 
-	constructor(private localStorage: LocalStorageService, private identity: IdentityFacade) {
+	constructor(private localStorage: LocalStorageService) {
+		if (ApiDefaultsInterceptorService.instance)
+			return ApiDefaultsInterceptorService.instance;
+
 		environment.dev && this.initMockResponseCodeHook();
-		this.identity.user$.subscribe(it => this.headers.Authorization = it ? `Bearer ${it.token}` : '');
+
+		return ApiDefaultsInterceptorService.instance = this;
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {

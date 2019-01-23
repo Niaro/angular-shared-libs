@@ -3,31 +3,26 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
-import { StoreModule } from '@ngrx/store';
 
 import { MaterialModule } from './materials.module';
-import { LayoutModule, IdentityModule } from './features';
-import { PROVIDERS, SwUpdatesService } from './providers';
+import { PROVIDERS } from './providers';
 import { FieldErrorComponent } from './validation';
 import {
-	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
-	PaymentMethodBrandComponent, CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent
+	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
+	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, SvgIconDefinitionsComponent,
+	SvgIconComponent, ModalOutletComponent, ModalComponent
 } from './components';
-import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective } from './directives';
+
 
 const MODULES = [
 	CommonModule,
 	MaterialModule,
 	RouterModule,
-	StoreModule,
-	LocalStorageModule,
 	ReactiveFormsModule,
-
-	LayoutModule,
-	IdentityModule
+	LocalStorageModule,
 ];
 
 const EXPOSED = [
@@ -39,6 +34,10 @@ const EXPOSED = [
 	StatusBarComponent,
 	FilterComponent,
 	FilterControlDirective,
+	SvgIconDefinitionsComponent,
+	SvgIconComponent,
+	ModalOutletComponent,
+	ModalComponent,
 
 	// directives
 	TextMaskDirective,
@@ -52,10 +51,6 @@ const EXPOSED = [
 	InputComponent,
 	CountrySelectorComponent,
 	IpInputComponent,
-
-	// business
-	CountryComponent,
-	PaymentMethodBrandComponent,
 
 	// pipes
 	UpperFirstPipe,
@@ -73,22 +68,16 @@ const EXPOSED = [
 	entryComponents: [DatepickerCalendarHeaderComponent]
 })
 export class SharedModule {
-
-	static forRoot(): ModuleWithProviders {
+	static forRoot(localStoragePrefix: string): ModuleWithProviders {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				LocalStorageModule.withConfig({
-					prefix: APP_STATE_PREFIX,
+				...LocalStorageModule.withConfig({
+					prefix: localStoragePrefix,
 					storageType: 'localStorage'
 				}).providers,
-				LayoutModule.forRoot().providers,
-				IdentityModule.forRoot().providers,
-				...PROVIDERS,
+				...PROVIDERS
 			]
 		};
 	}
-
-	constructor(swUpdater: SwUpdatesService) { }
-
 }

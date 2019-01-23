@@ -2,9 +2,8 @@ import { Injectable, Type } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute, NavigationError, NavigationStart } from '@angular/router';
 import { filter, distinctUntilChanged, map, share } from 'rxjs/operators';
 
-import { UrlHelper } from '../utils';
-import { LayoutFacade } from '../features/layout';
-import { ResponseError } from '../models';
+import { UrlHelper } from '../utils/url-helper';
+import { ResponseError } from '../models/api';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,10 +15,11 @@ export class RouterService {
 		share()
 	);
 
+	isNavigateToErrorPage = true;
+
 	constructor(
 		public router: Router,
-		public route: ActivatedRoute,
-		private layout: LayoutFacade
+		public route: ActivatedRoute
 	) {
 		this.router.events
 			.pipe(filter(e => e instanceof NavigationError))
@@ -47,7 +47,7 @@ export class RouterService {
 
 	tryNavigateOnResponseError(e: ResponseError) {
 		 // fullscreen pages handle errors on its own and all the non 500+ errors should be handled manually
-		if (this.layout.fullscreen || !e.is500ish)
+		if (this.isNavigateToErrorPage || !e.is500ish)
 			return;
 		this.navigateToErrorPage();
 	}
