@@ -36,7 +36,6 @@ export class FilterComponent implements OnChanges, AfterContentInit {
 
 	constructor(private router: Router, private route: ActivatedRoute) {
 		this.value$ = this._value$.pipe(filter(v => v !== undefined));
-		console.warn('filter route', route);
 	}
 
 	ngOnChanges({ defaults }: SimpleChanges) {
