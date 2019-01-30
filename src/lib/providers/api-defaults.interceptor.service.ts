@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { filter, startWith, first, tap, switchMap } from 'rxjs/operators';
+import { filter, startWith, first, switchMap } from 'rxjs/operators';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { environment } from '@bp/environment';
