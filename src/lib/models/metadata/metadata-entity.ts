@@ -28,7 +28,12 @@ export abstract class MetadataEntity {
 	}
 
 	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
-		return this.meta(propName).label;
+		const meta = this.meta(propName);
+
+		if (!meta)
+			throw new Error(`There is no metadata for the property ${propName}`);
+
+		return meta.label;
 	}
 
 	protected assignCustomizer = (currValue: any, srcValue: any, key: string, currObject, srcObject) => {
