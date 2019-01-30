@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { filter, startWith } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { filter, startWith, first, tap, switchMap } from 'rxjs/operators';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 import { environment } from '@bp/environment';
@@ -22,12 +22,28 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 		[MOCK_RESPONSE_CODE]  : '200'
 	};
 
+	private authorized$ = new BehaviorSubject(false);
+
 	constructor(private localStorage: LocalStorageService, private identity: IdentityFacade) {
 		environment.dev && this.initMockResponseCodeHook();
-		this.identity.user$.subscribe(it => this.headers.Authorization = it ? `Bearer ${it.token}` : '');
+
+		this.identity.user$.subscribe(it => {
+			this.headers.Authorization = it ? `Bearer ${it.token}` : '';
+			this.authorized$.next(!!it);
+		});
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+		return request.url.includes('auth')
+			? this.enhanceRequest(request, next)
+			: this.authorized$.pipe(
+				filter(it => !!it),
+				first(),
+				switchMap(() => this.enhanceRequest(request, next))
+			);
+	}
+
+	private enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next.handle(request.clone({
 			url: request.url.startsWith('http')
 				? request.url
