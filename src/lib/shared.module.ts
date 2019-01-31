@@ -10,11 +10,12 @@ import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, SvgIconDefinitionsComponent,
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, SvgSharedIconsDefinitionsComponent,
 	SvgIconComponent, ModalOutletComponent, ModalComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective } from './directives';
+import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 
 const MODULES = [
@@ -34,7 +35,7 @@ const EXPOSED = [
 	StatusBarComponent,
 	FilterComponent,
 	FilterControlDirective,
-	SvgIconDefinitionsComponent,
+	SvgSharedIconsDefinitionsComponent,
 	SvgIconComponent,
 	ModalOutletComponent,
 	ModalComponent,
@@ -68,12 +69,12 @@ const EXPOSED = [
 	entryComponents: [DatepickerCalendarHeaderComponent]
 })
 export class SharedModule {
-	static forRoot(localStoragePrefix: string): ModuleWithProviders {
+	static forRoot(): ModuleWithProviders {
 		return {
 			ngModule: SharedModule,
 			providers: [
 				...LocalStorageModule.withConfig({
-					prefix: localStoragePrefix,
+					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
 				}).providers,
 				...PROVIDERS

@@ -32,3 +32,27 @@ ul {
 	margin         : 0;
 	padding        : 0;
 }
+
+img,
+video,
+audio,
+embed,
+object {
+	max-width: 100%;
+}
+
+img,
+video,
+embed,
+object {
+	height: auto;
+}
+
+embed,
+object {
+	height: 100%;
+}
+
+img {
+	vertical-align: middle;
+}

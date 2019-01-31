@@ -1,8 +1,8 @@
 // #region colors
-$color-light      : #ccc;
-$color-semi-dark : #929292;
-$color-dark       : #333;
-$color-border     : #e2e8ec;
+$color-light      : #ccc !default;
+$color-semi-dark  : #929292 !default;
+$color-dark       : #333 !default;
+$color-border     : #e2e8ec !default;
 $dark-primary-text: $color-dark;
 
 $color-primary: #2578ea;
@@ -77,17 +77,52 @@ $mat-dialog-padding-h        : $mat-dialog-padding-v * 1.5;
 $mat-dialog-padding          : $mat-dialog-padding-v $mat-dialog-padding-h;
 // #endregion mat-cards
 
+// #region icons
+$icon-size        : 24px;
+$toolbar-icon-size: $icon-size;
+// #endregion icons
+
 // #region typography
-$title-font-size       : 22px;
-$headline-line-height  : 32px;
-$body-font-size        : 14px;
-$body-line-height      : 20px;
-$caption-font-size     : 12px;
-$font-size-xs          : 10px;
-$font-weight-slim      : 300;
-$font-weight-normal    : 400;
-$font-weight-bold      : 500;
-$font-weight-extra-bold: 700;
+$font-size-xs: 10px !default;
+$font-size-sm: 12px !default;
+$font-size-md: 14px !default;
+$font-size-lg: 18px !default;
+$font-size-xl: 22px !default;
+
+$font-weight-slim      : 300 !default;
+$font-weight-normal    : 400 !default;
+$font-weight-bold      : 500 !default;
+$font-weight-extra-bold: 700 !default;
+
+$font-family: 'Roboto,"Helvetica Neue",sans-serif' !default;
+
+$title-font-size : $font-size-xl !default;
+$title-line-height: 32px !default;
+$title-font-weight: $font-weight-normal !default;
+
+$subheading-2-font-size  : $font-size-lg !default;
+$subheading-2-line-height: 28px !default;
+$subheading-2-font-weight: $font-weight-normal !default;
+
+$caption-font-size  : $font-size-sm !default;
+$caption-line-height: 20px !default;
+$caption-font-weight: $font-weight-slim !default;
+
+$body-font-size  : $font-size-sm !default;
+$body-line-height: 20px !default;
+$body-font-weight: $font-weight-normal !default;
+
+$card-headline-font-size  : $font-size-lg !default;
+$card-headline-line-height: 32px !default;
+$card-headline-font-weight: $font-weight-normal !default;
+
+$card-title-font-size  : $font-size-xl !default;
+$card-title-line-height: 32px !default;
+$card-title-font-weight: $font-weight-slim !default;
+
+$button-font-size  : $icon-size !default;
+$button-line-height: 32px !default;
+$button-font-weight: $font-weight-slim !default;
 // #endregion typography
 
 // #region animation
@@ -102,8 +137,3 @@ $circle-sm-size: 9px;
 
 $dark-dividers     : rgba(black, 0.05);
 $border-card-radius: 10px;
-
-// #region icons
-$icon-size        : 24px;
-$toolbar-icon-size: $icon-size;
-// #endregion icons

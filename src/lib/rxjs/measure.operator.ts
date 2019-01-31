@@ -1,20 +1,8 @@
-// import { Observable } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
-// export function measureOperator<T, U>(this: Observable<T>, measureCb: (node?: T) => U): Observable<U> {
-// 	return this.switchMap(v => Observable.measure(() => measureCb(v)));
-// }
-
-// Observable.prototype['measure'] = measureOperator;
-
-// /**
-//  * Unsubscribes from the observable and subscribes to it again when notifier
-//  * emits a value
-//  */
-// export declare function measure<T, U>(this: Observable<T>, measure: (node?: T) => U): Observable<U>;
-
-// declare module 'rxjs/internal/Observable' {
-// 	// tslint:disable-next-line:interface-name
-// 	interface Observable<T> {
-// 		measure: typeof measure;
-// 	}
-// }
+export function measure<T, U>(measureCb: (node?: T) => U): OperatorFunction<T, U>  {
+	return (source: Observable<T>) => source.pipe(
+		switchMap(v => Observable.measure(() => measureCb(v)))
+	);
+}

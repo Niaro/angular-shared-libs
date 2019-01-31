@@ -1,0 +1,14 @@
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	font-family: $font-family;
+}
+
+* {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
