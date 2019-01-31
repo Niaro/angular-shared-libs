@@ -12,5 +12,5 @@ export const PROVIDERS: Provider[] = [
 	RouterService,
 	TelemetryService,
 	{ provide: HTTP_INTERCEPTORS, useClass: ApiResponseInterceptorService, multi: true },
-	{ provide: HTTP_INTERCEPTORS, useClass: ApiDefaultsInterceptorService, multi: true }
+	{ provide: HTTP_INTERCEPTORS, useClass: ApiDefaultsInterceptorService, multi: true },
 ];
