@@ -6,10 +6,14 @@ import { User } from '../models';
 import { IIdentityPartialState } from './identity.reducer';
 import { getUser } from './identity.selectors';
 import * as Identity from './identity.actions';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Injectable()
 export class IdentityFacade {
-	user$ = this.store.pipe(select(getUser));
+	user$ = this.store.pipe(
+		select(getUser),
+		distinctUntilChanged((x, y) => (x && x.token) === (y && y.token)),
+	);
 
 	constructor(private store: Store<IIdentityPartialState>, private telemetry: TelemetryService) {
 		this.user$.subscribe(user => user && this.telemetry.registerUser(user.userName));

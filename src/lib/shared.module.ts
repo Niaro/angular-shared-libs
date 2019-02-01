@@ -11,11 +11,12 @@ import { PROVIDERS, SwUpdatesService } from './providers';
 import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent, CountryComponent,
-	PaymentMethodBrandComponent, CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective
+	PaymentMethodBrandComponent, CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent
 } from './components';
 import { APP_STATE_PREFIX } from './state';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
-import { TextMaskDirective, TargetBlankDirective } from './directives';
+import { TextMaskDirective, TargetBlankDirective, SortDirective } from './directives';
 
 const MODULES = [
 	CommonModule,
@@ -36,14 +37,18 @@ const EXPOSED = [
 	ApiErrorComponent,
 	PaginatorComponent,
 	StatusBarComponent,
+	FilterComponent,
+	FilterControlDirective,
 
 	// directives
 	TextMaskDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
+	SortDirective,
 
 	// controls
 	DateRangeComponent,
+	DatepickerCalendarHeaderComponent,
 	InputComponent,
 	CountrySelectorComponent,
 	IpInputComponent,
@@ -64,7 +69,8 @@ const EXPOSED = [
 @NgModule({
 	imports     : MODULES,
 	exports     : [...EXPOSED, ...MODULES],
-	declarations: EXPOSED
+	declarations: EXPOSED,
+	entryComponents: [DatepickerCalendarHeaderComponent]
 })
 export class SharedModule {
 

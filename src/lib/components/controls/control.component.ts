@@ -1,7 +1,7 @@
 import { Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export abstract class ControlComponent<T> implements ControlValueAccessor, Validator {
+export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator {
 	@Input() value: T;
 	@Output() valueChange = new EventEmitter<T>();
 	@HostBinding('class.control') isControl = true;
@@ -23,11 +23,11 @@ export abstract class ControlComponent<T> implements ControlValueAccessor, Valid
 			.then(() => this.value = value);
 	}
 
-	registerOnChange(fn: (value: any) => {}): void {
+	registerOnChange(fn: (value: any) => void): void {
 		this.onChange = fn;
 	}
 
-	registerOnTouched(fn: () => {}): void {
+	registerOnTouched(fn: () => void): void {
 		this.onTouched = fn;
 	}
 	// #endregion Implementation of the ControlValueAccessor interface

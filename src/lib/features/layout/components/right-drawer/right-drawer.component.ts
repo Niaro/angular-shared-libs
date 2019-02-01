@@ -3,8 +3,10 @@ import { MatSidenav } from '@angular/material';
 import { Router, RouterOutlet, NavigationEnd, PRIMARY_OUTLET, RoutesRecognized, ActivatedRoute } from '@angular/router';
 import { filter, map, first, takeUntil } from 'rxjs/operators';
 import { last, unset, has } from 'lodash-es';
+import { fromEvent } from 'rxjs';
+
+import { AsyncVoidSubject } from '@bp/shared/rxjs';
 import { LayoutFacade } from '../../state';
-import { fromEvent, AsyncSubject } from 'rxjs';
 
 export type RightDrawerNames = 'primary' | 'root';
 
@@ -26,7 +28,7 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 	private navigation = false;
 	private destinationUrl: string;
 	private get outletName() { return this.outlet['name']; }
-	private destroyed$ = new AsyncSubject();
+	private destroyed$ = new AsyncVoidSubject();
 	private drawerOutletUrlTreePath: string;
 
 	constructor(
@@ -91,7 +93,6 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.destroyed$.next(null);
 		this.destroyed$.complete();
 	}
 
@@ -115,14 +116,14 @@ export class RightDrawerComponent implements OnInit, OnDestroy {
 
 	private navigateToPrevOpenInDrawerRouteOrToDestUrl() {
 		this.saveUrlWithOutletToHistory = false;
-		this.router.navigateByUrl(this.navigation ? this.destinationUrl : (this.outletUrlHistory.pop() || this.getUrlWithoutCurrentOutlet()));
+		this.router.navigateByUrl(this.navigation ? this.destinationUrl : (this.outletUrlHistory.pop() || this.getUrlWithoutDrawerOutlet()));
 	}
 
 	private outletDeactivate() {
 		this.saveUrlWithOutletToHistory && this.outletUrlHistory.push(this.urlWithOutlet);
 	}
 
-	private getUrlWithoutCurrentOutlet() {
+	private getUrlWithoutDrawerOutlet() {
 		const urlTree = this.router.parseUrl(this.router.url);
 		unset(urlTree, this.drawerOutletUrlTreePath);
 		return urlTree.toString();

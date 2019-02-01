@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, ActivatedRouteSnapshot, Params, NavigationError, NavigationStart } from '@angular/router';
-import { isNil, last, pickBy } from 'lodash-es';
+import { Injectable, Type } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute, NavigationError, NavigationStart } from '@angular/router';
 import { filter, distinctUntilChanged, map, share } from 'rxjs/operators';
 
+import { UrlHelper } from '../utils';
 import { LayoutFacade } from '../features/layout';
 import { ResponseError } from '../models';
 
@@ -10,31 +10,6 @@ import { ResponseError } from '../models';
 	providedIn: 'root'
 })
 export class RouterService {
-	static getPrimaryLastRouteParams(route: ActivatedRoute): Params {
-		const snapshot = this.getPrimaryBranchLastRoute(route.snapshot);
-		const params = snapshot.url.length ? last(snapshot.url).parameters : snapshot.params;
-		return pickBy(params, v => !isNil(v));
-	}
-
-	static getQueryParams(route: ActivatedRoute): Params {
-		const snapshot = this.getPrimaryBranchLastRoute(route.snapshot);
-		return pickBy(snapshot.queryParams, v => !isNil(v));
-	}
-
-	static getPrimaryBranchRoutes<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T[] {
-		const results: T[] = [route];
-		while (route.firstChild) {
-			route = route.firstChild as T;
-			results.push(route);
-		}
-		return results;
-	}
-
-	static getPrimaryBranchLastRoute<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T {
-		while (route.firstChild)
-			route = route.firstChild as T;
-		return route;
-	}
 
 	navigationStart$ = this.router.events.pipe(
 		filter(it => it instanceof NavigationStart),
@@ -55,9 +30,18 @@ export class RouterService {
 	onPrimaryComponentNavigationEnd(component: any) {
 		return this.router.events.pipe(
 			filter(e => e instanceof NavigationEnd),
-			map(() => RouterService.getPrimaryBranchLastRoute(this.route).component),
+			map(() => UrlHelper.getMainBranchLastRoute(this.route).component),
 			distinctUntilChanged(),
 			filter(it => it === component)
+		);
+	}
+
+	onNavigationEnd(cmptType: Type<any>) {
+		return this.router.events.pipe(
+			filter(e => e instanceof NavigationEnd),
+			map(() => UrlHelper.getComponentRoute(this.route, cmptType) as ActivatedRoute),
+			distinctUntilChanged((x, y) => (x && x.component) === (y && y.component)),
+			filter(v => v && v.component === cmptType)
 		);
 	}
 

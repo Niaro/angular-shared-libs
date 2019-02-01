@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { Countries, Country } from '@bp/shared/models';
+import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { isArray } from 'lodash-es';
 
@@ -46,12 +46,12 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: Country): void {
+	writeValue(value: Country | CountryCode): void {
 		Promise
 			.resolve()
 			.then(() => {
-				this.value = value;
-				this.inputControl.setValue(value && value.name, { emitViewToModelChange: false });
+				this.value = value instanceof Country ? value : Countries.findByCode(value);
+				this.inputControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface

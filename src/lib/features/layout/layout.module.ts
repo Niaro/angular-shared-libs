@@ -9,7 +9,7 @@ import { MaterialModule } from '../../materials.module';
 
 import {
 	LayoutComponent, NavItemComponent, SidenavComponent, ToolbarComponent, SvgIconComponent,
-	SvgIconDefinitionsComponent, FooterComponent, RightDrawerComponent
+	SvgIconDefinitionsComponent, FooterComponent, RightDrawerComponent, ModalComponent, ModalOutletComponent
 } from './components';
 import { LayoutFacade } from './state';
 import { LAYOUT_FEATURE_KEY, reducer, initialState } from './state/layout.reducer';
@@ -23,7 +23,9 @@ export const COMPONENTS = [
 	ToolbarComponent,
 	SvgIconComponent,
 	SvgIconDefinitionsComponent,
-	FooterComponent
+	FooterComponent,
+	ModalOutletComponent,
+	ModalComponent
 ];
 
 @NgModule({
