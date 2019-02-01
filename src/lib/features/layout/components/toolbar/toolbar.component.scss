@@ -10,14 +10,23 @@
 		position: fixed;
 		top     : 0;
 		z-index : 1;
+		color   : white;
 
 		.btn-menu {
 			margin-left: -11px;
 		}
 
 		.logo {
-			color      : white;
-			margin-left: 37px;
+			margin: 0 (1rem / 2);
+			height     : 100%;
+			display    : flex;
+			align-items: center;
+		}
+
+		.btn-icon bp-svg-icon {
+			width             : $toolbar-icon-size;
+			height            : $toolbar-icon-size;
+			display           : inline-flex;
 		}
 	}
 }

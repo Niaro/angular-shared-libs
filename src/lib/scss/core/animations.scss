@@ -1,17 +1,11 @@
-@keyframes flickering {
-	0% {
-		opacity: 0.3;
-	}
-	50% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0.3;
-	}
-}
-
 @keyframes fadeOut {
 	100% {
 		opacity: 0;
+	}
+}
+
+@keyframes rollingBackground {
+	100% {
+		background-position: 55px 0;
 	}
 }

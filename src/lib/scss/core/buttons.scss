@@ -1,0 +1,33 @@
+.bp-button.mat-button {
+	border-radius      : 30px;
+	border             : 2px solid $color-primary;
+	color              : $color-primary;
+	font-size          : $icon-size;
+	font-weight        : $font-weight-normal;
+	transition         : $animation-duration $animation-function;
+	transition-property: background, color;
+	padding            : 0.2em 1.25em;
+	min-width          : 185px;
+
+	&:hover {
+		background: $color-primary;
+		color     : white;
+	}
+
+	bp-svg-icon {
+		width       : $icon-size;
+		height      : $icon-size;
+		margin-right: 0.5em;
+
+		&.export {
+			position: relative;
+			top     : -1px;
+		}
+	}
+
+	.mat-button-wrapper {
+		display        : flex;
+		align-items    : center;
+		justify-content: center;
+	}
+}

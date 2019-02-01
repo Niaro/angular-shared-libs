@@ -8,6 +8,7 @@ export const environment: IEnvironment = {
 	prod: true,
 	get dev() { return !this.prod; },
 	hmr: IS_HMR_MODE,
+	cashierWidgetUrl: 'https://embed-sandbox.bridgerpay.com/cashier',
 
 	...appEnvironment,
 	...constants

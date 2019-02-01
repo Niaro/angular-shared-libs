@@ -1,66 +1,57 @@
-import * as m from 'moment';
-import {
-	Component, OnChanges, Input, EventEmitter, Output, SimpleChanges, HostBinding,
-	ChangeDetectionStrategy
-} from '@angular/core';
-import { assign, isNumber } from 'lodash-es';
+import { Component, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { isEqual } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { ControlComponent } from '../control.component';
+import { DateRange } from '../../../models/misc/date-range';
+import { DatepickerCalendarHeaderComponent } from './datepicker-calendar-header';
 
-type DataRangeValue = { from: number | m.Moment, to: number | m.Moment };
+type DateRangeValue = { from: number, to: number };
 
 @Component({
 	selector: 'bp-date-range',
 	templateUrl: './date-range.component.html',
 	styleUrls: ['./date-range.component.scss'],
 	animations: [SLIDE_RIGHT],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: DateRangeComponent,
+			multi: true
+		}
+	]
 })
-export class DateRangeComponent implements OnChanges {
-	@Input() value: DataRangeValue;
-	@Input() unix: boolean;
-	@Output() valueChange = new EventEmitter<DataRangeValue>();
-	@HostBinding('class.empty') get empty() { return !this._value.from && !this._value.to; }
+export class DateRangeComponent extends ControlComponent<DateRange> {
+	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 
-	_value = new DateRange();
+	@HostBinding('class.empty') get empty() { return this.value.empty; }
 
-	constructor() { }
+	value = new DateRange();
 
-	ngOnChanges({ value, unix }: SimpleChanges) {
-		if (value)
-			this._value = new DateRange(this.value
-				? {
-					from: isNumber(this.value.from) ? m.unix(this.value.from) : this.value.from,
-					to: isNumber(this.value.to) ? m.unix(this.value.to) : this.value.to,
-				}
-				: {}
-			);
-
-		if (unix)
-			this.unix = true;
+	constructor(private cdr: ChangeDetectorRef) {
+		super();
 	}
+
+	// #region Implementation of the ControlValueAccessor interface
+	writeValue(value: DateRange | DateRangeValue | string): void {
+		Promise
+			.resolve()
+			.then(() => {
+				this.value = value instanceof DateRange ? value : new DateRange(value);
+				this.cdr.markForCheck();
+			});
+	}
+	// #endregion Implementation of the ControlValueAccessor interface
 
 	update(v: Partial<DateRange>) {
-		this._value = new DateRange({ ...this._value, ...v });
-		this.valueChange.emit(this.unix
-			? this._value && this._value.unix()
-			: this._value
-		);
-	}
-}
+		const value = new DateRange({ ...this.value, ...v });
 
-class DateRange {
-	from: m.Moment;
-	to: m.Moment;
-
-	constructor(data?: Partial<DateRange>) {
-		assign(this, data);
-	}
-
-	unix() {
-		return {
-			from: this.from ? this.from.unix() : this.from,
-			to: this.to ? this.to.unix() : this.to
-		};
+		if (!isEqual(value, this.value)) {
+			this.value = value;
+			this.valueChange.emit(value);
+			this.onChange(value);
+		}
 	}
 }

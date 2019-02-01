@@ -1,15 +1,16 @@
 import {
 	Component, Input, Output, HostBinding, ChangeDetectionStrategy, ElementRef, AfterViewInit,
-	OnDestroy, ViewChild
+	OnDestroy, ViewChild, ChangeDetectorRef
 } from '@angular/core';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { isEmpty } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { TextMaskConfig, TextMaskDirective, NumberMaskConfig } from '@bp/shared/directives';
-import { isEmpty } from 'lodash-es';
 
 @Component({
 	selector: 'bp-input',
@@ -25,7 +26,7 @@ import { isEmpty } from 'lodash-es';
 })
 export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
 	@Input() value: string;
-	input$ = new BehaviorSubject<string>('');
+	input$ = new OptionalBehaviorSubject<string>();
 	@Output() valueChange = this.input$;
 	@Input() placeholder: string;
 	@Input() mask: TextMaskConfig;
@@ -40,7 +41,7 @@ export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAcc
 
 	private destroyed$ = new Subject();
 
-	constructor(private host: ElementRef) { }
+	constructor(private host: ElementRef, private cdr: ChangeDetectorRef) { }
 
 	ngAfterViewInit() {
 		if (this.autocomplete)
@@ -70,10 +71,14 @@ export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAcc
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
-		Promise.resolve().then(() => this.autocomplete
-			? this.$input.value = value
-			: this.maskDirective.writeValue(value && value.toString())
-		);
+		Promise.resolve().then(() => {
+			this.value = value;
+			if (this.autocomplete)
+				this.$input.value = value;
+			else
+				this.maskDirective.writeValue(value && value.toString());
+			this.cdr.markForCheck();
+		});
 	}
 
 	registerOnChange(fn: (value: any) => {}): void {

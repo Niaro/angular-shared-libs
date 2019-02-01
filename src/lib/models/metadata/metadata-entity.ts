@@ -27,6 +27,15 @@ export abstract class MetadataEntity {
 		return (<typeof MetadataEntity>this.constructor).metadata.get(propName);
 	}
 
+	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
+		const meta = this.meta(propName);
+
+		if (!meta)
+			throw new Error(`There is no metadata for the property ${propName}`);
+
+		return meta.label;
+	}
+
 	protected assignCustomizer = (currValue: any, srcValue: any, key: string, currObject, srcObject) => {
 		const mapper = (<typeof MetadataEntity>this.constructor).metadata.mappers[key];
 		if (!isNil(srcValue) && mapper) {

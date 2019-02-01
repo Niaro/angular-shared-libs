@@ -128,5 +128,33 @@ bp-layout {
 
 	.mat-dialog-container {
 		border-radius: $border-card-radius;
+		padding      : $mat-dialog-padding;
+
+		h1 {
+			margin-top: 0;
+		}
+
+		.btn-icon-close {
+			top  : $mat-dialog-padding-v - 2px;
+			right: $mat-dialog-padding-v;
+		}
+	}
+}
+
+.mat-dialog-container,
+.mat-sidenav {
+	@include mat-elevation(15);
+	position: relative;
+
+	.btn-icon-close {
+		position: absolute;
+		color: $color-semi-dark;
+		z-index: 2;
+
+		svg {
+			$size: 20px;
+			width: $size;
+			height: $size;
+		}
 	}
 }
