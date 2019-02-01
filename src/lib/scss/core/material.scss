@@ -95,14 +95,20 @@ bp-layout {
 			td {
 				border-color: transparent;
 				padding     : $gatter 0;
+				transition  : background $animation-duration $animation-function;
 			}
 
 			tr {
 				height: auto;
+
+				&.clickable:hover td {
+					background: fade-out($color-primary, 0.9);
+					cursor    : pointer;
+				}
 			}
 
 			tbody tr:first-of-type td {
-				padding-top: $edge-gatter;
+				border-top: $gatter solid white;
 			}
 
 			tfoot tr td {
@@ -112,7 +118,7 @@ bp-layout {
 		}
 
 		&:not(.has-footer) tbody tr:last-of-type td {
-			padding-bottom: $edge-gatter;
+			border-bottom: $gatter solid white;
 		}
 	}
 }
@@ -148,12 +154,12 @@ bp-layout {
 
 	.btn-icon-close {
 		position: absolute;
-		color: $color-semi-dark;
-		z-index: 2;
+		color   : $color-semi-dark;
+		z-index : 2;
 
 		svg {
-			$size: 20px;
-			width: $size;
+			$size : 20px;
+			width : $size;
 			height: $size;
 		}
 	}
