@@ -7,8 +7,8 @@ import createNgrxMiddleware from 'logrocket-ngrx';
 import { environment } from '@bp/environment';
 
 if (environment.prod) {
-	LogRocket.init('fpkaz5/bgp-admin', {
-		release: `${environment.name}_${environment.version}`,
+	LogRocket.init(environment.logrocket, {
+		release: `${environment.version}`,
 		network: {
 			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string> }) => {
 				// if the url contains 'ignore'

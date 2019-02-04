@@ -1,6 +1,8 @@
 import { Version } from './constants';
 
 export interface IAppEnvironment {
+	logrocket?: string;
+
 	api?: {
 		url: string;
 		version?: string;
