@@ -1,3 +1,4 @@
+export * from './fade-list';
 export * from './fade';
 export * from './route';
 export * from './slide-float';

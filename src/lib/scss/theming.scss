@@ -4,7 +4,6 @@ $typography: mat-typography-config(
 	$subheading-2: mat-typography-level($subheading-2-font-size, $subheading-2-line-height, $subheading-2-font-weight),
 	$caption: mat-typography-level($caption-font-size, $caption-line-height, $caption-font-weight),
 	$body-1: mat-typography-level($body-font-size, $body-line-height, $body-font-weight),
-	$button: mat-typography-level($button-font-size, $button-line-height, $button-font-weight)
 );
 
 // Include the common styles for Angular Material. We include this here so that you only

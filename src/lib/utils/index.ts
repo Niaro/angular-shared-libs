@@ -1,4 +1,6 @@
 export * from './chain';
+export * from './don-helper';
+export * from './is-extension-of';
 export * from './key-codes';
 export * from './uniq-id';
 export * from './url-helper';

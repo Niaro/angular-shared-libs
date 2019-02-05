@@ -3,7 +3,7 @@ export * from './measure.static';
 export * from './mutate.operator';
 export * from './mutate.static';
 export * from './mutation';
-// export * from './resize';
+export * from './resize';
 export * from './scheduler.async-outside-angular';
 export * from './scheduler.outside-angular';
 export * from './scheduler.run-in-angular-zone';

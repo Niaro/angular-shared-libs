@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { MaterialModule } from './materials.module';
-import { PROVIDERS } from './providers';
+import { PROVIDERS, RxJSExtenderService } from './providers';
 import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
@@ -16,6 +16,7 @@ import {
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
+import { TouchModule, CarouselModule } from './features';
 
 
 const MODULES = [
@@ -24,6 +25,9 @@ const MODULES = [
 	RouterModule,
 	ReactiveFormsModule,
 	LocalStorageModule,
+
+	TouchModule,
+	CarouselModule
 ];
 
 const EXPOSED = [
@@ -73,7 +77,7 @@ export class SharedModule {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				...LocalStorageModule.withConfig({
+				...LocalStorageModule.forRoot({
 					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
 				}).providers,
@@ -81,4 +85,6 @@ export class SharedModule {
 			]
 		};
 	}
+
+	constructor(rxjsExtender: RxJSExtenderService) { }
 }

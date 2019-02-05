@@ -1,18 +1,19 @@
 import { Directive, ElementRef, Output } from '@angular/core';
-import { TouchBuilder, TouchManager } from './touch';
+import { TouchBuilder } from './touch-builder';
+import { TouchManager } from './touch-manager';
 
 @Directive({
-	selector: '[rtMultitouchStart],[rtMultitouchEnd],[rtRotate],[rtPinch],[rtSwipe],[rtDoubleTap],[rtLongTap],[rtSingleTap],[rtTap],[rtPan]'
+	selector: '[bpRotate],[bpPinch],[bpSwipe],[bpDoubleTap],[bpLongTap],[bpSingleTap],[bpTap],[bpPan]'
 })
 export class TouchDirective {
-	@Output('rtRotate') get rotate() { return this.touchManager.rotate$; }
-	@Output('rtPinch') get pinch() { return this.touchManager.pinch$; }
-	@Output('rtSwipe') get swipe() { return this.touchManager.swipe$; }
-	@Output('rtDoubleTap') get doubleTap() { return this.touchManager.doubleTap$; }
-	@Output('rtLongTap') get longTap() { return this.touchManager.longTap$; }
-	@Output('rtSingleTap') get singleTap() { return this.touchManager.singleTap$; }
-	@Output('rtTap') get tap() { return this.touchManager.tap$; }
-	@Output('rtPan') get pan() { return this.touchManager.pan$; }
+	@Output('bpRotate') get rotate() { return this.touchManager.rotate$; }
+	@Output('bpPinch') get pinch() { return this.touchManager.pinch$; }
+	@Output('bpSwipe') get swipe() { return this.touchManager.swipe$; }
+	@Output('bpDoubleTap') get doubleTap() { return this.touchManager.doubleTap$; }
+	@Output('bpLongTap') get longTap() { return this.touchManager.longTap$; }
+	@Output('bpSingleTap') get singleTap() { return this.touchManager.singleTap$; }
+	@Output('bpTap') get tap() { return this.touchManager.tap$; }
+	@Output('bpPan') get pan() { return this.touchManager.pan$; }
 
 	private touchManager: TouchManager;
 

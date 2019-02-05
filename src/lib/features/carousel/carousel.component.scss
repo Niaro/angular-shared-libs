@@ -1,0 +1,175 @@
+@import 'imports';
+
+$bullet-size: 10px;
+
+:host {
+	display: block;
+
+	.main-row {
+		display: flex;
+		position: relative;
+	}
+
+	.viewport {
+		flex: 1;
+		order: 1;
+		overflow: hidden;
+		z-index: 0;
+	}
+
+	.slides {
+		display: flex;
+		align-items: flex-start;
+		margin: 0 5px;
+		height: 100%;
+		padding: 0;
+		list-style: none;
+		position: relative;
+		transition: transform $animation-duration $animation-function;
+		will-change: transform;
+
+		&.canceled-animation {
+			transition: none;
+		}
+	}
+
+	.slide {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		padding: 0 5px;
+		transition: opacity $animation-duration;
+	}
+
+	.btn-arrow {
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		cursor: pointer;
+		padding: 0;
+		background: transparent;
+		border: none;
+
+		.icon path {
+			fill: white;
+			transition: fill $animation-duration $animation-function;
+		}
+
+		&.prev {
+			order: 0;
+			left: 0;
+
+			.icon {
+				transform: rotate(180deg);
+			}
+		}
+
+		&.next {
+			order: 2;
+			right: 0;
+		}
+
+		&.disabled {
+			opacity: .4;
+			cursor: not-allowed;
+		}
+
+		&.disabled,
+		&.disabled:hover {
+			.circled-arrow {}
+		}
+
+		&.arrow-type-outer {
+			position: static;
+			padding: 25px;
+		}
+
+		&.arrow-type-inner {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			z-index: 1;
+			flex-flow: column;
+			justify-content: flex-end;
+			padding-bottom: 10px;
+
+			> span {
+				$arrow-size: 45px;
+				width: $arrow-size;
+				height: $arrow-size;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: $arrow-size;
+			}
+		}
+
+		&.arrow-size-sm {
+			.icon {
+
+			}
+
+			.circled-arrow {}
+		}
+
+		&.arrow-size-md {
+			width: 88px;
+
+			.icon {
+				width: 20px;
+				height: 16px;
+			}
+
+			.circled-arrow {}
+		}
+	}
+
+	.bullets {
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
+		position: relative;
+		overflow: hidden;
+
+		.bullet {
+			display: inline-block;
+			width: $bullet-size;
+			height: $bullet-size;
+			margin-right: $bullet-size;
+			flex-shrink: 0;
+
+			border-radius: 100%;
+			background-color: $color-border;
+			cursor: pointer;
+			transition: background-color $animation-duration;
+
+			&:last-child {
+				margin-right: 0;
+			}
+
+			&.active,
+			&:hover {
+				background-color: $color-primary;
+			}
+
+			&.active {
+				pointer-events: none;
+			}
+		}
+
+		// gradient if there is too much bullets
+		&:after {
+			content: '';
+			position: absolute;
+			pointer-events: none;
+			width: 100%;
+			height: 100%;
+			$gradient: white 0%, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0) 80%, white 100%;
+			background-image: -webkit-linear-gradient(left, $gradient);
+			/* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
+			background-image: linear-gradient(to right, $gradient);
+			/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+		}
+	}
+}

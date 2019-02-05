@@ -1,7 +1,9 @@
-import { PropertiesMetadata } from './properties-metadata';
-import { NonFunctionPropertyNames } from '../misc/typescript-types';
 import { assignWith, isNil, isArray, has, camelCase } from 'lodash-es';
-import { Enumeration, isExtensionOf } from '../misc';
+
+import { isExtensionOf } from '@bp/shared/utils';
+
+import { PropertiesMetadata } from './properties-metadata';
+import { NonFunctionPropertyNames, Enumeration } from '../misc';
 
 export abstract class MetadataEntity {
 	static get metadata(): PropertiesMetadata {
