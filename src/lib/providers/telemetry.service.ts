@@ -6,15 +6,9 @@ import createNgrxMiddleware from 'logrocket-ngrx';
 
 import { environment } from '@bp/environment';
 
-@Injectable({
-	providedIn: 'root'
-})
-export class TelemetryService {
-
-	static logrocketMetaReducer = createNgrxMiddleware(LogRocket);
-
-	static logrocketOptions = {
-		release: `${environment.name}_${environment.version}}`,
+if (environment.prod) {
+	LogRocket.init(environment.logrocket, {
+		release: `${environment.version}`,
 		network: {
 			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string> }) => {
 				// if the url contains 'ignore'
@@ -26,7 +20,15 @@ export class TelemetryService {
 				return request;
 			},
 		},
-	}
+	});
+}
+
+@Injectable({
+	providedIn: 'root'
+})
+export class TelemetryService {
+
+	static logrocketMetaReducer = createNgrxMiddleware(LogRocket);
 
 	private static instance: TelemetryService;
 
