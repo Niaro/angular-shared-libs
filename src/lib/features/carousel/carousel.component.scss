@@ -6,26 +6,26 @@ $bullet-size: 10px;
 	display: block;
 
 	.main-row {
-		display: flex;
+		display : flex;
 		position: relative;
 	}
 
 	.viewport {
-		flex: 1;
-		order: 1;
+		flex    : 1;
+		order   : 1;
 		overflow: hidden;
-		z-index: 0;
+		z-index : 0;
 	}
 
 	.slides {
-		display: flex;
+		display    : flex;
 		align-items: flex-start;
-		margin: 0 5px;
-		height: 100%;
-		padding: 0;
-		list-style: none;
-		position: relative;
-		transition: transform $animation-duration $animation-function;
+		margin     : 0 5px;
+		height     : 100%;
+		padding    : 0;
+		list-style : none;
+		position   : relative;
+		transition : transform $animation-duration $animation-function;
 		will-change: transform;
 
 		&.canceled-animation {
@@ -34,31 +34,32 @@ $bullet-size: 10px;
 	}
 
 	.slide {
-		display: flex;
+		display        : flex;
 		justify-content: center;
-		align-items: center;
-		position: relative;
-		padding: 0 5px;
-		transition: opacity $animation-duration;
+		align-items    : center;
+		position       : relative;
+		padding        : 0 5px;
+		transition     : opacity $animation-duration;
 	}
 
 	.btn-arrow {
-		display: flex;
+		display    : flex;
 		align-items: center;
 		flex-shrink: 0;
-		cursor: pointer;
-		padding: 0;
-		background: transparent;
-		border: none;
+		cursor     : pointer;
+		padding    : 0;
+		background : transparent;
+		border     : none;
+		transition : opacity $animation-duration $animation-function;
 
 		.icon path {
-			fill: white;
+			fill      : white;
 			transition: fill $animation-duration $animation-function;
 		}
 
 		&.prev {
 			order: 0;
-			left: 0;
+			left : 0;
 
 			.icon {
 				transform: rotate(180deg);
@@ -72,7 +73,7 @@ $bullet-size: 10px;
 
 		&.disabled {
 			opacity: .4;
-			cursor: not-allowed;
+			cursor : not-allowed;
 		}
 
 		&.disabled,
@@ -80,69 +81,113 @@ $bullet-size: 10px;
 			.circled-arrow {}
 		}
 
-		&.arrow-type-outer {
-			position: static;
-			padding: 25px;
+		&.arrow-type-circled,
+		&.arrow-type-inner {
+			position : absolute;
+			top      : 0;
+			bottom   : 0;
+			z-index  : 1;
+			flex-flow: column;
+
+			> span {
+				display        : flex;
+				align-items    : center;
+				justify-content: center;
+			}
 		}
 
 		&.arrow-type-inner {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			z-index: 1;
-			flex-flow: column;
 			justify-content: flex-end;
-			padding-bottom: 10px;
+			padding-bottom : 10px;
 
 			> span {
-				$arrow-size: 45px;
-				width: $arrow-size;
-				height: $arrow-size;
-				display: flex;
-				align-items: center;
-				justify-content: center;
+				$arrow-size  : 45px;
+				width        : $arrow-size;
+				height       : $arrow-size;
 				border-radius: $arrow-size;
 			}
 		}
 
-		&.arrow-size-sm {
-			.icon {
+		&.arrow-type-circled {
+			justify-content: center;
+			$arrow-size    : 30px;
 
+			&.disabled {
+				opacity       : 0;
+				pointer-events: none;
 			}
 
-			.circled-arrow {}
+			> span {
+				width        : $arrow-size;
+				height       : $arrow-size;
+				border-radius: $arrow-size;
+				background   : white;
+				border       : 1px solid fade-out($color-border, 0.5);
+				transition   : box-shadow $animation-duration $animation-function;
+				@include mat-elevation(3);
+
+				path {
+					fill: $color-primary;
+				}
+
+				&:hover {
+					@include mat-elevation(8);
+				}
+			}
+
+			&.next > span {
+				margin-left: $arrow-size / 2;
+			}
+
+			&.prev > span {
+				margin-right: 20px;
+			}
+		}
+
+		&.arrow-size-sm {
+			width: 20px;
+
+			.icon {
+				width: 8px;
+			}
+
+			&.next .icon {
+				margin-left: 3px;
+			}
+
+			&.prev .icon {
+				margin-right: 2px;
+			}
 		}
 
 		&.arrow-size-md {
 			width: 88px;
 
 			.icon {
-				width: 20px;
+				width : 20px;
 				height: 16px;
 			}
-
-			.circled-arrow {}
 		}
 	}
 
 	.bullets {
-		display: flex;
+		display        : flex;
 		justify-content: center;
-		margin-top: 10px;
-		position: relative;
-		overflow: hidden;
+		margin-top     : 10px;
+		position       : relative;
+		overflow       : hidden;
 
 		.bullet {
-			display: inline-block;
-			width: $bullet-size;
-			height: $bullet-size;
+			display     : inline-block;
+			width       : $bullet-size;
+			height      : $bullet-size;
 			margin-right: $bullet-size;
-			flex-shrink: 0;
+			flex-shrink : 0;
 
-			border-radius: 100%;
+			border-radius   : 100%;
 			background-color: $color-border;
-			cursor: pointer;
-			transition: background-color $animation-duration;
+			cursor          : pointer;
+			transition      : background-color $animation-duration;
 
 			&:last-child {
 				margin-right: 0;
@@ -160,12 +205,12 @@ $bullet-size: 10px;
 
 		// gradient if there is too much bullets
 		&:after {
-			content: '';
-			position: absolute;
-			pointer-events: none;
-			width: 100%;
-			height: 100%;
-			$gradient: white 0%, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0) 80%, white 100%;
+			content         : '';
+			position        : absolute;
+			pointer-events  : none;
+			width           : 100%;
+			height          : 100%;
+			$gradient       : white 0%, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0) 80%, white 100%;
 			background-image: -webkit-linear-gradient(left, $gradient);
 			/* For Chrome 25 and Safari 6, iOS 6.1, Android 4.3 */
 			background-image: linear-gradient(to right, $gradient);
