@@ -29,3 +29,35 @@
 .status-refund {
 	border-color: $color-light !important;
 }
+
+.text-rule-type,
+.text-status-inProcess,
+.text-status-active,
+.text-status-connected,
+.text-status-processing {
+	color: $color-primary !important;
+}
+
+.text-payment-route-rule-type-block,
+.text-status-declinedDueTo3DAuthFailure,
+.text-status-declinedDoNotTryAgain,
+.text-status-declinedByTimeout,
+.text-status-declinedDueToInvalidCreditCard,
+.text-status-declined {
+	color: $color-danger !important;
+}
+
+.text-status-chargeback {
+	color: #9999ff;
+}
+
+.text-status-approved {
+	color: $color-success;
+}
+
+.text-status-inactive,
+.text-status-disabled,
+.text-status-notConnected,
+.text-status-refund {
+	color: $color-light !important;
+}
