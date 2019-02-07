@@ -77,7 +77,7 @@ export class SharedModule {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				...LocalStorageModule.forRoot({
+				...LocalStorageModule.withConfig({
 					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
 				}).providers,

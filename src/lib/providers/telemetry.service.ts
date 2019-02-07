@@ -6,7 +6,7 @@ import createNgrxMiddleware from 'logrocket-ngrx';
 
 import { environment } from '@bp/environment';
 
-if (environment.prod) {
+if (environment.prod && location.hostname !== 'localhost') {
 	LogRocket.init(environment.logrocket, {
 		release: `${environment.version}`,
 		network: {
