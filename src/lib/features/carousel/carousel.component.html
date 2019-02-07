@@ -4,7 +4,7 @@
 		<ul #slidesContainer
 		    class="slides"
 		    [class.canceled-animation]="(animate$ | async) === false"
-		    [@fadeList]="(items$ | async).length">
+		    [@fadeInList]="(items$ | async).length">
 			<li #slide
 			    *ngFor="let item of (items$ | async); let i = index"
 			    class="slide">

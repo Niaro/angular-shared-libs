@@ -9,7 +9,7 @@ import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, fir
 import { isNull, isEqual, forOwn, sum } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
-import { FADE_LIST } from '@bp/shared/animations';
+import { FADE_IN_LIST } from '@bp/shared/animations';
 import { AsyncVoidSubject, OptionalBehaviorSubject, BpScheduler, measure } from '@bp/shared/rxjs';
 import { Direction, Dimensions } from '@bp/shared/models';
 import { $ } from '@bp/shared/utils';
@@ -26,7 +26,7 @@ export enum ArrowType {
 	selector: 'bp-carousel',
 	styleUrls: ['carousel.component.scss'],
 	templateUrl: 'carousel.component.html',
-	animations: [FADE_LIST],
+	animations: [FADE_IN_LIST],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
