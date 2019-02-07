@@ -4,7 +4,7 @@ import {
 	QueryList, ChangeDetectionStrategy, Renderer2
 } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
-import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max } from 'rxjs/operators';
+import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, tap, distinctUntilChanged } from 'rxjs/operators';
 
 import { isNull, isEqual, forOwn, sum } from 'lodash-es';
 import { Dictionary } from 'lodash';
@@ -82,14 +82,25 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	items$ = new OptionalBehaviorSubject<any[]>();
 
 	prevButtonDisabled$ = this.slidesVisibility$.pipe(
-		map(({ firstFullyVisible }) => firstFullyVisible === 0 && !this.looped),
+		map(({ firstFullyVisible }) => (firstFullyVisible === undefined || firstFullyVisible === 0) && !this.looped),
+		distinctUntilChanged()
 	);
 
 	nextButtonDisabled$ = combineLatest(
 		this.slidesVisibility$,
 		this.items$
 	).pipe(
-		map(([{ lastFullyVisible }, items]) => lastFullyVisible === (items && items.length - 1) && !this.looped)
+		map(([{ lastFullyVisible }, items]) =>
+			(lastFullyVisible === undefined || lastFullyVisible === (items && items.length - 1)) && !this.looped
+		),
+		distinctUntilChanged()
+	);
+
+	showArrowButtons$ = combineLatest(
+		this.prevButtonDisabled$,
+		this.nextButtonDisabled$
+	).pipe(
+		map(([prevDisabled, nextDisabled]) => !(prevDisabled && nextDisabled))
 	);
 
 	animate$ = new BehaviorSubject(false);
@@ -238,7 +249,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			.pipe(filter(v => !!v))
 			.subscribe(offsets => {
 				let maxOffset;
-				if (this.currentItemsPerView === undefined || this.currentItemsPerView == null)
+				if (this.currentItemsPerView === undefined || this.currentItemsPerView === null)
 					maxOffset = sum(offsets.map(({ width }) => width)) - this.slideMaxWidth;
 				else
 					maxOffset = this.slideMaxWidth / this.currentItemsPerView * this.items.length - this.slideMaxWidth;
