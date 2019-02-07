@@ -4,7 +4,7 @@ import {
 	QueryList, ChangeDetectionStrategy, Renderer2
 } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
-import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, tap, distinctUntilChanged } from 'rxjs/operators';
+import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
 
 import { isNull, isEqual, forOwn, sum } from 'lodash-es';
 import { Dictionary } from 'lodash';
