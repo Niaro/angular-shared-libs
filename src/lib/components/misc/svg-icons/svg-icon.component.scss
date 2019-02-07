@@ -7,4 +7,10 @@
 		height: 26px;
 		width: 180px;
 	}
+
+	&.crosshair,
+	&.tick {
+		width: 12px;
+		height: 9px;
+	}
 }
