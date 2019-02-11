@@ -72,8 +72,8 @@ $mat-card-status-border-width: 5px;
 $mat-card-elevation          : 10;
 $mat-elevation-opacity       : 0.4;
 $mat-card-grid-aisle         : 1.5rem;
-$mat-dialog-padding-v        : 32px;
-$mat-dialog-padding-h        : $mat-dialog-padding-v * 1.5;
+$mat-dialog-padding-v        : 32px !default;
+$mat-dialog-padding-h        : $mat-dialog-padding-v * 1.5 !default;
 $mat-dialog-padding          : $mat-dialog-padding-v $mat-dialog-padding-h;
 // #endregion mat-cards
 
@@ -137,3 +137,4 @@ $circle-sm-size: 9px;
 
 $dark-dividers     : rgba(black, 0.05);
 $border-card-radius: 10px;
+$bg-blur           : 5px;

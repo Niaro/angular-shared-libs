@@ -10,14 +10,13 @@ import { FieldErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, SvgSharedIconsDefinitionsComponent,
-	SvgIconComponent, ModalOutletComponent, ModalComponent
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
-import { TouchModule, CarouselModule } from './features';
 
+import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
 
 const MODULES = [
 	CommonModule,
@@ -27,7 +26,9 @@ const MODULES = [
 	LocalStorageModule,
 
 	TouchModule,
-	CarouselModule
+	CarouselModule,
+	ModalModule,
+	SvgIconsModule
 ];
 
 const EXPOSED = [
@@ -39,10 +40,6 @@ const EXPOSED = [
 	StatusBarComponent,
 	FilterComponent,
 	FilterControlDirective,
-	SvgSharedIconsDefinitionsComponent,
-	SvgIconComponent,
-	ModalOutletComponent,
-	ModalComponent,
 
 	// directives
 	TextMaskDirective,
@@ -81,6 +78,7 @@ export class SharedModule {
 					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
 				}).providers,
+				...ModalModule.forRoot().providers,
 				...PROVIDERS
 			]
 		};

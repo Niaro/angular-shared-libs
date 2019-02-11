@@ -8,7 +8,8 @@ import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 
 export const MODAL_OUTLET = 'modal';
-const URL_TREE_MODAL_OUTLET_PATH = `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`;
+const URL_TREE_PRIMARY_MODAL_OUTLET_PATH = `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`;
+const URL_TREE_MODAL_OUTLET_PATH = `root.children.${MODAL_OUTLET}`;
 
 @Component({
 	selector: 'bp-modal-outlet',
@@ -80,12 +81,13 @@ export class ModalOutletComponent implements OnInit {
 
 	private getUrlWithoutModalOutlet() {
 		const urlTree = this.router.parseUrl(this.router.url);
+		unset(urlTree, URL_TREE_PRIMARY_MODAL_OUTLET_PATH);
 		unset(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 		return urlTree.toString();
 	}
 
 	private hasUrlModalOutlet(url: string): boolean {
 		const urlTree = this.router.parseUrl(url);
-		return has(urlTree, URL_TREE_MODAL_OUTLET_PATH);
+		return has(urlTree, URL_TREE_PRIMARY_MODAL_OUTLET_PATH) || has(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 	}
 }

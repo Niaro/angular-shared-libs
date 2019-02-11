@@ -2,6 +2,7 @@ export * from './animations';
 export * from './components';
 export * from './models';
 export * from './pipes';
+export * from './features';
 export * from './providers';
 export * from './rxjs';
 export * from './utils';
