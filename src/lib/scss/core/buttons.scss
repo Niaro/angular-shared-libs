@@ -35,3 +35,9 @@ body .mat-button {
 		justify-content: center;
 	}
 }
+
+a.bp-button.mat-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}

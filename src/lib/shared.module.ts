@@ -13,7 +13,7 @@ import {
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe } from './pipes';
-import { TextMaskDirective, TargetBlankDirective, SortDirective } from './directives';
+import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
@@ -43,6 +43,7 @@ const EXPOSED = [
 
 	// directives
 	TextMaskDirective,
+	RouterLinkNoOutletsWithHrefDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,

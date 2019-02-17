@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ContentChild } from '@angular/core';
-import { RouterOutlet, Router, ActivatedRoute, PRIMARY_OUTLET, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { RouterOutlet, Router, PRIMARY_OUTLET, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { filter, map } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { unset, has } from 'lodash-es';
 
 import { IModalHostComponent } from './modal-host-component.interface';
@@ -27,19 +27,15 @@ export class ModalOutletComponent implements OnInit {
 
 	constructor(
 		public router: Router,
-		private route: ActivatedRoute,
 		private dialogsManager: MatDialog
 	) { }
 
 	ngOnInit() {
-		this.outlet.activateEvents.subscribe((cmpt) => this.outletActivate(cmpt));
+		this.outlet.activateEvents.subscribe(cmpt => this.outletActivate(cmpt));
 
 		this.router.events
-			.pipe(
-				filter(e => e instanceof NavigationEnd),
-				map(() => this.route.snapshot.firstChild.children.find(r => r.outlet === MODAL_OUTLET))
-			)
-			.subscribe(outletRoute => this.urlWithOutlet = outletRoute && this.router.url);
+			.pipe(filter(e => e instanceof NavigationEnd))
+			.subscribe((e: NavigationEnd) => this.urlWithOutlet = this.hasUrlModalOutlet(e.url) ? this.router.url : undefined);
 
 		// We redirect to the destination url only after the drawer is animatedly closed
 		// otherwise the router outlets content in the drawer deletes right at the animation start

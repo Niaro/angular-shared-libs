@@ -22,6 +22,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 		'x-api-key'           : environment.mockKey,
 		[MOCK_RESPONSE_CODE]  : '200'
 	};
+	checkAuthorization = false;
 
 	private authorized$ = new BehaviorSubject(false);
 
@@ -40,7 +41,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-		return request.url.includes('auth')
+		return !this.checkAuthorization || request.url.includes('auth')
 			? this.enhanceRequest(request, next)
 			: this.authorized$.pipe(
 				filter(it => !!it),

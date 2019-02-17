@@ -1,0 +1,100 @@
+import { Directive, Input, OnChanges, OnDestroy, HostBinding, HostListener } from '@angular/core';
+import { LocationStrategy } from '@angular/common';
+import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET } from '@angular/router';
+import { takeUntil, filter } from 'rxjs/operators';
+import { isString } from 'lodash-es';
+
+import { AsyncVoidSubject } from '../rxjs';
+import { chain } from '../utils';
+
+/**
+ * We need our own implementation of RouterLink directive because the angular's directive
+ * doesn't remove current presented in url outlets from generated links
+ */
+export type QueryParamsHandling = 'merge' | 'preserve' | '';
+
+@Directive({
+	selector: 'a[routerLinkNoOutlets]' // tslint:disable-line
+})
+export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestroy {
+
+	@Input()
+	set routerLinkNoOutlets(commands: any[] | string) {
+		if (commands != null)
+			this.commands = Array.isArray(commands) ? commands : [commands];
+		else
+			this.commands = [];
+	}
+
+	@HostBinding('attr.target') @Input() target: string;
+	@Input() queryParams: { [k: string]: any };
+	@Input() fragment: string;
+	@Input() queryParamsHandling: QueryParamsHandling;
+	@Input() preserveFragment: boolean;
+	@Input() skipLocationChange: boolean;
+	@Input() replaceUrl: boolean;
+
+	// the url displayed on the anchor element.
+	@HostBinding() href: string;
+
+	private commands: any[] = [];
+	private destroyed$ = new AsyncVoidSubject();
+
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute,
+		private locationStrategy: LocationStrategy
+	) {
+		router.events
+			.pipe(
+				takeUntil(this.destroyed$),
+				filter(e => e instanceof NavigationEnd)
+			)
+			.subscribe(s => this.updateTargetUrlAndHref());
+	}
+
+	ngOnChanges() { this.updateTargetUrlAndHref(); }
+	ngOnDestroy() { this.destroyed$.complete(); }
+
+	@HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'])
+	onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean {
+		if (button !== 0 || ctrlKey || metaKey || shiftKey)
+			return true;
+
+		if (isString(this.target) && this.target !== '_self')
+			return true;
+
+		this.router.navigateByUrl(this.urlTree, {
+			skipLocationChange: attrBoolValue(this.skipLocationChange),
+			replaceUrl: attrBoolValue(this.replaceUrl)
+		});
+
+		return false;
+	}
+
+	private updateTargetUrlAndHref(): void {
+		this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+	}
+
+	get urlTree(): UrlTree {
+		const tree = this.router.createUrlTree(this.commands, {
+			relativeTo: this.route,
+			queryParams: this.queryParams,
+			fragment: this.fragment,
+			queryParamsHandling: this.queryParamsHandling,
+			preserveFragment: attrBoolValue(this.preserveFragment)
+		});
+
+		// clear the tree current root from not primary outlets
+		chain(tree.root.children)
+			.toPairs()
+			.filter(([outletName]) => outletName !== PRIMARY_OUTLET)
+			.forEach(([outletName]) => delete tree.root.children[outletName]);
+
+		return tree;
+	}
+}
+
+function attrBoolValue(s: any): boolean {
+	return s === '' || !!s;
+}
