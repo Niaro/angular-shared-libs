@@ -33,6 +33,7 @@ export class TelemetryService {
 	private static instance: TelemetryService;
 
 	static routerErrorHandler(error) {
+		environment.dev && console.error(error);
 		LogRocket.captureMessage(error, { tags: { source: 'router' } });
 	}
 

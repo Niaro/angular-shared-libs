@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import {
+	MatCardModule,
 	MatInputModule,
 	MatButtonModule,
 	MatIconModule,
@@ -23,6 +24,7 @@ import {
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 const MODULES = [
+	MatCardModule,
 	MatInputModule,
 	MatButtonModule,
 	MatIconModule,
