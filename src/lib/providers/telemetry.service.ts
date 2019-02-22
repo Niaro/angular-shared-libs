@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Dictionary } from 'lodash';
-import { uniqueId } from 'lodash-es';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
 
@@ -45,6 +44,6 @@ export class TelemetryService {
 	}
 
 	registerUser(email: string) {
-		LogRocket.identify(uniqueId(), { email });
+		LogRocket.identify(email, { email });
 	}
 }
