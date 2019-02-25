@@ -6,7 +6,7 @@
        [value]="value.from"
        [max]="value.to"
        (click)="fromPicker.open()"
-	   (dateChange)="update({ from: $event.value })">
+       (dateChange)="update({ from: $event.value })">
 
 <mat-datepicker #fromPicker
                 [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
@@ -17,11 +17,12 @@
 <input class="to"
        [class.empty]="!value.to"
        [matDatepicker]="toPicker"
+       readonly
        placeholder="To"
        [value]="value.to"
        [min]="value.from"
        (click)="toPicker.open()"
-	   (dateChange)="update({ to: $event.value })">
+       (dateChange)="update({ to: $event.value })">
 
 <mat-datepicker #toPicker
                 [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatRippleModule } from '@angular/material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { TouchModule } from '../touch';
 
@@ -10,7 +11,9 @@ import { CarouselComponent } from './carousel.component';
 	imports: [
 		CommonModule,
 		MatRippleModule,
-		TouchModule],
+		TouchModule,
+		DragDropModule
+	],
 	declarations: [CarouselComponent],
 	exports: [CarouselComponent]
 })

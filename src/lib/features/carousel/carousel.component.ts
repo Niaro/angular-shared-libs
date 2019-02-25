@@ -15,6 +15,7 @@ import { Direction, Dimensions } from '@bp/shared/models';
 import { $ } from '@bp/shared/utils';
 
 import { TouchManager, TouchBuilder, ISwipeEvent } from '../touch';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export enum ArrowType {
 	none = 'none',
@@ -41,6 +42,10 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input() showArrows = true;
 	@Input() resetActiveOnItemsChange = true;
 	@Input('autoplay') autoplayInterval = 0;
+	@Input() slideClass: string;
+	@Input() sortable = false;
+	@Input() slideInAnimation = true;
+	@Output('sort') sort$ = new Subject<any[]>();
 
 	@Input()
 	get items() { return this.items$.value; }
@@ -228,6 +233,16 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			this.activateIndex(this.slidesVisibility.firstFullyVisible - 1);
 		else if (this.looped || forceLooped)
 			this.activateIndex(this.items.length - 1);
+	}
+
+	drop(event: CdkDragDrop<any[]>) {
+		if (event.previousIndex === event.currentIndex)
+			return;
+
+		const copy = this.items.slice();
+		moveItemInArray(copy, event.previousIndex, event.currentIndex);
+		this.items = copy;
+		this.sort$.next(copy);
 	}
 
 	private updateScroll({ animate = false, distinctVisibility = true } = {}) {

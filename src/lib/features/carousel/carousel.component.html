@@ -3,11 +3,18 @@
 	     [style.height.px]="viewportHeight$ | async">
 		<ul #slidesContainer
 		    class="slides"
-		    [class.canceled-animation]="(animate$ | async) === false"
-		    [@fadeInList]="(items$ | async).length">
+		    [class.canceled-slide-animation]="(animate$ | async) === false"
+		    [@fadeInList]="(items$ | async).length"
+		    [@.disabled]="!slideInAnimation"
+		    cdkDropList
+		    cdkDropListOrientation="horizontal"
+		    (cdkDropListDropped)="drop($event)">
 			<li #slide
 			    *ngFor="let item of (items$ | async); let i = index"
-			    class="slide">
+			    class="carousel-slide"
+			    [ngClass]="slideClass"
+			    cdkDrag
+			    [cdkDragDisabled]="!sortable || (items$ | async).length === 1">
 				<ng-container *ngTemplateOutlet="template; context: { '\$implicit': item, index: i }"></ng-container>
 			</li>
 		</ul>

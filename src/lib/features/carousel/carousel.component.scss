@@ -28,18 +28,9 @@ $bullet-size: 10px;
 		transition : transform $animation-duration $animation-function;
 		will-change: transform;
 
-		&.canceled-animation {
+		&.canceled-slide-animation {
 			transition: none;
 		}
-	}
-
-	.slide {
-		display        : flex;
-		justify-content: center;
-		align-items    : center;
-		position       : relative;
-		padding        : 0 5px;
-		transition     : opacity $animation-duration;
 	}
 
 	.btn-arrow {
@@ -217,4 +208,13 @@ $bullet-size: 10px;
 			/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 		}
 	}
+}
+
+::ng-deep .carousel-slide {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	padding: 0 5px;
+	transition: opacity $animation-duration;
 }
