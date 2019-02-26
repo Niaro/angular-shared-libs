@@ -366,7 +366,10 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 				measure($slide => $.outerSize($slide).height),
 				max(),
 			)
-			.subscribe(height => this.viewportHeight$.next(height));
+			.subscribe(height => {
+				this.viewportHeight$.next(height);
+				this.cdr.detectChanges();
+			});
 	}
 }
 
