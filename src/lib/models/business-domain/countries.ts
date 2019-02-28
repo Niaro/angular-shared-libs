@@ -2,12 +2,14 @@ import { CountryCode } from 'libphonenumber-js';
 import * as intlTelInput from 'intl-tel-input';
 import { MetadataEntity } from '../metadata';
 
+export { CountryCode };
+
 // in order intlTelInputGlobals to be accessible down the code we need invoke a request to the lib,
 // otherwise intlTelInputGlobals is undefined
 // @ts-ignore
 const initiation = intlTelInput;
 
-export { CountryCode };
+export const COUNTRY_STATES: { [countryIso: string]: IState[] } = require('./states.json');
 
 export class Country extends MetadataEntity {
 	readonly name: string;
@@ -16,11 +18,13 @@ export class Country extends MetadataEntity {
 	readonly dialCode: string;
 	readonly lowerCaseName?: string;
 	readonly lowerCaseCode?: string;
+	readonly states?: IState[];
 
 	constructor(data: Partial<Country>) {
 		super(data);
 		this.lowerCaseName = this.name.toLowerCase();
 		this.lowerCaseCode = this.code.toLowerCase();
+		this.states = COUNTRY_STATES[this.code];
 		Object.freeze(this);
 	}
 
@@ -69,6 +73,7 @@ export class Countries {
 	}
 }
 
-export interface IStates {
-	[stateCode: string]: string;
+export interface IState {
+	iso: string;
+	name: string;
 }

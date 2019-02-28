@@ -5,7 +5,7 @@ import {
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
 import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
-import { isEmpty, transform, isNil } from 'lodash-es';
+import { isEmpty, transform, isNil, difference } from 'lodash-es';
 
 import { UrlHelper, chain } from '@bp/shared/utils';
 
@@ -140,10 +140,29 @@ export class FilterComponent implements OnChanges, AfterContentInit {
 				else
 					routeParams[controlName] = newRouteValue;
 
-				if (this.type === 'matrix')
-					this.router.navigate([routeParams], { relativeTo: this.route });
-				else
-					this.router.navigate([], { queryParams: routeParams, relativeTo: this.route });
+				this.updateUrl(routeParams);
 			});
+
+		/**
+		 * Remove from the url the deleted filter control
+		 */
+		filterControls$
+			.pipe(
+				pairwise(),
+				map(([prev, curr]) => difference(prev, curr)),
+				filter(v => v.length > 0)
+			)
+			.subscribe(deleted => {
+				const routeParams = this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route);
+				deleted.forEach(v => delete routeParams[v.name]);
+				this.updateUrl(routeParams);
+			});
+	}
+
+	private updateUrl(routeParams: Object) {
+		if (this.type === 'matrix')
+			this.router.navigate([routeParams], { relativeTo: this.route });
+		else
+			this.router.navigate([], { queryParams: routeParams, relativeTo: this.route });
 	}
 }

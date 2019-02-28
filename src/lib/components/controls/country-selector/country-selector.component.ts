@@ -50,8 +50,8 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 		Promise
 			.resolve()
 			.then(() => {
-				this.value = value instanceof Country ? value : Countries.findByCode(value);
-				this.inputControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
+				value = value instanceof Country ? value : Countries.findByCode(value);
+				this.inputControl.setValue(value && value.name || '', { emitViewToModelChange: false });
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface

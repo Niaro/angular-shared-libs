@@ -1,6 +1,6 @@
 import { animation, style, animate, trigger, transition, useAnimation } from '@angular/animations';
 
-import { NORMAL } from './variables';
+import { SLOW } from './variables';
 
 const slidedHorizontalIn = {
 	width: 0,
@@ -24,12 +24,12 @@ export const SLIDE_HORIZONTAL_OUT_ANIMATION = animation(
 			})
 		),
 	],
-	NORMAL
+	SLOW
 );
 
 export const SLIDE_HORIZONTAL_IN_ANIMATION = animation(
 	animate('{{timing}}s {{ease}}', style(slidedHorizontalIn)),
-	NORMAL
+	SLOW
 );
 
 export const SLIDE_HORIZONTAL = trigger('slideHorizontal', [
