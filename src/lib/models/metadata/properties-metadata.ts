@@ -1,4 +1,4 @@
-import { NonFunctionPropertyNames, Enumeration } from '../misc';
+import { Enumeration } from '../misc';
 import { PropertyMetadata } from './property-metadata';
 
 export class PropertiesMetadata {
@@ -14,7 +14,7 @@ export class PropertiesMetadata {
 		this.dict[metadata.property] = metadata;
 	}
 
-	get<T>(propName: NonFunctionPropertyNames<T>) {
+	get<T extends keyof any>(propName: T) {
 		return this.dict[<string>propName];
 	}
 }

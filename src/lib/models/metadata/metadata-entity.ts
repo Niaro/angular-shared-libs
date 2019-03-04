@@ -25,12 +25,12 @@ export abstract class MetadataEntity {
 		assignWith(this, data, this.assignCustomizer);
 	}
 
-	meta<T = this>(propName: NonFunctionPropertyNames<T>) {
-		return (<typeof MetadataEntity>this.constructor).metadata.get(propName);
+	get meta() {
+		return (<typeof MetadataEntity>this.constructor).metadata;
 	}
 
 	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
-		const meta = this.meta(propName);
+		const meta = this.meta.get(propName);
 
 		if (!meta)
 			throw new Error(`There is no metadata for the property ${propName}`);
