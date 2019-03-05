@@ -1,3 +1,4 @@
+export * from './chunk.pipe';
 export * from './is-present.pipe';
 export * from './lower-case.pipe';
 export * from './moment.pipe';
