@@ -1,3 +1,4 @@
+export * from './entity';
 export * from './mapper.decorator';
 export * from './metadata-entity';
 export * from './properties-metadata';

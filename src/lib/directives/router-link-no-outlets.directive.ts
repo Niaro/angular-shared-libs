@@ -1,11 +1,10 @@
 import { Directive, Input, OnChanges, OnDestroy, HostBinding, HostListener } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
-import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET } from '@angular/router';
+import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, UrlSegmentGroup } from '@angular/router';
 import { takeUntil, filter } from 'rxjs/operators';
 import { isString } from 'lodash-es';
 
 import { AsyncVoidSubject } from '../rxjs';
-import { chain } from '../utils';
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive
@@ -85,13 +84,20 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 			preserveFragment: attrBoolValue(this.preserveFragment)
 		});
 
-		// clear the tree current root from not primary outlets
-		chain(tree.root.children)
-			.toPairs()
-			.filter(([outletName]) => outletName !== PRIMARY_OUTLET)
-			.forEach(([outletName]) => delete tree.root.children[outletName]);
+		this.removeNonPrimaryOutlets(tree.root);
 
 		return tree;
+	}
+
+	private removeNonPrimaryOutlets({ children }: UrlSegmentGroup) {
+		for (const key in children) {
+			if (children.hasOwnProperty(key)) {
+				if (key === PRIMARY_OUTLET)
+					this.removeNonPrimaryOutlets(children[key]);
+				else
+					delete children[key];
+			}
+		}
 	}
 }
 

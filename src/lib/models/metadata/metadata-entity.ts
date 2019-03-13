@@ -21,8 +21,8 @@ export abstract class MetadataEntity {
 		return this.metadata.get(prop).label;
 	}
 
-	constructor(data: Partial<MetadataEntity>) {
-		assignWith(this, data, this.assignCustomizer);
+	constructor(data?: Partial<MetadataEntity>) {
+		data && assignWith(this, data, this.assignCustomizer);
 	}
 
 	get meta() {
