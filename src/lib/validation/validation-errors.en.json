@@ -10,5 +10,6 @@
 	"minimum": "The value must be higher than {{required}}",
 	"maximum": "The value must be less than {{required}}",
 	"pattern": "The value is invalid",
-	"excessSafeNumber": "The value must be less than 1 billion."
+	"excessSafeNumber": "The value must be less than 1 billion.",
+	"digits": "The value must contain only digits"
 }

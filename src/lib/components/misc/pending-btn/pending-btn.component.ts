@@ -1,10 +1,12 @@
 import { Component, ChangeDetectionStrategy, Input, ElementRef } from '@angular/core';
+import { FADE } from '@bp/shared/animations';
 
 @Component({
 	selector: 'bp-pending-btn',
 	templateUrl: './pending-btn.component.html',
 	styleUrls: ['./pending-btn.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	animations: [FADE]
 })
 export class PendingBtnComponent {
 	@Input() pending: boolean;
