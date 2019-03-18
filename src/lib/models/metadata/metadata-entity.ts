@@ -1,4 +1,4 @@
-import { assignWith, isNil, isArray, has, camelCase } from 'lodash-es';
+import { assignWith, isNil, isArray, has, camelCase, forIn } from 'lodash-es';
 
 import { isExtensionOf } from '@bp/shared/utils';
 
@@ -22,7 +22,8 @@ export abstract class MetadataEntity {
 	}
 
 	constructor(data?: Partial<MetadataEntity>) {
-		data && assignWith(this, data, this.assignCustomizer);
+		assignWith(this, data, this.assignCustomizer);
+		this.setDefaults();
 	}
 
 	get meta() {
@@ -40,6 +41,7 @@ export abstract class MetadataEntity {
 
 	protected assignCustomizer = (currValue: any, srcValue: any, key: string, currObject, srcObject) => {
 		const mapper = (<typeof MetadataEntity>this.constructor).metadata.mappers[key];
+
 		if (!isNil(srcValue) && mapper) {
 			const make = v => isExtensionOf(mapper, Enumeration)
 				? (<typeof Enumeration>mapper).parse(camelCase(v))
@@ -50,6 +52,14 @@ export abstract class MetadataEntity {
 				? srcValue.map(v => make(v))
 				: make(srcValue);
 		}
+
 		return srcValue;
+	}
+
+	private setDefaults() {
+		forIn((<typeof MetadataEntity>this.constructor).metadata.defaults, (defaultValue, k) => {
+			if (this[k] === undefined)
+				this[k] = defaultValue;
+		});
 	}
 }

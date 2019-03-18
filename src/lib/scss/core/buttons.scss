@@ -3,13 +3,22 @@
 	border             : 2px solid $color-primary;
 	color              : $color-primary;
 	transition         : $animation-duration $animation-function;
-	transition-property: background, color;
+	transition-property: background, color, box-shadow;
 	padding            : 0.2em 1.25em;
 	min-width          : 185px;
 
 	&:hover {
 		background: $color-primary;
 		color     : white;
+	}
+
+	&.primary {
+		background-color: $color-primary;
+		color           : white !important;
+
+		&:hover {
+			@include mat-elevation(5, $mat-elevation-color, 1);
+		}
 	}
 
 	bp-svg-icon {
@@ -28,10 +37,14 @@
 		align-items    : center;
 		justify-content: center;
 	}
+
+	&[disabled] {
+		cursor: not-allowed;
+	}
 }
 
 a.bp-button.mat-button {
-	display: inline-flex;
-	align-items: center;
+	display        : inline-flex;
+	align-items    : center;
 	justify-content: center;
 }

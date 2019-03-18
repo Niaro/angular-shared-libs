@@ -26,7 +26,7 @@ function getErrorString(controlName: string, validatorName: string, error?: IVal
 	const value = ERROR_STRINGS[validatorName];
 
 	const text = isObject(value)
-		? value[controlName] || value.default
+		? value[controlName] || value['default']
 		: value;
 
 	const masks = text.match(/{{(\w+)}}/g);

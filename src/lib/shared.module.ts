@@ -17,6 +17,7 @@ import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOut
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
+import { PendingBtnComponent } from './components/misc/pending-btn';
 
 const MODULES = [
 	CommonModule,
@@ -40,6 +41,7 @@ const EXPOSED = [
 	StatusBarComponent,
 	FilterComponent,
 	FilterControlDirective,
+	PendingBtnComponent,
 
 	// directives
 	TextMaskDirective,
