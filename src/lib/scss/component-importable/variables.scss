@@ -74,8 +74,8 @@ $mat-card-elevation          : 10;
 $mat-elevation-opacity       : 0.4;
 $mat-elevation-color         : black;
 $mat-card-grid-aisle         : 1.5rem;
-$mat-dialog-padding-v        : 32px !default;
-$mat-dialog-padding-h        : $mat-dialog-padding-v * 1.5 !default;
+$mat-dialog-padding-v        : 24px !default;
+$mat-dialog-padding-h        : $mat-dialog-padding-v * 2 !default;
 $mat-dialog-padding          : $mat-dialog-padding-v $mat-dialog-padding-h;
 // #endregion mat-cards
 
