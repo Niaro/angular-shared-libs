@@ -18,6 +18,18 @@
 	}
 }
 
+.bp-overlay-pane {
+	width: 100%;
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	margin: 0 1rem;
+
+	&.lg {
+		max-width: 900px !important;
+	}
+}
+
 .mat-dialog-container,
 .mat-sidenav {
 	@include mat-elevation(15);

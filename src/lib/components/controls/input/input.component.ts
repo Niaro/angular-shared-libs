@@ -5,7 +5,7 @@ import {
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { takeUntil, map, auditTime } from 'rxjs/operators';
 import { isEmpty } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
@@ -31,6 +31,7 @@ export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAcc
 	@Input() placeholder: string;
 	@Input() mask: TextMaskConfig;
 	@Input() autocomplete: MatAutocomplete;
+	@Input() throttle = 200;
 	@HostBinding('class.empty') get empty() { return !this.value; }
 
 	autocompleteOrigin = { elementRef: this.host };
@@ -51,10 +52,13 @@ export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAcc
 				.subscribe((it: MatAutocompleteSelectedEvent) => this.update(it.option.value));
 		else
 			this.maskDirective.valueChange$
-				.pipe(map(v => this.maskDirective.config instanceof NumberMaskConfig && !this.maskDirective.config.allowLeadingZeroes && !isEmpty(v)
-					? +v
-					: v
-				))
+				.pipe(
+					auditTime(this.throttle),
+					map(v => this.maskDirective.config instanceof NumberMaskConfig && !this.maskDirective.config.allowLeadingZeroes && !isEmpty(v)
+						? +v
+						: v
+					)
+				)
 				.subscribe(v => this.update(<any>v));
 
 	}

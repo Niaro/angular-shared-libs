@@ -18,7 +18,7 @@ const EXPOSED = [
 		CommonModule,
 		MatDialogModule,
 		MatButtonModule,
-		SvgIconsModule
+		SvgIconsModule,
 	],
 	declarations: EXPOSED,
 	exports: EXPOSED

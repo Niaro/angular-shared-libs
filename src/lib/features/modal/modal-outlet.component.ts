@@ -64,7 +64,7 @@ export class ModalOutletComponent implements OnInit {
 
 		this.navigation = false;
 		this.activeDialog = this.dialogsManager.open(cmpt.modal.template, {
-			panelClass: [cmpt.panelClass, 'mat-typography']
+			panelClass: [...cmpt.panelClass, 'bp-overlay-pane', 'mat-typography']
 		});
 
 		this.activeDialog
