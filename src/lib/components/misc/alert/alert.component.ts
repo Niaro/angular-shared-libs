@@ -1,6 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { SLIDE } from '@bp/shared/animations';
-import { ResponseError } from '@bp/shared/models';
+import { IApiErrorMessage } from '@bp/shared/models';
 
 @Component({
 	selector: 'bp-alert',
@@ -11,6 +11,8 @@ import { ResponseError } from '@bp/shared/models';
 })
 export class AlertComponent {
 	@Input() type: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
-	@Input() show = true;
-	@Input() error: ResponseError;
+	@Input() show = false;
+	@Input() errors: IApiErrorMessage | null;
+
+	@HostBinding('class.hidden') get hidden() { return !this.errors || !this.show; }
 }

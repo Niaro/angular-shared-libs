@@ -1,6 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { isEmpty } from 'lodash-es';
-import { ResponseError, IApiErrorMessage } from '@bp/shared/models';
+import { IApiErrorMessage } from '@bp/shared/models';
 
 @Component({
 	selector: 'bp-api-error',
@@ -9,16 +8,7 @@ import { ResponseError, IApiErrorMessage } from '@bp/shared/models';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApiErrorComponent {
+
 	@Input('src')
-	get error() { return this._error; }
-	set error(value: ResponseError) {
-		this._error = value;
-		this.messages = value && !isEmpty(value.messages) && value.messages.some(it => !it.field)
-			? value.messages.filter(it => !it.field)
-			: [];
-	}
-
-	private _error: ResponseError;
-
-	messages: IApiErrorMessage[];
+	errors: IApiErrorMessage[];
 }

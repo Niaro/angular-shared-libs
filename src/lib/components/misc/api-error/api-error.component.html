@@ -1,13 +1,13 @@
-<ng-container *ngIf="messages.length === 1; else listTpl">
-	{{ messages[0].message }}
-	<small *ngIf="messages[0].type as type">{{ type }}</small>
+<ng-container *ngIf="errors.length === 1; else listTpl">
+	{{ errors[0].message }}
+	<small *ngIf="errors[0].type as type">{{ type }}</small>
 </ng-container>
 
 <ng-template #listTpl>
 	<ul>
-		<li *ngFor="let msg of messages">
-			{{ msg.message }}
-			<small *ngIf="msg.type">{{ msg.type }}</small>
+		<li *ngFor="let e of errors">
+			{{ e.message }}
+			<small *ngIf="e.type">{{ e.type }}</small>
 		</li>
 	</ul>
 </ng-template>
