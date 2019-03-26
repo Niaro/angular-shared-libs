@@ -48,6 +48,10 @@
 	}
 }
 
+.mat-sidenav {
+	z-index: 4 !important;
+}
+
 .cdk-global-scrollblock {
 	overflow: hidden !important;
 }
