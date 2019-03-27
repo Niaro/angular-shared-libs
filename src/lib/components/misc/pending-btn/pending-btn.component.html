@@ -1,6 +1,7 @@
 <button [attr.type]="type"
         mat-button
-        class="bp-button primary"
+		class="bp-button primary"
+		[class.pending]="pending"
         [disabled]="disabled || pending"
         color="primary">
 	<ng-content></ng-content>

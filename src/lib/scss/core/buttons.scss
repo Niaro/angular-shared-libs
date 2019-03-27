@@ -39,6 +39,11 @@
 	}
 
 	&[disabled] {
+		&:not(.pending) {
+			background: $color-light;
+			border-color: $color-light;
+		}
+
 		cursor: not-allowed;
 		box-shadow: none !important;
 	}
