@@ -1,0 +1,23 @@
+
+<mat-form-field appearance="outline">
+	<mat-label>{{ label }}</mat-label>
+	<input [matDatepicker]="picker"
+		   readonly
+		   matInput
+		   [value]="value"
+		   (click)="picker.open()"
+		   (dateChange)="update($event.value)">
+	<mat-error [bpFieldError]="formControlName"></mat-error>
+</mat-form-field>
+
+<mat-datepicker #picker
+				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+</mat-datepicker>
+
+<button *ngIf="!empty"
+		@slideRight
+		matSuffix
+		mat-icon-button
+		(click)="update(null)">
+	<mat-icon>close</mat-icon>
+</button>

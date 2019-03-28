@@ -4,8 +4,8 @@ import { isEqual } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { DateRange, DateRangeInput } from '@bp/shared/models/misc/date-range';
+import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
-import { DatepickerCalendarHeaderComponent } from './datepicker-calendar-header';
 
 type DateRangeValue = { from: number, to: number };
 
