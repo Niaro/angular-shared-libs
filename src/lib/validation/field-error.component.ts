@@ -5,7 +5,7 @@ import { map, startWith } from 'rxjs/operators';
 import { head } from 'lodash-es';
 
 import { ValidationErrorStrings } from './validation-error-strings';
-import { FormControl, FormGroupDirective } from '@angular/forms';
+import { FormGroupDirective } from '@angular/forms';
 
 @Component({
 	// tslint:disable-next-line:component-selector
