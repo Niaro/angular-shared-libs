@@ -1,39 +1,30 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Optional } from '@angular/core';
 import { MatFormField } from '@angular/material';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { head } from 'lodash-es';
-
-import { ValidationErrorStrings } from './validation-error-strings';
-import { FormGroupDirective } from '@angular/forms';
+import { FormGroupDirective, NgControl } from '@angular/forms';
 
 @Component({
 	// tslint:disable-next-line:component-selector
 	selector: '[bpFieldError]',
-	template: '{{ error$ | async }}',
+	template: `
+		<bp-validation-error [errors]="control.errors" [controlName]="controlName" [animate]="false"></bp-validation-error>
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FieldErrorComponent implements OnInit {
+export class FieldErrorComponent {
 	@Input('bpFieldError') formControlName: string;
 
-	error$: Observable<string>;
-
-	private get control() {
+	get control() {
 		return this.formControlName
-			? this.formGroup.directives.find(v => v.name === this.formControlName)
+			? this.formGroup.control.controls[this.formControlName]
 			: this.formField._control.ngControl;
 	}
 
-	constructor(
-		private formField: MatFormField,
-		private formGroup: FormGroupDirective
-	) { }
-
-	ngOnInit() {
-		this.error$ = this.control.statusChanges.pipe(
-			startWith(null),
-			map(() => new ValidationErrorStrings(this.control.name, this.control.errors)),
-			map(errors => head(errors))
-		);
+	get controlName() {
+		return this.control instanceof NgControl ? this.control.name : this.formControlName;
 	}
+
+	constructor(
+		private formGroup: FormGroupDirective,
+		@Optional() private formField?: MatFormField
+	) { }
 }

@@ -6,7 +6,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { MaterialModule } from './materials.module';
 import { PROVIDERS, RxJSExtenderService } from './providers';
-import { FieldErrorComponent } from './validation';
+import { FieldErrorComponent, ValidationErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
@@ -34,6 +34,7 @@ const MODULES = [
 
 const EXPOSED = [
 	// misc
+	ValidationErrorComponent,
 	FieldErrorComponent,
 	AlertComponent,
 	ApiErrorComponent,

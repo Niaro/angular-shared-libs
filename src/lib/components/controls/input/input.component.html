@@ -1,24 +1,26 @@
 <input *ngIf="autocomplete; else defaultTpl"
-       #el
-       matInput
-       [placeholder]="placeholder"
-       [value]="value"
-       [matAutocomplete]="autocomplete"
-       [matAutocompleteConnectedTo]="autocompleteOrigin"
-       (input)="update(el.value)">
+	   #el
+	   matInput
+	   [placeholder]="placeholder"
+	   [value]="value"
+	   [matAutocomplete]="autocomplete"
+	   [matAutocompleteConnectedTo]="autocompleteOrigin"
+	   (input)="update(el.value)">
 
 <ng-template #defaultTpl>
 	<input #el
-	       matInput
-	       [placeholder]="placeholder"
-	       [bpTextMask]="mask"
-	       (input)="!mask && update(el.value)" />
+		   matInput
+		   [placeholder]="placeholder"
+		   [bpTextMask]="mask"
+		   (input)="!mask && update(el.value)" />
 </ng-template>
 
-<button *ngIf="$input?.value"
-        @slideRight
-        matSuffix
-        mat-icon-button
-        (click)="$input.value=''; update(null)">
-	<mat-icon>close</mat-icon>
-</button>
+<div *ngIf="$input?.value"
+	 class="close-btn-wrapper"
+	 @slideRight>
+	<button type="button"
+			mat-icon-button
+			(click)="$input.value=''; update(null)">
+		<mat-icon>close</mat-icon>
+	</button>
+</div>

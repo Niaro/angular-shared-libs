@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Countries, Country, CountryCode } from '@bp/shared/models';
-import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl } from '@angular/forms';
 import { isArray } from 'lodash-es';
 
 import { InputBasedComponent } from '../input-based.component';
@@ -27,7 +27,9 @@ import { InputBasedComponent } from '../input-based.component';
 	]
 })
 export class CountrySelectorComponent extends InputBasedComponent<Country> implements OnChanges {
+	@Input() formControl: FormControl;
 	@Input() excluded: Country[];
+	@Input() placeholder = 'Country';
 	countries = Countries.list;
 	filtered = this.countries;
 

@@ -1,8 +1,10 @@
 <bp-input class="rounded-input"
           [formControl]="inputControl"
-          placeholder="Country"
+          [placeholder]="placeholder"
           [autocomplete]="countryAutocomplete">
 </bp-input>
+
+<bp-validation-error *ngIf="formControl" [errors]="formControl.errors"></bp-validation-error>
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete">
 	<mat-option *ngFor="let country of filtered"

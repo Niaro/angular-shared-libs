@@ -29,6 +29,9 @@ function getErrorString(controlName: string, validatorName: string, error?: IVal
 		? value[controlName] || value['default']
 		: value;
 
+	if (!text)
+		throw new Error(`There is no error text for '${controlName}:${validatorName}'`);
+
 	const masks = text.match(/{{(\w+)}}/g);
 	return masks
 		? masks.reduce((txt, mask) => txt.replace(mask, error[mask.replace(/({{|}})/g, '')]), text)
