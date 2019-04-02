@@ -18,7 +18,12 @@ export abstract class MetadataEntity {
 	}
 
 	static getLabel<T>(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(prop).label;
+		const meta = this.metadata.get(prop);
+
+		if (!meta)
+			throw new Error(`Metadata for the property ${prop} hasn't been found`);
+
+		return meta.label;
 	}
 
 	constructor(data?: Partial<MetadataEntity>) {
