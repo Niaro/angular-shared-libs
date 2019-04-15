@@ -1,21 +1,49 @@
-import { Enumeration } from '../misc';
 import { PropertyMetadata } from './property-metadata';
 
+type MetadataHost = { metadata: PropertiesMetadata };
+
 export class PropertiesMetadata {
-	readonly list: PropertyMetadata[] = [];
-	readonly mappers: { [property: string]: ((v: any, data: any) => any) | Enumeration | InstanceType<any>} = {};
-	readonly defaults: { [property: string]: any } = {};
-	private dict: { [property: string]: PropertyMetadata } = {};
+	private dict: { [property: string]: PropertyMetadata } = { };
 
-	push(metadata: PropertyMetadata) {
-		if (this.dict[metadata.property])
-			return;
-
-		this.list.push(metadata);
-		this.dict[metadata.property] = metadata;
+	private get protoMetadata() {
+		const proto = <MetadataHost>Object.getPrototypeOf(this.metadataHost);
+		return proto && proto.metadata;
 	}
 
-	get<T extends keyof any>(propName: T) {
-		return this.dict[<string>propName];
+	constructor(private readonly metadataHost: MetadataHost) { }
+
+	add(property: string, metadata: Partial<PropertyMetadata>) {
+		this.dict[property] = new PropertyMetadata({
+			...(this.dict[property] || {}),
+			...metadata,
+			property
+		});
+	}
+
+	get(propName: string): PropertyMetadata {
+		const propMeta = this.dict[propName] || this.protoMetadata && this.protoMetadata.get(propName);
+
+		if (!propMeta)
+			throw new Error(`Metadata for the property ${propName} hasn't been found`);
+
+		return propMeta;
+	}
+
+	has(propName: string): boolean {
+		return !!(this.dict[propName] || this.protoMetadata && this.protoMetadata.has(propName));
+	}
+
+	keys(): string[] {
+		return [
+			...Object.keys(this.dict),
+			...(this.protoMetadata ? this.protoMetadata.keys() : [])
+		];
+	}
+
+	values(): PropertyMetadata[] {
+		return [
+			...Object.values(this.dict),
+			...(this.protoMetadata ? this.protoMetadata.values() : [])
+		];
 	}
 }

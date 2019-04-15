@@ -46,15 +46,6 @@
 	text-overflow: ellipsis;
 }
 
-@mixin placeholder-color($color) {
-
-	&::placeholder,
-	&::-webkit-input-placeholder {
-		color     : $color;
-		transition: color $animation-duration $animation-function;
-	}
-}
-
 @mixin bg-stripes($color1, $color2) {
 	$gradient: -45deg,
 		$color2 25%,
@@ -82,4 +73,55 @@
 	bottom  : 0;
 	left    : 0;
 	right   : 0;
+}
+
+@mixin placeholder-color($color) {
+	&::placeholder,
+	&::-webkit-input-placeholder {
+		color     : $color;
+		transition: color $animation-duration $animation-function;
+	}
+}
+
+@mixin placeholder {
+	&::-webkit-input-placeholder {
+		@content;
+	}
+	&::-moz-placeholder {
+		opacity: 1;
+		@content;
+	}
+	&:-moz-placeholder {
+		@content;
+	}
+	&:-ms-input-placeholder {
+		@content;
+	}
+	&.placeholder {
+		@content;
+	}
+}
+
+@mixin size($width, $height: $width) {
+	width: $width;
+	height: $height;
+}
+
+@mixin font($size: 16, $lineheight: 16, $weight: 400) {
+	font-size: $size + px;
+	line-height: $lineheight + px;
+	font-weight: $weight;
+}
+
+@mixin fontsize($size: 16, $lineheight: 16) {
+	font-size: $size + px;
+	line-height: $lineheight + px;
+}
+
+@mixin position($top, $right, $bottom, $left) {
+	position: absolute;
+	top: $top;
+	bottom: $bottom;
+	left: $left;
+	right: $right;
 }

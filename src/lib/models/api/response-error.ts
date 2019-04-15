@@ -11,12 +11,12 @@ export class ResponseError {
 		return this.status === StatusCode.forbidden;
 	}
 
-	get is500ish() {
+	get isInternalServerError() {
 		return this.status === StatusCode.internalServerError;
 	}
 
-	constructor(e: HttpErrorResponse) {
-		this.status = e.status >= 500 || e.status === 0 || e.statusText === 'Unknown Error'
+	constructor(e: HttpErrorResponse | { status: StatusCode }) {
+		this.status = e.status >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
 			? StatusCode.internalServerError
 			: e.status === 0 ? StatusCode.timeout : e.status;
 
@@ -26,15 +26,15 @@ export class ResponseError {
 			return this;
 
 		if (this.status === StatusCode.internalServerError)
-			this.messages = [
-				{
-					message: 'The request to the server has failed.',
-					type: 'Please check your connection and try again later or contact the support if the problem persists',
-				},
-			];
-		else if (e.error) {
+			this.messages = [{
+				message: 'The request to the server has failed.',
+				type: 'Please check your connection and try again later or contact the support if the problem persists',
+			}];
+		else if (e instanceof HttpErrorResponse && e.error) {
 			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;
-			this.messages = result ? (isArray(result) ? result : [result]) : [];
+			this.messages = result
+				? (isArray(result) ? result : [result])
+				: [];
 		}
 
 		this.messages.forEach(it => it.field = camelCase(it.field));

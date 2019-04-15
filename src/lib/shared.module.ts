@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { MaterialModule } from './materials.module';
@@ -10,7 +11,7 @@ import { FieldErrorComponent, ValidationErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent, CopyComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
@@ -23,6 +24,7 @@ const MODULES = [
 	CommonModule,
 	MaterialModule,
 	RouterModule,
+	HttpClientModule,
 	ReactiveFormsModule,
 	LocalStorageModule,
 
@@ -43,6 +45,7 @@ const EXPOSED = [
 	FilterComponent,
 	FilterControlDirective,
 	PendingBtnComponent,
+	CopyComponent,
 
 	// directives
 	TextMaskDirective,

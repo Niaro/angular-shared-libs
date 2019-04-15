@@ -1,0 +1,13 @@
+@import 'imports';
+
+:host {
+	textarea {
+		position: fixed;
+		top: -9999999px;
+		right: -9999999px;
+	}
+
+	.content {
+		display: none;
+	}
+}

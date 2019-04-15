@@ -5,7 +5,7 @@ import createNgrxMiddleware from 'logrocket-ngrx';
 
 import { environment } from '@bp/environment';
 
-if (environment.prod && location.hostname !== 'localhost') {
+if (environment.prod && location.hostname !== 'localhost' && environment.logrocket) {
 	LogRocket.init(environment.logrocket, {
 		release: `${environment.version}`,
 		network: {
@@ -43,7 +43,7 @@ export class TelemetryService {
 		return TelemetryService.instance = this;
 	}
 
-	registerUser(email: string) {
-		LogRocket.identify(email, { email });
+	registerUser(uid: string, email: string) {
+		LogRocket.identify(uid, { email });
 	}
 }

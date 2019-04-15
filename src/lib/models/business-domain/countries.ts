@@ -1,6 +1,9 @@
 import { CountryCode } from 'libphonenumber-js';
 import * as intlTelInput from 'intl-tel-input';
+import { mapValues } from 'lodash-es';
+
 import { MetadataEntity } from '../metadata';
+import { State } from './state';
 
 export { CountryCode };
 
@@ -9,7 +12,10 @@ export { CountryCode };
 // @ts-ignore
 const initiation = intlTelInput;
 
-export const COUNTRY_STATES: { [countryIso: string]: IState[] } = require('./states.json');
+export const COUNTRY_STATES: { [countryIso: string]: State[] } = mapValues(
+	require('./states.json'),
+	(v: Partial<State>[]) => v.map((it: Partial<State>) => new State(it))
+);
 
 export class Country extends MetadataEntity {
 	readonly name: string;
@@ -18,7 +24,7 @@ export class Country extends MetadataEntity {
 	readonly dialCode: string;
 	readonly lowerCaseName?: string;
 	readonly lowerCaseCode?: string;
-	readonly states?: IState[];
+	readonly states?: State[];
 
 	constructor(data: Partial<Country>) {
 		super(data);
@@ -29,6 +35,10 @@ export class Country extends MetadataEntity {
 	}
 
 	valueOf(): any {
+		return this.code;
+	}
+
+	toJSON() {
 		return this.code;
 	}
 }
@@ -56,8 +66,8 @@ export class Countries {
 		return this.list.find(v => v.name.toLowerCase() === countryName);
 	}
 
-	static findByCode(code: CountryCode) {
-		return this.countryByCountryCode.get(code);
+	static findByCode(code: CountryCode | string) {
+		return this.countryByCountryCode.get(<CountryCode>code);
 	}
 
 	static findByDialCode(dialCode: string) {
@@ -71,9 +81,4 @@ export class Countries {
 	static includesCode(countryCode: CountryCode) {
 		return this.list.some(v => v.code === countryCode);
 	}
-}
-
-export interface IState {
-	iso: string;
-	name: string;
 }

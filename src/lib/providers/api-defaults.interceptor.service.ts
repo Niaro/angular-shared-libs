@@ -7,8 +7,10 @@ import { Dictionary } from 'lodash';
 
 import { environment } from '@bp/environment';
 
+export const CORRELATION_ID_KEY = 'x-correlation-id';
 const MOCK_RESPONSE_CODE = 'x-mock-response-code';
 const CONTENT_TYPE = 'Content-Type';
+const { url: API_URL, version: API_VERSION } = environment.api || { url: '', version: '' };
 
 @Injectable({
 	providedIn: 'root',
@@ -17,12 +19,14 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 	private static instance;
 
 	headers: Dictionary<string> = {
-		[CONTENT_TYPE]        : 'application/json',
+		[CONTENT_TYPE]: 'application/json',
 		'json-naming-strategy': 'camelcase',
-		'x-api-key'           : environment.mockKey,
-		[MOCK_RESPONSE_CODE]  : '200'
+		'x-api-key': environment.mockKey,
+		[MOCK_RESPONSE_CODE]: '200'
 	};
 	checkAuthorization = false;
+
+	baseUrl = `${API_URL ? (API_URL.includes('api') ? API_URL : `${API_URL}/api`) : '/api'}${API_VERSION ? `/${API_VERSION}` : ''}`;
 
 	private authorized$ = new BehaviorSubject(false);
 
@@ -54,8 +58,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 		return next.handle(request.clone({
 			url: request.url.startsWith('http')
 				? request.url
-				// tslint:disable-next-line:max-line-length
-				: `${environment.api ? environment.api.url : ''}/api${environment.api && environment.api.version ? '/' + environment.api.version : ''}/${request.url}`,
+				: `${this.baseUrl}/${request.url}`,
 			setHeaders: {
 				...this.headers,
 				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],
@@ -68,7 +71,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 			.pipe(
 				filter(e => e.key === MOCK_RESPONSE_CODE),
 				startWith({
-					key     : MOCK_RESPONSE_CODE,
+					key: MOCK_RESPONSE_CODE,
 					newvalue: this.localStorage.get<string>(MOCK_RESPONSE_CODE),
 				})
 			)

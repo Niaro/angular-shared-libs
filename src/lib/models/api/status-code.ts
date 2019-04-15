@@ -4,7 +4,7 @@ export enum StatusCode {
 	created = 201,
 	noContent = 204,
 	badRequest = 400,
-	unauthorized = 401,
+	denied = 401,
 	transactionDeclined = 402,
 	forbidden = 403,
 	notFound = 404,
@@ -16,7 +16,7 @@ export enum StatusCode {
 
 export const STATUS_CODE_MESSAGES = {
 	[StatusCode.badRequest]: 'Bad request',
-	[StatusCode.unauthorized]: 'Unauthorized',
+	[StatusCode.denied]: 'Access denied',
 	[StatusCode.transactionDeclined]: 'Transaction declined',
 	[StatusCode.forbidden]: 'Access forbidden',
 	[StatusCode.notFound]: 'Not found',

@@ -5,13 +5,14 @@ $color-dark       : #333 !default;
 $color-border     : #e2e8ec !default;
 $dark-primary-text: $color-dark;
 
-$color-primary: #2578ea;
-$color-danger : #ff6666;
-$color-success: #33ff99;
+$color-primary      : #2578ea;
+$color-primary-light: #6ea6ff;
+$color-danger       : #ff6666;
+$color-success      : #33ff99;
 
 $primary-colors: (
 	50      : lighten($color-primary, 40%),
-	100     : #6ea6ff,
+	100     : $color-primary-light,
 	500     : $color-primary,
 	700     : #004db7,
 	contrast: (
@@ -49,6 +50,7 @@ $success: mat-palette($success-colors);
 $danger : mat-palette($danger-colors);
 $warning: mat-palette($mat-orange);
 $info   : mat-palette($mat-light-blue);
+
 $palette: (
 	primary: $primary,
 	accent : $accent,
@@ -130,6 +132,7 @@ $button-font-weight: $font-weight-slim !default;
 // #region animation
 $animation-duration: 0.225s;
 $animation-function: ease-in-out;
+$transition-props  : $animation-duration $animation-function;
 // #endregion animation
 
 // #region circle

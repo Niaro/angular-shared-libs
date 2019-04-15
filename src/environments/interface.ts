@@ -3,6 +3,8 @@ import { Version } from './constants';
 export interface IAppEnvironment {
 	logrocket?: string;
 
+	widgetUrl?: string;
+
 	api?: {
 		url: string;
 		version?: string;
@@ -17,5 +19,5 @@ export interface IEnvironment extends IAppEnvironment {
 	version: Version;
 	mockKey: string;
 	mockUrl: string;
-	cashierWidgetUrl: string;
+	widgetLoaderUrl: string;
 }

@@ -1,14 +1,8 @@
 html,
 body {
 	height: 100%;
-	margin: 0;
 }
 
 body {
 	@extend .mat-typography;
-}
-
-* {
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 }

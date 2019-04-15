@@ -28,7 +28,17 @@ export class Validators {
 	static digits(c: AbstractControl): IValidationErrors | null {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
-		return isNaN(+c.value) ? { digits: null } : null;
+		return isNaN(+c.value)
+			? { digits: null }
+			: null;
+	}
+
+	static letters(c: AbstractControl): IValidationErrors | null {
+		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+
+		return c.value.match(/[$&+,:;=?@#|'<>.^*\(\)%\!\-\[\]\{\}\d]/g)
+			? { letters: null }
+			: null;
 	}
 
 	/**
@@ -39,7 +49,9 @@ export class Validators {
 			if (this.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +c.value ? +c.value : 0;
-			return actual < required ? { minimum: { required, actual } } : null;
+			return actual < required
+				? { minimum: { required, actual } }
+				: null;
 		};
 	}
 
@@ -51,7 +63,9 @@ export class Validators {
 			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +value ? +value : 0;
-			return actual > required ? { maximum: { required, actual } } : null;
+			return actual > required
+				? { maximum: { required, actual } }
+				: null;
 		};
 	}
 
@@ -63,7 +77,9 @@ export class Validators {
 			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
-			return actual < required ? { minLength: { required, actual } } : null;
+			return actual < required
+				? { minlength: { required, actual } }
+				: null;
 		};
 	}
 
@@ -75,7 +91,9 @@ export class Validators {
 			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
-			return actual > required ? { maxLength: { required, actual } } : null;
+			return actual > required
+				? { maxlength: { required, actual } }
+				: null;
 		};
 	}
 

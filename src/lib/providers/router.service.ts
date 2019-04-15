@@ -47,7 +47,7 @@ export class RouterService {
 
 	tryNavigateOnResponseError(e: ResponseError) {
 		 // fullscreen pages handle errors on its own and all the non 500+ errors should be handled manually
-		if (this.isNavigateToErrorPage || !e.is500ish)
+		if (this.isNavigateToErrorPage || !e.isInternalServerError)
 			return;
 		this.navigateToErrorPage();
 	}

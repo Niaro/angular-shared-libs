@@ -1,7 +1,10 @@
 import { assign } from 'lodash-es';
+import { Enumeration } from '../misc';
 
 export class PropertyMetadata {
 	label: string;
+	mapper: ((v: any, data: any) => any) | Enumeration | InstanceType<any>;
+	default: any;
 
 	/**
 	 * the name of the property to which this metadata belongs

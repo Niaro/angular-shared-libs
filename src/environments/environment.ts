@@ -16,18 +16,10 @@ export const environment: IEnvironment = {
 		url: 'https://37efb36f-87de-42a0-89a3-f2d2a0c46d61.mock.pstmn.io',
 		version: 'v1',
 	},
-	cashierWidgetUrl: 'http://localhost:4201/embed/embed_cashier.js',
+	widgetUrl: 'http://localhost:4201',
+	widgetLoaderUrl: 'http://localhost:4201/embed/embed_cashier.js',
 
 	// by putting this always as the last property in the object we allow overriding of any environment specific property by the apps
 	...appEnvironment,
 	...constants
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-import 'zone.js/dist/zone-error'; // Included with Angular CLI;
