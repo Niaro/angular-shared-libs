@@ -2,7 +2,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
 import { MaterialModule } from './materials.module';
@@ -24,7 +23,6 @@ const MODULES = [
 	CommonModule,
 	MaterialModule,
 	RouterModule,
-	HttpClientModule,
 	ReactiveFormsModule,
 	LocalStorageModule,
 
