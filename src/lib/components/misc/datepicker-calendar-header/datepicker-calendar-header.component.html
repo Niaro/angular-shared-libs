@@ -14,12 +14,13 @@
 
 		<div class="mat-calendar-spacer"></div>
 
-		<button mat-button
-		        type="button"
+		<button mat-icon-button
+				type="button"
+				matTooltip="Clear the field"
 		        class="mat-calendar-clear-button"
 		        [disabled]="!picker._selected"
 		        (click)="clear()">
-			CLEAR
+			<mat-icon>delete_outline</mat-icon>
 		</button>
 
 		<button mat-icon-button

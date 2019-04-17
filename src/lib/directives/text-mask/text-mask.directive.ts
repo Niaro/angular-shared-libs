@@ -382,7 +382,9 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	private actualizeDecimalSymbol(value: string) {
-		return value.replace(NumberMaskConfig.acceptedInputDecimalSymbols, (<NumberMaskConfig>this.activeConfig).decimalSymbol);
+		return this.activeConfig instanceof NumberMaskConfig && this.activeConfig.thousandsSeparatorSymbol !== ','
+			? value.replace(NumberMaskConfig.acceptedInputDecimalSymbols, (<NumberMaskConfig>this.activeConfig).decimalSymbol)
+			: value;
 	}
 
 	private formatDecimalValue(value: string): string {

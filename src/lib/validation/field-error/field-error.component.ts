@@ -23,7 +23,7 @@ export class FieldErrorComponent {
 	}
 
 	constructor(
-		private formGroup: FormGroupDirective,
+		@Optional() private formGroup?: FormGroupDirective,
 		@Optional() private formField?: MatFormField
 	) { }
 }

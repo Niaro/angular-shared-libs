@@ -23,3 +23,7 @@ export type ArrayPropertyNames<T> = {
 export type Filter<T, U extends T> = T extends U ? T : never;
 
 export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+
+export type PickNames<T, U> = {
+	[K in keyof T]: T[K] extends U ? K : never
+}[keyof T];
