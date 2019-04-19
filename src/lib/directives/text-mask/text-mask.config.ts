@@ -177,7 +177,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 
 	get integersSeparatorRegExp() {
 		return this['_separatorRegExp_']
-			|| (this['_separatorRegExp_'] = new RegExp(escapeRegExp(this.thousandsSeparatorSymbolw), 'g'));
+			|| (this['_separatorRegExp_'] = new RegExp(escapeRegExp(this.thousandsSeparatorSymbol), 'g'));
 	}
 
 	get leadingZeroRegExp() {
