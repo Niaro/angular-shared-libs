@@ -89,8 +89,6 @@ export class TextMaskConfig {
 }
 
 export class NumberMaskConfig extends TextMaskConfig {
-	static acceptedInputDecimalSymbols = new RegExp(/\,|\./);
-
 	prefix = '';
 
 	suffix = '';
@@ -132,7 +130,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	 * Character that acts as a decimal point
 	 * @default separator of current culture
 	 */
-	decimalSymbol = this.getLocaleDecimalSeparator();
+	decimalSeparatorSymbol = this.getLocaleDecimalSeparatorSymbol();
 
 	/**
 	 * How many digits to allow after the decimal
@@ -172,12 +170,19 @@ export class NumberMaskConfig extends TextMaskConfig {
 	 */
 	emptyIsZero = false;
 
-	get separatorRegExp() {
-		return this['_separatorRegExp_'] || (this['_separatorRegExp_'] = new RegExp(this.thousandsSeparatorSymbol, 'g'));
+	get decimalSeparatorRegExp() {
+		return this['_decimalSeparatorRegExp_']
+			|| (this['_decimalSeparatorRegExp_'] = new RegExp(escapeRegExp(this.decimalSeparatorSymbol), 'g'));
+	}
+
+	get integersSeparatorRegExp() {
+		return this['_separatorRegExp_']
+			|| (this['_separatorRegExp_'] = new RegExp(escapeRegExp(this.thousandsSeparatorSymbolw), 'g'));
 	}
 
 	get leadingZeroRegExp() {
-		return this['_leadingZeroRegExp_'] || (this['_leadingZeroRegExp_'] = new RegExp(`^([0${this.thousandsSeparatorSymbol}]+)[1-9]`));
+		return this['_leadingZeroRegExp_']
+			|| (this['_leadingZeroRegExp_'] = new RegExp(`^([0${escapeRegExp(this.thousandsSeparatorSymbol)}]+)[1-9]`));
 	}
 
 	constructor(config?: Partial<NumberMaskConfig>) {
@@ -189,7 +194,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 		return super.assign(config);
 	}
 
-	private getLocaleDecimalSeparator(): string {
+	private getLocaleDecimalSeparatorSymbol(): string {
 		return 1.1.toLocaleString().substring(1, 2);
 	}
 }

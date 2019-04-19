@@ -295,7 +295,8 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 		if (this.activeConfig instanceof NumberMaskConfig) {
 			maskedValue = this.formatDecimalValue(maskedValue)
-				.replace(this.activeConfig.decimalSymbol, '.')
+				.replace(this.activeConfig.decimalSeparatorSymbol, '.')
+				.replace(this.activeConfig.thousandsSeparatorSymbol, '')
 				.replace(/\s/g, '')
 				.replace(/\.$/, '');
 			if (!this.activeConfig.allowLeadingZeroes)
@@ -306,50 +307,49 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	private applyMaskAndUpdateInput(userInput: string) {
-		userInput = this.tryApplySuffixOrPrefix(userInput);
-		let caret = this.$input.selectionStart;
+		let handledUserInput = this.tryApplySuffixOrPrefix(userInput);
+		const caret = this.$input.selectionStart;
 		let caretChange = 0;
 
 		if (this.activeConfig instanceof NumberMaskConfig) {
 			// remove digit if removed just space
-			const isOnlySpaceRemoval = userInput.length !== this.prevMaskedValue.length
-				&& userInput.replace(this.activeConfig.separatorRegExp, '') === this.prevMaskedValue.replace(this.activeConfig.separatorRegExp, '');
-			if (isOnlySpaceRemoval) {
+			const isOnlySeparatorRemoval = handledUserInput.length !== this.prevMaskedValue.length
+				// tslint:disable-next-line: max-line-length
+				&& handledUserInput.replace(this.activeConfig.integersSeparatorRegExp, '') === this.prevMaskedValue.replace(this.activeConfig.integersSeparatorRegExp, '');
+
+				if (isOnlySeparatorRemoval) {
 				if (this.lastKeyCode === KEY.DELETE)
-					userInput = userInput.slice(0, caret) + userInput.slice(caret + 1);
+					handledUserInput = handledUserInput.slice(0, caret) + handledUserInput.slice(caret + 1);
 				else {
-					userInput = userInput.slice(0, caret - 1) + userInput.slice(caret);
+					handledUserInput = handledUserInput.slice(0, caret - 1) + handledUserInput.slice(caret);
 					caretChange--;
 				}
 			}
 
-			// the mask manager doesn't change the input value if in the value have changed only comma to period or vice versa
-			// so we change manually by setting the formated value to the input value
-			userInput = this.actualizeDecimalSymbol(userInput);
-
 			// trim zeros
 			if (!this.activeConfig.allowLeadingZeroes) {
-				const match = this.activeConfig.leadingZeroRegExp.exec(userInput);
+				const match = this.activeConfig.leadingZeroRegExp.exec(handledUserInput);
 				if (match) {
-					userInput = userInput.substring(match[1].length);
+					handledUserInput = handledUserInput.substring(match[1].length);
 					caretChange -= match[1].length;
 				}
 			}
 
 			// add zero if starts with decimal symbol
-			if (userInput.startsWith(this.activeConfig.decimalSymbol)) {
-				userInput = '0' + userInput;
-				if (this.prevMaskedValue !== userInput)
+			if (handledUserInput.startsWith(this.activeConfig.decimalSeparatorSymbol)) {
+				handledUserInput = '0' + handledUserInput;
+				if (this.prevMaskedValue !== handledUserInput)
 					caretChange++;
 			}
 		}
 
-		this.recalculateFirstLastMaskIndexes(userInput);
-		this.textMaskInputManager.update(userInput);
-		if (caretChange) {
-			caret = Math.max(0, this.$input.selectionStart + caretChange);
-			this.setCaret(caret);
-		}
+		this.recalculateFirstLastMaskIndexes(handledUserInput);
+		this.textMaskInputManager.update(handledUserInput);
+		handledUserInput = this.$input.value; // the lib writes directly to the input element
+
+		caretChange += handledUserInput.length - userInput.length;
+
+		this.setCaret(Math.max(0, caret + caretChange));
 
 		return this.prevMaskedValue = this.$input.value;
 	}
@@ -381,22 +381,17 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			+ (isEmpty(this.cleanValueFromMask(value)) && !this.activeConfig.suffix ? 0 : 1);
 	}
 
-	private actualizeDecimalSymbol(value: string) {
-		return this.activeConfig instanceof NumberMaskConfig && this.activeConfig.thousandsSeparatorSymbol !== ','
-			? value.replace(NumberMaskConfig.acceptedInputDecimalSymbols, (<NumberMaskConfig>this.activeConfig).decimalSymbol)
-			: value;
-	}
-
 	private formatDecimalValue(value: string): string {
-		if (this.activeConfig instanceof NumberMaskConfig && NumberMaskConfig.acceptedInputDecimalSymbols.test(value)) {
-			value = this.actualizeDecimalSymbol(value);
-
+		if (this.activeConfig instanceof NumberMaskConfig && (<NumberMaskConfig>this.activeConfig).decimalSeparatorRegExp.test(value)) {
 			const { decimalMinimumLimit } = (<NumberMaskConfig>this.config);
-			const fractionDigits = (<string>RegExp['$\''])
-				.split('')
+
+			let fractionDigits = (<string>RegExp['$\''])
+				.split('');
+
+			fractionDigits = fractionDigits
 				.filter(v => (<NumberMaskPipe>this.maskPipe).digitRegExp.test(v));
 
-			const fractionPart = this.activeConfig.decimalSymbol + fractionDigits.join('');
+			const fractionPart = this.activeConfig.decimalSeparatorSymbol + fractionDigits.join('');
 
 			if (fractionDigits.every(v => v === '0'))
 				return value.replace(fractionPart, '');

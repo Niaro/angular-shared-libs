@@ -14,13 +14,13 @@ export class NumberMaskPipe extends MaskPipe {
 
 	constructor(public config = new NumberMaskConfig()) {
 		super(config);
-		this.decimalSymbolRegExp = new RegExp(`\\${this.config.decimalSymbol}`);
+		this.decimalSymbolRegExp = new RegExp(`\\${this.config.decimalSeparatorSymbol}`);
 	}
 
 	transformBody(rawValue: string) {
 		if (rawValue === '' || (rawValue[0] === this.prefix[0] && rawValue.length === 1))
 			return [DIGIT_REGEXP];
-		else if (rawValue === this.config.decimalSymbol && this.config.allowDecimal)
+		else if (rawValue === this.config.decimalSeparatorSymbol && this.config.allowDecimal)
 			return ['0', this.decimalSymbolRegExp, DIGIT_REGEXP];
 
 		let integer;
@@ -28,7 +28,7 @@ export class NumberMaskPipe extends MaskPipe {
 		let mask;
 		const refinedValue = integer = this.removePrefixAndSuffix(rawValue);
 
-		const indexOfLastDecimal = refinedValue.lastIndexOf(this.config.decimalSymbol);
+		const indexOfLastDecimal = refinedValue.lastIndexOf(this.config.decimalSeparatorSymbol);
 		const hasDecimal = indexOfLastDecimal !== -1;
 		const isNegative = (refinedValue[0] === '-') && this.config.allowNegative;
 
@@ -57,7 +57,7 @@ export class NumberMaskPipe extends MaskPipe {
 		mask = integer ? this.convertToMask(integer) : [DIGIT_REGEXP];
 
 		if ((hasDecimal && this.config.allowDecimal) || this.config.requireDecimal === true) {
-			if (refinedValue[indexOfLastDecimal - 1] !== this.config.decimalSymbol)
+			if (refinedValue[indexOfLastDecimal - 1] !== this.config.decimalSeparatorSymbol)
 				mask.push(this.caretTrap);
 
 			mask.push(this.decimalSymbolRegExp, this.caretTrap);
@@ -69,7 +69,7 @@ export class NumberMaskPipe extends MaskPipe {
 				mask = mask.concat(fraction);
 			}
 
-			if (this.config.requireDecimal === true && refinedValue[indexOfLastDecimal - 1] === this.config.decimalSymbol)
+			if (this.config.requireDecimal === true && refinedValue[indexOfLastDecimal - 1] === this.config.decimalSeparatorSymbol)
 				mask.push(DIGIT_REGEXP);
 		}
 

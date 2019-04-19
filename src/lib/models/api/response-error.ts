@@ -31,7 +31,7 @@ export class ResponseError {
 				type: 'Please check your connection and try again later or contact the support if the problem persists',
 			}];
 		else if (e instanceof HttpErrorResponse && e.error) {
-			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;
+			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result || e.error.response && { message: e.error.response.message };
 			this.messages = result
 				? (isArray(result) ? result : [result])
 				: [];

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Optional } from '@angular/core';
+import { Component, Input, Optional } from '@angular/core';
 import { MatFormField } from '@angular/material';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 
@@ -7,7 +7,6 @@ import { FormGroupDirective, NgControl } from '@angular/forms';
 	selector: '[bpFieldError]',
 	templateUrl: './field-error.component.html',
 	styleUrls: ['./field-error.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FieldErrorComponent {
 	@Input('bpFieldError') formControlName: string;
