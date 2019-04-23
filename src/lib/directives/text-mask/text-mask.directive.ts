@@ -67,8 +67,6 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 	private onChange: (v: any) => void;
 	private onTouched: () => void;
-	private prevMaskedValue = '';
-	private lastKeyCode: number;
 
 	constructor(
 		private host: ElementRef,
@@ -203,7 +201,6 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	protected onKeyDown(e: KeyboardEvent) {
 		if (!this.textMaskInputManager) return;
 
-		this.lastKeyCode = e.keyCode;
 		if ([KEY.BACKSPACE, KEY.PAGE_UP, KEY.PAGE_DOWN, KEY.END, KEY.HOME, KEY.LEFT, KEY.UP, KEY.RIGHT, KEY.DOWN].includes(e.keyCode))
 			setTimeout(() => this.setCaretToValidPosition());
 	}
@@ -307,69 +304,23 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	private applyMaskAndUpdateInput(userInput: string) {
-		let handledUserInput = this.tryApplySuffixOrPrefix(userInput);
-		const caret = this.$input.selectionStart;
-		let caretChange = 0;
-
-		if (this.activeConfig instanceof NumberMaskConfig) {
-			// remove digit if removed just space
-			const isOnlySeparatorRemoval = handledUserInput.length !== this.prevMaskedValue.length
-				// tslint:disable-next-line: max-line-length
-				&& handledUserInput.replace(this.activeConfig.integersSeparatorRegExp, '') === this.prevMaskedValue.replace(this.activeConfig.integersSeparatorRegExp, '');
-
-				if (isOnlySeparatorRemoval) {
-				if (this.lastKeyCode === KEY.DELETE)
-					handledUserInput = handledUserInput.slice(0, caret) + handledUserInput.slice(caret + 1);
-				else {
-					handledUserInput = handledUserInput.slice(0, caret - 1) + handledUserInput.slice(caret);
-					caretChange--;
-				}
-			}
-
+		if (this.activeConfig instanceof NumberMaskConfig && !this.activeConfig.allowLeadingZeroes) {
 			// trim zeros
-			if (!this.activeConfig.allowLeadingZeroes) {
-				const match = this.activeConfig.leadingZeroRegExp.exec(handledUserInput);
-				if (match) {
-					handledUserInput = handledUserInput.substring(match[1].length);
-					caretChange -= match[1].length;
-				}
-			}
-
-			// add zero if starts with decimal symbol
-			if (handledUserInput.startsWith(this.activeConfig.decimalSeparatorSymbol)) {
-				handledUserInput = '0' + handledUserInput;
-				if (this.prevMaskedValue !== handledUserInput)
-					caretChange++;
-			}
+			const match = this.activeConfig.leadingZeroRegExp.exec(userInput);
+			if (match)
+				userInput = userInput.substring(match[1].length);
 		}
 
-		this.recalculateFirstLastMaskIndexes(handledUserInput);
-		this.textMaskInputManager.update(handledUserInput);
-		handledUserInput = this.$input.value; // the lib writes directly to the input element
+		this.textMaskInputManager.update(userInput);
+		this.recalculateFirstLastMaskIndexes(this.$input.value);
 
-		caretChange += handledUserInput.length - userInput.length;
-
-		this.setCaret(Math.max(0, caret + caretChange));
-
-		return this.prevMaskedValue = this.$input.value;
+		return this.$input.value;
 	}
 
 	private updateInputAndControlOnConfigChange(emitOnChange: boolean) {
 		this.setCaret(0); // reset caret on config change
 		const value = this.applyMaskAndConvertToControlValue(this.value$.value.value.toString());
 		emitOnChange && this.emitChange(value);
-	}
-
-	private tryApplySuffixOrPrefix(input: string) {
-		const { prefix, prefixRegExp, suffix, suffixRegExp } = this.activeConfig;
-
-		let output = input;
-		if (prefixRegExp && !prefixRegExp.test(input))
-			output = prefix + input;
-		if (suffixRegExp && !suffixRegExp.test(input))
-			output += suffix;
-
-		return output;
 	}
 
 	private recalculateFirstLastMaskIndexes(value: string = '') {
@@ -432,7 +383,10 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		if (this.activeConfig instanceof NumberMaskConfig && this.activeConfig.placeholderFromMask)
 			placeholderChar = '0';
 
-		return mask.map(char => char instanceof RegExp ? placeholderChar : char).join('');
+		return mask.map(char => char instanceof RegExp
+			? placeholderChar
+			: char
+		).join('');
 	}
 
 	private tryActivatePlaceholder() {
