@@ -2,6 +2,7 @@ import {
 	Directive, ElementRef, Input, HostListener, Renderer2, OnChanges,
 	OnInit, AfterViewInit, SimpleChanges
 } from '@angular/core';
+import { LEFT_ARROW, BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, UP_ARROW, RIGHT_ARROW, DOWN_ARROW } from '@angular/cdk/keycodes';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { skip, filter, map } from 'rxjs/operators';
@@ -9,7 +10,6 @@ import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
 import { isFunction, isArray, isEmpty, isEqual, isNil, isNull, findLast, repeat } from 'lodash-es';
 
 import { AsyncVoidSubject } from '../../rxjs';
-import { KEY } from '../../utils';
 import { TextMaskConfig, NumberMaskConfig, TextMask, TextMaskFn } from './text-mask.config';
 import { MaskPipe } from './mask-pipe';
 import { NumberMaskPipe } from './number-mask-pipe';
@@ -201,7 +201,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	protected onKeyDown(e: KeyboardEvent) {
 		if (!this.textMaskInputManager) return;
 
-		if ([KEY.BACKSPACE, KEY.PAGE_UP, KEY.PAGE_DOWN, KEY.END, KEY.HOME, KEY.LEFT, KEY.UP, KEY.RIGHT, KEY.DOWN].includes(e.keyCode))
+		if ([BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW].includes(e.keyCode))
 			setTimeout(() => this.setCaretToValidPosition());
 	}
 

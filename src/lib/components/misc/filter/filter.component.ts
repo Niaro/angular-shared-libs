@@ -19,20 +19,20 @@ export type FilterValue = { [controlName: string]: any };
 	styleUrls: ['filter.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FilterComponent implements OnChanges, AfterContentInit {
+export class FilterComponent<T = FilterValue> implements OnChanges, AfterContentInit {
 	@Input() except: string[] = [];
 	@Input() type: 'query' | 'matrix' = 'matrix';
-	@Input() defaults: FilterValue = {};
+	@Input() defaults: T = <T>{};
 
-	value$: Observable<FilterValue>;
+	value$: Observable<T>;
 	get value() { return this._value$.value; }
 	get empty() { return isEmpty(this.value); }
 
 	@ContentChildren(FilterControlDirective, { descendants: true })
 	private controlsQuery: QueryList<FilterControlDirective>;
-	private _value$ = new BehaviorSubject<FilterValue>({});
-	private defaults$ = new BehaviorSubject<FilterValue>({});
-	private defaultsStringed$ = new BehaviorSubject<Stringify<FilterValue>>({});
+	private _value$ = new BehaviorSubject<T>(<T>{});
+	private defaults$ = new BehaviorSubject<T>(<T>{});
+	private defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>>{});
 
 	constructor(private router: Router, private route: ActivatedRoute) {
 		this.value$ = this._value$.pipe(filter(v => v !== undefined));
@@ -109,7 +109,7 @@ export class FilterComponent implements OnChanges, AfterContentInit {
 					.value()
 				)
 			)
-			.subscribe(controlSelectedValues => this._value$.next(controlSelectedValues));
+			.subscribe(controlSelectedValues => this._value$.next(<T>controlSelectedValues));
 
 		/**
 		 * Update the url on the filter controls value change
