@@ -49,14 +49,20 @@ export abstract class MetadataEntity {
 			const { mapper } = this.meta.get(key);
 
 			if (!isNil(srcValue) && mapper) {
-				const make = v => isExtensionOf(mapper, Enumeration)
+				const isEnumMapper = isExtensionOf(mapper, Enumeration);
+				const isMetadataEntityMapper = isExtensionOf(mapper, MetadataEntity);
+				const isFunctionMapper = !isEnumMapper && !isMetadataEntityMapper;
+
+				const make = v => isEnumMapper
 					? (<typeof Enumeration>mapper).parse(camelCase(v))
 					// if the mapper doesn't have a name we assume that this is a class is used as a mapper so we initiate it
-					: isExtensionOf(mapper, MetadataEntity) ? new mapper(v) : mapper(v, srcObject, currObject);
+					: new mapper(v);
 
-				return isArray(srcValue)
-					? srcValue.map(v => make(v))
-					: make(srcValue);
+				return isFunctionMapper
+					? mapper(srcValue, srcObject, currObject)
+					: isArray(srcValue)
+						? srcValue.map(v => make(v))
+						: make(srcValue);
 			}
 		}
 
