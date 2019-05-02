@@ -40,6 +40,10 @@ export class Currency extends MetadataEntity {
 		Object.freeze(this);
 	}
 
+	toString() {
+		return this.code;
+	}
+
 	valueOf(): any {
 		return this.code;
 	}

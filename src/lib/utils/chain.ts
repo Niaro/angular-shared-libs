@@ -1,4 +1,7 @@
-import { map, filter, flatMap, compact, mapValues, forOwn, mapKeys, split, chunk, flatten, fromPairs, toPairs, forEach } from 'lodash-es';
+import {
+	map, filter, flatMap, compact, mapValues, forOwn, mapKeys, split, chunk, flatten,
+	fromPairs, toPairs, forEach, groupBy
+} from 'lodash-es';
 
 // just add here the lodash functions you want to support
 const chainableFunctions = {
@@ -14,7 +17,8 @@ const chainableFunctions = {
 	flatten,
 	fromPairs,
 	toPairs,
-	forEach
+	forEach,
+	groupBy
 };
 
 export const chain = <T>(input: T) => {
