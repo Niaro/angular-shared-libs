@@ -14,7 +14,7 @@
 
 	&.primary {
 		background-color: $color-primary;
-		color           : white !important;
+		color           : white;
 
 		&:hover {
 			@include mat-elevation(5, $mat-elevation-color, 1);
