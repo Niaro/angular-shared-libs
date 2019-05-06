@@ -24,6 +24,10 @@ export class CryptoCurrency extends MetadataEntity {
 		Object.freeze(this);
 	}
 
+	toString(): any {
+		return this.code;
+	}
+
 	valueOf(): any {
 		return this.code;
 	}
