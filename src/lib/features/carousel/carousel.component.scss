@@ -5,7 +5,7 @@ $bullet-size: 10px;
 :host {
 	display: block;
 
-	.main-row {
+	.carousel-main-row {
 		display : flex;
 		position: relative;
 	}
@@ -17,7 +17,7 @@ $bullet-size: 10px;
 		z-index : 0;
 	}
 
-	.slides {
+	.carousel-slides {
 		display    : flex;
 		align-items: flex-start;
 		margin     : 0 5px;

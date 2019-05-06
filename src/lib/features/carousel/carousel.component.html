@@ -1,8 +1,8 @@
-<div class="main-row">
+<div class="carousel-main-row">
 	<div class="viewport"
 	     [style.height.px]="viewportHeight$ | async">
 		<ul #slidesContainer
-		    class="slides"
+		    class="carousel-slides"
 		    [class.canceled-slide-animation]="(animate$ | async) === false"
 		    [@fadeInList]="(items$ | async).length"
 		    [@.disabled]="!slideInAnimation"
