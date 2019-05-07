@@ -145,15 +145,17 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	}
 
 	ngOnChanges({ items, activeItem, itemsPerView }: SimpleChanges) {
-		itemsPerView && !itemsPerView.firstChange && this.updateItemsPerView();
-
 		if (items && (items.firstChange || this.resetActiveOnItemsChange))
 			this.activateItem(this.items[0], false);
 
-		if (items && !items.firstChange)
-			this.updateScroll({ animate: false, distinctVisibility: false });
-		else if (activeItem && !activeItem.firstChange)
-			this.updateScroll({ animate: false });
+		Promise.resolve().then(() => {
+			if (itemsPerView || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
+				this.updateItemsPerView();
+			if (items && !items.firstChange)
+				this.updateScroll({ animate: false, distinctVisibility: false });
+			else if (activeItem && !activeItem.firstChange)
+				this.updateScroll({ animate: false });
+		});
 	}
 
 	ngAfterViewInit() {
