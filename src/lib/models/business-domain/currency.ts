@@ -3,7 +3,7 @@ import { isString } from 'lodash-es';
 
 import { MetadataEntity } from '../metadata';
 
-// TODO: Upon typsceript 3.4 turn this to
+// TODO: Upon typescript 3.4 turn this to
 // const furniture = <const> ['chair', 'table', 'lamp'];
 // type Furniture = typeof furniture[number];
 export type CurrencyCode = 'USD' | 'EUR' | 'GBP';

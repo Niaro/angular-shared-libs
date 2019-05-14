@@ -11,4 +11,6 @@ export class TransactionStatus extends Enumeration {
 	static declinedDueToInvalidCreditCard = new TransactionStatus();
 	static refund = new TransactionStatus();
 	static chargeback = new TransactionStatus();
+
+	get isDeclinedLike() { return this.name.startsWith(TransactionStatus.declined.name); }
 }

@@ -1,5 +1,5 @@
-<div *ngIf="error"
+<div *ngIf="error$ | async as e"
 	  @slide
 	  [@.disabled]="!animate">
-	{{ error }}
+	{{ e }}
 </div>
