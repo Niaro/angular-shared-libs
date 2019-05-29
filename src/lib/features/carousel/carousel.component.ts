@@ -126,7 +126,8 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	private _activeIndex = -1;
 	private $slides$ = new BehaviorSubject<HTMLElement[]>([]);
 	private shouldUpdateScroll = false;
-	private slideMaxWidth: number;
+	private slideMaxWidth$ = new BehaviorSubject<number>(undefined);
+	public get slideMaxWidth() { return this.slideMaxWidth$.value; }
 	private slideStyle$ = new Subject<Dictionary<string>>();
 	private touch: TouchManager;
 	private autoplayTask: number;
@@ -255,16 +256,22 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			setTimeout(() => this.animate$.next(true), 50);
 		}
 
-		Observable
-			.measure(() => this.slideMaxWidth && this.items.length && this.items.length === this.$slides$.value.length && this.activeIndex > -1
-				? this.$slides$.value.map($slide => new Dimensions({
-					left: $slide.offsetLeft,
-					width: Math.floor($slide.getBoundingClientRect().width)
-				}))
-				: null
+		this.slideMaxWidth$
+			.pipe(
+				switchMap(slideMaxWidth => Observable
+					.measure(() => slideMaxWidth && this.items.length && this.items.length === this.$slides$.value.length && this.activeIndex > -1
+						? this.$slides$.value.map($slide => new Dimensions({
+							left: $slide.offsetLeft,
+							width: Math.floor($slide.getBoundingClientRect().width)
+						}))
+						: null
+					)
+				),
+				filter(v => !!v)
 			)
-			.pipe(filter(v => !!v))
+
 			.subscribe(offsets => {
+				console.warn('updateScroll')
 				let maxOffset;
 				if (this.currentItemsPerView === undefined || this.currentItemsPerView === null)
 					maxOffset = sum(offsets.map(({ width }) => width)) - this.slideMaxWidth;
@@ -317,30 +324,36 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	}
 
 	private updateItemsPerView() {
-		this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerView);
-		this.slideMaxWidth = this.$slidesContainer.offsetWidth ? this.$slidesContainer.offsetWidth : undefined;
+		console.warn('updateItemsPerView')
+		Observable
+			.measure(() => {
+				this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerView);
+				return this.$slidesContainer.offsetWidth ? this.$slidesContainer.offsetWidth : undefined;
+			})
+			.subscribe((slideMaxWidth) => {
+				let css;
+				if (isNull(this.currentItemsPerView))
+					css = {
+						'-ms-flex': null, '-webkit-flex': null, flex: null,
+						'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
+						width: 'initial'
+					};
+				else {
+					// use width instead of flex-basis because IE 11 doesn't respect padding on flex-item
+					// @link https://github.com/philipwalton/flexbugs#7-flex-basis-doesnt-account-for-box-sizingborder-box
+					const flex = '0 0 auto';
+					css = {
+						'-ms-flex': flex, '-webkit-flex': flex, flex,
+						width: `${Math.trunc(100 / this.currentItemsPerView)}%`
+					};
+				}
 
-		let css;
-		if (isNull(this.currentItemsPerView))
-			css = {
-				'-ms-flex': null, '-webkit-flex': null, flex: null,
-				'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
-				width: 'initial'
-			};
-		else {
-			// use width instead of flex-basis because IE 11 doesn't respect padding on flex-item
-			// @link https://github.com/philipwalton/flexbugs#7-flex-basis-doesnt-account-for-box-sizingborder-box
-			const flex = '0 0 auto';
-			css = {
-				'-ms-flex': flex, '-webkit-flex': flex, flex,
-				width: `${Math.trunc(100 / this.currentItemsPerView)}%`
-			};
-		}
+				if (slideMaxWidth)
+					css['max-width'] = `${slideMaxWidth}px`;
 
-		if (this.slideMaxWidth)
-			css['max-width'] = `${this.slideMaxWidth}px`;
-
-		this.slideStyle$.next(css);
+				this.slideStyle$.next(css);
+				this.slideMaxWidth$.next(slideMaxWidth);
+			});
 	}
 
 	private onResize() {

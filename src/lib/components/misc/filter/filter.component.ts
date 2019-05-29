@@ -1,10 +1,10 @@
 import {
 	Component, AfterContentInit, OnChanges, ContentChildren, QueryList, Input, SimpleChanges,
-	ChangeDetectionStrategy
+	ChangeDetectionStrategy, Output
 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
-import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
+import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn, tap } from 'rxjs/operators';
 import { isEmpty, transform, isNil, difference } from 'lodash-es';
 
 import { UrlHelper, chain } from '@bp/shared/utils';
@@ -24,7 +24,8 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	@Input() type: 'query' | 'matrix' = 'matrix';
 	@Input() defaults: T = <T>{};
 
-	value$: Observable<T>;
+	@Output('value') value$: Observable<T>;
+
 	get value() { return this._value$.value; }
 	get empty() { return isEmpty(this.value); }
 

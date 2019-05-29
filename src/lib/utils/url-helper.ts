@@ -27,11 +27,11 @@ export class UrlHelper {
 
 	static toRouteString(value: any) {
 		if (isBoolean(value))
-			return value ? 'true' : null;
+			return value ? 'true' : undefined;
 		if (isArray(value) && value.length)
 			return value.map(v => valueToString(v)).join(',');
 		if (value === '')
-			return null;
+			return undefined;
 		return valueToString(value);
 	}
 
@@ -103,5 +103,5 @@ export class UrlHelper {
 }
 
 function valueToString(value: any): string {
-	return isNil(value) ? null : value.valueOf() && value.valueOf().toString();
+	return isNil(value) ? undefined : value.valueOf() && value.valueOf().toString();
 }
