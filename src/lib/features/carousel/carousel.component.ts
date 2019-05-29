@@ -271,7 +271,6 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			)
 
 			.subscribe(offsets => {
-				console.warn('updateScroll')
 				let maxOffset;
 				if (this.currentItemsPerView === undefined || this.currentItemsPerView === null)
 					maxOffset = sum(offsets.map(({ width }) => width)) - this.slideMaxWidth;
@@ -324,7 +323,6 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	}
 
 	private updateItemsPerView() {
-		console.warn('updateItemsPerView')
 		Observable
 			.measure(() => {
 				this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerView);
