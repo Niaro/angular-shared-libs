@@ -9,6 +9,7 @@ export class PaymentMethodType extends Enumeration {
 	static wireTransfer = new PaymentMethodType('Wire Transfer');
 	static voucher = new PaymentMethodType();
 
+
 	logo: string;
 
 	routeName: string;

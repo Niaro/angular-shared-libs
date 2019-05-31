@@ -12,7 +12,7 @@ import { IApiErrorMessage } from '@bp/shared/models';
 export class AlertComponent {
 	@Input() type: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
 	@Input() show = false;
-	@Input() errors: IApiErrorMessage | null;
+	@Input() errors: IApiErrorMessage[] | null;
 
-	@HostBinding('class.hidden') get hidden() { return !this.errors || !this.show; }
+	@HostBinding('class.hidden') get hidden() { return !this.errors && !this.show; }
 }
