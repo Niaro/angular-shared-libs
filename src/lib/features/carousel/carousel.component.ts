@@ -44,6 +44,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input('autoplay') autoplayInterval = 0;
 	@Input() slideClass: string;
 	@Input() sortable = false;
+	@Input() sortableItem: (item: any) => boolean;
 	@Input() slideInAnimation = true;
 	@Output('sort') sort$ = new Subject<any[]>();
 
