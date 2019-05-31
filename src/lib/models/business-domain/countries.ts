@@ -2,7 +2,7 @@ import { CountryCode } from 'libphonenumber-js';
 import * as intlTelInput from 'intl-tel-input';
 import { mapValues } from 'lodash-es';
 
-import { MetadataEntity } from '../metadata';
+import { MetadataEntity } from '../metadata/metadata-entity';
 import { State } from './state';
 
 export { CountryCode };
@@ -20,7 +20,7 @@ export const COUNTRY_STATES: { [countryIso: string]: State[] } = mapValues(
 export class Country extends MetadataEntity {
 	readonly name: string;
 	readonly displayName: string;
-	readonly code: CountryCode;
+	readonly code: CountryCode | 'ALL';
 	readonly dialCode: string;
 	readonly lowerCaseName?: string;
 	readonly lowerCaseCode?: string;
@@ -56,6 +56,8 @@ export class Countries {
 			});
 		});
 
+	static worldwide = new Country({ name: 'Worldwide', displayName: 'Worldwide', code: 'ALL' });
+
 	private static countryByCountryCode = new Map<CountryCode, Country>(Countries.list
 		.map(it => [it.code, it] as [CountryCode, Country])
 	);
@@ -63,11 +65,13 @@ export class Countries {
 
 	static find(countryName: string) {
 		countryName = countryName.toLowerCase();
-		return this.list.find(v => v.name.toLowerCase() === countryName);
+		return this.list.find(v => v.lowerCaseName === countryName)
+			|| (Countries.worldwide.lowerCaseName === countryName ? this.worldwide : null);
 	}
 
 	static findByCode(code: CountryCode | string) {
-		return this.countryByCountryCode.get(<CountryCode>code);
+		return this.countryByCountryCode.get(<CountryCode>code)
+		|| (Countries.worldwide.code === code ? this.worldwide : null);
 	}
 
 	static findByDialCode(dialCode: string) {

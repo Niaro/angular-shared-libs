@@ -1,0 +1,18 @@
+<span [matTooltip]="compact ? country.name : ''"
+	 matTooltipClass="capitalized"
+	 matTooltipPosition="above">
+	<bp-svg-icon *ngIf="isWorldwide; else defaultTpl"
+				 class="iti-flag"
+				 name="earth">
+	</bp-svg-icon>
+	<ng-template #defaultTpl>
+		<div class="iti-flag"
+			 [ngClass]="country.lowerCaseCode">
+		</div>
+	</ng-template>
+</span>
+
+<span *ngIf="!compact"
+	  class="capitalized">
+	{{ country.name }}
+</span>

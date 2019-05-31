@@ -10,14 +10,14 @@ import { FieldErrorComponent, ValidationErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent, CopyComponent
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
+	CopyComponent, CountryComponent, PendingBtnComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
-import { PendingBtnComponent } from './components/misc/pending-btn';
 
 const MODULES = [
 	CommonModule,
@@ -44,6 +44,7 @@ const EXPOSED = [
 	FilterControlDirective,
 	PendingBtnComponent,
 	CopyComponent,
+	CountryComponent,
 
 	// directives
 	TextMaskDirective,

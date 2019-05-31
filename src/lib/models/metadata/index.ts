@@ -1,3 +1,4 @@
+export * from './control-generate-scheme';
 export * from './default.decorator';
 export * from './entity';
 export * from './mapper.decorator';

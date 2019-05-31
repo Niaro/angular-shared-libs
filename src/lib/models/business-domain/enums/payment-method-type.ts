@@ -4,18 +4,10 @@ import { Enumeration } from '../../misc';
 
 export class PaymentMethodType extends Enumeration {
 	static creditCard = new PaymentMethodType('Credit Card');
-	static crypto = new PaymentMethodType();
 	static apm = new PaymentMethodType('APM');
-	static voucher = new PaymentMethodType();
+	static crypto = new PaymentMethodType();
 	static wireTransfer = new PaymentMethodType('Wire Transfer');
-	static eWallet = new PaymentMethodType('EWallet');
-	static alipay = new PaymentMethodType();
-	static banks = new PaymentMethodType();
-
-	// for the cashier demo
-	static jcb = new PaymentMethodType();
-	static paypal = new PaymentMethodType();
-	static chinaUnionPay = new PaymentMethodType();
+	static voucher = new PaymentMethodType();
 
 	logo: string;
 
