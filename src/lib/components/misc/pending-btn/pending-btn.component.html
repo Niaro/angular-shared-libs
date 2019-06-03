@@ -1,13 +1,13 @@
 <button [attr.type]="type"
-        mat-button
+		mat-button
 		class="bp-button primary"
 		[class.pending]="pending"
-        [disabled]="disabled || pending"
-        color="primary">
+		[disabled]="disabled || pending"
+		color="primary">
 	<ng-content></ng-content>
 </button>
 
 <mat-progress-spinner *ngIf="pending"
-                      @fade
-                      mode="indeterminate">
+					  @fade
+					  mode="indeterminate">
 </mat-progress-spinner>

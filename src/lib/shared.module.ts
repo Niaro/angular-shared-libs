@@ -11,7 +11,7 @@ import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
-	CopyComponent, CountryComponent, PendingBtnComponent
+	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
@@ -45,6 +45,7 @@ const EXPOSED = [
 	PendingBtnComponent,
 	CopyComponent,
 	CountryComponent,
+	IconBtnComponent,
 
 	// directives
 	TextMaskDirective,
@@ -92,5 +93,6 @@ export class SharedModule {
 		};
 	}
 
+	// we inject the service here in order to init the underlying services logic from the the very start
 	constructor(rxjsExtender: RxJSExtenderService) { }
 }

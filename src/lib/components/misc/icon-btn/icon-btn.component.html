@@ -1,0 +1,13 @@
+<button [class.progress]="pending"
+		[class.disabled]="disabled"
+		type="button"
+		matRipple
+		matRippleCentered="centered"
+		[matRippleDisabled]="disabled"
+		(click)="disabled && $event.stopPropagation()">
+	<ng-content></ng-content>
+	<mat-progress-spinner *ngIf="pending"
+						  @fade
+						  mode="indeterminate">
+	</mat-progress-spinner>
+</button>

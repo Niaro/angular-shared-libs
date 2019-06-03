@@ -10,7 +10,7 @@ import { FADE } from '@bp/shared/animations';
 })
 export class PendingBtnComponent {
 	@Input() pending: boolean;
-	@Input() type: string;
+	@Input() type = 'button';
 	@Input() disabled: boolean;
 	@Input() btnClass: string;
 	get $host() { return this.host.nativeElement; }

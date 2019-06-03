@@ -3,9 +3,9 @@
 
 	<mat-form-field>
 		<mat-select [value]="pageSize$ | async"
-		            (valueChange)="pageSize$.next($event); currentPage = 1">
+					(valueChange)="pageSize$.next($event); currentPage = 1">
 			<mat-option *ngFor="let option of pageSizeOptions"
-			            [value]="option">
+						[value]="option">
 				{{ option }}
 			</mat-option>
 		</mat-select>
@@ -13,44 +13,28 @@
 </span>
 
 <div *ngIf="hasNext || hasPrevious"
-     @fade>
+	 @fade>
 	<span class="state">
 		{{ currentPage === 1 ? 1 : (pageSize * currentPage - pageSize + 1) }} - {{ pageSize * currentPage }} of many
 	</span>
 
 	<div class="buttons">
-		<button class="prev"
-		        [class.progress]="progressPrev"
-		        (click)="page.emit(pageCursors[currentPage - 1]); currentPage = currentPage - 1; progressPrev = true;"
-		        [disabled]="!hasPrevious || progress"
-		        type="button"
-		        matTooltip="Prev page"
-		        matTooltipPosition="above"
-		        matRipple
-		        matRippleCentered="centered"
-		        [matRippleDisabled]="!hasPrevious">
+		<bp-icon-btn class="prev"
+					 matTooltip="Prev page"
+					 matTooltipPosition="above"
+					 [pending]="progressPrev"
+					 [disabled]="!hasPrevious || progress"
+					 (click)="page.emit(pageCursors[currentPage - 1]); currentPage = currentPage - 1; progressPrev = true;">
 			<mat-icon>arrow_back_ios</mat-icon>
-			<mat-progress-spinner *ngIf="progressPrev"
-			                      @fade
-			                      mode="indeterminate">
-			</mat-progress-spinner>
-		</button>
+		</bp-icon-btn>
 
-		<button class="next"
-		        [class.progress]="progressNext"
-		        (click)="page.emit(pagedResults.nextPageCursor); currentPage = currentPage + 1; progressNext = true;"
-		        [disabled]="!hasNext || progress"
-		        type="button"
-		        matTooltip="Next page"
-		        matTooltipPosition="above"
-		        matRipple
-		        matRippleCentered="centered"
-		        [matRippleDisabled]="!hasNext">
+		<bp-icon-btn class="next"
+					 matTooltip="Next page"
+					 matTooltipPosition="above"
+					 [pending]="progressNext"
+					 [disabled]="!hasNext || progress"
+					 (click)="page.emit(pagedResults.nextPageCursor); currentPage = currentPage + 1; progressNext = true;">
 			<mat-icon>arrow_back_ios</mat-icon>
-			<mat-progress-spinner *ngIf="progressNext"
-			                      @fade
-			                      mode="indeterminate">
-			</mat-progress-spinner>
-		</button>
+		</bp-icon-btn>
 	</div>
 </div>
