@@ -8,6 +8,9 @@ import { environment } from '@bp/environment';
 if (environment.prod && location.hostname !== 'localhost' && environment.logrocket) {
 	LogRocket.init(environment.logrocket, {
 		release: `${environment.version}`,
+		console: {
+			shouldAggregateConsoleErrors: true,
+		},
 		network: {
 			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string> }) => {
 				// if the url contains 'ignore'
