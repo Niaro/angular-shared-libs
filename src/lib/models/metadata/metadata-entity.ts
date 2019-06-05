@@ -72,7 +72,7 @@ export abstract class MetadataEntity {
 	private setDefaults() {
 		this.meta
 			.values()
-			.filter(v => this[v.property] === undefined)
+			.filter(v => isNil(this[v.property]))
 			.forEach(v => this[v.property] = v.default);
 	}
 }

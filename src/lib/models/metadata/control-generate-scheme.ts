@@ -1,16 +1,17 @@
-import { Omit } from '../misc/typescript-types';
-import { assign, isNumber, isBoolean } from 'lodash-es';
+import { isNumber, isBoolean, startCase } from 'lodash-es';
 
 export class ControlGenerateScheme {
 	type: 'input' | 'switch' | 'digits';
-	value: number | boolean | string;
+
 	property: string;
 
-	constructor(data: Omit<Partial<ControlGenerateScheme>, 'type'>) {
-		assign(this, data);
+	label: string;
 
-		this.type = isNumber(this.value)
+	constructor({ property, value }: { property: string, value: number | boolean | string }) {
+		this.property = property;
+		this.label = startCase(property);
+		this.type = isNumber(value)
 			? 'digits'
-			: isBoolean(this.value) ? 'switch' : 'input';
+			: isBoolean(value) ? 'switch' : 'input';
 	}
 }
