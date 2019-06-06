@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import {
 	MatCardModule,
@@ -18,7 +18,8 @@ import {
 	MatTooltipModule,
 	MatDatepickerModule,
 	MatAutocompleteModule,
-	MatSlideToggleModule
+	MatSlideToggleModule,
+	MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -49,4 +50,13 @@ const MODULES = [
 	imports: MODULES,
 	exports: MODULES,
 })
-export class MaterialModule {}
+export class MaterialModule {
+	static forRoot(): ModuleWithProviders {
+		return {
+			ngModule: MaterialModule,
+			providers: [
+				{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } }
+			]
+		};
+	}
+}

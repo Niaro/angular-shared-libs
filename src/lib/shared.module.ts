@@ -88,6 +88,7 @@ export class SharedModule {
 					storageType: 'localStorage'
 				}).providers,
 				...ModalModule.forRoot().providers,
+				...MaterialModule.forRoot().providers,
 				...PROVIDERS
 			]
 		};
