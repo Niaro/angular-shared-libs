@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { FADE } from '@bp/shared/animations';
 
 @Component({
@@ -13,7 +13,4 @@ export class PendingBtnComponent {
 	@Input() type = 'button';
 	@Input() disabled: boolean;
 	@Input() btnClass: string;
-	get $host() { return this.host.nativeElement; }
-
-	constructor(public host: ElementRef) { }
 }
