@@ -82,7 +82,7 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 		const country = input && Countries.find(input);
 		if (country !== this.value) {
 			this.value = country;
-			this.valueChange.emit(country);
+			this.valueChange.next(country);
 			this.onChange(country);
 		}
 	}

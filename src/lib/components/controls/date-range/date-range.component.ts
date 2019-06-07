@@ -50,7 +50,7 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 
 		if (!isEqual(value, this.value)) {
 			this.value = value;
-			this.valueChange.emit(value);
+			this.valueChange.next(value);
 			this.onChange(value);
 		}
 	}

@@ -49,4 +49,8 @@ export class TelemetryService {
 	registerUser(uid: string, email: string) {
 		LogRocket.identify(uid, { email });
 	}
+
+	captureMessage(error) {
+		LogRocket.captureMessage(error, { tags: { source: 'manual' } });
+	}
 }
