@@ -1,4 +1,6 @@
-import { isObject, isString, isBoolean, forIn } from 'lodash-es';
+import { isObject, isString, isBoolean, forIn, forOwn } from 'lodash-es';
+import { Dictionary } from 'lodash';
+
 import { Dimensions, Size, Position } from '../models/misc/dimensions';
 
 export class $ {
@@ -278,5 +280,25 @@ export class $ {
 		const event = document.createEvent('Event');
 		event.initEvent(eventName, canBubble, canceable);
 		el$.dispatchEvent(event);
+	}
+
+	static addScriptCodeToBody({ code, src, data }: { code?: string, src?: string, data?: Dictionary<string> }) {
+		const $s = document.createElement('script');
+		$s.type = 'text/javascript';
+		$s.async = true;
+
+		data && forOwn(data, (value, key) => $s.dataset[key] = value);
+
+		if (src)
+			$s.src = src;
+		else {
+			try {
+				$s.appendChild(document.createTextNode(code));
+			} catch (e) {
+				$s.text = code;
+			}
+		}
+
+		document.body.appendChild($s);
 	}
 }
