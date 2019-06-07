@@ -5,4 +5,14 @@ body {
 
 body {
 	@extend .mat-typography;
+
+	iframe#jsd-widget {
+		right: 10px !important;
+		transition: opacity $transition-props !important;
+	}
+
+	&.hide-jira-widget iframe#jsd-widget {
+		opacity: 0;
+		pointer-events: none;
+	}
 }
