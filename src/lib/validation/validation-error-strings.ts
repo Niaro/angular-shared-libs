@@ -12,7 +12,7 @@ export class ValidationErrorStrings extends Array<string> {
 			? translate.instant('error')
 			: require('../../../../../apps/widget/src/assets/i18n/en.json').error;
 
-		function getErrorString(validatorName: string, error?: IValidationError | string | null) {
+		function getErrorString(validatorName: string, error?: IValidationError | string | true) {
 			if (isString(error))
 				return error;
 
