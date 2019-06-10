@@ -1,6 +1,7 @@
 import { Enumeration } from '../../misc';
 
 export class TransactionStatus extends Enumeration {
+	static init = new TransactionStatus();
 	static approved = new TransactionStatus();
 	static inProcess = new TransactionStatus();
 	static pending = new TransactionStatus();
