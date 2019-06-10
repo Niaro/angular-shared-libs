@@ -11,5 +11,5 @@ export interface IValidationError {
 }
 
 export interface IValidationErrors {
-	[validator: string]: IValidationError | null; // null means to use predefined error
+	[validator: string]: IValidationError | true; // true means to use predefined error
 }

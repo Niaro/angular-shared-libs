@@ -21,7 +21,15 @@ export class Validators {
 	 */
 	static required(c: AbstractControl): IValidationErrors | null {
 		return Validators.isEmptyValue(c.value) || (isString(c.value) && !c.value.trim())
-			? { required: null }
+			? { required: true }
+			: null;
+	}
+
+	static noZero(c: AbstractControl): IValidationErrors | null {
+		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+
+		return +c.value === 0
+			? { noZero: true }
 			: null;
 	}
 
@@ -29,7 +37,7 @@ export class Validators {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 		return isNaN(+c.value)
-			? { digits: null }
+			? { digits: true }
 			: null;
 	}
 
@@ -37,7 +45,7 @@ export class Validators {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 		return c.value.match(/[$&+,:;=?@#|'<>.^*\(\)%\!\-\[\]\{\}\d]/g)
-			? { letters: null }
+			? { letters: true }
 			: null;
 	}
 
@@ -101,7 +109,7 @@ export class Validators {
 		const MAX_SAFE_NUMBER_VALUE = 999999999999.99;
 
 		return ({ value }: AbstractControl): IValidationErrors | null =>
-			enabled && value > MAX_SAFE_NUMBER_VALUE ? { excessSafeNumber: null } : null;
+			enabled && value > MAX_SAFE_NUMBER_VALUE ? { excessSafeNumber: true } : null;
 	}
 
 	/**
