@@ -28,7 +28,7 @@
 				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
 </mat-datepicker>
 
-<div *ngIf="!value.empty"
+<div *ngIf="deletable && !value.empty"
 	 class="close-btn-wrapper"
 	 @slideRight>
 	<button type="button"

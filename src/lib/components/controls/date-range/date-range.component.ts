@@ -1,13 +1,11 @@
-import { Component, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEqual } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
-import { DateRange, DateRangeInput } from '@bp/shared/models/misc/date-range';
+import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
 import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
-
-type DateRangeValue = { from: number, to: number };
 
 @Component({
 	selector: 'bp-date-range',
@@ -24,6 +22,8 @@ type DateRangeValue = { from: number, to: number };
 	]
 })
 export class DateRangeComponent extends ControlComponent<DateRange> {
+	@Input() deletable = true;
+
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 
 	@HostBinding('class.empty') get empty() { return this.value.empty; }
@@ -35,11 +35,11 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: DateRange | DateRangeValue | string): void {
+	writeValue(value: DateRangeInputValue): void {
 		Promise
 			.resolve()
 			.then(() => {
-				this.value = value instanceof DateRange ? value : new DateRange(value);
+				this.value = DateRange.parse(value);
 				this.cdr.markForCheck();
 			});
 	}

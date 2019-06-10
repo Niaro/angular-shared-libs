@@ -11,7 +11,7 @@ import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
-	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent
+	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
@@ -56,6 +56,7 @@ const EXPOSED = [
 
 	// controls
 	DateRangeComponent,
+	DateRangeShortcutsComponent,
 	DatepickerCalendarHeaderComponent,
 	InputComponent,
 	CountrySelectorComponent,

@@ -7,12 +7,14 @@ const RANGE_DELIMITER = ':';
 
 export type DateRangeInput = { from?: m.MomentInput, to?: m.MomentInput };
 
+export type DateRangeInputValue = DateRange | DateRangeInput | string;
+
 export class DateRange {
 
 	/**
 	 * Parse string 'unix:unix' to DateRange
 	 */
-	static parse(value: string) {
+	static parseString(value: string) {
 		const [from, to] = chain(value)
 			.split(RANGE_DELIMITER)
 			.chunk(2)
@@ -22,6 +24,10 @@ export class DateRange {
 			.value();
 
 		return new DateRange({ from, to });
+	}
+
+	static parse(value: DateRangeInputValue) {
+		return value instanceof DateRange ? value : new DateRange(value);
 	}
 
 	get from() { return this._from; }
@@ -48,7 +54,7 @@ export class DateRange {
 
 	constructor(config?: DateRangeInput | string) {
 		if (isString(config))
-			return DateRange.parse(config);
+			return DateRange.parseString(config);
 
 		assign(this, config);
 		Object.freeze(this);
@@ -76,6 +82,10 @@ export class DateRange {
 			from: this._from ? this._from.toJSON() : null,
 			to: this._to ? this._to.toJSON() : null
 		};
+	}
+
+	isSame(other: DateRange) {
+		return this.unixText === other.unixText;
 	}
 
 	private setUnixText() {

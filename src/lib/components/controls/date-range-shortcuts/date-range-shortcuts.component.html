@@ -1,0 +1,6 @@
+<button *ngFor="let shortcut of dateRangeShortcuts"
+		class="link interactive"
+		[class.active]="shortcut === selected"
+		(click)="update(shortcut)">
+	{{ shortcut.displayName }}
+</button>

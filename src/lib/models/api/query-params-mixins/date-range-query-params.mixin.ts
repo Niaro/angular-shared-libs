@@ -19,7 +19,7 @@ export function mixinDaterangeQueryParams<T extends Constructor<QueryParamsBase<
 		constructor(...args: any[]) {
 			super(...args);
 
-			this.routeParams.dateRange && assign(this, DateRange.parse(this.routeParams.dateRange).unix());
+			this.routeParams.dateRange && assign(this, DateRange.parseString(this.routeParams.dateRange).unix());
 		}
 	};
 }

@@ -1,22 +1,48 @@
 $link-color: $color-primary;
 
-a.link {
+.link {
 	text-decoration: none;
-	color          : $link-color;
-	transition     : color $animation-duration $animation-function;
-	border-bottom  : 1px solid transparent;
-	position       : relative;
+	color: $link-color;
+	transition: $animation-duration $animation-function;
+	transition-property: color, font-weight;
+	background: transparent;
+	border: none;
+	padding: 0;
+	border-bottom: 1px solid transparent;
+	position: relative;
 
 	&:after {
-		content   : '';
-		position  : absolute;
-		bottom    : 0;
-		right     : 0;
-		left      : 0;
-		height    : 1px;
+		content: '';
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		height: 1px;
 		background: transparent;
-		opacity   : 0.4;
+		opacity: 0.4;
 		transition: background $animation-duration $animation-function;
+	}
+
+	&.interactive {
+		&:after {
+			background: repeating-linear-gradient(to right,
+					$link-color,
+					$link-color 1px,
+					transparent 1px,
+					transparent 3px);
+		}
+
+		&.active {
+			font-weight: $font-weight-extra-bold;
+
+			&:after {
+				background: transparent
+			}
+		}
+
+		&:hover:after {
+			background: transparent;
+		}
 	}
 
 	.mat-row & {
