@@ -91,8 +91,6 @@ export abstract class Enumeration {
 
 		if (valueSameAsName)
 			this._value = this.name;
-
-		Object.freeze(this);
 	}
 
 	// private getCssClass() {

@@ -30,6 +30,8 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	@Input() formControl: FormControl;
 	@Input() excluded: Country[];
 	@Input() placeholder = 'Country';
+	@Input() hasWorldwide = false;
+
 	countries = Countries.list;
 	filtered = this.countries;
 
@@ -40,11 +42,16 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 			.subscribe(it => this.onCountryNameChange(it));
 	}
 
-	ngOnChanges({ excluded }: SimpleChanges) {
+	ngOnChanges({ excluded, hasWorldwide }: SimpleChanges) {
 		if (excluded)
 			this.countries = isArray(this.excluded)
 				? Countries.list.filter(it => !this.excluded.includes(it))
 				: Countries.list;
+
+		if (hasWorldwide || excluded) {
+			this.countries = this.updateWorldwideInCountriesList(this.countries);
+			this.filtered = this.updateWorldwideInCountriesList(this.filtered);
+		}
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -75,8 +82,14 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 		const country = input && Countries.find(input);
 		if (country !== this.value) {
 			this.value = country;
-			this.valueChange.emit(country);
+			this.valueChange.next(country);
 			this.onChange(country);
 		}
+	}
+
+	private updateWorldwideInCountriesList(list: Country[]) {
+		return this.hasWorldwide
+			? [Countries.worldwide, ...list]
+			: list.filter(v => v !== Countries.worldwide);
 	}
 }

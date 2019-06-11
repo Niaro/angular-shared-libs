@@ -56,7 +56,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 
 	private enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next.handle(request.clone({
-			url: request.url.startsWith('http')
+			url: request.url.startsWith('http') || request.url.includes('assets')
 				? request.url
 				: `${this.baseUrl}/${request.url}`,
 			setHeaders: {

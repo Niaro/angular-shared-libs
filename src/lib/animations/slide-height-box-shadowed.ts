@@ -4,9 +4,6 @@ import { NORMAL } from './variables';
 
 const slidBoxShadowedUp = {
 	height: 0,
-	'display': 'block',
-	'padding': '10px',
-	'margin': '-10px',
 	overflow: 'hidden',
 };
 export const BOX_SHADOWED_SLIDE_DOWN_ANIMATION = animation(

@@ -64,7 +64,7 @@ export class IpInputComponent extends InputBasedComponent<string> {
 	onIpChange(ip: string) {
 		if (this.inputControl.valid && this.value !== ip) {
 			this.value = this.inputControl.value;
-			this.valueChange.emit(this.value);
+			this.valueChange.next(this.value);
 			this.onChange(this.value);
 		}
 	}

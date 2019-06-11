@@ -3,7 +3,8 @@ $color-light      : #ccc !default;
 $color-semi-dark  : #929292 !default;
 $color-dark       : #333 !default;
 $color-border     : #e2e8ec !default;
-$dark-primary-text: $color-dark;
+$color-bg         : #fafafa !default;
+$dark-primary-text: $color-dark !default;
 
 $color-primary      : #2578ea;
 $color-primary-light: #6ea6ff;
@@ -69,16 +70,19 @@ $edit-max-width  : 1024px;
 // #endregion layout
 
 // #region mat-cards
-$mat-card-padding-x          : 1rem;
-$mat-card-padding-y          : 1.25rem;
-$mat-card-status-border-width: 5px;
-$mat-card-elevation          : 10;
-$mat-elevation-opacity       : 0.4;
-$mat-elevation-color         : black;
-$mat-card-grid-aisle         : 1.5rem;
-$mat-dialog-padding-v        : 24px !default;
-$mat-dialog-padding-h        : $mat-dialog-padding-v * 2 !default;
-$mat-dialog-padding          : $mat-dialog-padding-v $mat-dialog-padding-h;
+$mat-card-padding-x            : 1rem;
+$mat-card-padding-y            : 1.25rem;
+$mat-card-status-border-width  : 5px;
+$mat-card-elevation            : 10;
+$mat-card-elevation-shadow-size: 20px;
+$mat-card-aux-elevation        : 3;
+$mat-elevation-opacity         : 0.4;
+$mat-elevation-color           : black;
+$mat-card-grid-aisle           : 1.5rem;
+$mat-card-grid-aisle-half      : 0.75rem;
+$mat-dialog-padding-v          : 24px !default;
+$mat-dialog-padding-h          : $mat-dialog-padding-v * 2 !default;
+$mat-dialog-padding            : $mat-dialog-padding-v $mat-dialog-padding-h;
 // #endregion mat-cards
 
 // #region icons

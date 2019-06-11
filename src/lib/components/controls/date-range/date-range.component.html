@@ -1,37 +1,39 @@
 <input class="from"
-       [class.empty]="!value.from"
-       [matDatepicker]="fromPicker"
-       readonly
-       placeholder="From"
-       [value]="value.from"
-       [max]="value.to"
-       (click)="fromPicker.open()"
-       (dateChange)="update({ from: $event.value })">
+	   [class.empty]="!value.from"
+	   [matDatepicker]="fromPicker"
+	   readonly
+	   placeholder="From"
+	   [value]="value.from"
+	   [max]="value.to"
+	   (click)="fromPicker.open()"
+	   (dateChange)="update({ from: $event.value })">
 
 <mat-datepicker #fromPicker
-                [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
 </mat-datepicker>
 
 <span class="separator">-</span>
 
 <input class="to"
-       [class.empty]="!value.to"
-       [matDatepicker]="toPicker"
-       readonly
-       placeholder="To"
-       [value]="value.to"
-       [min]="value.from"
-       (click)="toPicker.open()"
-       (dateChange)="update({ to: $event.value })">
+	   [class.empty]="!value.to"
+	   [matDatepicker]="toPicker"
+	   readonly
+	   placeholder="To"
+	   [value]="value.to"
+	   [min]="value.from"
+	   (click)="toPicker.open()"
+	   (dateChange)="update({ to: $event.value })">
 
 <mat-datepicker #toPicker
-                [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
 </mat-datepicker>
 
-<button *ngIf="!value.empty"
-        @slideRight
-        matSuffix
-        mat-icon-button
-        (click)="update({ to: null, from: null })">
-	<mat-icon>close</mat-icon>
-</button>
+<div *ngIf="deletable && !value.empty"
+	 class="close-btn-wrapper"
+	 @slideRight>
+	<button type="button"
+			mat-icon-button
+			(click)="update({ to: null, from: null })">
+		<mat-icon>close</mat-icon>
+	</button>
+</div>

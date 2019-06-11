@@ -1,4 +1,4 @@
-import { MetadataEntity } from '../metadata';
+import { MetadataEntity } from '../metadata/metadata-entity';
 
 export class State extends MetadataEntity {
 	iso: string;

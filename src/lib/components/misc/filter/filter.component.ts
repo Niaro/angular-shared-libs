@@ -1,6 +1,6 @@
 import {
 	Component, AfterContentInit, OnChanges, ContentChildren, QueryList, Input, SimpleChanges,
-	ChangeDetectionStrategy
+	ChangeDetectionStrategy, Output
 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
@@ -24,7 +24,8 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	@Input() type: 'query' | 'matrix' = 'matrix';
 	@Input() defaults: T = <T>{};
 
-	value$: Observable<T>;
+	@Output('value') value$: Observable<T>;
+
 	get value() { return this._value$.value; }
 	get empty() { return isEmpty(this.value); }
 
@@ -117,6 +118,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		filterControls$
 			.pipe(
 				switchMap(controls => merge(...controls.map(c => c.value$.pipe(
+					auditTime(50),
 					map((value): [string, any] => [c.name, value]),
 
 					// if more than one the filter control emits a value during the same event loop,

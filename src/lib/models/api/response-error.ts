@@ -1,6 +1,6 @@
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 import { HttpErrorResponse } from '@angular/common/http';
-import { isArray, camelCase } from 'lodash-es';
+import { isArray, camelCase, lowerCase } from 'lodash-es';
 
 export class ResponseError {
 	status: StatusCode;
@@ -15,12 +15,12 @@ export class ResponseError {
 		return this.status === StatusCode.internalServerError;
 	}
 
-	constructor(e: HttpErrorResponse | { status: StatusCode }) {
+	constructor(e: HttpErrorResponse | Partial<ResponseError>) {
 		this.status = e.status >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
 			? StatusCode.internalServerError
 			: e.status === 0 ? StatusCode.timeout : e.status;
 
-		this.statusText = STATUS_CODE_MESSAGES[this.status];
+		this.statusText = this.statusText || STATUS_CODE_MESSAGES[this.status];
 
 		if (this.status === StatusCode.notFound)
 			return this;
@@ -31,10 +31,10 @@ export class ResponseError {
 				type: 'Please check your connection and try again later or contact the support if the problem persists',
 			}];
 		else if (e instanceof HttpErrorResponse && e.error) {
-			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result || e.error.response && { message: e.error.response.message };
+			const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;
 			this.messages = result
-				? (isArray(result) ? result : [result])
-				: [];
+				? isArray(result) ? result : [result]
+				: e.error.response && e.error.response.message && [{ message: lowerCase(e.error.response.message) }] || [];
 		}
 
 		this.messages.forEach(it => it.field = camelCase(it.field));
@@ -42,7 +42,7 @@ export class ResponseError {
 }
 
 export interface IApiErrorMessage {
-	type: string;
 	message: string;
+	type?: string;
 	field?: string;
 }

@@ -6,8 +6,8 @@
 	.alert {
 		@include mat-elevation(1);
 		overflow: hidden;
-		padding: 1em 1.25em;
-		margin-bottom: 1em;
+		padding: 1rem 1.25rem;
+		margin-bottom: 2rem;
 		border-radius: $border-card-radius / 2;
 
 		@each $type,

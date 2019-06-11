@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { isNumber } from 'lodash-es';
+
 import { FADE } from '@bp/shared/animations';
 
 @Component({
@@ -10,10 +12,11 @@ import { FADE } from '@bp/shared/animations';
 })
 export class PendingBtnComponent {
 	@Input() pending: boolean;
-	@Input() type: string;
+	@Input() type = 'button';
 	@Input() disabled: boolean;
+	@Input() progress: number;
 	@Input() btnClass: string;
-	get $host() { return this.host.nativeElement; }
 
-	constructor(public host: ElementRef) { }
+	get inProgress() { return this.pending || isNumber(this.progress); }
+	isNumber = isNumber;
 }

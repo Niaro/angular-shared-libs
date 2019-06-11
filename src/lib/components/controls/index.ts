@@ -1,5 +1,6 @@
 export * from './country-selector';
 export * from './date-range';
+export * from './date-range-shortcuts';
 export * from './datepicker';
 export * from './input';
 export * from './ip-input';

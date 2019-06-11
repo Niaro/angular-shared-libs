@@ -10,14 +10,14 @@ import { FieldErrorComponent, ValidationErrorComponent } from './validation';
 import {
 	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
-	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent, CopyComponent
+	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
+	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
-import { PendingBtnComponent } from './components/misc/pending-btn';
 
 const MODULES = [
 	CommonModule,
@@ -44,6 +44,8 @@ const EXPOSED = [
 	FilterControlDirective,
 	PendingBtnComponent,
 	CopyComponent,
+	CountryComponent,
+	IconBtnComponent,
 
 	// directives
 	TextMaskDirective,
@@ -54,6 +56,7 @@ const EXPOSED = [
 
 	// controls
 	DateRangeComponent,
+	DateRangeShortcutsComponent,
 	DatepickerCalendarHeaderComponent,
 	InputComponent,
 	CountrySelectorComponent,
@@ -86,10 +89,12 @@ export class SharedModule {
 					storageType: 'localStorage'
 				}).providers,
 				...ModalModule.forRoot().providers,
+				...MaterialModule.forRoot().providers,
 				...PROVIDERS
 			]
 		};
 	}
 
+	// we inject the service here in order to init the underlying services logic from the the very start
 	constructor(rxjsExtender: RxJSExtenderService) { }
 }

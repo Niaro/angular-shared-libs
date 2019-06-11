@@ -1,0 +1,56 @@
+@import 'imports';
+
+@mixin iconSize($size) {
+	width: $size;
+	height: $size;
+	font-size: $size;
+}
+
+:host {
+	button {
+		$btn-size: 40px;
+		background: none;
+		border: none;
+		padding: 0;
+		border-radius: $btn-size;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: $color-primary;
+
+		&,
+		.mat-progress-spinner,
+		.mat-progress-spinner ::ng-deep svg {
+			width: $btn-size !important;
+			height: $btn-size !important;
+		}
+
+		&.disabled {
+			cursor: not-allowed;
+			color: fade-out($color-semi-dark, 0.7);
+
+			:ng-deep > * {
+				pointer-events: none;
+			}
+		}
+
+		&.progress ::ng-deep mat-icon {
+			opacity: 0;
+		}
+
+		::ng-deep mat-icon {
+			@include iconSize(16px);
+
+			@at-root .lg#{&} {
+				@include iconSize(34px);
+			}
+
+			transition: opacity $animation-duration ease-in-out;
+		}
+
+		.mat-progress-spinner {
+			position: absolute;
+		}
+	}
+}

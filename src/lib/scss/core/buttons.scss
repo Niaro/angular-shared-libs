@@ -44,6 +44,10 @@
 			border-color: $color-light;
 		}
 
+		&.pending {
+			color: white;
+		}
+
 		cursor: not-allowed;
 		box-shadow: none !important;
 	}

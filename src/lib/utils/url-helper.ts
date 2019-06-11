@@ -1,6 +1,6 @@
 import { Type } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivatedRoute, Params } from '@angular/router';
-import { isBoolean, isArray, mapValues, pickBy, isNil, reduce, last, toPairs } from 'lodash-es';
+import { isBoolean, isArray, mapValues, pickBy, isNil, last, toPairs } from 'lodash-es';
 
 export class UrlHelper {
 	static parse(value: string) {
@@ -27,11 +27,11 @@ export class UrlHelper {
 
 	static toRouteString(value: any) {
 		if (isBoolean(value))
-			return value ? 'true' : null;
+			return value ? 'true' : undefined;
 		if (isArray(value) && value.length)
 			return value.map(v => valueToString(v)).join(',');
 		if (value === '')
-			return null;
+			return undefined;
 		return valueToString(value);
 	}
 
@@ -93,21 +93,15 @@ export class UrlHelper {
 		if (isNil(url))
 			return url;
 
-		let has = url.includes('?');
-		return reduce(params, (_url, value, key) => {
-			if (isNil(value) || isNaN(value))
-				return _url;
+		const queryParams = Object.keys(params)
+			.filter(k => !isNil(params[k]) && !isNaN(params[k]))
+			.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+			.join('&');
 
-			let separator = '&';
-			if (!has) {
-				separator = '?';
-				has = true;
-			}
-			return _url + separator + key + '=' + value;
-		}, url);
+		return `${url}${url.includes('?') ? '&' : '?'}${queryParams}`;
 	}
 }
 
 function valueToString(value: any): string {
-	return isNil(value) ? null : value.valueOf() && value.valueOf().toString();
+	return isNil(value) ? undefined : value.valueOf() && value.valueOf().toString();
 }

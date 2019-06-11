@@ -1,0 +1,28 @@
+@import 'imports';
+
+:host {
+	bp-svg-icon {
+		background: white;
+		color: $color-primary;
+		display: inline-flex !important;
+		width: 20px;
+		height: 14px;
+
+		::ng-deep svg {
+			width: 20px;
+			height: 12px;
+			position: relative;
+			top: 1px;
+		}
+	}
+
+	bp-svg-icon,
+	.iti-flag {
+		display: inline-block;
+		position: relative;
+	}
+
+	.capitalized {
+		margin-left: 0.5rem;
+	}
+}

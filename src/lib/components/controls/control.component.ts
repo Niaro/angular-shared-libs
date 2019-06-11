@@ -1,10 +1,11 @@
-import { Output, Input, EventEmitter, HostBinding } from '@angular/core';
+import { Output, Input, HostBinding } from '@angular/core';
+import { Subject } from 'rxjs';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { isNil } from 'lodash-es';
 
 export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator {
 	@Input() value: T;
-	@Output() valueChange = new EventEmitter<T>();
+	@Output() valueChange = new Subject<T>();
 	@HostBinding('class.control') isControl = true;
 	@HostBinding('class.empty') get empty() { return isNil(this.value); }
 

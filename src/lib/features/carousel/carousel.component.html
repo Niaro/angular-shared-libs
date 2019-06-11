@@ -1,12 +1,13 @@
-<div class="main-row">
+<div class="carousel-main-row">
 	<div class="viewport"
 	     [style.height.px]="viewportHeight$ | async">
 		<ul #slidesContainer
-		    class="slides"
+		    class="carousel-slides"
 		    [class.canceled-slide-animation]="(animate$ | async) === false"
 		    [@fadeInList]="(items$ | async).length"
 		    [@.disabled]="!slideInAnimation"
-		    cdkDropList
+			cdkDropList
+			[cdkDropListDisabled]="(items$ | async).length === 1 || !sortable"
 		    cdkDropListOrientation="horizontal"
 		    (cdkDropListDropped)="drop($event)">
 			<li #slide
@@ -14,7 +15,7 @@
 			    class="carousel-slide"
 			    [ngClass]="slideClass"
 			    cdkDrag
-			    [cdkDragDisabled]="!sortable || (items$ | async).length === 1">
+			    [cdkDragDisabled]="sortableItem && !sortableItem(item)">
 				<ng-container *ngTemplateOutlet="template; context: { '\$implicit': item, index: i }"></ng-container>
 			</li>
 		</ul>
