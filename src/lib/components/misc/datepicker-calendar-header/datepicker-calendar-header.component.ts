@@ -1,16 +1,15 @@
 import * as m from 'moment';
 import { Component, ChangeDetectionStrategy, ViewEncapsulation, Inject, Optional, ChangeDetectorRef } from '@angular/core';
-import {
-	MatCalendarHeader, MatDatepickerIntl, MatCalendar, DateAdapter, MAT_DATE_FORMATS, MatDateFormats,
-	MatDatepicker
-} from '@angular/material';
+import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
+import { MatCalendarHeader, MatDatepicker, MatCalendar, MatDatepickerIntl } from '@angular/material/datepicker';
+
 
 @Component({
 	selector: 'bp-datepicker-calendar-header',
 	templateUrl: './datepicker-calendar-header.component.html',
 	styleUrls: ['./datepicker-calendar-header.component.scss'],
 	exportAs: 'matCalendarHeader',
-	// tslint:disable-next-line:use-view-encapsulation
+	// tslint:disable-next-line:use-component-view-encapsulation
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

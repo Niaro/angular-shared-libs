@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpResponse, HttpEvent, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { isNil } from 'lodash-es';
+import { isNil, fromPairs } from 'lodash-es';
 
 import { ResponseError, IApiResponse } from '../models';
-import { chain } from '../utils';
 import { RouterService } from './router.service';
 import { ApiDefaultsInterceptorService, CORRELATION_ID_KEY } from './api-defaults.interceptor.service';
 
@@ -41,12 +40,12 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 
 	private cleanseParams(params: HttpParams) {
 		return new HttpParams({
-			fromObject: chain(params.keys())
-				.map((k) => [k, params.get(k) as any])
-				.map(([k, v]) => [k, isNil(v) ? v : v.toString()])
-				.filter(([, v]) => v !== '' && v !== 'NaN' && !isNil(v))
-				.fromPairs()
-				.value()
+			fromObject: fromPairs(
+				params.keys()
+					.map((k) => [k, params.get(k) as any])
+					.map(([k, v]) => [k, isNil(v) ? v : v.toString()])
+					.filter(([, v]) => v !== '' && v !== 'NaN' && !isNil(v))
+			)
 		});
 	}
 }

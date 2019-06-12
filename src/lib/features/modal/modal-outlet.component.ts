@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ContentChild } from '@angular/core';
 import { RouterOutlet, Router, PRIMARY_OUTLET, NavigationEnd, RoutesRecognized } from '@angular/router';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
 import { unset, has } from 'lodash-es';
 
@@ -18,11 +18,12 @@ const URL_TREE_MODAL_OUTLET_PATH = `root.children.${MODAL_OUTLET}`;
 })
 export class ModalOutletComponent implements OnInit {
 
-	@ContentChild(RouterOutlet) outlet: RouterOutlet;
+	@ContentChild(RouterOutlet, { static: true }) outlet: RouterOutlet;
 
 	private activeDialog: MatDialogRef<any, any>;
 	private urlWithOutlet: string;
 	private destinationUrl: string;
+
 	private navigation: boolean;
 
 	constructor(

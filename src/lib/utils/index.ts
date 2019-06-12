@@ -1,4 +1,3 @@
-export * from './chain';
 export * from './dom-helper';
 export * from './is-extension-of';
 export * from './is-page-context';

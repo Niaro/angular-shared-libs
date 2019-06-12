@@ -1,7 +1,8 @@
 import { Component, Input, Optional } from '@angular/core';
-import { MatFormField } from '@angular/material';
+import { MatFormField } from '@angular/material/form-field';
 import { FormGroupDirective, NgControl } from '@angular/forms';
 
+// tslint:disable-next-line: prefer-on-push-component-change-detection
 @Component({
 	// tslint:disable-next-line:component-selector
 	selector: '[bpFieldError]',

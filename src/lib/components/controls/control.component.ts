@@ -5,7 +5,7 @@ import { isNil } from 'lodash-es';
 
 export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator {
 	@Input() value: T;
-	@Output() valueChange = new Subject<T>();
+	@Output() readonly valueChange = new Subject<T>();
 	@HostBinding('class.control') isControl = true;
 	@HostBinding('class.empty') get empty() { return isNil(this.value); }
 

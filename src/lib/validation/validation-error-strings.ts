@@ -1,14 +1,14 @@
-import { isObject, isString } from 'lodash-es';
+import { isObject, isString, flatMap, compact } from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
+import { Dictionary } from 'lodash';
 
-import { chain } from '../utils';
 import { IValidationErrors, IValidationError } from './models';
 
 export class ValidationErrorStrings extends Array<string> {
 	constructor(controlName: string, errors: IValidationErrors, translate?: TranslateService) {
 		super();
 
-		const ERROR_STRINGS = translate
+		const ERROR_STRINGS: Dictionary<string | Dictionary<string>> = translate
 			? translate.instant('error')
 			: require('../../../../../apps/widget/src/assets/i18n/en.json').error;
 
@@ -31,11 +31,8 @@ export class ValidationErrorStrings extends Array<string> {
 				: text;
 		}
 
-		return chain(errors)
-			.flatMap((error, validatorName) => getErrorString(validatorName, error))
-			// in case if we have an error for the control but don't have
-			// predefined error msg for the error we get [undefined], thus we compact it
-			.compact()
-			.value();
+		// in case if we have an error for the control but don't have
+		// predefined error msg for the error we get [undefined], thus we compact it
+		return compact(flatMap(errors, (error, validatorName) => getErrorString(validatorName, error)));
 	}
 }

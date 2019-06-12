@@ -5,9 +5,9 @@ import {
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
 import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
-import { isEmpty, transform, isNil, difference } from 'lodash-es';
+import { isEmpty, transform, isNil, difference, fromPairs } from 'lodash-es';
 
-import { UrlHelper, chain } from '@bp/shared/utils';
+import { UrlHelper } from '@bp/shared/utils';
 
 import { FilterControlDirective } from './filter-control.directive';
 
@@ -16,7 +16,7 @@ export type FilterValue = { [controlName: string]: any };
 @Component({
 	selector: 'bp-filter',
 	template: `<ng-content></ng-content>`,
-	styleUrls: ['filter.component.scss'],
+	styleUrls: ['./filter.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent<T = FilterValue> implements OnChanges, AfterContentInit {
@@ -24,7 +24,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	@Input() type: 'query' | 'matrix' = 'matrix';
 	@Input() defaults: T = <T>{};
 
-	@Output('value') value$: Observable<T>;
+	@Output('value') readonly value$: Observable<T>;
 
 	get value() { return this._value$.value; }
 	get empty() { return isEmpty(this.value); }
@@ -104,11 +104,9 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					map((value): [string, any] => [c.name, value])
 				)))),
 				auditTime(50),
-				map(controlValues => chain(controlValues)
-					.filter(([, value]) => !isNil(value))
-					.fromPairs()
-					.value()
-				)
+				map(controlValues => fromPairs(
+					controlValues.filter(([, value]) => !isNil(value))
+				))
 			)
 			.subscribe(controlSelectedValues => this._value$.next(<T>controlSelectedValues));
 

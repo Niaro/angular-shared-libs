@@ -5,6 +5,7 @@ import { RouterLinkWithHref } from '@angular/router';
 	selector: 'a[bpTargetBlank]'
 })
 export class TargetBlankDirective implements OnChanges {
+	// tslint:disable-next-line: no-input-prefix
 	@Input('rtTargetBlank') shouldSet: boolean | '' = true;
 	@HostBinding('attr.target') get target() { return this.shouldSet ? '_blank' : null; }
 	@HostBinding('attr.rel') get rel() { return this.shouldSet ? 'noopener' : null; }
