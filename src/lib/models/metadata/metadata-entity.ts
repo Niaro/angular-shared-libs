@@ -32,6 +32,7 @@ export abstract class MetadataEntity {
 	}
 
 	constructor(data?: Partial<MetadataEntity>) {
+		this.applyPropertyAttributes();
 		assignWith(this, data, this.assignCustomizer);
 		this.setDefaults();
 	}
@@ -69,10 +70,21 @@ export abstract class MetadataEntity {
 		return srcValue;
 	}
 
+	private applyPropertyAttributes() {
+		this.meta
+			.values()
+			.filter(v => v.unserializable)
+			.forEach(v => Object.defineProperty(this, v.property, {
+				enumerable: false,
+				configurable: true,
+				writable: true
+			}));
+	}
+
 	private setDefaults() {
 		this.meta
 			.values()
-			.filter(v => isNil(this[v.property]))
+			.filter(v => v.default !== undefined && isNil(this[v.property]))
 			.forEach(v => this[v.property] = v.default);
 	}
 }
