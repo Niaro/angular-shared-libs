@@ -7,7 +7,8 @@
 		   [value]="value"
 		   (click)="picker.open()"
 		   (dateChange)="update($event.value)">
-	<mat-error [bpFieldError]="formControlName?.name || formControlDirective?.name"></mat-error>
+		   <!-- TODO: Solve this -->
+	<!-- <mat-error [bpFieldError]="formControlName?.name || formControlDirective?.name"></!--> -->
 </mat-form-field>
 
 <mat-datepicker #picker

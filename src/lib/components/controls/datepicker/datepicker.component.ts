@@ -1,6 +1,6 @@
 import * as m from 'moment';
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input, Optional, Self } from '@angular/core';
-import { NG_VALUE_ACCESSOR, FormControlName, FormControlDirective } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
@@ -24,12 +24,8 @@ export class DatePickerComponent extends ControlComponent<m.Moment> {
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 	@Input() label: string;
 
-	constructor(
-		private cdr: ChangeDetectorRef,
-		@Optional() @Self() public formControlName?: FormControlName,
-		@Optional() @Self() public formControlDirective?: FormControlDirective) {
+	constructor(private cdr: ChangeDetectorRef) {
 		super();
-
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
