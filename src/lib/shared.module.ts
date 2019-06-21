@@ -8,10 +8,11 @@ import { MaterialModule } from './materials.module';
 import { PROVIDERS, RxJSExtenderService } from './providers';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
 import {
-	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
+	AlertComponent, ApiErrorsComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
-	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent
+	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
+	AlertMessagesComponent
 } from './components';
 import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe, StartCasePipe } from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
@@ -37,7 +38,8 @@ const EXPOSED = [
 	ValidationErrorComponent,
 	FieldErrorComponent,
 	AlertComponent,
-	ApiErrorComponent,
+	AlertMessagesComponent,
+	ApiErrorsComponent,
 	PaginatorComponent,
 	StatusBarComponent,
 	FilterComponent,

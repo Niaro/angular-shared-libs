@@ -1,0 +1,6 @@
+<bp-alert-messages [src]="errors">
+	<ng-template let-error>
+		{{ error.message }}
+		<small *ngIf="error.type">{{ error.type }}</small>
+	</ng-template>
+</bp-alert-messages>
