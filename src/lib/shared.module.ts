@@ -14,7 +14,10 @@ import {
 	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
 	AlertMessagesComponent
 } from './components';
-import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe, StartCasePipe } from './pipes';
+import {
+	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
+	StartCasePipe, TakePipe
+} from './pipes';
 import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
@@ -73,12 +76,13 @@ const EXPOSED = [
 	MomentPipe,
 	SafePipe,
 	ChunkPipe,
-	StartCasePipe
+	StartCasePipe,
+	TakePipe
 ];
 
 @NgModule({
-	imports     : MODULES,
-	exports     : [...EXPOSED, ...MODULES],
+	imports: MODULES,
+	exports: [...EXPOSED, ...MODULES],
 	declarations: EXPOSED,
 	entryComponents: [DatepickerCalendarHeaderComponent]
 })
