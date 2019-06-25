@@ -10,7 +10,7 @@ import { isNull, isEqual, forOwn, sum } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
-import { AsyncVoidSubject, OptionalBehaviorSubject, BpScheduler, measure } from '@bp/shared/rxjs';
+import { AsyncVoidSubject, OptionalBehaviorSubject, BpScheduler, measure, mutate } from '@bp/shared/rxjs';
 import { Direction, Dimensions } from '@bp/shared/models';
 import { $ } from '@bp/shared/utils';
 
@@ -178,7 +178,10 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			this.$slides$,
 			this.slideStyle$
 		)
-			.subscribe(([$slides, style]) => $slides.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))));
+			.pipe(
+				mutate(([$slides, style]) => $slides.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))))
+			)
+			.subscribe();
 
 		fromEvent(window, 'resize')
 			.pipe(
