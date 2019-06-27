@@ -18,7 +18,10 @@ import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
 	StartCasePipe, TakePipe
 } from './pipes';
-import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
+import {
+	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
+	DelayedRenderDirective
+} from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
@@ -58,6 +61,7 @@ const EXPOSED = [
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
+	DelayedRenderDirective,
 
 	// controls
 	DateRangeComponent,
