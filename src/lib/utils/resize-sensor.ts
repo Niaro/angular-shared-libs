@@ -9,7 +9,7 @@ type SizeInfo = {
 
 type OnResize = (sizeInfo: SizeInfo) => void;
 
-type HTMLDivResetSensorElement = HTMLDivElement & { resetSensor: Function };
+type HTMLDivResetSensorElement = HTMLDivElement & { resetSensor?: Function };
 
 type HTMLResizableElement = HTMLElement & {
 	resizedAttached?: EventQueue,
@@ -160,18 +160,16 @@ export class ResizeSensor {
 				const isInvisible = await fastdom.measure(() => $el.offsetWidth === 0 && $el.offsetHeight === 0);
 				if (isInvisible) {
 					// Check in next frame
-					if (!lastAnimationFrame) {
+					if (!lastAnimationFrame)
 						lastAnimationFrame = requestAnimationFrame(() => {
 							lastAnimationFrame = 0;
 							reset();
 						});
-					}
 
 					return;
-				} else {
+				} else
 					// Stop checking
 					initialHiddenCheck = false;
-				}
 			}
 
 			resetExpandShrink();
@@ -225,8 +223,8 @@ if (typeof MutationObserver !== 'undefined') {
 		for (let i = 0; i < mutations.length; i++) {
 			const record = mutations[i];
 			for (let j = 0; j < record.addedNodes.length; j++) {
-				const $el  = record.addedNodes[j] as HTMLResizableElement;
-				$el.resizeSensor && $el.resizeSensor.resetSensor();
+				const $el = record.addedNodes[j] as HTMLResizableElement;
+				$el.resizeSensor && $el.resizeSensor.resetSensor && $el.resizeSensor.resetSensor();
 			}
 		}
 	});
