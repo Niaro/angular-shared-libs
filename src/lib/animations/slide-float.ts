@@ -2,7 +2,7 @@ import { trigger, transition, useAnimation } from '@angular/animations';
 
 import { slideInUp, slideOutUp, slideInRight, slideOutRight } from 'ng-animate';
 
-import { FAST } from './variables';
+import { FAST, NORMAL } from './variables';
 
 export const SLIDE_UP = trigger('slideUp', [
 	transition(':enter', useAnimation(slideInUp, FAST)),
@@ -10,6 +10,6 @@ export const SLIDE_UP = trigger('slideUp', [
 ]);
 
 export const SLIDE_RIGHT = trigger('slideRight', [
-	transition(':enter', useAnimation(slideInRight, FAST)),
-	transition(':leave', useAnimation(slideOutRight, FAST)),
+	transition(':enter', useAnimation(slideInRight, NORMAL)),
+	transition(':leave', useAnimation(slideOutRight, NORMAL)),
 ]);

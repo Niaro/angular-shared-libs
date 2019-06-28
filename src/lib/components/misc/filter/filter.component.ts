@@ -116,7 +116,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		filterControls$
 			.pipe(
 				switchMap(controls => merge(...controls.map(c => c.value$.pipe(
-					auditTime(50),
+					auditTime(250),
 					map((value): [string, any] => [c.name, value]),
 
 					// if more than one the filter control emits a value during the same event loop,

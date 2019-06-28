@@ -15,12 +15,14 @@
 		   (input)="!mask && update(el.value)" />
 </ng-template>
 
-<div *ngIf="$input?.value"
-	 class="close-btn-wrapper"
-	 @slideRight>
-	<button type="button"
-			mat-icon-button
-			(click)="$input.value=''; update(null)">
-		<mat-icon>close</mat-icon>
-	</button>
-</div>
+<ng-container *ngIf="$input?.value">
+	<div *bpDelayedRender
+		 class="close-btn-wrapper"
+		 @slideRight>
+		<button type="button"
+				mat-icon-button
+				(click)="$input.value=''; update(null)">
+			<mat-icon>close</mat-icon>
+		</button>
+	</div>
+</ng-container>
