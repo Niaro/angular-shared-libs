@@ -19,7 +19,8 @@ import {
 	MatDatepickerModule,
 	MatAutocompleteModule,
 	MatSlideToggleModule,
-	MAT_SNACK_BAR_DEFAULT_OPTIONS
+	MAT_SNACK_BAR_DEFAULT_OPTIONS,
+	MAT_MOMENT_DATE_ADAPTER_OPTIONS
 } from '@angular/material';
 
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
@@ -55,6 +56,7 @@ export class MaterialModule {
 		return {
 			ngModule: MaterialModule,
 			providers: [
+				{ provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
 				{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } }
 			]
 		};
