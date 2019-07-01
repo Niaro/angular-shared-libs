@@ -89,7 +89,7 @@ export class DateRange {
 		this.unixText = from || to ? `${from}${RANGE_DELIMITER}${to}` : undefined;
 	}
 
-	private getUnixString(moment: m.Moment) {
+	private getUnixString(moment?: m.Moment) {
 		return moment ? moment.format('X') : '';
 	}
 

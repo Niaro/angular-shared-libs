@@ -82,17 +82,17 @@ export class DateRangeShortcut extends Enumeration {
 	}
 
 	private getDateRange() {
-		const to = m().startOf('day');
+		const to = m().endOf('day');
 
 		switch (this) {
 			case DateRangeShortcut.week:
-				return new DateRange({ from: m().startOf('week'), to });
+				return new DateRange({ from: m().utc().startOf('week'), to });
 			case DateRangeShortcut.month:
-				return new DateRange({ from: m().startOf('month'), to });
+				return new DateRange({ from: m().utc().startOf('month'), to });
 			case DateRangeShortcut.quarter:
-				return new DateRange({ from: m().startOf('quarter'), to });
+				return new DateRange({ from: m().utc().startOf('quarter'), to });
 			case DateRangeShortcut.year:
-				return new DateRange({ from: m().startOf('year'), to });
+				return new DateRange({ from: m().utc().startOf('year'), to });
 		}
 	}
 }
