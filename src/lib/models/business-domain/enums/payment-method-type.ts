@@ -8,7 +8,7 @@ export class PaymentMethodType extends Enumeration {
 	static crypto = new PaymentMethodType();
 	static wireTransfer = new PaymentMethodType('Wire Transfer');
 	static voucher = new PaymentMethodType();
-
+	static link = new PaymentMethodType();
 
 	logo: string;
 
