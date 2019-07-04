@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ErrorHandler } from '@angular/core';
 import { Dictionary } from 'lodash';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
@@ -35,8 +35,18 @@ export class TelemetryService {
 	private static instance: TelemetryService;
 
 	static routerErrorHandler(error) {
-		environment.dev && console.error(error);
-		LogRocket.captureMessage(error, { tags: { source: 'router' } });
+		this.captureError(error, 'router');
+	}
+
+	static appErrorHandler(error) {
+		this.captureError(error, 'app');
+	}
+
+	private static captureError(error, source) {
+		if (environment.prod)
+			LogRocket.captureException(error, { tags: { source } });
+		else
+			console.error(error);
 	}
 
 	constructor() {
@@ -50,7 +60,13 @@ export class TelemetryService {
 		LogRocket.identify(uid, { email });
 	}
 
-	captureMessage(error) {
-		LogRocket.captureMessage(error, { tags: { source: 'manual' } });
+	captureError(error) {
+		TelemetryService.captureError(error, 'manual');
+	}
+}
+
+export class AppErrorHandler implements ErrorHandler {
+	handleError(error) {
+		TelemetryService.appErrorHandler(error);
 	}
 }

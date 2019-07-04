@@ -1,10 +1,10 @@
-import { Provider } from '@angular/core';
+import { Provider, ErrorHandler } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { ApiDefaultsInterceptorService } from './api-defaults.interceptor.service';
 import { ApiResponseInterceptorService } from './api-response.interceptor.service';
 import { RouterService } from './router.service';
-import { TelemetryService } from './telemetry.service';
+import { TelemetryService, AppErrorHandler } from './telemetry.service';
 import { RxJSExtenderService } from './rxjs-extender.service';
 import { EnvironmentService } from './environment.service';
 
@@ -20,4 +20,5 @@ export const PROVIDERS: Provider[] = [
 	EnvironmentService,
 	{ provide: HTTP_INTERCEPTORS, useClass: ApiResponseInterceptorService, multi: true },
 	{ provide: HTTP_INTERCEPTORS, useClass: ApiDefaultsInterceptorService, multi: true },
+	{ provide: ErrorHandler, useClass: AppErrorHandler },
 ];
