@@ -35,11 +35,11 @@ export class TelemetryService {
 	private static instance: TelemetryService;
 
 	static routerErrorHandler(error) {
-		this.captureError(error, 'router');
+		TelemetryService.captureError(error, 'router');
 	}
 
 	static appErrorHandler(error) {
-		this.captureError(error, 'app');
+		TelemetryService.captureError(error, 'app');
 	}
 
 	private static captureError(error, source) {
