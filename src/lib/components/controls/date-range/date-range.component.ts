@@ -46,6 +46,9 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	// #endregion Implementation of the ControlValueAccessor interface
 
 	update(v: DateRangeInput) {
+		if (v.to && this.value.from.isSame(v.to))
+			v.to = this.value.from.clone().endOf('day');
+
 		const value = new DateRange({ ...this.value, ...v });
 
 		if (!isEqual(value, this.value)) {
