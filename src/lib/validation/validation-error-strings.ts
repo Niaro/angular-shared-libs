@@ -1,7 +1,6 @@
-import { isObject, isString } from 'lodash-es';
+import { isObject, isString, compact, flatMap } from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
 
-import { chain } from '../utils';
 import { IValidationErrors, IValidationError } from './models';
 
 export class ValidationErrorStrings extends Array<string> {
@@ -31,11 +30,8 @@ export class ValidationErrorStrings extends Array<string> {
 				: text;
 		}
 
-		return chain(errors)
-			.flatMap((error, validatorName) => getErrorString(validatorName, error))
-			// in case if we have an error for the control but don't have
-			// predefined error msg for the error we get [undefined], thus we compact it
-			.compact()
-			.value();
+		// in case if we have an error for the control but don't have
+		// predefined error msg for the error we get [undefined], thus we compact it
+		return compact(flatMap(errors, (error, validatorName) => getErrorString(validatorName, error)));
 	}
 }

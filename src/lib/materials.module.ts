@@ -20,10 +20,10 @@ import {
 	MatAutocompleteModule,
 	MatSlideToggleModule,
 	MAT_SNACK_BAR_DEFAULT_OPTIONS,
-	MAT_MOMENT_DATE_ADAPTER_OPTIONS
+
 } from '@angular/material';
 
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 const MODULES = [
 	MatCardModule,

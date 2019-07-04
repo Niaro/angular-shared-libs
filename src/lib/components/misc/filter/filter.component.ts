@@ -5,9 +5,9 @@ import {
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
 import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
-import { isEmpty, transform, isNil, difference } from 'lodash-es';
+import { isEmpty, transform, isNil, difference, fromPairs } from 'lodash-es';
 
-import { UrlHelper, chain } from '@bp/shared/utils';
+import { UrlHelper } from '@bp/shared/utils';
 
 import { FilterControlDirective } from './filter-control.directive';
 
@@ -104,11 +104,9 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					map((value): [string, any] => [c.name, value])
 				)))),
 				auditTime(50),
-				map(controlValues => chain(controlValues)
-					.filter(([, value]) => !isNil(value))
-					.fromPairs()
-					.value()
-				)
+				map(controlValues => fromPairs(
+					controlValues.filter(([, value]) => !isNil(value))
+				))
 			)
 			.subscribe(controlSelectedValues => this._value$.next(<T>controlSelectedValues));
 

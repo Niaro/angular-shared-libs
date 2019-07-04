@@ -1,7 +1,5 @@
 import * as m from 'moment';
-import { isNil, assign, isString } from 'lodash-es';
-
-import { chain } from '@bp/shared/utils';
+import { isNil, assign, isString, chunk } from 'lodash-es';
 
 const RANGE_DELIMITER = ':';
 
@@ -15,13 +13,10 @@ export class DateRange {
 	 * Parse string 'unix:unix' to DateRange
 	 */
 	static parseString(value: string) {
-		const [from, to] = chain(value)
-			.split(RANGE_DELIMITER)
-			.chunk(2)
+		const [from, to] = chunk(value.split(RANGE_DELIMITER), 2)
 			.map(dates => dates.map(d => d && m.unix(+d)))
 			.map(dates => dates.map(d => d && d.isValid() ? d : null))
-			.flatten<m.Moment | null>()
-			.value();
+			.flat();
 
 		return new DateRange({ from, to });
 	}
