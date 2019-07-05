@@ -276,10 +276,9 @@ export class $ {
 		return el ? el.getAttribute('content') : undefined;
 	}
 
-	static dispatchEvent(el$: HTMLElement, eventName: string, canBubble: boolean = false, canceable: boolean = false) {
-		const event = document.createEvent('Event');
-		event.initEvent(eventName, canBubble, canceable);
-		el$.dispatchEvent(event);
+	static dispatchEvent(el$: HTMLElement, eventName: string, bubbles = false, cancelable = false) {
+		const evt = new Event(eventName, { bubbles, cancelable });
+		el$.dispatchEvent(evt);
 	}
 
 	static addScriptCodeToBody({ code, src, data }: { code?: string, src?: string, data?: Dictionary<string> }) {

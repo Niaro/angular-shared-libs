@@ -73,3 +73,8 @@ $link-color: $color-primary;
 h4 {
 	text-transform: uppercase;
 }
+
+b,
+strong {
+	font-weight: $font-weight-bold;
+}
