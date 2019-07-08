@@ -2,12 +2,12 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IApiErrorMessage } from '@bp/shared/models';
 
 @Component({
-	selector: 'bp-api-error',
-	templateUrl: './api-error.component.html',
-	styleUrls: ['./api-error.component.scss'],
+	selector: 'bp-api-errors',
+	templateUrl: './api-errors.component.html',
+	styleUrls: ['./api-errors.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ApiErrorComponent {
+export class ApiErrorsComponent {
 
 	@Input('src')
 	errors: IApiErrorMessage[];

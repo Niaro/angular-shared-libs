@@ -8,13 +8,20 @@ import { MaterialModule } from './materials.module';
 import { PROVIDERS, RxJSExtenderService } from './providers';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
 import {
-	AlertComponent, ApiErrorComponent, DateRangeComponent, InputComponent, PaginatorComponent,
+	AlertComponent, ApiErrorsComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
-	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent
+	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
+	AlertMessagesComponent
 } from './components';
-import { UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe } from './pipes';
-import { TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective } from './directives';
+import {
+	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
+	StartCasePipe, TakePipe
+} from './pipes';
+import {
+	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
+	DelayedRenderDirective
+} from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
@@ -37,7 +44,8 @@ const EXPOSED = [
 	ValidationErrorComponent,
 	FieldErrorComponent,
 	AlertComponent,
-	ApiErrorComponent,
+	AlertMessagesComponent,
+	ApiErrorsComponent,
 	PaginatorComponent,
 	StatusBarComponent,
 	FilterComponent,
@@ -53,6 +61,7 @@ const EXPOSED = [
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
+	DelayedRenderDirective,
 
 	// controls
 	DateRangeComponent,
@@ -70,12 +79,14 @@ const EXPOSED = [
 	ToKeyValuePairsPipe,
 	MomentPipe,
 	SafePipe,
-	ChunkPipe
+	ChunkPipe,
+	StartCasePipe,
+	TakePipe
 ];
 
 @NgModule({
-	imports     : MODULES,
-	exports     : [...EXPOSED, ...MODULES],
+	imports: MODULES,
+	exports: [...EXPOSED, ...MODULES],
 	declarations: EXPOSED,
 	entryComponents: [DatepickerCalendarHeaderComponent]
 })
@@ -84,7 +95,7 @@ export class SharedModule {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				...LocalStorageModule.withConfig({
+				...LocalStorageModule.forRoot({
 					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
 				}).providers,

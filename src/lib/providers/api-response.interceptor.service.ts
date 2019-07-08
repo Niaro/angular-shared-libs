@@ -5,7 +5,6 @@ import { catchError, map } from 'rxjs/operators';
 import { isNil, fromPairs } from 'lodash-es';
 
 import { ResponseError, IApiResponse } from '../models';
-
 import { RouterService } from './router.service';
 import { ApiDefaultsInterceptorService, CORRELATION_ID_KEY } from './api-defaults.interceptor.service';
 

@@ -1,5 +1,6 @@
-import { isObject, isString, compact, flatMap } from 'lodash-es';
+import { isObject, isString, flatMap, compact } from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
+import { Dictionary } from 'lodash';
 
 import { IValidationErrors, IValidationError } from './models';
 
@@ -7,7 +8,7 @@ export class ValidationErrorStrings extends Array<string> {
 	constructor(controlName: string, errors: IValidationErrors, translate?: TranslateService) {
 		super();
 
-		const ERROR_STRINGS = translate
+		const ERROR_STRINGS: Dictionary<string | Dictionary<string>> = translate
 			? translate.instant('error')
 			: require('../../../../../apps/widget/src/assets/i18n/en.json').error;
 

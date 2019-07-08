@@ -23,7 +23,6 @@ import { ControlComponent } from '../control.component';
 export class DatePickerComponent extends ControlComponent<m.Moment> {
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 	@Input() label: string;
-	@Input() formControlName: string;
 
 	constructor(private cdr: ChangeDetectorRef) {
 		super();

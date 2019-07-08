@@ -1,5 +1,4 @@
 export * from './alert';
-export * from './api-error';
 export * from './copy';
 export * from './country';
 export * from './datepicker-calendar-header';

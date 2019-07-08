@@ -1,4 +1,4 @@
-<bp-validation-error [errors]="control.errors"
-					 [controlName]="controlName"
+<bp-validation-error [errors]="errors$ | async"
+					 [controlName]="controlName$ | async"
 					 [animate]="false">
 </bp-validation-error>

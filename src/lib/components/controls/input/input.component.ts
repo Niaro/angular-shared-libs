@@ -2,7 +2,7 @@ import {
 	Component, Input, Output, HostBinding, ChangeDetectionStrategy, ElementRef, AfterViewInit,
 	OnDestroy, ViewChild, ChangeDetectorRef
 } from '@angular/core';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil, map, auditTime } from 'rxjs/operators';
@@ -27,7 +27,7 @@ import { TextMaskConfig, TextMaskDirective, NumberMaskConfig } from '@bp/shared/
 export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
 	@Input() value: string;
 	input$ = new OptionalBehaviorSubject<string>();
-	@Output() valueChange = this.input$;
+	@Output() readonly valueChange = this.input$;
 	@Input() placeholder: string;
 	@Input() mask: TextMaskConfig;
 	@Input() autocomplete: MatAutocomplete;
@@ -36,8 +36,8 @@ export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAcc
 
 	autocompleteOrigin = { elementRef: this.host };
 
-	@ViewChild(TextMaskDirective) maskDirective: TextMaskDirective;
-	@ViewChild('el') input: ElementRef;
+	@ViewChild(TextMaskDirective, { static: false }) maskDirective: TextMaskDirective;
+	@ViewChild('el', { static: false }) input: ElementRef;
 	get $input(): HTMLInputElement { return this.input && this.input.nativeElement; }
 
 	private destroyed$ = new Subject();

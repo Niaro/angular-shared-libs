@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { MatButton } from '@angular/material';
+import { MatButton } from '@angular/material/button';
 
 @Component({
 	selector: '[bp-copy]',
@@ -8,9 +8,9 @@ import { MatButton } from '@angular/material';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CopyComponent {
-	@ViewChild('copyBtn') /** @private */ copyBtn: MatButton;
-	@ViewChild('clipboardTextarea') /** @private */ clipboardTextareaRef: ElementRef;
-	@ViewChild('content') /** @private */ contentRef: ElementRef;
+	@ViewChild('copyBtn', { static: true }) /** @private */ copyBtn: MatButton;
+	@ViewChild('clipboardTextarea', { static: true }) /** @private */ clipboardTextareaRef: ElementRef;
+	@ViewChild('content', { static: true }) /** @private */ contentRef: ElementRef;
 
 	private get $clipboardTextarea(): HTMLInputElement { return this.clipboardTextareaRef.nativeElement; }
 	private get $content(): HTMLElement { return this.contentRef.nativeElement; }

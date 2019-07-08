@@ -1,5 +1,5 @@
 import { Directive, Input, Self, Inject, Optional } from '@angular/core';
-import { MatSelect, MatSelectChange } from '@angular/material';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';

@@ -10,7 +10,7 @@ import { isNull, isEqual, forOwn, sum } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
-import { AsyncVoidSubject, OptionalBehaviorSubject, BpScheduler, measure } from '@bp/shared/rxjs';
+import { AsyncVoidSubject, OptionalBehaviorSubject, BpScheduler, measure, mutate } from '@bp/shared/rxjs';
 import { Direction, Dimensions } from '@bp/shared/models';
 import { $ } from '@bp/shared/utils';
 
@@ -25,8 +25,8 @@ export enum ArrowType {
 
 @Component({
 	selector: 'bp-carousel',
-	styleUrls: ['carousel.component.scss'],
-	templateUrl: 'carousel.component.html',
+	styleUrls: ['./carousel.component.scss'],
+	templateUrl: './carousel.component.html',
 	animations: [FADE_IN_LIST],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -46,7 +46,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input() sortable = false;
 	@Input() sortableItem: (item: any) => boolean;
 	@Input() slideInAnimation = true;
-	@Output('sort') sort$ = new Subject<any[]>();
+	@Output('sort') readonly sort$ = new Subject<any[]>();
 
 	@Input()
 	get items() { return this.items$.value; }
@@ -63,8 +63,8 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		this._activeIndex = this.items.indexOf(value);
 	}
 
-	@Output('activeItemChange') activeItemChange$ = new Subject<any>();
-	@Output('scrolled') scroll$ = new Subject<Readonly<ICarouselViewportItemsVisibility>>();
+	@Output('activeItemChange') readonly activeItemChange$ = new Subject<any>();
+	@Output('scrolled') readonly scroll$ = new Subject<Readonly<ICarouselViewportItemsVisibility>>();
 
 	get activeIndex() {
 		if (!this.items || !this.items.length) return;
@@ -114,8 +114,8 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	currentItemsPerView$ = new BehaviorSubject<number | null>(this.itemsPerView);
 	get currentItemsPerView() { return this.currentItemsPerView$.value; }
 
-	@ContentChild(TemplateRef) template: TemplateRef<any>;
-	@ViewChild('slidesContainer') private slidesContainerRef: ElementRef;
+	@ContentChild(TemplateRef, { static: false }) template: TemplateRef<any>;
+	@ViewChild('slidesContainer', { static: true }) private slidesContainerRef: ElementRef;
 	@ViewChildren('slide') private slidesQuery: QueryList<ElementRef>;
 
 	private get $slidesContainer(): HTMLElement { return this.slidesContainerRef && this.slidesContainerRef.nativeElement; }
@@ -150,14 +150,16 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		if (items && (items.firstChange || this.resetActiveOnItemsChange))
 			this.activateItem(this.items[0], false);
 
-		Promise.resolve().then(() => {
-			if (itemsPerView || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
-				this.updateItemsPerView();
-			if (items && !items.firstChange)
-				this.updateScroll({ animate: false, distinctVisibility: false });
-			else if (activeItem && !activeItem.firstChange)
-				this.updateScroll({ animate: false });
-		});
+		Promise
+			.resolve()
+			.then(() => {
+				if (itemsPerView || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
+					this.updateItemsPerView();
+				if (items && !items.firstChange)
+					this.updateScroll({ animate: false, distinctVisibility: false });
+				else if (activeItem && !activeItem.firstChange)
+					this.updateScroll({ animate: false });
+			});
 	}
 
 	ngAfterViewInit() {
@@ -176,7 +178,10 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			this.$slides$,
 			this.slideStyle$
 		)
-			.subscribe(([$slides, style]) => $slides.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))));
+			.pipe(
+				mutate(([$slides, style]) => $slides.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))))
+			)
+			.subscribe();
 
 		fromEvent(window, 'resize')
 			.pipe(

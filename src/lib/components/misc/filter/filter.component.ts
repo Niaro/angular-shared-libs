@@ -16,7 +16,7 @@ export type FilterValue = { [controlName: string]: any };
 @Component({
 	selector: 'bp-filter',
 	template: `<ng-content></ng-content>`,
-	styleUrls: ['filter.component.scss'],
+	styleUrls: ['./filter.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent<T = FilterValue> implements OnChanges, AfterContentInit {
@@ -24,7 +24,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	@Input() type: 'query' | 'matrix' = 'matrix';
 	@Input() defaults: T = <T>{};
 
-	@Output('value') value$: Observable<T>;
+	@Output('value') readonly value$: Observable<T>;
 
 	get value() { return this._value$.value; }
 	get empty() { return isEmpty(this.value); }
@@ -116,7 +116,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		filterControls$
 			.pipe(
 				switchMap(controls => merge(...controls.map(c => c.value$.pipe(
-					auditTime(50),
+					auditTime(250),
 					map((value): [string, any] => [c.name, value]),
 
 					// if more than one the filter control emits a value during the same event loop,

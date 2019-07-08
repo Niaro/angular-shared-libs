@@ -20,7 +20,7 @@ export class PaginatorComponent implements OnChanges {
 	@Input() pageSizeOptions = [10, 25, 50, 100, 250];
 	@Input() pagedResults: PagedResults;
 
-	@Output() page = new EventEmitter<string>();
+	@Output() readonly page = new EventEmitter<string>();
 	pageSize$ = new BehaviorSubject(PAGE_SIZE);
 	get pageSize() { return this.pageSize$.value; }
 

@@ -1,29 +1,23 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-
-import {
-	MatCardModule,
-	MatInputModule,
-	MatButtonModule,
-	MatIconModule,
-	MatToolbarModule,
-	MatDialogModule,
-	MatMenuModule,
-	MatProgressSpinnerModule,
-	MatProgressBarModule,
-	MatSnackBarModule,
-	MatPaginatorModule,
-	MatSortModule,
-	MatSelectModule,
-	MatRippleModule,
-	MatTooltipModule,
-	MatDatepickerModule,
-	MatAutocompleteModule,
-	MatSlideToggleModule,
-	MAT_SNACK_BAR_DEFAULT_OPTIONS,
-
-} from '@angular/material';
-
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRippleModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const MODULES = [
 	MatCardModule,

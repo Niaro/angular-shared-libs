@@ -1,5 +1,5 @@
 import { Directive, Self } from '@angular/core';
-import { MatSort } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { snakeCase, camelCase } from 'lodash-es';
 import { map, first } from 'rxjs/operators';

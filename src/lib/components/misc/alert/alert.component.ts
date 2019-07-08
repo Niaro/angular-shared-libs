@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { SLIDE } from '@bp/shared/animations';
 import { IApiErrorMessage } from '@bp/shared/models';
+import { isEmpty } from 'lodash-es';
 
 @Component({
 	selector: 'bp-alert',
@@ -11,8 +12,8 @@ import { IApiErrorMessage } from '@bp/shared/models';
 })
 export class AlertComponent {
 	@Input() type: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
-	@Input() show = false;
 	@Input() errors: IApiErrorMessage[] | null;
+	@Input() messages: string[] | null;
 
-	@HostBinding('class.hidden') get hidden() { return !this.errors && !this.show; }
+	@HostBinding('class.hidden') get hidden() { return isEmpty(this.errors) && isEmpty(this.messages); }
 }
