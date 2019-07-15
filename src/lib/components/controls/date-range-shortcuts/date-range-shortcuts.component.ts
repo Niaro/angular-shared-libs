@@ -66,7 +66,7 @@ export class DateRangeShortcut extends Enumeration {
 	static week = new DateRangeShortcut();
 	static month = new DateRangeShortcut();
 	static quarter = new DateRangeShortcut();
-	static year = new DateRangeShortcut();
+	// static year = new DateRangeShortcut();
 
 	dateRange: DateRange;
 
@@ -91,8 +91,8 @@ export class DateRangeShortcut extends Enumeration {
 				return new DateRange({ from: m().utc().startOf('month'), to });
 			case DateRangeShortcut.quarter:
 				return new DateRange({ from: m().utc().startOf('quarter'), to });
-			case DateRangeShortcut.year:
-				return new DateRange({ from: m().utc().startOf('year'), to });
+			// case DateRangeShortcut.year:
+			// 	return new DateRange({ from: m().utc().startOf('year'), to });
 		}
 	}
 }
