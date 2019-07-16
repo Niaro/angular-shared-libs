@@ -55,12 +55,13 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 	}
 
 	private enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+		const url = request.url.startsWith('http') || request.url.includes('assets')
+			? request.url
+			: `${this.baseUrl}/${request.url}`;
 		return next.handle(request.clone({
-			url: request.url.startsWith('http') || request.url.includes('assets')
-				? request.url
-				: `${this.baseUrl}/${request.url}`,
+			url,
 			setHeaders: {
-				...this.headers,
+				...(url.includes('bridgerpay.com') ? this.headers : {}),
 				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],
 			},
 		}));

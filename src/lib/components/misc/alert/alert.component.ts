@@ -14,6 +14,7 @@ export class AlertComponent {
 	@Input() type: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
 	@Input() errors: IApiErrorMessage[] | null;
 	@Input() messages: string[] | null;
+	@Input() closable = true;
 
 	@HostBinding('class.hidden') get hidden() { return isEmpty(this.errors) && isEmpty(this.messages); }
 }

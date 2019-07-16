@@ -44,7 +44,10 @@ export class TelemetryService {
 
 	private static captureError(error, source) {
 		if (environment.prod)
-			LogRocket.captureException(error, { tags: { source } });
+			LogRocket.captureException(
+				error instanceof Error ? error : new Error(JSON.stringify(error)),
+				{ tags: { source } }
+			);
 		else
 			console.error(error);
 	}
