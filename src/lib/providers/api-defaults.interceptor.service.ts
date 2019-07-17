@@ -61,7 +61,7 @@ export class ApiDefaultsInterceptorService implements HttpInterceptor {
 		return next.handle(request.clone({
 			url,
 			setHeaders: {
-				...(url.includes('bridgerpay.com') ? this.headers : {}),
+				...(request.url.startsWith('http') ? {} : this.headers),
 				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],
 			},
 		}));
