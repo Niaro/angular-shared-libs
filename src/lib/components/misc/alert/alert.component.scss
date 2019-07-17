@@ -10,6 +10,13 @@
 		margin-bottom: 2rem;
 		border-radius: $border-card-radius / 2;
 
+		.btn-icon-close {
+			right: 6px;
+			top: 6px;
+			color: inherit;
+			opacity: 0.5;
+		}
+
 		@each $type,
 		$scheme in $palette {
 			&.alert-#{$type} ::ng-deep {

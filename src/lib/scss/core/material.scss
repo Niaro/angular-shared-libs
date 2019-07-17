@@ -33,6 +33,11 @@
 .mat-dialog-container,
 .mat-sidenav {
 	@include mat-elevation(15);
+}
+
+.mat-dialog-container,
+.mat-sidenav,
+.alert {
 	position: relative;
 
 	.btn-icon-close {
