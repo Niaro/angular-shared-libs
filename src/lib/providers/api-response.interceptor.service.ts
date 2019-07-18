@@ -6,14 +6,14 @@ import { isNil, fromPairs } from 'lodash-es';
 
 import { ResponseError, IApiResponse } from '../models';
 import { RouterService } from './router.service';
-import { ApiDefaultsInterceptorService, CORRELATION_ID_KEY } from './api-defaults.interceptor.service';
+import { ApiRequestInterceptorService, CORRELATION_ID_KEY } from './api-request.interceptor.service';
 
 @Injectable()
 export class ApiResponseInterceptorService implements HttpInterceptor {
 
 	constructor(
 		private router: RouterService,
-		private apiDefaultsInterceptor: ApiDefaultsInterceptorService
+		private apiRequestInterceptor: ApiRequestInterceptorService
 	) { }
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
@@ -25,7 +25,7 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 				map((e: HttpEvent<IApiResponse<any>>) => {
 					if (e instanceof HttpResponse) {
 						if (e.headers.has(CORRELATION_ID_KEY))
-							this.apiDefaultsInterceptor.headers[CORRELATION_ID_KEY] = e.headers.get(CORRELATION_ID_KEY);
+							this.apiRequestInterceptor.headers[CORRELATION_ID_KEY] = e.headers.get(CORRELATION_ID_KEY);
 						return e.clone({ body: e.body && e.body.result });
 					} else
 						return e;
