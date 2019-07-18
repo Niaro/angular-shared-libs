@@ -4,8 +4,12 @@ import { isArray, camelCase, lowerCase } from 'lodash-es';
 
 export class ResponseError {
 	status: StatusCode;
+
 	statusText: string;
+
 	messages: IApiErrorMessage[] = [];
+
+	url: string;
 
 	get isForbidden() {
 		return this.status === StatusCode.forbidden;
@@ -16,6 +20,7 @@ export class ResponseError {
 	}
 
 	constructor(e: HttpErrorResponse | Partial<ResponseError>) {
+		this.url = e.url;
 		this.status = e.status >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
 			? StatusCode.internalServerError
 			: e.status === 0 ? StatusCode.timeout : e.status;
