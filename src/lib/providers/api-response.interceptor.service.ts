@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { isNil, fromPairs } from 'lodash-es';
 
-import { ResponseError, IApiResponse } from '../models';
+import { ResponseError, IApiResponse, StatusCode } from '../models';
 import { RouterService } from './router.service';
 import { ApiRequestInterceptorService, CORRELATION_ID_KEY } from './api-request.interceptor.service';
 
@@ -26,6 +26,8 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 					if (e instanceof HttpResponse) {
 						if (e.headers.has(CORRELATION_ID_KEY))
 							this.apiRequestInterceptor.headers[CORRELATION_ID_KEY] = e.headers.get(CORRELATION_ID_KEY);
+						if (e.status === StatusCode.redirect && e.headers.has('location') && e.headers.get('location').includes('cloudflareaccess'))
+							window.location.href = e.headers.get('location');
 						return e.clone({ body: e.body && e.body.result });
 					} else
 						return e;

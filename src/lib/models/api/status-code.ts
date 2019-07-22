@@ -3,6 +3,7 @@ export enum StatusCode {
 	ok = 200,
 	created = 201,
 	noContent = 204,
+	redirect = 302,
 	badRequest = 400,
 	denied = 401,
 	transactionDeclined = 402,
