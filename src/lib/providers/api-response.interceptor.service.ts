@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { isNil, fromPairs } from 'lodash-es';
 
-import { ResponseError, IApiResponse, StatusCode } from '../models';
+import { ResponseError, IApiResponse } from '../models';
 import { RouterService } from './router.service';
 import { ApiRequestInterceptorService, CORRELATION_ID_KEY } from './api-request.interceptor.service';
 
