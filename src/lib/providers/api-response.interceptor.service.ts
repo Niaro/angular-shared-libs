@@ -26,8 +26,6 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 					if (e instanceof HttpResponse) {
 						if (e.headers.has(CORRELATION_ID_KEY))
 							this.apiRequestInterceptor.headers[CORRELATION_ID_KEY] = e.headers.get(CORRELATION_ID_KEY);
-						if (e.status === StatusCode.redirect && e.headers.has('location') && e.headers.get('location').includes('cloudflareaccess'))
-							window.location.href = e.headers.get('location');
 						return e.clone({ body: e.body && e.body.result });
 					} else
 						return e;
