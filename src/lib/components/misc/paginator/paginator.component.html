@@ -3,7 +3,7 @@
 
 	<mat-form-field>
 		<mat-select [value]="pageSize$ | async"
-					(valueChange)="pageSize$.next($event); page = 1">
+					(valueChange)="pageSize$.next($event); currentPage = 1">
 			<mat-option *ngFor="let option of pageSizeOptions"
 						[value]="option">
 				{{ option }}
