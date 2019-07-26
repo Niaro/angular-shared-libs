@@ -31,9 +31,8 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	@Input() excluded: Country[];
 	@Input() placeholder = 'Country';
 	@Input() hasWorldwide = false;
-
-	countries = Countries.list;
-	filtered = this.countries;
+	@Input() countries = Countries.list;
+	filtered = Countries.list;
 
 	constructor() {
 		super();
@@ -42,13 +41,16 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 			.subscribe(it => this.onCountryNameChange(it));
 	}
 
-	ngOnChanges({ excluded, hasWorldwide }: SimpleChanges) {
+	ngOnChanges({ excluded, hasWorldwide, countries }: SimpleChanges) {
 		if (excluded)
 			this.countries = isArray(this.excluded)
 				? Countries.list.filter(it => !this.excluded.includes(it))
 				: Countries.list;
 
-		if (hasWorldwide || excluded) {
+		if (countries && this.countries)
+			this.filtered = this.countries;
+
+		if (hasWorldwide || excluded || countries) {
 			this.countries = this.updateWorldwideInCountriesList(this.countries);
 			this.filtered = this.updateWorldwideInCountriesList(this.filtered);
 		}

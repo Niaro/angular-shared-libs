@@ -67,3 +67,8 @@
 		top: unset !important;
 	}
 }
+
+.mat-select-panel,
+.mat-autocomplete-panel {
+	font-size: $body-font-size;
+}

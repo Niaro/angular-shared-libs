@@ -3,7 +3,7 @@
 
 	<mat-form-field>
 		<mat-select [value]="pageSize$ | async"
-					(valueChange)="pageSize$.next($event); currentPage = 1">
+					(valueChange)="pageSize$.next($event); page = 1">
 			<mat-option *ngFor="let option of pageSizeOptions"
 						[value]="option">
 				{{ option }}
@@ -12,28 +12,30 @@
 	</mat-form-field>
 </span>
 
-<div *ngIf="hasNext || hasPrevious"
+<div *ngIf="hasBack() || hasNext()"
 	 @fade>
 	<span class="state">
-		{{ currentPage === 1 ? 1 : (pageSize * currentPage - pageSize + 1) }} - {{ pageSize * currentPage }} of many
+		{{ (currentPage$ | async) === 1 ? 1 : (offset - pageSize + 1) }}
+		-
+		{{ Math.min(length, offset) }} {{ length ? 'of ' + length : (hasNext() ? 'of many' : '')}}
 	</span>
 
 	<div class="buttons">
 		<bp-icon-btn class="prev"
 					 matTooltip="Prev page"
 					 matTooltipPosition="above"
-					 [pending]="progressPrev"
-					 [disabled]="!hasPrevious || progress"
-					 (click)="page.emit(pageCursors[currentPage - 1]); currentPage = currentPage - 1; progressPrev = true;">
+					 [pending]="progressBack$ | async"
+					 [disabled]="!hasBack() || (progress$ | async)"
+					 (click)="onBack()">
 			<mat-icon>arrow_back_ios</mat-icon>
 		</bp-icon-btn>
 
 		<bp-icon-btn class="next"
 					 matTooltip="Next page"
 					 matTooltipPosition="above"
-					 [pending]="progressNext"
-					 [disabled]="!hasNext || progress"
-					 (click)="page.emit(pagedResults.nextPageCursor); currentPage = currentPage + 1; progressNext = true;">
+					 [pending]="progressNext$ | async"
+					 [disabled]="!hasNext() || (progress$ | async)"
+					 (click)="onNext()">
 			<mat-icon>arrow_back_ios</mat-icon>
 		</bp-icon-btn>
 	</div>
