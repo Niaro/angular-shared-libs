@@ -20,7 +20,7 @@ import {
 } from './pipes';
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
-	DelayedRenderDirective
+	DelayedRenderDirective, DynamicOutletDirective
 } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
@@ -62,6 +62,7 @@ const EXPOSED = [
 	TargetBlankDirective,
 	SortDirective,
 	DelayedRenderDirective,
+	DynamicOutletDirective,
 
 	// controls
 	DateRangeComponent,
