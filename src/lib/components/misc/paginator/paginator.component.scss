@@ -47,8 +47,12 @@
 	.buttons {
 		display: flex;
 
-		mat-icon {
+		::ng-deep button:not(.disabled) mat-icon {
 			color: $color-semi-dark;
+		}
+
+		mat-icon {
+			width: 8px;
 		}
 
 		.next mat-icon {

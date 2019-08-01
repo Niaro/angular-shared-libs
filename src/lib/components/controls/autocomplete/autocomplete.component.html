@@ -1,0 +1,16 @@
+<bp-input [ngClass]="inputClass"
+		  [formControl]="inputControl"
+		  [placeholder]="placeholder"
+		  [autocomplete]="autocomplete">
+</bp-input>
+
+<bp-validation-error *ngIf="formControl"
+					 [errors]="formControl.errors">
+</bp-validation-error>
+
+<mat-autocomplete #autocomplete="matAutocomplete">
+	<mat-option *ngFor="let item of filtered"
+				[value]="item">
+		{{ item }}
+	</mat-option>
+</mat-autocomplete>
