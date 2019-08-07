@@ -5,9 +5,9 @@ import { environment } from '@bp/environment';
   providedIn: 'root'
 })
 export class EnvironmentService {
+	get isProd() { return environment.name === 'prod'; }
 
-	isNotProdLike = environment.name !== 'prod' && environment.name !== 'sandbox';
+	get isNotProd() { return !this.isProd; }
 
-	get isProdLike() { return !this.isNotProdLike; }
-
+	get isNotProdLike() { return this.isNotProd && environment.name !== 'sandbox'; }
 }
