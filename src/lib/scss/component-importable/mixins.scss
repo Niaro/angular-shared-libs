@@ -125,3 +125,18 @@
 	left: $left;
 	right: $right;
 }
+
+@mixin afterBottomBorder($color: $color-border, $width: 1px) {
+	border-bottom: none;
+
+	&:after {
+		content: '';
+		height: $width;
+		background: $color;
+		display: block;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}
+}

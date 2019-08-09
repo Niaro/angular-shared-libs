@@ -5,6 +5,7 @@ import { isArray } from 'lodash-es';
 
 import { InputBasedComponent } from '../input-based.component';
 
+
 @Component({
 	selector: 'bp-country-selector',
 	templateUrl: './country-selector.component.html',
@@ -28,12 +29,14 @@ import { InputBasedComponent } from '../input-based.component';
 })
 export class CountrySelectorComponent extends InputBasedComponent<Country> implements OnChanges {
 	@Input() formControl: FormControl;
-	@Input() excluded: Country[];
-	@Input() placeholder = 'Country';
-	@Input() hasWorldwide = false;
 
-	countries = Countries.list;
-	filtered = this.countries;
+	@Input() excluded: Country[];
+
+	@Input() placeholder = 'Country';
+
+	@Input() hasWorldwide = false;
+	@Input() countries = Countries.list;
+	filtered = Countries.list;
 
 	constructor() {
 		super();
@@ -42,15 +45,27 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 			.subscribe(it => this.onCountryNameChange(it));
 	}
 
-	ngOnChanges({ excluded, hasWorldwide }: SimpleChanges) {
+	ngOnChanges({ excluded, hasWorldwide, countries, value }: SimpleChanges) {
 		if (excluded)
 			this.countries = isArray(this.excluded)
 				? Countries.list.filter(it => !this.excluded.includes(it))
 				: Countries.list;
 
-		if (hasWorldwide || excluded) {
+		if (countries && this.countries)
+			this.filtered = this.countries;
+
+		if (hasWorldwide || excluded || countries) {
 			this.countries = this.updateWorldwideInCountriesList(this.countries);
 			this.filtered = this.updateWorldwideInCountriesList(this.filtered);
+		}
+
+		if (value) {
+			const countryName = !this.value || !this.hasWorldwide && this.value === Countries.worldwide
+				? ''
+				: this.value.name;
+
+			this.updateFilteredCountries(countryName);
+			this.inputControl.setValue(countryName, { emitEvent: false });
 		}
 	}
 
@@ -74,10 +89,7 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	// #endregion Implementation of the Validator interface
 
 	onCountryNameChange(input: string) {
-		const loweredCountryName = input && input.toLowerCase();
-		this.filtered = loweredCountryName
-			? this.countries.filter(it => it.lowerCaseName.includes(loweredCountryName))
-			: this.countries;
+		this.updateFilteredCountries(input);
 
 		const country = input && Countries.find(input);
 		if (country !== this.value) {
@@ -91,5 +103,12 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 		return this.hasWorldwide
 			? [Countries.worldwide, ...list]
 			: list.filter(v => v !== Countries.worldwide);
+	}
+
+	private updateFilteredCountries(input: string) {
+		const loweredCountryName = input && input.toLowerCase();
+		this.filtered = loweredCountryName
+			? this.countries.filter(it => it.lowerCaseName.includes(loweredCountryName))
+			: this.countries;
 	}
 }

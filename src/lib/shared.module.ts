@@ -12,7 +12,7 @@ import {
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
 	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
-	AlertMessagesComponent
+	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent
 } from './components';
 import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
@@ -20,7 +20,7 @@ import {
 } from './pipes';
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
-	DelayedRenderDirective
+	DelayedRenderDirective, DynamicOutletDirective
 } from './directives';
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
@@ -56,12 +56,14 @@ const EXPOSED = [
 	IconBtnComponent,
 
 	// directives
+	CursorPageAdaptorDirective,
 	TextMaskDirective,
 	RouterLinkNoOutletsWithHrefDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
 	DelayedRenderDirective,
+	DynamicOutletDirective,
 
 	// controls
 	DateRangeComponent,
@@ -71,6 +73,7 @@ const EXPOSED = [
 	CountrySelectorComponent,
 	IpInputComponent,
 	DatePickerComponent,
+	AutocompleteComponent,
 
 	// pipes
 	UpperFirstPipe,

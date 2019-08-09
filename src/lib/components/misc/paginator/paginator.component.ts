@@ -1,12 +1,13 @@
-import { Component, OnChanges, Input, ChangeDetectionStrategy, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, Output } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map, filter, skip } from 'rxjs/operators';
-import { isNil } from 'lodash-es';
 
-import { PagedResults, PAGE_SIZE } from '@bp/shared/models';
+import { PAGE_SIZE } from '@bp/shared/models';
 import { FADE } from '@bp/shared/animations';
 import { UrlHelper } from '@bp/shared/utils';
+import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
+
 
 @Component({
 	selector: 'bp-paginator',
@@ -15,27 +16,40 @@ import { UrlHelper } from '@bp/shared/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [FADE]
 })
-export class PaginatorComponent implements OnChanges {
+export class PaginatorComponent {
+	Math = Math;
 
 	@Input() pageSizeOptions = [10, 25, 50, 100, 250];
-	@Input() pagedResults: PagedResults;
+	@Input() length: number;
 
-	@Output() readonly page = new EventEmitter<string>();
-	pageSize$ = new BehaviorSubject(PAGE_SIZE);
+	@Output('page') readonly page$ = new OptionalBehaviorSubject<string>();
+	get page() { return this.page$.value; }
+	set page(value: string) { this.page$.next(value); }
+
+	readonly pageSize$ = new BehaviorSubject(PAGE_SIZE);
 	get pageSize() { return this.pageSize$.value; }
 
-	get hasNext() { return this.pagedResults && !!this.pagedResults.nextPageCursor; }
-	get hasPrevious() { return !isNil(this.pageCursors[this.currentPage - 1]); }
+	get offset() { return this.currentPage * this.pageSize; }
 
-	currentPage = 1;
+	readonly currentPage$ = new BehaviorSubject(1);
+	get currentPage() { return this.currentPage$.value; }
+	set currentPage(value: number) { this.currentPage$.next(value); }
 
-	get progress() { return this.progressPrev || this.progressNext; }
-	progressPrev = false;
-	progressNext = false;
+	readonly progressBack$ = new BehaviorSubject(false);
+	get progressBack() { return this.progressBack$.value; }
+	set progressBack(value: boolean) { this.progressBack$.next(value); }
 
-	pageCursors: { [page: number]: string } = { 1: '' }; // the first page doesn't have cursor
+	readonly progressNext$ = new BehaviorSubject(false);
+	get progressNext() { return this.progressNext$.value; }
+	set progressNext(value: boolean) { this.progressNext$.next(value); }
 
-	constructor(private router: Router, private route: ActivatedRoute) {
+	readonly progress$ = combineLatest(this.progressBack$, this.progressNext$)
+		.pipe(map(([back, next]) => back || next));
+
+	constructor(
+		private router: Router,
+		private route: ActivatedRoute
+	) {
 		this.route.params
 			.pipe(
 				map(({ pageSize }) => +pageSize),
@@ -48,14 +62,27 @@ export class PaginatorComponent implements OnChanges {
 			.subscribe(v => this.navigate({ pageSize: v === PAGE_SIZE ? null : v }));
 	}
 
-	ngOnChanges({ pagedResults }: SimpleChanges) {
-		if (pagedResults && this.pagedResults) {
-			if (this.pagedResults.firstPage)
-				this.currentPage = 1;
-			this.pageCursors[this.currentPage + 1] = this.pagedResults.nextPageCursor;
-			this.progressPrev = this.progressNext = false;
-		}
+	getBackPage() {
+		return this.currentPage - 1;
 	}
+
+	getNextPage() {
+		return this.currentPage + 1;
+	}
+
+	onBack = () => {
+		this.page = this.getBackPage().toString();
+		this.currentPage = this.getBackPage();
+	}
+
+	onNext = () => {
+		this.page = this.getNextPage().toString();
+		this.currentPage = this.getNextPage();
+	}
+
+	hasBack = () => this.offset > this.pageSize;
+
+	hasNext = () => this.offset < this.length;
 
 	private navigate(params: Params) {
 		this.router.navigate([UrlHelper.mergeRouteParams(this.route, params)], { relativeTo: this.route });

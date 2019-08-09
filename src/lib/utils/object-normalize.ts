@@ -2,14 +2,13 @@ import { mapValues, isString, isObject } from 'lodash-es';
 import { isArray } from 'util';
 
 /**
- * Turn all parseable string values into objects recursively;
+ * Parses values of the objects;
  */
-export function normalize(value: any) {
-	value = parse(value);
+export function normalize(value: Object | Object[]) {
 	return isArray(value)
 		? value.map(v => normalize(v))
 		: isObject(value)
-			? mapValues(value, v => normalize(v))
+			? mapValues(value, v => parse(v))
 			: value;
 }
 
