@@ -9,5 +9,5 @@ export class EnvironmentService {
 
 	get isNotProd() { return !this.isProd; }
 
-	get isNotProdLike() { return this.isNotProd && environment.name !== 'sandbox'; }
+	get isNotProdOrSandbox() { return this.isNotProd && environment.name !== 'sandbox'; }
 }
