@@ -1,6 +1,7 @@
 <button [attr.type]="type"
 		mat-button
 		class="bp-button primary"
+		[ngClass]="btnClass"
 		[class.pending]="inProgress"
 		[disabled]="disabled || inProgress"
 		color="primary">
