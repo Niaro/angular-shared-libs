@@ -6,7 +6,8 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { UrlHelper } from '@bp/shared/utils';
 
 @Directive({
-	selector: '[bpFilterControl]'
+	selector: '[bpFilterControl]',
+	exportAs: 'filterControl'
 })
 export class FilterControlDirective {
 	@Input('bpFilterControl') name: string;

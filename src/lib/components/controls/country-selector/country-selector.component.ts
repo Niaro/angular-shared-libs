@@ -35,7 +35,9 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	@Input() placeholder = 'Country';
 
 	@Input() hasWorldwide = false;
+
 	@Input() countries = Countries.list;
+
 	filtered = Countries.list;
 
 	constructor() {
