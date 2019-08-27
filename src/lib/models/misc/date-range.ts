@@ -12,23 +12,23 @@ export class DateRange {
 	/**
 	 * Parse string 'unix:unix' to DateRange
 	 */
-	static parseString(value: string) {
+	static parseString(value: string, format?: string) {
 		const [from, to] = chunk(value.split(RANGE_DELIMITER), 2)
 			.map(dates => dates.map(d => d && m.unix(+d)))
 			.map(dates => dates.map(d => d && d.isValid() ? d : null))
 			.flat();
 
-		return new DateRange({ from, to });
+		return new DateRange({ from, to }, format);
 	}
 
-	static parse(value: DateRangeInputValue) {
-		return value instanceof DateRange ? value : new DateRange(value);
+	static parse(value: DateRangeInputValue, format?: string) {
+		return value instanceof DateRange ? value : new DateRange(value, format);
 	}
 
 	get from() { return this._from; }
 	set from(value) {
 		this._from = this.parseMoment(value);
-		this.fromFormatted = this._from && this._from.format('LL');
+		this.fromFormatted = this._from && this._from.format(this.format);
 		this.setUnixText();
 	}
 	fromFormatted: string;
@@ -36,7 +36,7 @@ export class DateRange {
 	get to() { return this._to; }
 	set to(value) {
 		this._to = this.parseMoment(value);
-		this.toFormatted = this._to && this._to.format('LL');
+		this.toFormatted = this._to && this._to.format(this.format);
 		this.setUnixText();
 	}
 	toFormatted: string;
@@ -47,16 +47,16 @@ export class DateRange {
 	private _to: m.Moment;
 	private unixText: string;
 
-	constructor(config?: DateRangeInput | string) {
+	constructor(config?: DateRangeInput | string, private format = 'LL') {
 		if (isString(config))
-			return DateRange.parseString(config);
+			return DateRange.parseString(config, format);
 
 		assign(this, config);
 		Object.freeze(this);
 	}
 
 	clone() {
-		return new DateRange(this);
+		return new DateRange(this, this.format);
 	}
 
 	valueOf(): any {

@@ -1,12 +1,13 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, ErrorHandler } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { MaterialModule } from './materials.module';
-import { PROVIDERS, RxJSExtenderService } from './providers';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
+
 import {
 	AlertComponent, ApiErrorsComponent, DateRangeComponent, InputComponent, PaginatorComponent,
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
@@ -14,17 +15,25 @@ import {
 	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
 	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent
 } from './components';
+
 import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
 	StartCasePipe, TakePipe
 } from './pipes';
+
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
 	DelayedRenderDirective, DynamicOutletDirective
 } from './directives';
+
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
+
+import {
+	RouterService, TelemetryService, RxJSExtenderService, EnvironmentService, FirebaseService, FileLoaderService,
+	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler
+} from './providers';
 
 const MODULES = [
 	CommonModule,
@@ -104,7 +113,16 @@ export class SharedModule {
 				}).providers,
 				...ModalModule.forRoot().providers,
 				...MaterialModule.forRoot().providers,
-				...PROVIDERS
+
+				RouterService,
+				TelemetryService,
+				RxJSExtenderService,
+				EnvironmentService,
+				FirebaseService,
+				FileLoaderService,
+				{ provide: HTTP_INTERCEPTORS, useClass: ApiResponseInterceptorService, multi: true },
+				{ provide: HTTP_INTERCEPTORS, useClass: ApiRequestInterceptorService, multi: true },
+				{ provide: ErrorHandler, useClass: AppErrorHandler },
 			]
 		};
 	}
