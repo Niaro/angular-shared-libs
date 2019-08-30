@@ -3,7 +3,7 @@ import { assignWith, isNil, isArray, has, camelCase } from 'lodash-es';
 import { isExtensionOf } from '@bp/shared/utils';
 
 import { PropertiesMetadata } from './properties-metadata';
-import { NonFunctionPropertyNames, Enumeration } from '../misc';
+import { Enumeration } from '../misc';
 
 export abstract class MetadataEntity {
 
@@ -31,23 +31,23 @@ export abstract class MetadataEntity {
 		return this.metadata.get(<string>prop).label;
 	}
 
-	constructor(data?: Partial<MetadataEntity>) {
+	constructor(data?: any) {
 		this.applyPropertyAttributes();
-		assignWith(this, data, this.assignCustomizer);
+		assignWith(this, data, (...args) => this.assignCustomizer(...args));
 		this.setDefaults();
 	}
 
-	get meta() {
+	getMetadata() {
 		return MetadataEntity.getMetadata(this);
 	}
 
 	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
-		return this.meta.get(<string>propName).label;
+		return this.getMetadata().get(<string>propName).label;
 	}
 
-	protected assignCustomizer = (currValue: any, srcValue: any, key: string, currObject, srcObject) => {
-		if (this.meta.has(key)) {
-			const { mapper } = this.meta.get(key);
+	protected assignCustomizer(currValue: any, srcValue: any, key: string, currObject, srcObject) {
+		if (this.getMetadata().has(key)) {
+			const { mapper } = this.getMetadata().get(key);
 
 			if (!isNil(srcValue) && mapper) {
 				const isEnumMapper = isExtensionOf(mapper, Enumeration);
@@ -71,7 +71,7 @@ export abstract class MetadataEntity {
 	}
 
 	private applyPropertyAttributes() {
-		this.meta
+		this.getMetadata()
 			.values()
 			.filter(v => v.unserializable)
 			.forEach(v => Object.defineProperty(this, v.property, {
@@ -82,7 +82,7 @@ export abstract class MetadataEntity {
 	}
 
 	private setDefaults() {
-		this.meta
+		this.getMetadata()
 			.values()
 			.filter(v => v.default !== undefined && isNil(this[v.property]))
 			.forEach(v => this[v.property] = v.default);

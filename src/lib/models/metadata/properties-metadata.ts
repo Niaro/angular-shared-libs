@@ -10,6 +10,10 @@ export class PropertiesMetadata {
 		return proto && proto.metadata;
 	}
 
+	private _values: PropertyMetadata[];
+
+	private _keys: string[];
+
 	constructor(private readonly metadataHost: MetadataHost) { }
 
 	add(property: string, metadata: Partial<PropertyMetadata>) {
@@ -34,16 +38,16 @@ export class PropertiesMetadata {
 	}
 
 	keys(): string[] {
-		return [
+		return this._keys || (this._keys = [
 			...Object.keys(this.dict),
 			...(this.protoMetadata ? this.protoMetadata.keys() : [])
-		];
+		]);
 	}
 
 	values(): PropertyMetadata[] {
-		return [
+		return this._values || (this._values = [
 			...Object.values(this.dict),
 			...(this.protoMetadata ? this.protoMetadata.values() : [])
-		];
+		]);
 	}
 }

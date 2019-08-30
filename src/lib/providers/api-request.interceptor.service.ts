@@ -28,6 +28,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		// it doesn't happpen
 		'ngsw-bypass': ''
 	};
+
 	checkAuthorization = false;
 
 	baseUrl = `${API_URL ? (API_URL.includes('api') ? API_URL : `${API_URL}/api`) : '/api'}${API_VERSION ? `/${API_VERSION}` : ''}`;
