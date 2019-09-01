@@ -19,7 +19,7 @@ export abstract class Enumeration {
 
 	static parse(data: number | string | Enumeration): Enumeration {
 		if (data instanceof Enumeration || isNil(data))
-			return data;
+			return (data instanceof this.prototype.constructor) ? data : null;
 		else if (isNumber(data))
 			return this.find(data);
 		return this[camelCase(data)];

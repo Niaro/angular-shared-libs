@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
 
-import { isString, isRegExp, merge, keys, isNil } from 'lodash-es';
+import { isString, isRegExp, merge, keys, isNil, mapKeys } from 'lodash-es';
 import { IValidationErrors } from './models';
 
 /**
@@ -33,6 +33,37 @@ export class Validators {
 			: null;
 	}
 
+	static password(): ValidatorFn {
+		const minLength = 8;
+		const minLengthValidator = Validators.minLength(minLength);
+		return (c: AbstractControl): IValidationErrors | null => {
+			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+			const value = c.value as string;
+
+			const minLengthValidation = minLengthValidator(c);
+			if (minLengthValidation)
+				return mapKeys(minLengthValidation, () => 'passwordMinLength');
+
+			const letters = value.split('');
+			const hasUpperCaseLetter = letters.some(v => v === v.toUpperCase() && v !== v.toLowerCase());
+			const hasLowerCaseLetter = letters.some(v => v === v.toLowerCase() && v !== v.toUpperCase());
+			const hasDigit = /\d/.test(value);
+			const hasSpecialCharacter = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+
+			return hasUpperCaseLetter && hasLowerCaseLetter && hasDigit && hasSpecialCharacter
+				? null
+				: { password: true };
+		};
+	}
+
+	static confirmPassword(c: AbstractControl): IValidationErrors | null {
+		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+
+		return c.parent.controls['password'].value !== c.value
+			? { passwordConfirm: true }
+			: null;
+	}
+
 	static digits(c: AbstractControl): IValidationErrors | null {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
@@ -54,7 +85,7 @@ export class Validators {
 	 */
 	static minimum(required: number): ValidatorFn {
 		return (c: AbstractControl): IValidationErrors | null => {
-			if (this.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +c.value ? +c.value : 0;
 			return actual < required
@@ -68,7 +99,7 @@ export class Validators {
 	 */
 	static maximum(required: number): ValidatorFn {
 		return ({ value }: AbstractControl): IValidationErrors | null => {
-			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
+			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +value ? +value : 0;
 			return actual > required
@@ -82,7 +113,7 @@ export class Validators {
 	 */
 	static minLength(required: number): ValidatorFn {
 		return ({ value }: AbstractControl): IValidationErrors | null => {
-			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
+			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
 			return actual < required
@@ -96,7 +127,7 @@ export class Validators {
 	 */
 	static maxLength(required: number): ValidatorFn {
 		return ({ value }: AbstractControl): IValidationErrors | null => {
-			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
+			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
 			return actual > required
@@ -119,7 +150,7 @@ export class Validators {
 		const regex = isRegExp(pattern) ? pattern : new RegExp(pattern);
 
 		return ({ value }: AbstractControl): IValidationErrors | null => {
-			if (this.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
+			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			return regex.test(value)
 				? null
@@ -141,22 +172,22 @@ export class Validators {
 	static compose(validators: ValidatorFn[]): ValidatorFn {
 		if (!validators) return null;
 		const presentValidators = validators.filter(v => v !== null);
-		if (this.isEmptyValue(presentValidators)) return null;
+		if (Validators.isEmptyValue(presentValidators)) return null;
 
 		return (control: AbstractControl) =>
-			this.mergeErrors(this.executeValidators(control, presentValidators));
+			Validators.mergeErrors(Validators.executeValidators(control, presentValidators));
 	}
 
 	static composeAsync(validators: AsyncValidatorFn[]): AsyncValidatorFn {
 		if (!validators) return null;
 		const presentValidators = validators.filter(v => v != null);
-		if (this.isEmptyValue(presentValidators)) return null;
+		if (Validators.isEmptyValue(presentValidators)) return null;
 
 		return (control: AbstractControl) => {
-			const promises = this.executeAsyncValidators(control, presentValidators).map(
-				this.convertToPromise
+			const promises = Validators.executeAsyncValidators(control, presentValidators).map(
+				Validators.convertToPromise
 			);
-			return Promise.all(promises).then(this.mergeErrors);
+			return Promise.all(promises).then(Validators.mergeErrors);
 		};
 	}
 
