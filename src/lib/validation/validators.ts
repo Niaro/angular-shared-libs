@@ -56,12 +56,14 @@ export class Validators {
 		};
 	}
 
-	static confirmPassword(c: AbstractControl): IValidationErrors | null {
-		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+	static confirmPassword(propName: string = 'password'): ValidatorFn {
+		return (c: AbstractControl): IValidationErrors | null => {
+			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
-		return c.parent.controls['password'].value !== c.value
-			? { passwordConfirm: true }
-			: null;
+			return c.parent.controls[propName].value !== c.value
+				? { passwordConfirm: true }
+				: null;
+		};
 	}
 
 	static digits(c: AbstractControl): IValidationErrors | null {
