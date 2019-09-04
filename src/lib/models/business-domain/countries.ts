@@ -90,7 +90,7 @@ export class Countries {
 			name: 'United States Minor Outlying Islands',
 			code: 'UM',
 			dialCode: '1808'
-		}),
+		})
 	];
 
 	static worldwide = new Country({ name: 'Worldwide', displayName: 'Worldwide', code: 'ALL' });
