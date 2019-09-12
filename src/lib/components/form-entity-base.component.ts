@@ -7,14 +7,13 @@ import { FormBaseComponent } from './form-base.component';
 
 export abstract class FormEntityBaseComponent<T extends Entity> extends FormBaseComponent<T> {
 
-	@Input() model: T;
+	@Input() model!: T;
 
 	abstract type: typeof MetadataEntity;
 
 	get isAdding() { return isNil(this.model.id); }
 
 	label(prop: string) {
-		console.warn(prop);
 		return this.type.getLabel(prop);
 	}
 }

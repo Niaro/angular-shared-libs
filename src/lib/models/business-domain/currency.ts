@@ -14,18 +14,21 @@ const CURRENCIES = new Map<CurrencyCode, Currency>();
 
 export class Currency extends MetadataEntity {
 	static list = CURRENCIES_CODES.map(it => new Currency(<any>it));
-	readonly symbol: string;
-	readonly code: CurrencyCode;
+	readonly symbol!: string;
+	readonly code!: CurrencyCode;
 	/**
 	 * '{symbol} {code}'
 	 */
-	readonly displayName: string;
+	readonly displayName!: string;
 
 	constructor(dataOrCode: Partial<Currency> | CurrencyCode) {
-		super(isString(dataOrCode) ? <any>{ code: dataOrCode.toUpperCase() as CurrencyCode } : dataOrCode);
+		super(isString(dataOrCode)
+			? <any>{ code: dataOrCode.toUpperCase() as CurrencyCode }
+			: dataOrCode
+		);
 
 		if (CURRENCIES.has(this.code))
-			return CURRENCIES.get(this.code);
+			return CURRENCIES.get(this.code) as Currency;
 
 		this.symbol = getCurrencySymbol(this.code, 'narrow');
 		if (!this.symbol)

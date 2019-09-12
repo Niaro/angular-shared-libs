@@ -3,14 +3,14 @@ import { SubscriptionLike } from 'rxjs';
 
 export class OptionalBehaviorSubject<T> extends Subject<T> {
 	private hasInitValue: boolean;
-	private hasNextValue: boolean;
+	private hasNextValue: boolean | undefined;
 
 	constructor(private _value?: T) {
 		super();
 		this.hasInitValue = arguments.length === 1;
 	}
 
-	get value(): T {
+	get value(): T | undefined {
 		return this.getValue();
 	}
 
@@ -22,7 +22,7 @@ export class OptionalBehaviorSubject<T> extends Subject<T> {
 		return subscription;
 	}
 
-	getValue(): T {
+	getValue(): T | undefined {
 		if (this.hasError)
 			throw this.thrownError;
 		else if (this.closed)

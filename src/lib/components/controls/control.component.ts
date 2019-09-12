@@ -4,12 +4,12 @@ import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, Val
 import { isNil } from 'lodash-es';
 
 export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator {
-	@Input() value: T;
+	@Input() value!: T;
 	@Output() readonly valueChange = new Subject<T>();
 	@HostBinding('class.control') isControl = true;
 	@HostBinding('class.empty') get empty() { return isNil(this.value); }
 
-	protected validator: ValidatorFn | null;
+	protected validator!: ValidatorFn | null;
 
 	validatorOnChange = () => { };
 

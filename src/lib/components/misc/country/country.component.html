@@ -1,4 +1,4 @@
-<span [matTooltip]="compact ? country.name : ''"
+<span [matTooltip]="compact && country ? country?.name : ''"
 	 matTooltipClass="capitalized"
 	 matTooltipPosition="above">
 	<bp-svg-icon *ngIf="isWorldwide; else defaultTpl"
@@ -7,12 +7,12 @@
 	</bp-svg-icon>
 	<ng-template #defaultTpl>
 		<div class="iti__flag"
-			 [ngClass]="'iti__'+ country.lowerCaseCode">
+			 [ngClass]="'iti__'+ (country?.lowerCaseCode || '')">
 		</div>
 	</ng-template>
 </span>
 
 <span *ngIf="!compact"
 	  class="capitalized">
-	{{ country.name }}
+	{{ country?.name }}
 </span>

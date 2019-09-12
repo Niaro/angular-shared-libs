@@ -20,11 +20,11 @@ export class PaginatorComponent {
 	Math = Math;
 
 	@Input() pageSizeOptions = [10, 25, 50, 100, 250];
-	@Input() length: number;
+	@Input() length!: number;
 
-	@Output('page') readonly page$ = new OptionalBehaviorSubject<string>();
+	@Output('page') readonly page$ = new OptionalBehaviorSubject<string | undefined>();
 	get page() { return this.page$.value; }
-	set page(value: string) { this.page$.next(value); }
+	set page(value: string | undefined) { this.page$.next(value); }
 
 	readonly pageSize$ = new BehaviorSubject(PAGE_SIZE);
 	get pageSize() { return this.pageSize$.value; }

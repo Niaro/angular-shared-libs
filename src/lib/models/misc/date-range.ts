@@ -15,7 +15,7 @@ export class DateRange {
 	static parseString(value: string, format?: string) {
 		const [from, to] = chunk(value.split(RANGE_DELIMITER), 2)
 			.map(dates => dates.map(d => d && m.unix(+d)))
-			.map(dates => dates.map(d => d && d.isValid() ? d : null))
+			.map(dates => dates.map(d => d && d.isValid() ? d : undefined))
 			.flat();
 
 		return new DateRange({ from, to }, format);
@@ -27,25 +27,25 @@ export class DateRange {
 
 	get from() { return this._from; }
 	set from(value) {
-		this._from = this.parseMoment(value);
+		this._from = value && this.parseMoment(value);
 		this.fromFormatted = this._from && this._from.format(this.format);
 		this.setUnixText();
 	}
-	fromFormatted: string;
+	fromFormatted: string | undefined;
 
 	get to() { return this._to; }
 	set to(value) {
-		this._to = this.parseMoment(value);
+		this._to = value && this.parseMoment(value);
 		this.toFormatted = this._to && this._to.format(this.format);
 		this.setUnixText();
 	}
-	toFormatted: string;
+	toFormatted: string | undefined;
 
 	get empty() { return isNil(this.from) && isNil(this.to); }
 
-	private _from: m.Moment;
-	private _to: m.Moment;
-	private unixText: string;
+	private _from: m.Moment | undefined;
+	private _to: m.Moment | undefined;
+	private unixText!: string | undefined;
 
 	constructor(config?: DateRangeInput | string, private format = 'LL') {
 		if (isString(config))
@@ -93,7 +93,7 @@ export class DateRange {
 		return moment ? moment.format('X') : '';
 	}
 
-	private parseMoment(value?: m.MomentInput): m.Moment {
-		return value && (m.isMoment(value) ? value : m(value));
+	private parseMoment(value: m.MomentInput): m.Moment {
+		return m.isMoment(value) ? value : m(value);
 	}
 }

@@ -8,7 +8,7 @@ export abstract class MaskPipe {
 	readonly suffixLength: number;
 	readonly caretTrap = '[]';
 
-	formatChars = [];
+	formatChars: string[] = [];
 
 	get mask() { return this.config.mask; }
 	get prefixRegExp() { return this.config.prefixRegExp; }
@@ -22,13 +22,14 @@ export abstract class MaskPipe {
 		this.suffixLength = this.suffix.length;
 	}
 
-	transform(rawValue: string): TextMask {
+	transform(rawValue: string): TextMask | undefined {
 		rawValue = isNil(rawValue) ? '' : rawValue;
-		return this.tryAddPrefixAndSuffix(this.transformBody(rawValue))
+		const bodyMask = this.transformBody(rawValue);
+		return bodyMask && this.tryAddPrefixAndSuffix(bodyMask)
 			.filter(char => !isUndefined(char));
 	}
 
-	protected abstract transformBody(rawValue: string): TextMask;
+	protected abstract transformBody(rawValue: string): TextMask | undefined;
 
 	/**
 	 * Method is getting rid of prefix and suffix chars from input value

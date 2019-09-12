@@ -8,6 +8,7 @@ import * as firebase from 'firebase/app';
 // Add the Firebase products that you want to use
 import 'firebase/storage';
 import 'firebase/functions';
+
 import { TelemetryService } from './telemetry.service';
 import { IMondayBillingDetailsRequest, IMondayBillingDetailsResponse, INewLead, INewApplicant } from 'firebase/functions/src/models';
 
@@ -28,7 +29,7 @@ export class FirebaseService {
 
 	private functions: firebase.functions.Functions;
 
-	private uploadTask: firebase.storage.UploadTask;
+	private uploadTask!: firebase.storage.UploadTask;
 
 	constructor(
 		private telemetry: TelemetryService,
@@ -112,7 +113,7 @@ export class FirebaseService {
 		const fileName = this.getFilenameWithoutExtension(name);
 		const counterRegexp = /_(\d+)$/;
 		const counterMatchInName = fileName.match(counterRegexp);
-		const counter = +(counterMatchInName && counterMatchInName[1]) + 1;
+		const counter = +(counterMatchInName && counterMatchInName[1] || 0) + 1;
 		return name.replace(
 			fileName,
 			counterMatchInName ? fileName.replace(counterRegexp, `_${counter}`) : `${fileName}_${counter}`
@@ -124,8 +125,8 @@ export class FirebaseService {
 		return name.replace(fileName, snakeCase(fileName));
 	}
 
-	private getFilenameWithoutExtension(name: string) {
+	private getFilenameWithoutExtension(name: string): string {
 		if (!name) return '';
-		return /(.+?)(\.[^\.]+$|$)/.exec(name)[1];
+		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
 	}
 }

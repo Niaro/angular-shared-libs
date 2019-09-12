@@ -19,8 +19,8 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 	private _pending = false;
 
 	@Input()
-	get apiError(): ResponseError { return this._error; }
-	set apiError(value: ResponseError) {
+	get apiError(): ResponseError | null { return this._error; }
+	set apiError(value: ResponseError | null) {
 		this._error = value;
 
 		if (!value) {
@@ -30,8 +30,8 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 
 		if (value.messages) {
 			value.messages
-				.filter(it => it.field)
-				.forEach(it => this.form.controls[it.field].setErrors({ server: it.message }));
+				.filter(it => !!it.field)
+				.forEach(it => this.form.controls[it.field!].setErrors({ server: it.message }));
 
 			this.errors = value.messages.filter(it => !it.field);
 		}
@@ -40,8 +40,8 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 			this._error = this.errors = null;
 		this.cdr.detectChanges();
 	}
-	private _error: ResponseError;
-	errors: IApiErrorMessage[] | null;
+	private _error!: ResponseError | null;
+	errors!: IApiErrorMessage[] | null;
 
 	@Output()
 	readonly submitted = new Subject<T>();
@@ -51,7 +51,7 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 		this._form = value;
 		this.disableOnPending();
 	}
-	private _form: FormGroup;
+	private _form!: FormGroup;
 
 	showInvalidInputsSnack = true;
 
@@ -75,7 +75,7 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 		else if (this.showInvalidInputsSnack)
 			this.snackBar.open(
 				'Some inputs are invalid!',
-				null,
+				undefined,
 				{
 					panelClass: 'error'
 				});

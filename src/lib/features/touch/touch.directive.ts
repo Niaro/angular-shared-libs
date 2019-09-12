@@ -15,9 +15,7 @@ export class TouchDirective {
 	@Output('bpTap') get tap() { return this.touchManager.tap$; }
 	@Output('bpPan') get pan() { return this.touchManager.pan$; }
 
-	private touchManager: TouchManager;
+	private touchManager = this.touchBuilder.build(this.host.nativeElement) as TouchManager;
 
-	constructor(private host: ElementRef, private touchBuilder: TouchBuilder) {
-		this.touchManager = this.touchBuilder.build(this.host.nativeElement);
-	}
+	constructor(private host: ElementRef, private touchBuilder: TouchBuilder) { }
 }

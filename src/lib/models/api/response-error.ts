@@ -1,15 +1,15 @@
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 import { HttpErrorResponse } from '@angular/common/http';
-import { isArray, camelCase, lowerCase } from 'lodash-es';
+import { isArray, camelCase, lowerCase, get } from 'lodash-es';
 
 export class ResponseError {
 	status: StatusCode;
 
-	statusText: string;
+	statusText!: string;
 
 	messages: IApiErrorMessage[] = [];
 
-	url: string;
+	url: string | null | undefined;
 
 	get isForbidden() {
 		return this.status === StatusCode.forbidden;
@@ -19,13 +19,13 @@ export class ResponseError {
 		return this.status === StatusCode.internalServerError;
 	}
 
-	constructor(e: HttpErrorResponse | Partial<ResponseError>) {
+	constructor(e: HttpErrorResponse | DeepPartial<ResponseError>) {
 		this.url = e.url;
-		this.status = e.status >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
+		this.status = e.status! >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
 			? StatusCode.internalServerError
-			: e.status === 0 ? StatusCode.timeout : e.status;
+			: e.status!;
 
-		this.statusText = this.statusText || STATUS_CODE_MESSAGES[this.status];
+		this.statusText = this.statusText || get(STATUS_CODE_MESSAGES, this.status);
 
 		if (this.status === StatusCode.notFound)
 			return this;

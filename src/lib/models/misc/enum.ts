@@ -1,31 +1,33 @@
 import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst } from 'lodash-es';
 
 export abstract class Enumeration {
-	static list(): Enumeration[] {
-		if (!this['_list_']) {
-			const list = [];
+	private static _list: any[];
+
+	static list<T extends Enumeration>(): T[] {
+		if (!this._list) {
+			const list: T[] = [];
 			forOwn(this, (it, key) => {
 				if (it instanceof Enumeration && isNaN(+key) && this.shouldList(it))
-					list.push(it);
+					list.push(it as T);
 			});
-			this['_list_'] = list;
+			this._list = list;
 		}
-		return this['_list_'];
+		return this._list;
 	}
 
-	static find(value: number | string): Enumeration {
-		return this[value];
+	static find(value: number | string): Enumeration | null {
+		return (<any>this)[value];
 	}
 
-	static parse(data: number | string | Enumeration): Enumeration {
+	static parse(data: any): Enumeration | null {
 		if (data instanceof Enumeration || isNil(data))
 			return (data instanceof this.prototype.constructor) ? data : null;
 		else if (isNumber(data))
 			return this.find(data);
-		return this[camelCase(data)];
+		return this.find(camelCase(data));
 	}
 
-	static parseStrict(data: number | string | Enumeration): Enumeration {
+	static parseStrict(data: any): Enumeration {
 		const result = this.parse(data);
 		if (!result)
 			throw new Error(`Enum type ${this.name} does not contains value ${data}`);
@@ -40,12 +42,12 @@ export abstract class Enumeration {
 
 	get displayName(): string { return this._displayName || this.name || this._value.toString(); }
 
-	name: string;
+	name!: string;
 
 	// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
 	// cssClass: string;
 
-	protected _value: number | string;
+	protected _value!: number | string;
 	protected _displayName: string;
 
 	private id = `enum_${Math.random().toString(36).substr(2, 8)}`;
@@ -57,15 +59,15 @@ export abstract class Enumeration {
 
 		if (isNumber(valueOrDisplayName)) {
 			this._value = valueOrDisplayName.valueOf();
-			this.constructor[this._value] = this;
-			this._displayName = displayName;
+			(<any>this.constructor)[this._value] = this;
+			this._displayName = displayName as string;
 
 			// Schedule a microtask at the end of the current event loop
 			// which means that the constructor will have all the enumerations attached to it by the time
 			// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
 			Promise.resolve().then(() => this.init());
 		} else {
-			this._displayName = valueOrDisplayName;
+			this._displayName = valueOrDisplayName as string;
 
 			// same as the comment above
 			Promise.resolve().then(() => this.init({ valueSameAsName: true }));
@@ -76,8 +78,8 @@ export abstract class Enumeration {
 		return this._value;
 	}
 
-	toString(): string {
-		return this._value.toString();
+	toString(): string | undefined {
+		return this._value ? this._value.toString() : undefined;
 	}
 
 	toJSON() {
@@ -98,7 +100,7 @@ export abstract class Enumeration {
 	// }
 
 	private getValueName() {
-		let res: string = null;
+		let res = '';
 		forOwn(this.constructor, (it, key) => {
 			if (it instanceof Enumeration && it.id === this.id && isNaN(+key)) {
 				res = key;

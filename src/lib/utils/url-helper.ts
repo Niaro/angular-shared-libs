@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivatedRoute, Params } from '@angular/router';
 import { isBoolean, isArray, mapValues, pickBy, isNil, last, toPairs } from 'lodash-es';
+import { Dictionary } from 'lodash';
 
 export class UrlHelper {
 	static parse(value: string) {
@@ -41,7 +42,7 @@ export class UrlHelper {
 
 	static getRouteParams(route: ActivatedRoute): Params {
 		const snapshot = UrlHelper.getMainBranchLastRoute(route.snapshot);
-		const params = snapshot.url.length ? last(snapshot.url).parameters : snapshot.params;
+		const params = snapshot.url.length ? last(snapshot.url)!.parameters : snapshot.params;
 		return pickBy(params, v => !isNil(v));
 	}
 
@@ -63,7 +64,8 @@ export class UrlHelper {
 		return pickBy(snapshot.queryParams, v => !isNil(v));
 	}
 
-	static getComponentRoute(route: ActivatedRouteSnapshot | ActivatedRoute, component: Type<any>): ActivatedRouteSnapshot | ActivatedRoute {
+	static getComponentRoute(route: ActivatedRouteSnapshot | ActivatedRoute, component: Type<any>)
+		: ActivatedRouteSnapshot | ActivatedRoute | null {
 		if (route.routeConfig && route.routeConfig.component === component)
 			return route;
 
@@ -72,6 +74,8 @@ export class UrlHelper {
 			if (cmptRoute)
 				return cmptRoute;
 		}
+
+		return null;
 	}
 
 	static getMainBranchRoutes<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T[] {
@@ -89,13 +93,13 @@ export class UrlHelper {
 		return route;
 	}
 
-	static appendQueryParams(url: string, params: {}) {
+	static appendQueryParams(url: string, params: Dictionary<string | number>) {
 		if (isNil(url))
 			return url;
 
 		const queryParams = Object.keys(params)
-			.filter(k => !isNil(params[k]) && !isNaN(params[k]))
-			.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+			.filter(k => !isNil(params[k]) && !isNaN(<number>params[k]))
+			.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k].toString())}`)
 			.join('&');
 
 		return `${url}${url.includes('?') ? '&' : '?'}${queryParams}`;

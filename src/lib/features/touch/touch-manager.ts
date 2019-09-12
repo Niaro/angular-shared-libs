@@ -4,6 +4,7 @@ import { observeOn } from 'rxjs/operators';
 
 import { Point, Vector, Direction } from '@bp/shared/models/misc';
 import { BpScheduler } from '@bp/shared/rxjs';
+import { set } from 'lodash-es';
 
 const DOUBLE_TAP_TIME = 250;
 const LONG_TAP_TIME = 750;
@@ -14,32 +15,34 @@ export class TouchManager {
 	static events = [ // TODO: Change to string enums after TS 2.4 release
 		'touchStart', 'touchMove', 'touchEnd', 'touchCancel',
 		'tap', 'singleTap', 'doubleTap', 'longTap',
-		'pan', 'swipe', 'pinch', 'rotate'];
+		'pan', 'swipe', 'pinch', 'rotate'
+	];
 
-	touchStart$: Observable<TouchEvent>;
-	touchMove$: Observable<TouchEvent>;
-	touchEnd$: Observable<TouchEvent>;
-	touchCancel$: Observable<TouchEvent>;
+	touchStart$!: Observable<TouchEvent>;
+	touchMove$!: Observable<TouchEvent>;
+	touchEnd$!: Observable<TouchEvent>;
+	touchCancel$!: Observable<TouchEvent>;
 
-	tap$: Observable<TouchEvent>;
-	singleTap$: Observable<TouchEvent>;
-	doubleTap$: Observable<TouchEvent>;
-	longTap$: Observable<TouchEvent>;
+	tap$!: Observable<TouchEvent>;
+	singleTap$!: Observable<TouchEvent>;
+	doubleTap$!: Observable<TouchEvent>;
+	longTap$!: Observable<TouchEvent>;
 
-	pan$: Observable<IPanEvent>;
-	swipe$: Observable<ISwipeEvent>;
-	pinch$: Observable<IPinchEvent>;
-	rotate$: Observable<IRotateEvent>;
+	pan$!: Observable<IPanEvent>;
+	swipe$!: Observable<ISwipeEvent>;
+	pinch$!: Observable<IPinchEvent>;
+	rotate$!: Observable<IRotateEvent>;
 
-	private isMoved: boolean;
-	private isDoubleTap: boolean;
-	private startPosition: Point;
-	private lastPosition: Point;
-	private lastVector: Vector;
+	private isMoved!: boolean;
+	private isDoubleTap!: boolean;
+	private startPosition!: Point;
+	private lastPosition!: Point;
+	private lastVector!: Vector;
 
 	// position at previous tap
-	private prevPosition: Point;
-	private prevTime: Date;
+	// position at previous tap
+	private prevPosition!: Point;
+	private prevTime!: Date;
 
 	private timeouts = new Map<TimeoutType, number>();
 	private subjects: { [event: string]: Subject<TouchEvent> } = {};
@@ -55,7 +58,7 @@ export class TouchManager {
 
 		TouchManager.events.forEach(event => {
 			this.subjects[event] = new Subject();
-			this[`${event}$`] = this.subjects[event].pipe(observeOn(BpScheduler.runInAngularZone));
+			set(this, `${event}$`, this.subjects[event].pipe(observeOn(BpScheduler.runInAngularZone)));
 		});
 	}
 
@@ -146,7 +149,7 @@ export class TouchManager {
 				this.cancel(TimeoutType.singleTap);
 				(<ISwipeEvent>e).bpDirection = move.direction();
 				this.subjects.swipe.next(e);
-			// tap
+				// tap
 			} else if (!this.isMoved) {
 				this.subjects.tap.next(e);
 

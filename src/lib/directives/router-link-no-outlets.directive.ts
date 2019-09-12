@@ -25,16 +25,16 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 			this.commands = [];
 	}
 
-	@HostBinding('attr.target') @Input() target: string;
-	@Input() queryParams: { [k: string]: any };
-	@Input() fragment: string;
-	@Input() queryParamsHandling: QueryParamsHandling;
-	@Input() preserveFragment: boolean;
-	@Input() skipLocationChange: boolean;
-	@Input() replaceUrl: boolean;
+	@HostBinding('attr.target') @Input() target!: string;
+	@Input() queryParams!: { [k: string]: any };
+	@Input() fragment!: string;
+	@Input() queryParamsHandling!: QueryParamsHandling;
+	@Input() preserveFragment!: boolean;
+	@Input() skipLocationChange!: boolean;
+	@Input() replaceUrl!: boolean;
 
 	// the url displayed on the anchor element.
-	@HostBinding() href: string;
+	@HostBinding() href!: string;
 
 	private commands: any[] = [];
 	private destroyed$ = new AsyncVoidSubject();

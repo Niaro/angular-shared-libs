@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ContentChild } from '@angular/core';
 import { RouterOutlet, Router, PRIMARY_OUTLET, NavigationEnd, RoutesRecognized } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { unset, has } from 'lodash-es';
 
 import { IModalHostComponent } from './modal-host-component.interface';
@@ -18,13 +18,13 @@ const URL_TREE_MODAL_OUTLET_PATH = `root.children.${MODAL_OUTLET}`;
 })
 export class ModalOutletComponent implements OnInit {
 
-	@ContentChild(RouterOutlet, { static: true }) outlet: RouterOutlet;
+	@ContentChild(RouterOutlet, { static: true }) outlet!: RouterOutlet;
 
-	private activeDialog: MatDialogRef<any, any>;
-	private urlWithOutlet: string;
-	private destinationUrl: string;
+	private activeDialog!: MatDialogRef<any, any> | null;
+	private urlWithOutlet!: string | null;
+	private destinationUrl!: string;
 
-	private navigation: boolean;
+	private navigation!: boolean;
 
 	constructor(
 		public router: Router,
@@ -32,19 +32,28 @@ export class ModalOutletComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.outlet.activateEvents.subscribe(cmpt => this.outletActivate(cmpt));
+		this.outlet.activateEvents.subscribe((cmpt: IModalHostComponent) => this.outletActivate(cmpt));
 
 		this.router.events
-			.pipe(filter(e => e instanceof NavigationEnd))
-			.subscribe((e: NavigationEnd) => this.urlWithOutlet = this.hasUrlModalOutlet(e.url) ? this.router.url : undefined);
+			.pipe(
+				filter(e => e instanceof NavigationEnd),
+				map(v => v as NavigationEnd)
+			)
+			.subscribe(e => this.urlWithOutlet = this.hasUrlModalOutlet(e.url)
+				? this.router.url
+				: null
+			);
 
 		// We redirect to the destination url only after the drawer is animatedly closed
 		// otherwise the router outlets content in the drawer deletes right at the animation start
 		// which create a nasty visual glitch
 		this.router.events
-			.pipe(filter(e => e instanceof RoutesRecognized && !!this.activeDialog))
-			.subscribe((e: RoutesRecognized) => {
-				if (this.hasUrlModalOutlet(e.url))
+			.pipe(
+				filter(e => e instanceof RoutesRecognized && !!this.activeDialog),
+				map(v => v as RoutesRecognized)
+			)
+			.subscribe(e => {
+				if (!this.urlWithOutlet || this.hasUrlModalOutlet(e.url))
 					return;
 
 				// If the destination url doesn't have the modal outlet that means the user
@@ -55,7 +64,7 @@ export class ModalOutletComponent implements OnInit {
 				this.router.navigateByUrl(this.urlWithOutlet);
 				this.destinationUrl = e.url;
 				this.navigation = true;
-				this.activeDialog.close(); // the handler on the close event will actually navigate to the destination url
+				this.activeDialog && this.activeDialog.close(); // the handler on the close event will actually navigate to the destination url
 			});
 	}
 

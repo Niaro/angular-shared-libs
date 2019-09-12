@@ -12,13 +12,11 @@ import { Dictionary } from 'lodash';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldErrorComponent implements OnChanges, AfterViewInit {
-	@Input('bpFieldError') formControlName: string;
+	@Input('bpFieldError') formControlName!: string;
 
-	get ngControl() { return this.formField._control && this.formField._control.ngControl; }
+	errors$ = new OptionalBehaviorSubject<Dictionary<any> | null>();
 
-	errors$ = new OptionalBehaviorSubject<Dictionary<any>>();
-
-	controlName$ = new OptionalBehaviorSubject<string>();
+	controlName$ = new OptionalBehaviorSubject<string | null>();
 
 	constructor(private formField: MatFormField) { }
 
@@ -27,9 +25,13 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.ngControl.statusChanges
-			.subscribe(() => this.errors$.next(this.ngControl.errors));
+		const control = this.formField._control.ngControl;
 
-		!this.formControlName && this.controlName$.next(this.ngControl.name);
+		if (control) {
+			control.statusChanges && control.statusChanges
+				.subscribe(() => this.errors$.next(control.errors));
+
+			!this.formControlName && this.controlName$.next(control.name);
+		}
 	}
 }

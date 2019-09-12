@@ -5,7 +5,7 @@ import {
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
 import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
-import { isEmpty, transform, isNil, difference, fromPairs } from 'lodash-es';
+import { isEmpty, transform, isNil, difference, fromPairs, get, set } from 'lodash-es';
 
 import { UrlHelper } from '@bp/shared/utils';
 
@@ -30,7 +30,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	get empty() { return isEmpty(this.value); }
 
 	@ContentChildren(FilterControlDirective, { descendants: true })
-	private controlsQuery: QueryList<FilterControlDirective>;
+	private controlsQuery!: QueryList<FilterControlDirective>;
 	private _value$ = new BehaviorSubject<T>(<T>{});
 	private defaults$ = new BehaviorSubject<T>(<T>{});
 	private defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>>{});
@@ -61,7 +61,11 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		)
 			.pipe(
 				filter(([, defaults]) => !isEmpty(defaults)),
-				map(([controls, defaults]) => transform(controls, (acc, c) => acc[c.name] = UrlHelper.toRouteString(defaults[c.name]), {}))
+				map(([controls, defaults]) => transform(
+					controls,
+					(acc, c) => set(acc, c.name, UrlHelper.toRouteString(get(defaults, c.name))),
+					<Stringify<T>>{}
+				))
 			)
 			.subscribe(this.defaultsStringed$);
 
@@ -74,15 +78,15 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			this.defaultsStringed$
 		)
 			.pipe(
-				map(([controls, params, defaults]) => controls.map(control => ({
-					control,
-					routeValue: params[control.name],
-					defaultValue: defaults[control.name]
+				map(([controls, params, defaults]) => controls.map(c => ({
+					control: c,
+					routeValue: params[c.name],
+					defaultValue: get(defaults, c.name)
 				}))),
 				startWith(undefined),
 				pairwise(),
 				// update only those controls which are needed to be updated
-				map(([prevSet, nextSet]) => nextSet.filter(n => {
+				map(([prevSet, nextSet]) => nextSet!.filter(n => {
 					const prev = prevSet && prevSet.find(p => n.control.name === p.control.name);
 					return !prev || n.routeValue !== prev.routeValue;
 				})),
@@ -125,7 +129,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					// we schedule it at the end of the current event loop
 					observeOn(asyncScheduler)
 				)))),
-				map(([controlName, value]): [Params, string, string] => [
+				map(([controlName, value]): [Params, string, string | undefined] => [
 					this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route),
 					controlName,
 					UrlHelper.toRouteString(value)
@@ -135,7 +139,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			.subscribe(([routeParams, controlName, newRouteValue]) => {
 				this.except.forEach(v => delete routeParams[v]);
 
-				if (isNil(newRouteValue) || newRouteValue === this.defaultsStringed$.value[controlName])
+				if (isNil(newRouteValue) || newRouteValue === get(this.defaultsStringed$.value, controlName))
 					delete routeParams[controlName];
 				else
 					routeParams[controlName] = newRouteValue;

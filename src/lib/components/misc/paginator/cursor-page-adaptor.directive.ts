@@ -10,7 +10,7 @@ import { isNil } from 'lodash-es';
 	selector: 'bp-paginator[pagedResults]'
 })
 export class CursorPageAdaptorDirective implements OnChanges {
-	@Input('pagedResults') pagedResults: PagedResults;
+	@Input('pagedResults') pagedResults!: PagedResults;
 
 	pageCursors: { [page: number]: string } = { 1: '' }; // the first page doesn't have cursor
 

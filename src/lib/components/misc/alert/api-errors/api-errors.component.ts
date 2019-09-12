@@ -10,5 +10,5 @@ import { IApiErrorMessage } from '@bp/shared/models';
 export class ApiErrorsComponent {
 
 	@Input('src')
-	errors: IApiErrorMessage[];
+	errors!: IApiErrorMessage[];
 }

@@ -34,15 +34,15 @@ export class GenerateSchemeControl {
 }
 
 export class GenerateSchemeGroup {
-	key: string;
+	key!: string;
 
-	isArray: boolean;
+	isArray!: boolean;
 
-	value: GenerateSchemeControl | GenerateSchemeControl[];
+	value!: GenerateSchemeControl | GenerateSchemeControl[];
 
 	get isRender() { return this.isArray || (<GenerateSchemeControl>this.value).isRender; }
 
-	constructor(data: Partial<GenerateSchemeGroup>) {
+	constructor(data: DeepPartial<GenerateSchemeGroup>) {
 		assign(this, data);
 	}
 }

@@ -11,8 +11,8 @@ type StatusPosition = 'top' | 'left';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusBarComponent implements OnChanges {
-	@Input('src') status: Enumeration;
-	@Input() position: StatusPosition;
+	@Input('src') status!: Enumeration;
+	@Input() position!: StatusPosition;
 
 	constructor(@Host() private container: StatusBarContainerDirective, private renderer: Renderer2) { }
 

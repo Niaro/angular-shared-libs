@@ -21,14 +21,14 @@ import { InputBasedComponent } from '../input-based.component';
 		}
 	]
 })
-export class AutocompleteComponent extends InputBasedComponent<string> implements OnChanges {
-	@Input() formControl: FormControl;
-	@Input() items: string[];
-	@Input() placeholder: string;
+export class AutocompleteComponent extends InputBasedComponent<string | null> implements OnChanges {
+	@Input() formControl!: FormControl;
+	@Input() items!: string[];
+	@Input() placeholder!: string;
 	@Input() inputClass = 'rounded-input';
 
-	lowercasedItems: { lowered: string, original: string }[];
-	filtered: string[];
+	lowercasedItems!: { lowered: string, original: string }[];
+	filtered!: string[];
 
 	constructor() {
 		super();
@@ -64,7 +64,7 @@ export class AutocompleteComponent extends InputBasedComponent<string> implement
 		const foundLoweredItem = input && this.lowercasedItems.find(v => v.lowered === loweredInput);
 		const found = foundLoweredItem && foundLoweredItem.original;
 		if (found !== this.value) {
-			this.value = found;
+			this.value = found || null;
 			this.valueChange.next(found);
 			this.onChange(found);
 		}

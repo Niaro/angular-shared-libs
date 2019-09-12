@@ -1,6 +1,6 @@
-import fastdom from './fastdom';
-import { Dictionary } from 'lodash';
 import { isFunction } from 'lodash-es';
+
+import fastdom from './fastdom';
 
 type SizeInfo = {
 	width: number;
@@ -18,12 +18,18 @@ type HTMLResizableElement = HTMLElement & {
 
 export class ResizeSensor {
 	static reset(element: HTMLResizableElement | HTMLResizableElement[]) {
-		this.forEachElement(element, $el => $el.resizeSensor && $el.resizeSensor.resetSensor());
+		this.forEachElement(element, $el => $el.resizeSensor
+			&& $el.resizeSensor.resetSensor
+			&& $el.resizeSensor.resetSensor()
+		);
 	}
 
 	static detach(element: HTMLResizableElement | HTMLResizableElement[], cb: OnResize) {
 		this.forEachElement(element, $el => {
 			if (!$el) return;
+
+			if (!$el.resizedAttached)
+				return;
 
 			if ($el.resizedAttached && isFunction(cb))
 				$el.resizedAttached.remove(cb);
@@ -132,7 +138,7 @@ export class ResizeSensor {
 		if ('absolute' !== position && 'relative' !== position && 'fixed' !== position)
 			await fastdom.mutate(() => $el.style.position = 'relative');
 
-		let dirty, rafId;
+		let dirty: boolean, rafId: number;
 		let size: SizeInfo = await this.getElementSize($el);
 		let lastWidth = 0;
 		let lastHeight = 0;
@@ -205,8 +211,12 @@ export class ResizeSensor {
 		requestAnimationFrame(reset);
 	}
 
-	private setStyle(element: HTMLElement, style: Dictionary<string>) {
-		return fastdom.mutate(() => Object.keys(style).forEach(k => element.style[k] = style[k]));
+	private setStyle(element: HTMLElement, style: Partial<CSSStyleDeclaration>) {
+		return fastdom.mutate(() => Object
+			.keys(style)
+			.map(v => v as unknown as number)
+			.forEach(k => element.style[k] = (<Required<CSSStyleDeclaration>>style)[k])
+		);
 	}
 
 	private async getElementSize(element: HTMLElement) {

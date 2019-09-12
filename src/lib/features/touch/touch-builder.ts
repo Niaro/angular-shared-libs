@@ -7,8 +7,8 @@ import { TouchManager } from './touch-manager';
 export class TouchBuilder {
 	constructor(private zone: NgZone) { }
 
-	build(elementOrSelector: string | Element): TouchManager {
+	build(elementOrSelector: string | Element): TouchManager | null {
 		const $element = isString(elementOrSelector) ? document.querySelector(elementOrSelector) : elementOrSelector;
-		return new TouchManager($element, this.zone);
+		return $element && new TouchManager($element, this.zone);
 	}
 }

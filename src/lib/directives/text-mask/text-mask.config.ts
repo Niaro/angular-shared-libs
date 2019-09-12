@@ -5,22 +5,27 @@ export class TextMaskConfig {
 	 * Is an array or a function that defines how the user input is going to be masked.
 	 * @link https://git.io/v1pTT
 	 */
-	mask: TextMask | TextMaskFn;
+	mask!: TextMask | TextMaskFn;
 
-	get prefix(): string { return this['_prefix_']; }
+	get prefix(): string { return this._prefix; }
 	set prefix(value: string) {
-		this['_prefix_'] = value;
-		(<any>this).prefixRegExp = value && value.length && new RegExp(`^${escapeRegExp(value)}`) || undefined;
+		this._prefix = value;
+		this._prefixRegExp = value && value.length && new RegExp(`^${escapeRegExp(value)}`) || undefined;
 	}
+	private _prefix!: string;
 
-	get suffix(): string { return this['_suffix_']; }
+	get suffix(): string { return this._suffix; }
 	set suffix(value: string) {
-		this['_suffix_'] = value;
-		(<any>this).suffixRegExp = value && value.length && new RegExp(`${escapeRegExp(value)}$`) || undefined;
+		this._suffix = value;
+		this._suffixRegExp = value && value.length && new RegExp(`${escapeRegExp(value)}$`) || undefined;
 	}
+	private _suffix!: string;
 
-	readonly prefixRegExp: RegExp;
-	readonly suffixRegExp: RegExp;
+	get prefixRegExp() { return this._prefixRegExp; }
+	private _prefixRegExp!: RegExp | undefined;
+
+	get suffixRegExp() { return this._suffixRegExp; }
+	private _suffixRegExp!: RegExp | undefined;
 
 	includeMaskInValue = false;
 
@@ -45,7 +50,7 @@ export class TextMaskConfig {
 
 	placeholderFromMask = true;
 
-	placeholder: string;
+	placeholder!: string;
 
 	maskOnFocus = true;
 
@@ -62,27 +67,29 @@ export class TextMaskConfig {
 	 * You can provide a pipe function that will give you the opportunity to modify the conformed value before it is displayed on the screen.
 	 * @link https://git.io/v1pk1
 	 */
-	pipe: (conformedValue: string, config: TextMaskConfig) => boolean | string | { value: string, indexesOfPipedChars: number[] };
+	pipe!: (conformedValue: string, config: TextMaskConfig) => boolean | string | { value: string, indexesOfPipedChars: number[] };
 
 	/**
 	 * You can provide an onAccept callback function which will be called when the user enters a character that is accepted
 	 * and displayed on the input element.
 	 * @link https://git.io/v1pkh
 	 */
-	onAccept: () => void;
+	onAccept!: () => void;
 
 	/**
 	 * You can provide an onReject callback function which will be called when the user tries to enter a character
 	 * that ends up being rejected either by the mask or by the pipe and not displayed on the input element.
 	 * @link https://git.io/v1pkx
 	 */
-	onReject: (conformedValue: string, maskRejection: boolean, pipeRejection: boolean) => boolean;
+	onReject!: (conformedValue: string, maskRejection: boolean, pipeRejection: boolean) => boolean;
+
+	inputElement?: HTMLInputElement;
 
 	constructor(config?: Partial<TextMaskConfig>) {
-		this.assign(config);
+		config && this.assign(config);
 	}
 
-	assign(config: Partial<TextMaskConfig>) {
+	assign<T>(config: Partial<T>) {
 		assign(this, config);
 		return this;
 	}
@@ -144,7 +151,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	 * How many digits to allow before the decimal
 	 * @default null
 	 */
-	integerLimit: number = null;
+	integerLimit: number | null = null;
 
 	/**
 	 * Whether or not to always include a decimal point and placeholder for decimal digits after the integer
@@ -171,28 +178,31 @@ export class NumberMaskConfig extends TextMaskConfig {
 	emptyIsZero = false;
 
 	get decimalSeparatorRegExp() {
-		return this['_decimalSeparatorRegExp_']
-			|| (this['_decimalSeparatorRegExp_'] = new RegExp(escapeRegExp(this.decimalSeparatorSymbol), 'g'));
+		return this._decimalSeparatorRegExp
+			|| (this._decimalSeparatorRegExp = new RegExp(escapeRegExp(this.decimalSeparatorSymbol), 'g'));
 	}
+	private _decimalSeparatorRegExp!: RegExp;
 
 	get integersSeparatorRegExp() {
-		return this['_separatorRegExp_']
-			|| (this['_separatorRegExp_'] = new RegExp(escapeRegExp(this.thousandsSeparatorSymbol), 'g'));
+		return this._integersSeparatorRegExp
+			|| (this._integersSeparatorRegExp = new RegExp(escapeRegExp(this.thousandsSeparatorSymbol), 'g'));
 	}
+	private _integersSeparatorRegExp!: RegExp;
 
 	get leadingZeroRegExp() {
-		return this['_leadingZeroRegExp_']
-			|| (this['_leadingZeroRegExp_'] = new RegExp(`^([0${escapeRegExp(this.thousandsSeparatorSymbol)}]+)[1-9]`));
+		return this._leadingZeroRegExp
+			|| (this._leadingZeroRegExp = new RegExp(`^([0${escapeRegExp(this.thousandsSeparatorSymbol)}]+)[1-9]`));
 	}
+	private _leadingZeroRegExp!: RegExp;
 
 	constructor(config?: Partial<NumberMaskConfig>) {
 		super();
-		this.assign(config);
+		config && this.assign(config);
 	}
 
-	assign(config: Partial<NumberMaskConfig>) {
-		return super.assign(config);
-	}
+	// assign(config: Partial<NumberMaskConfig>) {
+	// 	return super.assign(config);
+	// }
 
 	private getLocaleDecimalSeparatorSymbol(): string {
 		return 1.1.toLocaleString().substring(1, 2);

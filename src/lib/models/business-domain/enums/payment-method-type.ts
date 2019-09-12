@@ -10,9 +10,9 @@ export class PaymentMethodType extends Enumeration {
 	static voucher = new PaymentMethodType();
 	static link = new PaymentMethodType();
 
-	logo: string;
+	logo!: string;
 
-	routeName: string;
+	routeName!: string;
 
 	constructor(displayName?: string) {
 		super(displayName);

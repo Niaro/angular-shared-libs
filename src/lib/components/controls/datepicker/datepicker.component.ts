@@ -20,16 +20,16 @@ import { ControlComponent } from '../control.component';
 		}
 	]
 })
-export class DatePickerComponent extends ControlComponent<m.Moment> {
+export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
-	@Input() label: string;
+	@Input() label!: string;
 
 	constructor(private cdr: ChangeDetectorRef) {
 		super();
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: m.Moment): void {
+	writeValue(value: m.Moment | null): void {
 		Promise
 			.resolve()
 			.then(() => {

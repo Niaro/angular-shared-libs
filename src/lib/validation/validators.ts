@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn, AsyncValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidatorFn, AsyncValidatorFn, FormArray } from '@angular/forms';
 
 import { isString, isRegExp, merge, keys, isNil, mapKeys } from 'lodash-es';
 import { IValidationErrors } from './models';
@@ -59,6 +59,9 @@ export class Validators {
 	static confirmPassword(propName: string = 'password'): ValidatorFn {
 		return (c: AbstractControl): IValidationErrors | null => {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+
+			if (c.parent instanceof FormArray)
+				throw new Error('The confirm Password validator expects the control\'s parent to be a formGroup');
 
 			return c.parent.controls[propName].value !== c.value
 				? { passwordConfirm: true }
@@ -142,7 +145,9 @@ export class Validators {
 		const MAX_SAFE_NUMBER_VALUE = 999999999999.99;
 
 		return ({ value }: AbstractControl): IValidationErrors | null =>
-			enabled && value > MAX_SAFE_NUMBER_VALUE ? { excessSafeNumber: true } : null;
+			enabled && value > MAX_SAFE_NUMBER_VALUE
+				? { excessSafeNumber: true }
+				: null;
 	}
 
 	/**
@@ -171,19 +176,25 @@ export class Validators {
 	 * Compose multiple validators into a single function that returns the union
 	 * of the individual error maps.
 	 */
-	static compose(validators: ValidatorFn[]): ValidatorFn {
-		if (!validators) return null;
+	static compose(validators: ValidatorFn[]): ValidatorFn | null {
+		if (!validators)
+			return null;
+
 		const presentValidators = validators.filter(v => v !== null);
-		if (Validators.isEmptyValue(presentValidators)) return null;
+		if (Validators.isEmptyValue(presentValidators))
+			return null;
 
 		return (control: AbstractControl) =>
 			Validators.mergeErrors(Validators.executeValidators(control, presentValidators));
 	}
 
-	static composeAsync(validators: AsyncValidatorFn[]): AsyncValidatorFn {
-		if (!validators) return null;
-		const presentValidators = validators.filter(v => v != null);
-		if (Validators.isEmptyValue(presentValidators)) return null;
+	static composeAsync(validators: AsyncValidatorFn[]): AsyncValidatorFn | null {
+		if (!validators)
+			return null;
+
+		const presentValidators = validators.filter(v => v !== null);
+		if (Validators.isEmptyValue(presentValidators))
+			return null;
 
 		return (control: AbstractControl) => {
 			const promises = Validators.executeAsyncValidators(control, presentValidators).map(

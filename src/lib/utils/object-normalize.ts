@@ -4,7 +4,7 @@ import { isArray } from 'util';
 /**
  * Parses values of the objects;
  */
-export function normalize(value: Object | Object[]) {
+export function normalize(value: Object | Object[]): Object | any {
 	return isArray(value)
 		? value.map(v => normalize(v))
 		: isObject(value)

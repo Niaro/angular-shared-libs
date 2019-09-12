@@ -22,18 +22,18 @@ export class AlertComponent implements OnChanges {
 	@Input()
 	get errors() { return this._errors; }
 	set errors(value: IApiErrorMessage[] | null) { this._errors = value; }
+	_errors!: IApiErrorMessage[] | null;
 
 	@Input()
 	get messages() { return this._messages; }
 	set messages(value: string[] | null) { this._messages = value; }
+	_messages!: string[] | null;
 
 	@Input() closable = true;
 	@Input() frequency: 'daily' | 'weekly' | 'always' = 'always';
 
 	show = false;
 
-	_errors: IApiErrorMessage[];
-	_messages: string[];
 
 	@HostBinding('class.hidden') get hidden() { return isEmpty(this._errors) && isEmpty(this._messages); }
 

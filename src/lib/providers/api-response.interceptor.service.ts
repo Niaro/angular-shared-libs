@@ -40,7 +40,7 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 
 	private cleanseParams(params: HttpParams) {
 		const keys = params instanceof HttpParams ? params.keys() : Object.keys(params);
-		const getValueByKey = k => params instanceof HttpParams ? params.get(k) : params[k];
+		const getValueByKey = (k: string) => params instanceof HttpParams ? params.get(k) : params[k];
 		return new HttpParams({
 			fromObject: fromPairs(
 				keys

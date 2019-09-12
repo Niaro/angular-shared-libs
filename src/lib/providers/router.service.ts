@@ -22,9 +22,8 @@ export class RouterService {
 		public route: ActivatedRoute
 	) {
 		this.router.events
-			.pipe(filter(e => e instanceof NavigationError))
 			// the request prop means that an error has occurred on loading a lazy module, so we just generalize and send to the error page
-			.subscribe((e: NavigationError) => e.error.request && this.navigateToErrorPage());
+			.subscribe((e) => e instanceof NavigationError && e.error.request && this.navigateToErrorPage());
 	}
 
 	onPrimaryComponentNavigationEnd(component: any) {

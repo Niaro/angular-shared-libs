@@ -45,8 +45,14 @@ export abstract class MetadataEntity {
 		return this.getMetadata().get(<string>propName).label;
 	}
 
-	protected assignCustomizer(currValue: any, srcValue: any, key: string, currObject, srcObject) {
-		if (this.getMetadata().has(key)) {
+	protected assignCustomizer(
+		currValue: any,
+		srcValue: any,
+		key: string | undefined,
+		currObject: {} | undefined,
+		srcObject: {} | undefined
+	) {
+		if (key && this.getMetadata().has(key)) {
 			const { mapper } = this.getMetadata().get(key);
 
 			if (!isNil(srcValue) && mapper) {
@@ -54,7 +60,7 @@ export abstract class MetadataEntity {
 				const isMetadataEntityMapper = isExtensionOf(mapper, MetadataEntity);
 				const isFunctionMapper = !isEnumMapper && !isMetadataEntityMapper;
 
-				const make = v => isEnumMapper
+				const make = (v: string | undefined) => isEnumMapper
 					? (<typeof Enumeration>mapper).parse(camelCase(v))
 					// if the mapper doesn't have a name we assume that this is a class is used as a mapper so we initiate it
 					: new mapper(v);
@@ -84,7 +90,7 @@ export abstract class MetadataEntity {
 	private setDefaults() {
 		this.getMetadata()
 			.values()
-			.filter(v => v.default !== undefined && isNil(this[v.property]))
-			.forEach(v => this[v.property] = v.default);
+			.filter(v => v.default !== undefined && isNil((<any>this)[v.property]))
+			.forEach(v => (<any>this)[v.property] = v.default);
 	}
 }

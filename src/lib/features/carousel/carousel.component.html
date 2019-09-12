@@ -21,7 +21,7 @@
 		</ul>
 	</div>
 
-	<button *ngIf="isShowArrows && (showArrowButtons$ | async)"
+	<button *ngIf="showArrowButtons$ | async"
 	        type="button"
 	        class="btn-arrow prev"
 	        [class.disabled]="prevButtonDisabled$ | async"
@@ -34,7 +34,7 @@
 		</span>
 	</button>
 
-	<button *ngIf="isShowArrows && (showArrowButtons$ | async)"
+	<button *ngIf="showArrowButtons$ | async"
 	        type="button"
 	        class="btn-arrow next"
 	        [class.disabled]="nextButtonDisabled$ | async"

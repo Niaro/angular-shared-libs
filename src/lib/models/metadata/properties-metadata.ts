@@ -10,9 +10,9 @@ export class PropertiesMetadata {
 		return proto && proto.metadata;
 	}
 
-	private _values: PropertyMetadata[];
+	private _values!: PropertyMetadata[];
 
-	private _keys: string[];
+	private _keys!: string[];
 
 	constructor(private readonly metadataHost: MetadataHost) { }
 

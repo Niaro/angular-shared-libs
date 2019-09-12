@@ -27,10 +27,10 @@ import { InputBasedComponent } from '../input-based.component';
 		}
 	]
 })
-export class CountrySelectorComponent extends InputBasedComponent<Country> implements OnChanges {
-	@Input() formControl: FormControl;
+export class CountrySelectorComponent extends InputBasedComponent<Country | null> implements OnChanges {
+	@Input() formControl!: FormControl;
 
-	@Input() excluded: Country[];
+	@Input() excluded!: Country[];
 
 	@Input() placeholder = 'Country';
 
@@ -72,11 +72,13 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: Country | CountryCode): void {
+	writeValue(value: Country | CountryCode | null): void {
 		Promise
 			.resolve()
 			.then(() => {
-				value = value instanceof Country ? value : Countries.findByCode(value);
+				value = value instanceof Country
+					? value
+					: value && Countries.findByCode(value);
 				this.inputControl.setValue(value && value.name || '', { emitViewToModelChange: false });
 			});
 	}
@@ -93,7 +95,7 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	onCountryNameChange(input: string) {
 		this.updateFilteredCountries(input);
 
-		const country = input && Countries.find(input);
+		const country = input ? Countries.find(input) : null;
 		if (country !== this.value) {
 			this.value = country;
 			this.valueChange.next(country);
@@ -110,7 +112,7 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	private updateFilteredCountries(input: string) {
 		const loweredCountryName = input && input.toLowerCase();
 		this.filtered = loweredCountryName
-			? this.countries.filter(it => it.lowerCaseName.includes(loweredCountryName))
+			? this.countries.filter(it => it.lowerCaseName && it.lowerCaseName.includes(loweredCountryName))
 			: this.countries;
 	}
 }

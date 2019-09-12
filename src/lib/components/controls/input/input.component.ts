@@ -25,19 +25,19 @@ import { TextMaskConfig, TextMaskDirective, NumberMaskConfig } from '@bp/shared/
 	}]
 })
 export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
-	@Input() value: string;
+	@Input() value!: string;
 	input$ = new OptionalBehaviorSubject<string>();
 	@Output() readonly valueChange = this.input$;
-	@Input() placeholder: string;
-	@Input() mask: TextMaskConfig;
-	@Input() autocomplete: MatAutocomplete;
+	@Input() placeholder!: string;
+	@Input() mask!: TextMaskConfig;
+	@Input() autocomplete!: MatAutocomplete;
 	@Input() throttle = 200;
 	@HostBinding('class.empty') get empty() { return !this.value; }
 
 	autocompleteOrigin = { elementRef: this.host };
 
-	@ViewChild(TextMaskDirective, { static: false }) maskDirective: TextMaskDirective;
-	@ViewChild('el', { static: false }) input: ElementRef;
+	@ViewChild(TextMaskDirective, { static: false }) maskDirective!: TextMaskDirective;
+	@ViewChild('el', { static: false }) input!: ElementRef;
 	get $input(): HTMLInputElement { return this.input && this.input.nativeElement; }
 
 	private destroyed$ = new Subject();
@@ -55,7 +55,7 @@ export class InputComponent implements AfterViewInit, OnDestroy, ControlValueAcc
 				.pipe(
 					auditTime(this.throttle),
 					map(v => this.maskDirective.config instanceof NumberMaskConfig && !this.maskDirective.config.allowLeadingZeroes && !isEmpty(v)
-						? +v
+						? +(v!)
 						: v
 					)
 				)

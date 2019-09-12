@@ -23,7 +23,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange> imp
 
 	dateRangeShortcuts = DateRangeShortcut.list() as DateRangeShortcut[];
 
-	selected: DateRangeShortcut;
+	selected!: DateRangeShortcut | undefined;
 
 	constructor(private cdr: ChangeDetectorRef) {
 		super();
@@ -68,7 +68,7 @@ export class DateRangeShortcut extends Enumeration {
 	static quarter = new DateRangeShortcut();
 	// static year = new DateRangeShortcut();
 
-	dateRange: DateRange;
+	dateRange!: DateRange;
 
 	constructor() {
 		super();
@@ -76,8 +76,8 @@ export class DateRangeShortcut extends Enumeration {
 		Promise
 			.resolve()
 			.then(() => {
-				this.dateRange = this.getDateRange();
-				setInterval(() => this.dateRange = this.getDateRange(), 24 * 60 * 60 * 1000);
+				this.dateRange = this.getDateRange()!;
+				setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
 			});
 	}
 

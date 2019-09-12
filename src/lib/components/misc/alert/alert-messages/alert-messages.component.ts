@@ -8,7 +8,7 @@ import { Component, ChangeDetectionStrategy, Input, ContentChild, TemplateRef } 
 })
 export class AlertMessagesComponent {
 	@Input('src')
-	messages: any[];
+	messages!: any[];
 
-	@ContentChild(TemplateRef, { static: true }) tpl: TemplateRef<any>;
+	@ContentChild(TemplateRef, { static: true }) tpl!: TemplateRef<any>;
 }

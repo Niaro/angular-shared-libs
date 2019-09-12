@@ -9,10 +9,10 @@ import { Country, CountryCode, Countries } from '../../../models';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CountryComponent implements OnChanges {
-	@Input() src: CountryCode | Country;
-	@Input() compact: boolean;
+	@Input() src!: CountryCode | Country;
+	@Input() compact!: boolean;
 
-	country: Country;
+	country!: Country | null;
 	isWorldwide = false;
 
 	ngOnChanges({ compact, src }: SimpleChanges) {

@@ -1,8 +1,8 @@
 import { MetadataEntity } from '../metadata/metadata-entity';
 
 export class State extends MetadataEntity {
-	iso: string;
-	name: string;
+	iso!: string;
+	name!: string;
 
 	constructor(data: Partial<State>) {
 		super(data);
