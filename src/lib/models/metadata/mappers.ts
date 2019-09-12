@@ -16,7 +16,7 @@ export function countryMapper(v: Country | CountryCode) {
 }
 
 export function unixMomentMapper(v: any) {
-	return m.isMoment(v) ? v : m.unix(v)
+	return m.isMoment(v) ? v : m.unix(v);
 }
 
 export function momentMapper(v: any) {
