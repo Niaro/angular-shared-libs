@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { QuicklinkModule } from 'ngx-quicklink';
 
 import { MaterialModule } from './materials.module';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
@@ -41,6 +42,7 @@ const MODULES = [
 	RouterModule,
 	ReactiveFormsModule,
 	LocalStorageModule,
+	QuicklinkModule,
 
 	TouchModule,
 	CarouselModule,
