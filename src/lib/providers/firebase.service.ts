@@ -10,7 +10,6 @@ import 'firebase/storage';
 import 'firebase/functions';
 
 import { TelemetryService } from './telemetry.service';
-import { IMondayBillingDetailsRequest, IMondayBillingDetailsResponse, INewLead, INewApplicant } from 'firebase/functions/src/models';
 
 export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 
@@ -84,16 +83,12 @@ export class FirebaseService {
 		);
 	}
 
-	getMondayBillingDetails(req: IMondayBillingDetailsRequest): Promise<IMondayBillingDetailsResponse> {
-		return this.functions.httpsCallable('getMondayBillingDetails')(req);
+	async get<T, U>(firebaseFunctionName: string, body: T): Promise<U> {
+		return (await this.functions.httpsCallable(firebaseFunctionName)(body)).data;
 	}
 
-	createNewLead(req: INewLead): Promise<void> {
-		return this.functions.httpsCallable('createNewLead')(req) as Promise<any>;
-	}
-
-	createNewApplicant(req: INewApplicant): Promise<void> {
-		return this.functions.httpsCallable('createNewApplicant')(req) as Promise<any>;
+	async post<T>(firebaseFunctionName: string, body: T): Promise<void> {
+		this.functions.httpsCallable(firebaseFunctionName)(body) as Promise<any>;
 	}
 
 	private async getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
