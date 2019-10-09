@@ -107,15 +107,15 @@
 	height: $height;
 }
 
-@mixin font($size: 16, $lineheight: 16, $weight: 400) {
-	font-size: $size + px;
-	line-height: $lineheight + px;
+@mixin font($size: 16px, $lineheight: $size, $weight: 400) {
+	font-size: $size;
+	line-height: $lineheight;
 	font-weight: $weight;
 }
 
-@mixin fontsize($size: 16, $lineheight: 16) {
-	font-size: $size + px;
-	line-height: $lineheight + px;
+@mixin fontsize($size: 16px, $lineheight: $size) {
+	font-size: $size;
+	line-height: $lineheight;
 }
 
 @mixin position($top, $right, $bottom, $left) {

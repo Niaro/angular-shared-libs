@@ -6,7 +6,7 @@
 		   matInput
 		   [value]="value"
 		   (click)="picker.open()"
-		   (dateChange)="update($event.value)">
+		   (dateChange)="set($event.value)">
 		   <!-- TODO: Solve this -->
 	<!-- <mat-error [bpFieldError]="formControlName?.name || formControlDirective?.name"></!--> -->
 </mat-form-field>
@@ -19,6 +19,6 @@
 		@slideRight
 		matSuffix
 		mat-icon-button
-		(click)="update(null)">
+		(click)="set(null)">
 	<mat-icon>close</mat-icon>
 </button>

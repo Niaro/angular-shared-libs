@@ -41,6 +41,7 @@ export class CursorPageAdaptorDirective implements OnChanges {
 
 			this.pageCursors[this.paginator.getNextPage()] = this.pagedResults.nextPageCursor;
 			this.paginator.progressBack = this.paginator.progressNext = false;
+			this.paginator.cdr.detectChanges();
 		}
 	}
 

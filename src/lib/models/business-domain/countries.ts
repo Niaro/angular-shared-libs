@@ -18,12 +18,19 @@ export const COUNTRY_STATES = mapValues(
 ) as unknown as { [countryIso: string]: State[] };
 
 export class Country extends MetadataEntity {
+
 	readonly name!: string;
+
 	readonly displayName!: string;
+
 	readonly code!: CountryCode | 'ALL';
+
 	readonly dialCode!: string;
+
 	readonly lowerCaseName?: string;
+
 	readonly lowerCaseCode?: string;
+
 	readonly states?: State[];
 
 	constructor(data: Partial<Country>) {

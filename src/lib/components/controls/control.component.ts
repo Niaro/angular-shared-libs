@@ -1,15 +1,26 @@
-import { Output, Input, HostBinding } from '@angular/core';
+import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { isNil } from 'lodash-es';
+import { isNil, isEqual } from 'lodash-es';
 
-export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator {
+export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator, OnDestroy {
 	@Input() value!: T;
+
 	@Output() readonly valueChange = new Subject<T>();
+
 	@HostBinding('class.control') isControl = true;
-	@HostBinding('class.empty') get empty() { return isNil(this.value); }
+
+	@HostBinding('class.empty') get empty() { return isNil(this.value) || (<any>this.value) === ''; }
 
 	protected validator!: ValidatorFn | null;
+
+	protected destroyed$ = new Subject();
+
+	constructor(protected cdr: ChangeDetectorRef) { }
+
+	ngOnDestroy() {
+		this.destroyed$.next();
+	}
 
 	validatorOnChange = () => { };
 
@@ -44,4 +55,17 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 		return this.validator ? this.validator(c) : null;
 	}
 	// #endregion Implementation of the Validator interface
+
+	update(value: T | string) {
+		if (isEqual(value, this.value)) {
+			this.validatorOnChange();
+			return;
+		}
+
+		this.value = value as T;
+		this.valueChange.next(value as T);
+		this.onChange(value);
+		this.validatorOnChange();
+		this.cdr.markForCheck();
+	}
 }

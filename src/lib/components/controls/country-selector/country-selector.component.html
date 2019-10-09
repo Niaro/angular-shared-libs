@@ -1,14 +1,29 @@
-<bp-input class="rounded-input"
-          [formControl]="inputControl"
-          [placeholder]="placeholder"
-          [autocomplete]="countryAutocomplete">
-</bp-input>
+<ng-container *ngIf="appearance === 'round'; else defaultInputTpl">
+	<bp-round-input [formControl]="internalControl"
+					[name]="name"
+					[placeholder]="placeholder"
+					[autocomplete]="countryAutocomplete">
+	</bp-round-input>
 
-<bp-validation-error *ngIf="formControl" [errors]="formControl.errors"></bp-validation-error>
+	<bp-validation-error *ngIf="externalControl"
+						 [errors]="externalControl!.errors">
+	</bp-validation-error>
+</ng-container>
+
+<ng-template #defaultInputTpl>
+	<bp-input [name]="name"
+			  [label]="label"
+			  [hint]="hint"
+			  [required]="required"
+			  [formControl]="internalControl"
+			  [placeholder]="placeholder"
+			  [autocomplete]="countryAutocomplete">
+	</bp-input>
+</ng-template>
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete">
 	<mat-option *ngFor="let country of filtered"
-	            [value]="country.name">
+				[value]="country.name">
 		<bp-country [src]="country"></bp-country>
 	</mat-option>
 </mat-autocomplete>

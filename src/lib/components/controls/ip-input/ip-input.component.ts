@@ -1,9 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormControl, NG_VALIDATORS } from '@angular/forms';
 
 import { Validators } from '@bp/shared/validation';
 
-import { InputBasedComponent } from '../input-based.component';
+import { FormFieldControlComponent } from '../form-field-control.component';
 
 @Component({
 	selector: 'bp-ip-input',
@@ -26,20 +26,15 @@ import { InputBasedComponent } from '../input-based.component';
 		}
 	]
 })
-export class IpInputComponent extends InputBasedComponent<string> {
-	inputControl = new FormControl(
+export class IpInputComponent extends FormFieldControlComponent<string> {
+	internalControl = new FormControl(
 		'',
 		Validators.pattern(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/)
 	);
 
-	get valid() { return this.inputControl.valid; }
+	@Input() placeholder = 'IP';
 
-	constructor() {
-		super();
-
-		this.inputControl.valueChanges
-			.subscribe(it => this.onIpChange(it));
-	}
+	get valid() { return this.internalControl.valid; }
 
 	// maskConfig: Partial<TextMaskConfig> = {
 	// 	mask: (value: string) => {
@@ -61,11 +56,7 @@ export class IpInputComponent extends InputBasedComponent<string> {
 	// 	includeMaskInValue: true
 	// };
 
-	onIpChange(ip: string) {
-		if (this.inputControl.valid && this.value !== ip) {
-			this.value = this.inputControl.value;
-			this.valueChange.next(this.value);
-			this.onChange(this.value);
-		}
+	update(ip: string) {
+		this.internalControl.valid && super.update(ip);
 	}
 }

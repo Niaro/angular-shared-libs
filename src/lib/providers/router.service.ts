@@ -1,5 +1,5 @@
 import { Injectable, Type } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute, NavigationError, NavigationStart } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute, NavigationError, NavigationStart, NavigationExtras } from '@angular/router';
 import { filter, distinctUntilChanged, map, share } from 'rxjs/operators';
 
 import { UrlHelper } from '../utils/url-helper';
@@ -26,6 +26,17 @@ export class RouterService {
 			.subscribe((e) => e instanceof NavigationError && e.error.request && this.navigateToErrorPage());
 	}
 
+	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt: any })) {
+		this.router.navigate(commands, {
+			...extras,
+			relativeTo: UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt) as ActivatedRoute
+		});
+	}
+
+	closeOutlet(outlet: string) {
+		this.router.navigateByUrl(UrlHelper.getUrlExcludingOutlet(outlet, this.router));
+	}
+
 	onPrimaryComponentNavigationEnd(component: any) {
 		return this.router.events.pipe(
 			filter(e => e instanceof NavigationEnd),
@@ -45,7 +56,7 @@ export class RouterService {
 	}
 
 	tryNavigateOnResponseError(e: ResponseError) {
-		 // fullscreen pages handle errors on its own and all the non 500+ errors should be handled manually
+		// fullscreen pages handle errors on its own like the login page and all the non 500+ errors should be handled manually
 		if (!this.isNavigateToErrorPage || !e.isInternalServerError)
 			return;
 		this.navigateToErrorPage();

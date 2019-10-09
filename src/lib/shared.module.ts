@@ -14,7 +14,9 @@ import {
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
 	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
-	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent
+	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent, RoundInputComponent,
+	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
+	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent
 } from './components';
 
 import {
@@ -24,7 +26,8 @@ import {
 
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
-	DelayedRenderDirective, DynamicOutletDirective
+	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
+	RouterLinkRootOutletsDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
@@ -65,11 +68,15 @@ const EXPOSED = [
 	CopyComponent,
 	CountryComponent,
 	IconBtnComponent,
+	DeleteConfirmDialogComponent,
+	LogoutConfirmDialogComponent,
 
 	// directives
 	CursorPageAdaptorDirective,
 	TextMaskDirective,
 	RouterLinkNoOutletsWithHrefDirective,
+	RouterLinkRootOutletsWithHrefDirective,
+	RouterLinkRootOutletsDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
@@ -85,6 +92,11 @@ const EXPOSED = [
 	IpInputComponent,
 	DatePickerComponent,
 	AutocompleteComponent,
+	RoundInputComponent,
+	SelectComponent,
+	ButtonToggleComponent,
+	PropertyMetadataControlComponent,
+	PropertyMetadataViewComponent,
 
 	// pipes
 	UpperFirstPipe,
@@ -102,7 +114,11 @@ const EXPOSED = [
 	imports: MODULES,
 	exports: [...EXPOSED, ...MODULES],
 	declarations: EXPOSED,
-	entryComponents: [DatepickerCalendarHeaderComponent]
+	entryComponents: [
+		DatepickerCalendarHeaderComponent,
+		DeleteConfirmDialogComponent,
+		LogoutConfirmDialogComponent
+	]
 })
 export class SharedModule {
 	static forRoot(): ModuleWithProviders {

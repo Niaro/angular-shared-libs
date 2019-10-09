@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, Output } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, Output, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { map, filter, skip } from 'rxjs/operators';
@@ -20,7 +20,8 @@ export class PaginatorComponent {
 	Math = Math;
 
 	@Input() pageSizeOptions = [10, 25, 50, 100, 250];
-	@Input() length!: number;
+
+	@Input() totalLength!: number;
 
 	@Output('page') readonly page$ = new OptionalBehaviorSubject<string | undefined>();
 	get page() { return this.page$.value; }
@@ -29,7 +30,7 @@ export class PaginatorComponent {
 	readonly pageSize$ = new BehaviorSubject(PAGE_SIZE);
 	get pageSize() { return this.pageSize$.value; }
 
-	get offset() { return this.currentPage * this.pageSize; }
+	get offset() { return (this.currentPage - 1) * this.pageSize; }
 
 	readonly currentPage$ = new BehaviorSubject(1);
 	get currentPage() { return this.currentPage$.value; }
@@ -48,7 +49,8 @@ export class PaginatorComponent {
 
 	constructor(
 		private router: Router,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		public cdr: ChangeDetectorRef
 	) {
 		this.route.params
 			.pipe(
@@ -80,9 +82,9 @@ export class PaginatorComponent {
 		this.currentPage = this.getNextPage();
 	}
 
-	hasBack = () => this.offset > this.pageSize;
+	hasBack = () => this.offset >= this.pageSize;
 
-	hasNext = () => this.offset < this.length;
+	hasNext = () => this.offset < this.totalLength;
 
 	private navigate(params: Params) {
 		this.router.navigate([UrlHelper.mergeRouteParams(this.route, params)], { relativeTo: this.route });

@@ -5,10 +5,10 @@ import { Dictionary } from 'lodash';
 import { IValidationErrors, ValidationError, ValidationErrorTemplateVariables } from './models';
 
 export class ValidationErrorStrings extends Array<string> {
-	constructor(controlName: string, errors: IValidationErrors, translate?: TranslateService) {
+	constructor(errors: IValidationErrors, translate?: TranslateService) {
 		super();
 
-		const ERROR_STRINGS: Dictionary<string | Dictionary<string>> = translate
+		const ERROR_STRINGS: Dictionary<string> = translate
 			? translate.instant('error')
 			: require('../../../../../apps/widget/src/assets/i18n/en.json').error;
 
@@ -18,15 +18,8 @@ export class ValidationErrorStrings extends Array<string> {
 
 			const value = ERROR_STRINGS[validatorName];
 
-			const text = isObject(value)
-				? value[controlName] || value['default']
-				: value;
-
-			if (!text)
-				console.log('missed error', validatorName, controlName);
-
 			if (isObject(error)) {
-				const masks = text.match(/{{(\w+)}}/g);
+				const masks = value.match(/{{(\w+)}}/g);
 				return masks
 					? masks
 						.map(v => ({
@@ -35,12 +28,12 @@ export class ValidationErrorStrings extends Array<string> {
 						}))
 						.reduce(
 							(txt, { mask, maskValue }) => maskValue ? txt.replace(mask, maskValue.toString()) : txt,
-							text
+							value
 						)
-					: text;
+					: value;
 			}
 
-			return text;
+			return value;
 		}
 
 		// in case if we have an error for the control but don't have

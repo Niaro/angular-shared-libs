@@ -19,7 +19,7 @@ export function mixinSortQueryParams<T extends Constructor<QueryParamsBase<ISort
 
 			if (this.routeParams.sortField) {
 				this.sortField = this.routeParams.sortField;
-				this.sortDir = this.routeParams.sortDir || 'desc';
+				this.sortDir = this.routeParams.sortDir as SortDirection || 'desc';
 			}
 		}
 	};

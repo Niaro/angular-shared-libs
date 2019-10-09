@@ -24,13 +24,8 @@ export class PropertiesMetadata {
 		});
 	}
 
-	get(propName: string): PropertyMetadata {
-		const propMeta = this.dict[propName] || this.protoMetadata && this.protoMetadata.get(propName);
-
-		if (!propMeta)
-			throw new Error(`Metadata for the property ${propName} hasn't been found`);
-
-		return propMeta;
+	get(propName: string): PropertyMetadata | null {
+		return this.dict[propName] || this.protoMetadata && this.protoMetadata.get(propName);
 	}
 
 	has(propName: string): boolean {

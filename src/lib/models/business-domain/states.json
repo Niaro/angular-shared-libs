@@ -1,221 +1,221 @@
 {
 	"CA": [{
-		"iso": "AB",
+		"code": "AB",
 		"name": "Alberta"
 	}, {
-		"iso": "BC",
+		"code": "BC",
 		"name": "British Columbia"
 	}, {
-		"iso": "MB",
+		"code": "MB",
 		"name": "Manitoba"
 	}, {
-		"iso": "NB",
+		"code": "NB",
 		"name": "New Brunswick"
 	}, {
-		"iso": "NL",
+		"code": "NL",
 		"name": "Newfoundland and Labrador"
 	}, {
-		"iso": "NS",
+		"code": "NS",
 		"name": "Nova Scotia"
 	}, {
-		"iso": "NT",
+		"code": "NT",
 		"name": "Northwest Territories"
 	}, {
-		"iso": "NU",
+		"code": "NU",
 		"name": "Nunavut"
 	}, {
-		"iso": "ON",
+		"code": "ON",
 		"name": "Ontario"
 	}, {
-		"iso": "PE",
+		"code": "PE",
 		"name": "Prince Edward Island"
 	}, {
-		"iso": "QC",
+		"code": "QC",
 		"name": "Quebec"
 	}, {
-		"iso": "SK",
+		"code": "SK",
 		"name": "Saskatchewan"
 	}, {
-		"iso": "YT",
+		"code": "YT",
 		"name": "Yukon"
 	}],
 	"US": [{
-		"iso": "AL",
+		"code": "AL",
 		"name": "Alabama"
 	}, {
-		"iso": "AK",
+		"code": "AK",
 		"name": "Alaska"
 	}, {
-		"iso": "AZ",
+		"code": "AZ",
 		"name": "Arizona"
 	}, {
-		"iso": "AR",
+		"code": "AR",
 		"name": "Arkansas"
 	}, {
-		"iso": "CA",
+		"code": "CA",
 		"name": "California"
 	}, {
-		"iso": "CO",
+		"code": "CO",
 		"name": "Colorado"
 	}, {
-		"iso": "CT",
+		"code": "CT",
 		"name": "Connecticut"
 	}, {
-		"iso": "DE",
+		"code": "DE",
 		"name": "Delaware"
 	}, {
-		"iso": "DC",
+		"code": "DC",
 		"name": "District Of Columbia"
 	}, {
-		"iso": "FL",
+		"code": "FL",
 		"name": "Florida"
 	}, {
-		"iso": "GA",
+		"code": "GA",
 		"name": "Georgia"
 	}, {
-		"iso": "HI",
+		"code": "HI",
 		"name": "Hawaii"
 	}, {
-		"iso": "ID",
+		"code": "ID",
 		"name": "Idaho"
 	}, {
-		"iso": "IL",
+		"code": "IL",
 		"name": "Illinois"
 	}, {
-		"iso": "IN",
+		"code": "IN",
 		"name": "Indiana"
 	}, {
-		"iso": "IA",
+		"code": "IA",
 		"name": "Iowa"
 	}, {
-		"iso": "KS",
+		"code": "KS",
 		"name": "Kansas"
 	}, {
-		"iso": "KY",
+		"code": "KY",
 		"name": "Kentucky"
 	}, {
-		"iso": "LA",
+		"code": "LA",
 		"name": "Louisiana"
 	}, {
-		"iso": "ME",
+		"code": "ME",
 		"name": "Maine"
 	}, {
-		"iso": "MD",
+		"code": "MD",
 		"name": "Maryland"
 	}, {
-		"iso": "MA",
+		"code": "MA",
 		"name": "Massachusetts"
 	}, {
-		"iso": "MI",
+		"code": "MI",
 		"name": "Michigan"
 	}, {
-		"iso": "MN",
+		"code": "MN",
 		"name": "Minnesota"
 	}, {
-		"iso": "MS",
+		"code": "MS",
 		"name": "Mississippi"
 	}, {
-		"iso": "MO",
+		"code": "MO",
 		"name": "Missouri"
 	}, {
-		"iso": "MT",
+		"code": "MT",
 		"name": "Montana"
 	}, {
-		"iso": "NE",
+		"code": "NE",
 		"name": "Nebraska"
 	}, {
-		"iso": "NV",
+		"code": "NV",
 		"name": "Nevada"
 	}, {
-		"iso": "NH",
+		"code": "NH",
 		"name": "New Hampshire"
 	}, {
-		"iso": "NJ",
+		"code": "NJ",
 		"name": "New Jersey"
 	}, {
-		"iso": "NM",
+		"code": "NM",
 		"name": "New Mexico"
 	}, {
-		"iso": "NY",
+		"code": "NY",
 		"name": "New York"
 	}, {
-		"iso": "NC",
+		"code": "NC",
 		"name": "North Carolina"
 	}, {
-		"iso": "ND",
+		"code": "ND",
 		"name": "North Dakota"
 	}, {
-		"iso": "OH",
+		"code": "OH",
 		"name": "Ohio"
 	}, {
-		"iso": "OK",
+		"code": "OK",
 		"name": "Oklahoma"
 	}, {
-		"iso": "OR",
+		"code": "OR",
 		"name": "Oregon"
 	}, {
-		"iso": "PA",
+		"code": "PA",
 		"name": "Pennsylvania"
 	}, {
-		"iso": "RI",
+		"code": "RI",
 		"name": "Rhode Island"
 	}, {
-		"iso": "SC",
+		"code": "SC",
 		"name": "South Carolina"
 	}, {
-		"iso": "SD",
+		"code": "SD",
 		"name": "South Dakota"
 	}, {
-		"iso": "TN",
+		"code": "TN",
 		"name": "Tennessee"
 	}, {
-		"iso": "TX",
+		"code": "TX",
 		"name": "Texas"
 	}, {
-		"iso": "UT",
+		"code": "UT",
 		"name": "Utah"
 	}, {
-		"iso": "VT",
+		"code": "VT",
 		"name": "Vermont"
 	}, {
-		"iso": "VA",
+		"code": "VA",
 		"name": "Virginia"
 	}, {
-		"iso": "WA",
+		"code": "WA",
 		"name": "Washington"
 	}, {
-		"iso": "WV",
+		"code": "WV",
 		"name": "West Virginia"
 	}, {
-		"iso": "WI",
+		"code": "WI",
 		"name": "Wisconsin"
 	}, {
-		"iso": "WY",
+		"code": "WY",
 		"name": "Wyoming"
 	}],
 	"AU": [{
 		"name": "Australian Capital Territory",
-		"iso": "ACT"
+		"code": "ACT"
 	}, {
 		"name": "New South Wales",
-		"iso": "NSW"
+		"code": "NSW"
 	}, {
 		"name": "Northern Territory",
-		"iso": "NT"
+		"code": "NT"
 	}, {
 		"name": "Queensland",
-		"iso": "QLD"
+		"code": "QLD"
 	}, {
 		"name": "South Australia",
-		"iso": "SA"
+		"code": "SA"
 	}, {
 		"name": "Tasmania",
-		"iso": "TAS"
+		"code": "TAS"
 	}, {
 		"name": "Victoria",
-		"iso": "VIC"
+		"code": "VIC"
 	}, {
 		"name": "Western Australia",
-		"iso": "WA"
+		"code": "WA"
 	}]
 }

@@ -1,6 +1,6 @@
 import { Type } from '@angular/core';
-import { ActivatedRouteSnapshot, ActivatedRoute, Params } from '@angular/router';
-import { isBoolean, isArray, mapValues, pickBy, isNil, last, toPairs } from 'lodash-es';
+import { ActivatedRouteSnapshot, ActivatedRoute, Params, Router, UrlSegmentGroup } from '@angular/router';
+import { isBoolean, isArray, mapValues, pickBy, isNil, last, toPairs, isObject } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
 export class UrlHelper {
@@ -93,6 +93,12 @@ export class UrlHelper {
 		return route;
 	}
 
+	static getUrlExcludingOutlet(outlet: string, router: Router) {
+		const currentUrlTree = router.parseUrl(router.url);
+		this.deleteOutletRecursivelyFromSegments(outlet, currentUrlTree.root.children);
+		return currentUrlTree.toString();
+	}
+
 	static appendQueryParams(url: string, params: Dictionary<string | number>) {
 		if (isNil(url))
 			return url;
@@ -103,6 +109,19 @@ export class UrlHelper {
 			.join('&');
 
 		return `${url}${url.includes('?') ? '&' : '?'}${queryParams}`;
+	}
+
+	private static deleteOutletRecursivelyFromSegments(outlet: string, dictionary: Dictionary<UrlSegmentGroup>) {
+		// tslint:disable-next-line:forin
+		for (const property in dictionary) {
+			if (property === outlet) {
+				delete dictionary[property];
+				return;
+			}
+
+			if (dictionary.hasOwnProperty(property) && isObject(dictionary[property]))
+				this.deleteOutletRecursivelyFromSegments(outlet, dictionary[property].children);
+		}
 	}
 }
 

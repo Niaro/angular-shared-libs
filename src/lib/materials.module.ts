@@ -3,6 +3,7 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -38,7 +39,8 @@ const MODULES = [
 	MatDatepickerModule,
 	MatMomentDateModule,
 	MatAutocompleteModule,
-	MatSlideToggleModule
+	MatSlideToggleModule,
+	MatButtonToggleModule
 ];
 
 @NgModule({

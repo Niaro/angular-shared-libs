@@ -1,5 +1,5 @@
 import * as m from 'moment';
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
@@ -22,10 +22,11 @@ import { ControlComponent } from '../control.component';
 })
 export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
+
 	@Input() label!: string;
 
-	constructor(private cdr: ChangeDetectorRef) {
-		super();
+	constructor(cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -39,11 +40,8 @@ export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	update(v: m.Moment | null) {
-		if (v && this.value && v.isSame(this.value) || v !== this.value) {
-			this.value = v;
-			this.valueChange.next(v);
-			this.onChange(v);
-		}
+	set(v: m.Moment | null) {
+		if (v && this.value && v.isSame(this.value) || v !== this.value)
+			this.update(v);
 	}
 }

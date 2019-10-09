@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as m from 'moment';
 
@@ -25,12 +25,12 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange> imp
 
 	selected!: DateRangeShortcut | undefined;
 
-	constructor(private cdr: ChangeDetectorRef) {
-		super();
+	constructor(cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
 	ngOnInit() {
-		this.set(DateRangeShortcut.month);
+		this.select(DateRangeShortcut.month);
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -42,23 +42,19 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange> imp
 					this.value = DateRange.parse(value);
 					this.selected = this.dateRangeShortcuts.find(v => v.dateRange.isSame(this.value));
 				} else
-					this.set(DateRangeShortcut.month);
+					this.select(DateRangeShortcut.month);
 
 				this.cdr.markForCheck();
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	update(v: DateRangeShortcut) {
-		if (v !== this.selected)
-			this.set(v);
-	}
+	select(value: DateRangeShortcut) {
+		if (value === this.selected)
+			return;
 
-	private set(value: DateRangeShortcut) {
 		this.selected = value;
-		this.value = value.dateRange;
-		this.valueChange.next(value.dateRange);
-		this.onChange(value.dateRange);
+		this.update(value.dateRange);
 	}
 }
 

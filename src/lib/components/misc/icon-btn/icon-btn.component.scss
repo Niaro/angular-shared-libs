@@ -42,6 +42,10 @@
 		::ng-deep mat-icon {
 			@include iconSize(16px);
 
+			@at-root .md#{&} {
+				@include iconSize(24px);
+			}
+
 			@at-root .lg#{&} {
 				@include iconSize(34px);
 			}

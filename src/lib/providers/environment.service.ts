@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '@bp/environment';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class EnvironmentService {
 	get isProd() { return environment.name === 'prod'; }

@@ -10,6 +10,7 @@ import { FADE } from '@bp/shared/animations';
 })
 export class IconBtnComponent {
 	@Input() pending!: boolean;
+
 	@Input('disabled') _disabled!: boolean;
 
 	get disabled() { return this._disabled || this.pending; }

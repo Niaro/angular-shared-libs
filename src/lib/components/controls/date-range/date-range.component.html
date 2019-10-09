@@ -6,7 +6,7 @@
 	   [value]="value.from"
 	   [max]="value.to"
 	   (click)="fromPicker.open()"
-	   (dateChange)="update({ from: $event.value })">
+	   (dateChange)="patch({ from: $event.value })">
 
 <mat-datepicker #fromPicker
 				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
@@ -22,7 +22,7 @@
 	   [value]="value.to"
 	   [min]="value.from"
 	   (click)="toPicker.open()"
-	   (dateChange)="update({ to: $event.value })">
+	   (dateChange)="patch({ to: $event.value })">
 
 <mat-datepicker #toPicker
 				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
@@ -34,7 +34,7 @@
 		 class="close-btn-wrapper">
 		<button type="button"
 				mat-icon-button
-				(click)="update({ to: null, from: null })">
+				(click)="patch({ to: null, from: null })">
 			<mat-icon>close</mat-icon>
 		</button>
 	</div>

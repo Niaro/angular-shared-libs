@@ -24,16 +24,18 @@ export class FirebaseService {
 
 	uploadError$ = new Subject<string>();
 
-	private storage: firebase.storage.Storage;
+	private storage!: firebase.storage.Storage;
 
-	private functions: firebase.functions.Functions;
+	private functions!: firebase.functions.Functions;
 
 	private uploadTask!: firebase.storage.UploadTask;
 
 	constructor(
 		private telemetry: TelemetryService,
-		@Inject(FIREBASE_APP_ID) firebaseAppId: string
-	) {
+		@Inject(FIREBASE_APP_ID) private firebaseAppId: string
+	) { }
+
+	ignite(options = {}) {
 		if (isEmpty(firebase.apps))
 			firebase.initializeApp({
 				apiKey: 'AIzaSyCE0HJJUq4otCVdCbdBINJApcVmj3h-isU',
@@ -42,7 +44,8 @@ export class FirebaseService {
 				projectId: 'web-hosting-213618',
 				storageBucket: 'web-hosting-213618.appspot.com',
 				messagingSenderId: '977741303368',
-				appId: firebaseAppId
+				appId: this.firebaseAppId,
+				...options
 			});
 
 		this.storage = firebase.storage();
@@ -83,11 +86,11 @@ export class FirebaseService {
 		);
 	}
 
-	async get<T, U>(firebaseFunctionName: string, body: T): Promise<U> {
+	async getFnCall<T, U>(firebaseFunctionName: string, body: T): Promise<U> {
 		return (await this.functions.httpsCallable(firebaseFunctionName)(body)).data;
 	}
 
-	async post<T>(firebaseFunctionName: string, body: T): Promise<void> {
+	async postFnCall<T>(firebaseFunctionName: string, body: T): Promise<void> {
 		this.functions.httpsCallable(firebaseFunctionName)(body) as Promise<any>;
 	}
 

@@ -344,16 +344,8 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			.filter(char => char !== this.maskPipe.caretTrap); // remove caret traps for proper indexes calculation
 		const maskCharPredicate = (char: any) => char instanceof RegExp || isNull(char);
 		this.firstMaskCharIndex = renderedMask.findIndex(maskCharPredicate);
-
-		const lastMaskChar = findLast(renderedMask, maskCharPredicate);
-		const suffixOffset = this.activeConfig
-			&& this.activeConfig.suffix
-			&& isEmpty(this.cleanValueFromMask(value))
-			? 1 : 0;
-
-		this.lastMaskCharIndex = lastMaskChar
-			? renderedMask.lastIndexOf(lastMaskChar) + suffixOffset
-			: -1;
+		this.lastMaskCharIndex = renderedMask.lastIndexOf(findLast(renderedMask, maskCharPredicate)!)
+			+ (isEmpty(this.cleanValueFromMask(value)) && !this.activeConfig!.suffix ? 0 : 1);
 	}
 
 	private formatDecimalValue(value: string): string {
@@ -429,8 +421,8 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	private isCursorWithinPrefix() {
 		return this.isInputSelectable
 			&& this.firstMaskCharIndex > 0
-			&& (this.$input.selectionStart || -1) > 1
-			&& (this.$input.selectionStart || -1) < this.firstMaskCharIndex;
+			&& this.$input.selectionStart! > 1
+			&& this.$input.selectionStart! < this.firstMaskCharIndex;
 	}
 }
 

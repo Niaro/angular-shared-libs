@@ -2,12 +2,13 @@ import { Input, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, AbstractControl, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isEmpty, forOwn } from 'lodash-es';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject, of, combineLatest, empty } from 'rxjs';
+import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
 
 import { ResponseError, IApiErrorMessage } from '../models';
 import { AsyncVoidSubject } from '../rxjs';
 
-export abstract class FormBaseComponent<T> implements OnDestroy {
+export abstract class FormBaseComponent<T = any> implements OnDestroy {
 
 	@Input()
 	get pending() { return this._pending; }
@@ -28,10 +29,10 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 			return;
 		}
 
-		if (value.messages) {
+		if (value.messages && this.form) {
 			value.messages
 				.filter(it => !!it.field)
-				.forEach(it => this.form.controls[it.field!].setErrors({ server: it.message }));
+				.forEach(it => this.form!.controls[it.field!].setErrors({ server: it.message }));
 
 			this.errors = value.messages.filter(it => !it.field);
 		}
@@ -43,15 +44,22 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 	private _error!: ResponseError | null;
 	errors!: IApiErrorMessage[] | null;
 
-	@Output()
-	readonly submitted = new Subject<T>();
+	@Output('submitted')
+	readonly submitted$ = new Subject<T>();
 
-	get form() { return this._form; }
-	set form(value: FormGroup) {
-		this._form = value;
+	@Output('canSave')
+	readonly canSave$ = new BehaviorSubject(false);
+
+	// tslint:disable-next-line: no-output-native
+	@Output('invalid')
+	readonly invalid$ = new BehaviorSubject(false);
+
+	form$ = new BehaviorSubject<FormGroup | null>(null);
+	get form() { return this.form$.value; }
+	set form(value: FormGroup | null) {
+		this.form$.next(value);
 		this.disableOnPending();
 	}
-	private _form!: FormGroup;
 
 	showInvalidInputsSnack = true;
 
@@ -61,17 +69,23 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 		protected fb: FormBuilder,
 		protected cdr: ChangeDetectorRef,
 		protected snackBar: MatSnackBar
-	) { }
+	) {
+		this.setupInvalidObservable();
+		this.setupCanSaveObservable();
+	}
 
 	ngOnDestroy() {
 		this.destroyed$.complete();
 	}
 
 	submit() {
-		this.revalidatedAndMarkAsDirtyAndTouchedRecursively(this.form);
+		if (!this.form)
+			return;
+
+		this.revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(this.form);
 
 		if (this.form.valid)
-			this.submitted.next(this.form.value);
+			this.submitted$.next(this.form.value);
 		else if (this.showInvalidInputsSnack)
 			this.snackBar.open(
 				'Some inputs are invalid!',
@@ -83,11 +97,11 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 		this.cdr.detectChanges();
 	}
 
-	private revalidatedAndMarkAsDirtyAndTouchedRecursively(control: AbstractControl) {
+	private revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(control: AbstractControl) {
 		if (control instanceof FormGroup)
-			forOwn(control.controls, c => this.revalidatedAndMarkAsDirtyAndTouchedRecursively(c));
+			forOwn(control.controls, c => this.revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
 		else if (control instanceof FormArray)
-			control.controls.forEach(c => this.revalidatedAndMarkAsDirtyAndTouchedRecursively(c));
+			control.controls.forEach(c => this.revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
 		else if (control instanceof FormControl) {
 			control.updateValueAndValidity();
 
@@ -101,9 +115,53 @@ export abstract class FormBaseComponent<T> implements OnDestroy {
 	private disableOnPending() {
 		if (this.form) {
 			if (this.pending)
-				this.form.disable();
+				this.form.disable({ emitEvent: false });
 			else
-				this.form.enable();
+				this.form.enable({ emitEvent: false });
 		}
+	}
+
+	private setupInvalidObservable() {
+		this.form$
+			.pipe(
+				switchMap(v => v
+					? v.statusChanges.pipe(
+						startWith(v.status),
+						map(status => status === 'INVALID')
+					)
+					: of(false)
+				),
+				distinctUntilChanged()
+			)
+			.subscribe(this.invalid$);
+	}
+
+	private setupCanSaveObservable() {
+		const validForm$ = this.form$.pipe(
+			switchMap(v => v
+				? v.statusChanges.pipe(
+					startWith(v.status),
+					map(status => status === 'VALID')
+				)
+				: of(false)
+			),
+			distinctUntilChanged()
+		);
+
+		const dirtyForm$ = this.form$
+			.pipe(
+				switchMap(v => v
+					? v.statusChanges.pipe(
+						startWith(null),
+						map(() => !!v.dirty)
+					)
+					: empty()
+				),
+				distinctUntilChanged()
+			);
+
+		combineLatest(validForm$, dirtyForm$)
+			.pipe(map(([valid, dirty]) => valid && dirty))
+			.subscribe(this.canSave$);
 	}
 }

@@ -29,6 +29,8 @@ export class AlertComponent implements OnChanges {
 	set messages(value: string[] | null) { this._messages = value; }
 	_messages!: string[] | null;
 
+	@Input() showType = true;
+
 	@Input() closable = true;
 	@Input() frequency: 'daily' | 'weekly' | 'always' = 'always';
 

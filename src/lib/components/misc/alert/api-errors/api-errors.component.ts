@@ -11,4 +11,6 @@ export class ApiErrorsComponent {
 
 	@Input('src')
 	errors!: IApiErrorMessage[];
+
+	@Input() showType = true;
 }

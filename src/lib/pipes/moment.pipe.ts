@@ -5,7 +5,7 @@ import * as m from 'moment';
 	name: 'moment'
 })
 export class MomentPipe implements PipeTransform {
-	transform(unix: number, format: string): string {
-		return m.unix(unix).format(format);
+	transform(unixOrMoment: number | m.Moment, format: string): string {
+		return (m.isMoment(unixOrMoment) ? unixOrMoment : m.unix(unixOrMoment)).format(format);
 	}
 }

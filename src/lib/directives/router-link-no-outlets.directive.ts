@@ -1,6 +1,6 @@
 import { Directive, Input, OnChanges, OnDestroy, HostBinding, HostListener } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
-import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, UrlSegmentGroup } from '@angular/router';
+import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, UrlSegmentGroup, QueryParamsHandling } from '@angular/router';
 import { takeUntil, filter } from 'rxjs/operators';
 import { isString } from 'lodash-es';
 
@@ -10,7 +10,6 @@ import { AsyncVoidSubject } from '../rxjs';
  * We need our own implementation of RouterLink directive because the angular's directive
  * doesn't remove current presented in url outlets from generated links
  */
-export type QueryParamsHandling = 'merge' | 'preserve' | '';
 
 @Directive({
 	selector: 'a[routerLinkNoOutlets]' // tslint:disable-line
@@ -26,12 +25,20 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 	}
 
 	@HostBinding('attr.target') @Input() target!: string;
+
 	@Input() queryParams!: { [k: string]: any };
+
 	@Input() fragment!: string;
+
 	@Input() queryParamsHandling!: QueryParamsHandling;
+
 	@Input() preserveFragment!: boolean;
+
 	@Input() skipLocationChange!: boolean;
+
 	@Input() replaceUrl!: boolean;
+
+	@Input() state?: { [k: string]: any };
 
 	// the url displayed on the anchor element.
 	@HostBinding() href!: string;
@@ -49,7 +56,7 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 				takeUntil(this.destroyed$),
 				filter(e => e instanceof NavigationEnd)
 			)
-			.subscribe(s => this.updateTargetUrlAndHref());
+			.subscribe(() => this.updateTargetUrlAndHref());
 	}
 
 	ngOnChanges() { this.updateTargetUrlAndHref(); }
@@ -65,7 +72,8 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 
 		this.router.navigateByUrl(this.urlTree, {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
-			replaceUrl: attrBoolValue(this.replaceUrl)
+			replaceUrl: attrBoolValue(this.replaceUrl),
+			state: this.state
 		});
 
 		return false;

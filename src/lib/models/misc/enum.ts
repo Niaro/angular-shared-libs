@@ -1,4 +1,4 @@
-import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst } from 'lodash-es';
+import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst, kebabCase } from 'lodash-es';
 
 export abstract class Enumeration {
 	private static _list: any[];
@@ -16,15 +16,16 @@ export abstract class Enumeration {
 	}
 
 	static find(value: number | string): Enumeration | null {
-		return (<any>this)[value];
+		return (<any>this)[value] || null;
 	}
 
 	static parse(data: any): Enumeration | null {
-		if (data instanceof Enumeration || isNil(data))
-			return (data instanceof this.prototype.constructor) ? data : null;
-		else if (isNumber(data))
-			return this.find(data);
-		return this.find(camelCase(data));
+		if (isNil(data))
+			return null;
+
+		return data instanceof this.prototype.constructor
+			? data as Enumeration
+			: this.find(isNumber(data) ? data : camelCase(data));
 	}
 
 	static parseStrict(data: any): Enumeration {
@@ -44,8 +45,7 @@ export abstract class Enumeration {
 
 	name!: string;
 
-	// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
-	// cssClass: string;
+	cssClass!: string;
 
 	protected _value!: number | string;
 	protected _displayName: string;
@@ -88,16 +88,18 @@ export abstract class Enumeration {
 
 	private init({ valueSameAsName }: { valueSameAsName: boolean } = <any>{}) {
 		this.name = this.getValueName();
-		// this.cssClass = this.getCssClass();
+		this.cssClass = this.getCssClass();
 		this._displayName = this._displayName || upperFirst(lowerCase(this.name));
 
 		if (valueSameAsName)
 			this._value = this.name;
 	}
 
-	// private getCssClass() {
-	// 	return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
-	// }
+	private getCssClass() {
+		// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
+		// return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
+		return kebabCase(this.name);
+	}
 
 	private getValueName() {
 		let res = '';

@@ -25,6 +25,16 @@ export class Validators {
 			: null;
 	}
 
+	/**
+	* Validator that requires controls to have a non-empty and without whitespaces value.
+	 * @param name name of the custom required message key
+	 */
+	static customRequired(name: string): ValidatorFn {
+		return (c: AbstractControl): IValidationErrors | null => Validators.required(c)
+			? { [`required-${name}`]: true }
+			: null;
+	}
+
 	static noZero(c: AbstractControl): IValidationErrors | null {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 

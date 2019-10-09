@@ -1,9 +1,10 @@
-import { assignWith, isNil, isArray, has, camelCase } from 'lodash-es';
+import { assignWith, isNil, isArray, has, camelCase, mapValues } from 'lodash-es';
+import * as m from 'moment';
 
 import { isExtensionOf } from '@bp/shared/utils';
 
 import { PropertiesMetadata } from './properties-metadata';
-import { Enumeration } from '../misc';
+import { Enumeration } from '../misc/enum';
 
 export abstract class MetadataEntity {
 
@@ -28,7 +29,8 @@ export abstract class MetadataEntity {
 	}
 
 	static getLabel<T>(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(<string>prop).label;
+		const meta = this.metadata.get(<string>prop);
+		return meta && meta.label;
 	}
 
 	constructor(data?: any) {
@@ -42,7 +44,8 @@ export abstract class MetadataEntity {
 	}
 
 	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
-		return this.getMetadata().get(<string>propName).label;
+		const meta = this.getMetadata().get(<string>propName);
+		return meta && meta.label;
 	}
 
 	protected assignCustomizer(
@@ -53,7 +56,7 @@ export abstract class MetadataEntity {
 		srcObject: {} | undefined
 	) {
 		if (key && this.getMetadata().has(key)) {
-			const { mapper } = this.getMetadata().get(key);
+			const { mapper } = this.getMetadata().get(key)!;
 
 			if (!isNil(srcValue) && mapper) {
 				const isEnumMapper = isExtensionOf(mapper, Enumeration);
@@ -92,5 +95,9 @@ export abstract class MetadataEntity {
 			.values()
 			.filter(v => v.default !== undefined && isNil((<any>this)[v.property]))
 			.forEach(v => (<any>this)[v.property] = v.default);
+	}
+
+	toJSON(): any {
+		return mapValues(this, v => m.isMoment(v) ? v.unix() : v);
 	}
 }

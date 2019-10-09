@@ -1,9 +1,12 @@
-import { Component, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectionStrategy, Optional } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
-import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
-import { Dictionary } from 'lodash';
+import { isEqual } from 'lodash';
+import { AbstractControl, ValidationErrors, FormGroupDirective, AbstractControlDirective } from '@angular/forms';
+import { switchMap, distinctUntilChanged, map } from 'rxjs/operators';
+import { of } from 'rxjs';
 
-// tslint:disable-next-line: prefer-on-push-component-change-detection
+import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
+
 @Component({
 	// tslint:disable-next-line:component-selector
 	selector: '[bpFieldError]',
@@ -12,26 +15,39 @@ import { Dictionary } from 'lodash';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldErrorComponent implements OnChanges, AfterViewInit {
-	@Input('bpFieldError') formControlName!: string;
+	@Input('bpFieldError') formControlOrName!: AbstractControl | string;
 
-	errors$ = new OptionalBehaviorSubject<Dictionary<any> | null>();
+	@Input('bpFieldErrorSuppress') suppress = false;
 
-	controlName$ = new OptionalBehaviorSubject<string | null>();
+	errors$ = new OptionalBehaviorSubject<ValidationErrors | null>();
 
-	constructor(private formField: MatFormField) { }
+	formControl$ = new OptionalBehaviorSubject<AbstractControl | AbstractControlDirective | null>();
 
-	ngOnChanges({ formControlName }: SimpleChanges) {
-		formControlName && this.controlName$.next(this.formControlName);
+	get form() { return this.formGroupDirective && this.formGroupDirective.form; }
+
+	constructor(
+		@Optional() private formField?: MatFormField,
+		@Optional() private formGroupDirective?: FormGroupDirective
+	) {
+		this.formControl$
+			.pipe(
+				switchMap(v => v && v.statusChanges
+					? v.statusChanges.pipe(map(() => v.errors))
+					: of(null)
+				),
+				distinctUntilChanged((a, b) => isEqual(a, b))
+			)
+			.subscribe(errors => this.errors$.next(errors));
+	}
+
+	ngOnChanges({ formControlOrName }: SimpleChanges) {
+		formControlOrName && this.formControl$.next(this.formControlOrName instanceof AbstractControl
+			? this.formControlOrName
+			: this.form && this.form.controls[this.formControlOrName] || null
+		);
 	}
 
 	ngAfterViewInit() {
-		const control = this.formField._control.ngControl;
-
-		if (control) {
-			control.statusChanges && control.statusChanges
-				.subscribe(() => this.errors$.next(control.errors));
-
-			!this.formControlName && this.controlName$.next(control.name);
-		}
+		this.formField && this.formControl$.next(this.formField._control.ngControl);
 	}
 }

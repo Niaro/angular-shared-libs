@@ -17,7 +17,6 @@ import { ValidationErrorStrings } from '../validation-error-strings';
 })
 export class ValidationErrorComponent implements OnChanges {
 	@Input('errors') errors!: IValidationErrors | null;
-	@Input() controlName!: string | null;
 	@Input() animate = true;
 	@HostBinding('class.mat-error') matError = true;
 
@@ -26,11 +25,11 @@ export class ValidationErrorComponent implements OnChanges {
 	constructor(@Optional() private translate?: TranslateService) { }
 
 	ngOnChanges() {
-		if (this.errors && this.controlName)
+		if (this.errors)
 			this.error$ = this.translate
 				? this.translate.onLangChange.pipe(
-					map(() => new ValidationErrorStrings(this.controlName!, this.errors!, this.translate)[0])
+					map(() => new ValidationErrorStrings(this.errors!, this.translate)[0])
 				)
-				: of(new ValidationErrorStrings(this.controlName, this.errors)[0]);
+				: of(new ValidationErrorStrings(this.errors)[0]);
 	}
 }
