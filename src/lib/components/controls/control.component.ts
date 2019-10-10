@@ -34,7 +34,10 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	writeValue(value: T): void {
 		Promise
 			.resolve()
-			.then(() => this.value = value);
+			.then(() => {
+				this.value = value;
+				this.cdr.markForCheck();
+			});
 	}
 
 	registerOnChange(fn: (value: any) => void): void {

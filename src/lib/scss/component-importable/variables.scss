@@ -98,6 +98,7 @@ $font-size-md: 14px !default;
 $font-size-lg: 18px !default;
 $font-size-xl: 22px !default;
 
+$font-weight-extra-slim: 100 !default;
 $font-weight-slim      : 300 !default;
 $font-weight-normal    : 400 !default;
 $font-weight-bold      : 500 !default;
@@ -153,3 +154,5 @@ $row-panel-cell-size     : 160px;
 $row-panel-cell-head-size: 230px;
 
 $avatar-size: 40px;
+
+$z-index-sidenav: 1000000;

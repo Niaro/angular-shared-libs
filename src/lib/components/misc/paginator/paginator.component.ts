@@ -23,6 +23,8 @@ export class PaginatorComponent {
 
 	@Input() totalLength!: number;
 
+	@Input() pageLength!: number;
+
 	@Output('page') readonly page$ = new OptionalBehaviorSubject<string | undefined>();
 	get page() { return this.page$.value; }
 	set page(value: string | undefined) { this.page$.next(value); }
