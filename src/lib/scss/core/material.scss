@@ -118,6 +118,7 @@ $icon-size-xl: 48px;
 }
 
 bp-svg-icon,
+.mat-icon-button .material-icons,
 .material-icons {
 	&.sm {
 		@include size($icon-size-sm);
