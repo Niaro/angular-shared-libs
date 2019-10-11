@@ -26,7 +26,9 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302
 		// response code which if handled by the browser redirects the page, but with the service worker used as proxy for the api calls
 		// it doesn't happpen
-		'ngsw-bypass': ''
+		'ngsw-bypass': '',
+		// for cloudlfare access https://developers.cloudflare.com/access/faq/
+		'credentials': 'same-origin'
 	};
 
 	checkAuthorization = false;

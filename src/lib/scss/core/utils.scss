@@ -10,6 +10,14 @@
 	color: $color-primary;
 }
 
+.text-danger {
+	color: $color-danger;
+}
+
+.text-warning {
+	color: mat-color($warning, 800);
+}
+
 .text-white {
 	color: white;
 }
