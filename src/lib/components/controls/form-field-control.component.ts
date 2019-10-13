@@ -31,7 +31,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	internalControl = new FormControl();
 
 	get externalControl(): FormControl | null {
-		return this.formControl || this.form && this.form.controls[this.formControlName] || null;
+		return this.formControl || this.form && this.form.controls[this.formControlName] as FormControl || null;
 	}
 
 	get form() { return this.formGroupDirective && this.formGroupDirective.form; }
