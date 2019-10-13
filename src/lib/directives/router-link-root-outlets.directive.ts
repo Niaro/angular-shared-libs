@@ -21,7 +21,7 @@ export class RouterLinkRootOutletsWithHrefDirective implements OnChanges, OnDest
 	@Input()
 	set routerLinkRootOutlets(outlets: Dictionary<any[]>) {
 		if (!isObject(outlets))
-			throw new Error('RouterLinkOutlets accepts only a dictionary where the keys are the outlet names and the values are the route commands')
+			throw new Error('RouterLinkOutlets accepts only a dictionary where the keys are the outlet names and the values are the route commands');
 
 		this.commands = [{ outlets }];
 	}
@@ -102,7 +102,7 @@ export class RouterLinkRootOutletsDirective {
 	@Input()
 	set routerLinkRootOutlets(outlets: Dictionary<any[]>) {
 		if (!isObject(outlets))
-			throw new Error('RouterLinkOutlets accepts only a dictionary where the keys are the outlet names and the values are the route commands')
+			throw new Error('RouterLinkOutlets accepts only a dictionary where the keys are the outlet names and the values are the route commands');
 
 		this.commands = [{ outlets }];
 	}
