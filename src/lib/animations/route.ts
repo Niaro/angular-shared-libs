@@ -5,6 +5,10 @@ const optional = {
 	optional: true
 };
 const except = ':not(mat-toolbar):not(bp-toolbar):not(bp-demostand-toolbar):not(bp-right-drawers):not(bp-menu):not(router-outlet):not(.ignore-route-animation)';
+
+const enterAnimation = '0.5s ease-in-out';
+const leaveAnimation = '0.2s ease-in-out';
+
 export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 	transition(getTrue, [
 		// 100vh for a proper rendering for cdk-virtual-scroll-viewport
@@ -15,11 +19,11 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 		group([
 			sequence([
 				query(
-					`:leave`,
+					`:leave, :leave router-outlet + *`,
 					[
 						style({ opacity: 1 }),
 						animate(
-							'0.2s ease-in-out',
+							leaveAnimation,
 							style({ opacity: 0 })
 						),
 						style({ position: 'fixed' })
@@ -37,7 +41,7 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 								position: 'static'
 							}),
 							animate(
-								'0.5s ease-in-out',
+								enterAnimation,
 								style({ transform: 'translateY(0%)', opacity: 1 })
 							)
 						],
@@ -51,7 +55,7 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 								opacity: 0
 							}),
 							animate(
-								'0.5s ease-in-out',
+								enterAnimation,
 								style({ transform: 'translateY(0%)', opacity: 1 })
 							)
 						],
@@ -65,7 +69,7 @@ export const ROUTE_ANIMATIONS = trigger('routeAnimations', [
 				stagger(100, [
 					style({ transform: 'translateY(6%)', opacity: 0 }),
 					animate(
-						'0.5s ease-in-out',
+						enterAnimation,
 						style({ transform: 'translateY(0%)', opacity: 1 })
 					)
 				]),

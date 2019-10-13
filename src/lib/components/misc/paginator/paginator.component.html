@@ -18,7 +18,7 @@
 		{{ (currentPage$ | async) === 1 ? 1 : (offset + 1) }}
 		-
 		{{ (pageLength
-				? offset > 0 ? Math.min(pageLength, offset) : pageLength
+				? offset > 0 ? offset + pageLength : pageLength
 				: offset + pageSize
 			) || pageSize
 		}}

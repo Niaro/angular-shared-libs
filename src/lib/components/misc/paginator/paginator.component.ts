@@ -86,7 +86,7 @@ export class PaginatorComponent {
 
 	hasBack = () => this.offset >= this.pageSize;
 
-	hasNext = () => this.offset < this.totalLength;
+	hasNext = () => this.offset + this.pageLength < this.totalLength;
 
 	private navigate(params: Params) {
 		this.router.navigate([UrlHelper.mergeRouteParams(this.route, params)], { relativeTo: this.route });

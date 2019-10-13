@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as m from 'moment';
 
@@ -19,7 +19,7 @@ import { ControlComponent } from '../control.component';
 		}
 	]
 })
-export class DateRangeShortcutsComponent extends ControlComponent<DateRange> implements OnInit {
+export class DateRangeShortcutsComponent extends ControlComponent<DateRange> implements AfterViewInit {
 
 	dateRangeShortcuts = DateRangeShortcut.list() as DateRangeShortcut[];
 
@@ -29,7 +29,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange> imp
 		super(cdr);
 	}
 
-	ngOnInit() {
+	ngAfterViewInit() {
 		this.select(DateRangeShortcut.month);
 	}
 
@@ -37,15 +37,9 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange> imp
 	writeValue(value: DateRangeInputValue): void {
 		Promise
 			.resolve()
-			.then(() => {
-				if (value) {
-					this.value = DateRange.parse(value);
-					this.selected = this.dateRangeShortcuts.find(v => v.dateRange.isSame(this.value));
-				} else
-					this.select(DateRangeShortcut.month);
-
-				this.cdr.markForCheck();
-			});
+			.then(() => this.select(value && this.dateRangeShortcuts.find(v => v.dateRange.isSame(DateRange.parse(value)))
+				|| DateRangeShortcut.month
+			));
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
