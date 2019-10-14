@@ -10,21 +10,33 @@
 					[src]="value">
 		</bp-country>
 
-		<ng-container *ngSwitchCase="FieldViewType.number">
+		<bp-payment-method-brand *ngSwitchCase="FieldViewType.paymentMethodBrand"
+					[src]="value">
+		</bp-payment-method-brand>
+
+		<ng-container *ngSwitchCase="FieldViewType.money">
 			{{ value | currency:'USD':'':isInteger(value) ? '1.0-0' : null }}
 		</ng-container>
 
 		<ng-container *ngSwitchCase="FieldViewType.moment">
-			{{ value | moment: 'LLL'}}
+			{{ value | moment: metadata.viewFormatter ? metadata.viewFormatter(value) : 'LL LTS'}}
 		</ng-container>
 
 		<ng-container *ngSwitchCase="FieldViewType.currency">
 			{{ value.symbol === value.code ? '' : value.symbol }} {{ value.code }}
 		</ng-container>
 
+		<ng-container *ngSwitchCase="FieldViewType.status">
+			<span class="circle-sm mr-1 status-{{value.cssClass}}">
+			</span>
+			{{ value.displayName }}
+		</ng-container>
+
 		<ng-container *ngSwitchCase="FieldViewType.email">
 			<a class="link"
-			   href="mailto:{{ value }}">{{ value }}</a>
+			   href="mailto:{{ value }}">
+			   {{ value }}
+			</a>
 		</ng-container>
 	</div>
 

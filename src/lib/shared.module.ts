@@ -16,7 +16,8 @@ import {
 	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
 	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent, RoundInputComponent,
 	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
-	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent
+	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
+	PaymentMethodBrandComponent
 } from './components';
 
 import {
@@ -70,6 +71,7 @@ const EXPOSED = [
 	IconBtnComponent,
 	DeleteConfirmDialogComponent,
 	LogoutConfirmDialogComponent,
+	PaymentMethodBrandComponent,
 
 	// directives
 	CursorPageAdaptorDirective,
@@ -97,6 +99,7 @@ const EXPOSED = [
 	ButtonToggleComponent,
 	PropertyMetadataControlComponent,
 	PropertyMetadataViewComponent,
+	PropertyMetadataViewsSectionComponent,
 
 	// pipes
 	UpperFirstPipe,

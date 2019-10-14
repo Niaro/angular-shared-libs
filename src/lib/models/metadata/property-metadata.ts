@@ -23,6 +23,8 @@ export class PropertyMetadata {
 
 	viewType = FieldViewType.text;
 
+	viewFormatter!: (propValue: any) => any;
+
 	/**
 	 * the name of the property to which this metadata belongs
 	 */

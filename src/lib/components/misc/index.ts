@@ -7,5 +7,6 @@ export * from './filter';
 export * from './icon-btn';
 export * from './logout-confirm-dialog';
 export * from './paginator';
+export * from './payment-method-brand';
 export * from './pending-btn';
 export * from './status-bar';

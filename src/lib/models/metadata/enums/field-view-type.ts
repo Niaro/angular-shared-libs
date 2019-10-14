@@ -6,7 +6,7 @@ export class FieldViewType extends Enumeration {
 
 	static boolean = new FieldViewType();
 
-	static number = new FieldViewType();
+	static money = new FieldViewType();
 
 	static moment = new FieldViewType();
 
@@ -15,5 +15,11 @@ export class FieldViewType extends Enumeration {
 	// special
 	static currency = new FieldViewType();
 
+	static cryptoCurrency = new FieldViewType();
+
 	static country = new FieldViewType();
+
+	static paymentMethodBrand = new FieldViewType();
+
+	static status = new FieldViewType();
 }
