@@ -239,14 +239,21 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			this.activateIndex(this.items.length - 1);
 	}
 
-	drop(event: CdkDragDrop<any[]>) {
-		if (event.previousIndex === event.currentIndex)
+	drop({ previousIndex, currentIndex }: CdkDragDrop<any[]>) {
+		if (previousIndex === currentIndex)
 			return;
 
+		if (this.sortableItem && !this.sortableItem(this.items[currentIndex]))
+			currentIndex = previousIndex;
+
 		const copy = this.items.slice();
-		moveItemInArray(copy, event.previousIndex, event.currentIndex);
+		moveItemInArray(copy, previousIndex, currentIndex);
 		this.items = copy;
-		this.sort$.next(copy);
+
+		if (previousIndex === currentIndex)
+			return;
+
+		this.sort$.next(this.items);
 	}
 
 	private updateScroll({ animate = false, distinctVisibility = true } = {}) {
