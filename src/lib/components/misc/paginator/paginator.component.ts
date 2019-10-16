@@ -1,13 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy, Output, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { map, filter, skip } from 'rxjs/operators';
+import { map, filter, skip, distinctUntilChanged } from 'rxjs/operators';
+import { omit, isEqual } from 'lodash-es';
 
 import { PAGE_SIZE } from '@bp/shared/models';
 import { FADE } from '@bp/shared/animations';
 import { UrlHelper } from '@bp/shared/utils';
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
-
 
 @Component({
 	selector: 'bp-paginator',
@@ -60,6 +60,16 @@ export class PaginatorComponent {
 				filter(v => !isNaN(v) && v !== this.pageSize)
 			)
 			.subscribe(this.pageSize$);
+
+		this.route.params
+			.pipe(
+				map(params => omit(params, 'page')),
+				distinctUntilChanged((a, b) => isEqual(a, b))
+			)
+			.subscribe(() => {
+				this.page = undefined;
+				this.currentPage = 1;
+			});
 
 		this.pageSize$
 			.pipe(skip(1))

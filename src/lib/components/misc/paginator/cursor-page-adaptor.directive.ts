@@ -12,7 +12,7 @@ import { isNil } from 'lodash-es';
 export class CursorPageAdaptorDirective implements OnChanges {
 	@Input('pagedResults') pagedResults!: PagedResults;
 
-	pageCursors: { [page: number]: string } = { 1: '' }; // the first page doesn't have cursor
+	pageCursors: { [page: number]: string | null } = { 1: '' }; // the first page doesn't have cursor
 
 	constructor(@Self() private paginator: PaginatorComponent) {
 		this.paginator.hasBack = () => this.hasCursor(this.paginator.getBackPage());
@@ -21,14 +21,14 @@ export class CursorPageAdaptorDirective implements OnChanges {
 
 		this.paginator.onBack = () => {
 			const backPage = this.paginator.getBackPage();
-			this.paginator.page = this.pageCursors[backPage];
+			this.paginator.page = this.pageCursors[backPage]!;
 			this.paginator.progressBack = true;
 			this.paginator.currentPage = backPage;
 		};
 
 		this.paginator.onNext = () => {
 			const nextPage = this.paginator.getNextPage();
-			this.paginator.page = this.pageCursors[nextPage];
+			this.paginator.page = this.pageCursors[nextPage]!;
 			this.paginator.progressNext = true;
 			this.paginator.currentPage = nextPage;
 		};
@@ -39,7 +39,7 @@ export class CursorPageAdaptorDirective implements OnChanges {
 			if (this.pagedResults.firstPage)
 				this.paginator.currentPage = 1;
 
-			this.pageCursors[this.paginator.getNextPage()] = this.pagedResults.nextPageCursor;
+			this.pageCursors[this.paginator.getNextPage()] = this.pagedResults.nextPageCursor!;
 			this.paginator.progressBack = this.paginator.progressNext = false;
 			this.paginator.cdr.detectChanges();
 		}

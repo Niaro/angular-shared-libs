@@ -1,7 +1,7 @@
 import { assign } from 'lodash-es';
 
 export class PagedResults<T = any> {
-	nextPageCursor!: string;
+	nextPageCursor!: string | null;
 
 	firstPage!: boolean;
 

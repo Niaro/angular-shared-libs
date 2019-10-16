@@ -98,6 +98,6 @@ export abstract class MetadataEntity {
 	}
 
 	toJSON(): any {
-		return mapValues(this, v => m.isMoment(v) ? v.unix() : v);
+		return JSON.parse(JSON.stringify(mapValues(this, v => m.isMoment(v) ? v.unix() : v)));
 	}
 }

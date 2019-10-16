@@ -8,6 +8,7 @@ import * as firebase from 'firebase/app';
 // Add the Firebase products that you want to use
 import 'firebase/storage';
 import 'firebase/functions';
+import 'firebase/firestore';
 
 import { TelemetryService } from './telemetry.service';
 
@@ -24,15 +25,17 @@ export class FirebaseService {
 
 	uploadError$ = new Subject<string>();
 
-	private storage!: firebase.storage.Storage;
+	protected get db() { return firebase.firestore(); }
 
-	private functions!: firebase.functions.Functions;
+	protected storage!: firebase.storage.Storage;
 
-	private uploadTask!: firebase.storage.UploadTask;
+	protected functions!: firebase.functions.Functions;
+
+	protected uploadTask!: firebase.storage.UploadTask;
 
 	constructor(
-		private telemetry: TelemetryService,
-		@Inject(FIREBASE_APP_ID) private firebaseAppId: string
+		protected telemetry: TelemetryService,
+		@Inject(FIREBASE_APP_ID) protected firebaseAppId: string
 	) { }
 
 	ignite(options = {}) {
