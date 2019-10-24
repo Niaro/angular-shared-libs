@@ -37,6 +37,6 @@ export class PropertyMetadataViewComponent implements OnChanges {
 	}
 
 	private getHostClass(md: PropertyMetadata) {
-		return `view-type-${md.control.type.cssClass}`;
+		return `view-type-${md.viewType.cssClass}`;
 	}
 }

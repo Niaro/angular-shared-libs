@@ -12,7 +12,7 @@
 	<div *ngIf="value === '' || value === undefined || value === null || value.length === 0; else valueTpl">
 		<div *ngIf="metadata.viewType === FieldViewType.thumbnail; else emptyValueTpl"
 			 class="thumbnail empty">
-			 <mat-icon>image</mat-icon>
+			<mat-icon>image</mat-icon>
 		</div>
 
 		<ng-template #emptyValueTpl>
@@ -47,9 +47,15 @@
 			</ng-container>
 
 			<ng-container *ngSwitchCase="FieldViewType.status">
-				<span class="circle-sm mr-1 status-{{value.cssClass}}">
+				<span class="status-{{value.cssClass}}"
+						[class.mr-1]="!compact"
+						[class.circle-sm]="!compact"
+						[class.circle]="compact"
+						[matTooltip]="compact ? value.displayName : null">
 				</span>
-				{{ value.displayName }}
+				<ng-container *ngIf="!compact">
+					{{ value.displayName }}
+				</ng-container>
 			</ng-container>
 
 			<ng-container *ngSwitchCase="FieldViewType.email">
@@ -72,7 +78,10 @@
 
 			<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
 				<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status">
-					<span class="circle-sm mr-1 status-{{status.cssClass}}"
+					<span class="status-{{status.cssClass}}"
+						  [class.mr-1]="!compact"
+						  [class.circle-sm]="!compact"
+						  [class.circle]="compact"
 						  [matTooltip]="compact ? status.displayName : null">
 					</span>
 					<ng-container *ngIf="!compact">
@@ -80,7 +89,7 @@
 					</ng-container>
 				</ng-container>
 				<span *ngIf="!metadata.viewFormatter"
-					  class="circle-sm mr-1 status-{{value}}">
+					  class="circle status-{{value}}">
 				</span>
 			</ng-container>
 
