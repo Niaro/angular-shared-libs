@@ -1,20 +1,23 @@
 import { FormControl, ValidatorFn, ValidationErrors, FormGroupDirective } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 import { Input, ElementRef, Optional, SimpleChanges, OnChanges, ChangeDetectorRef, OnInit } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
-import { isEmpty } from 'lodash-es';
-import { switchMap, map, auditTime } from 'rxjs/operators';
-import { of, Subscription, iif } from 'rxjs';
+import { auditTime, switchMap, filter } from 'rxjs/operators';
+import { Subscription, iif } from 'rxjs';
 
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 
 import { ControlComponent } from './control.component';
 
 export abstract class FormFieldControlComponent<T> extends ControlComponent<T> implements OnChanges, OnInit {
+
 	@Input() formControl!: FormControl;
 
 	@Input() formControlName!: string;
 
 	@Input() appearance: MatFormFieldAppearance | 'round' = 'outline';
+
+	@Input() color: ThemePalette = 'primary';
 
 	@Input() name!: string;
 
@@ -27,6 +30,8 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	@Input() required!: boolean;
 
 	@Input() throttle = 200;
+
+	@Input() hideErrorText = false;
 
 	internalControl = new FormControl();
 
@@ -56,12 +61,12 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			this.writeValue(this.value);
 
 		if (throttle)
-			this.updateOnInternalControlValueChanges();
+			this.listenToInternalControlValueChanges();
 	}
 
 	ngOnInit() {
-		this.updateOnInternalControlValueChanges();
-		this.rerouteExternalControlErrorsToInternalControl();
+		this.listenToInternalControlValueChanges();
+		this.reflectExternalControlOnInternal();
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -88,28 +93,29 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			: null;
 	}
 
-	private updateOnInternalControlValueChanges() {
+	protected onInternalControlValueChange(v: any) {
+		this.updateValueAndEmitChange(v);
+	}
+
+	private listenToInternalControlValueChanges() {
 		this.updateSubscription.unsubscribe();
 		this.updateSubscription = iif(
 			() => !!this.throttle,
 			this.internalControl.valueChanges.pipe(auditTime(this.throttle)),
 			this.internalControl.valueChanges
 		)
-			.subscribe(v => this.update(v));
+			.subscribe(v => this.onInternalControlValueChange(v));
 	}
 
-	private rerouteExternalControlErrorsToInternalControl() {
+	protected reflectExternalControlOnInternal() {
+		this.externalControl$
+			.subscribe(external => this.internalControl.setValidators(external && external.validator));
+
 		this.externalControl$
 			.pipe(
-				switchMap(v => v
-					? v.statusChanges.pipe(map(() => v.errors))
-					: of(null)
-				),
-				map(errors => ({
-					...this.internalControl.errors,
-					...errors
-				}))
+				filter(v => !!v),
+				switchMap(v => v!.statusChanges),
 			)
-			.subscribe(errors => this.internalControl.setErrors(isEmpty(errors) ? null : errors));
+			.subscribe(() => this.cdr.markForCheck());
 	}
 }

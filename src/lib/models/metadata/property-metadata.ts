@@ -1,29 +1,29 @@
 import { assign, startCase } from 'lodash-es';
 
 import { Enumeration } from '../misc';
-import { FieldControlType, FieldViewType } from './enums';
+import { FieldViewType } from './enums';
 import { PropertyMetadataControl } from './property-metadata-control';
 
 export class PropertyMetadata {
 	label!: string;
 
-	hint!: string;
+	hint!: string | null;
 
-	placeholder!: string;
+	longHint!: string | null;
 
-	required!: boolean;
+	placeholder!: string | null;
 
 	mapper!: ((v: any, data: any) => any) | Enumeration | InstanceType<any>;
 
-	default!: any;
+	default!: any | null;
 
-	unserializable!: boolean;
+	unserializable!: boolean | null;
 
-	control = new PropertyMetadataControl({ type: FieldControlType.input });
+	control = new PropertyMetadataControl();
 
 	viewType = FieldViewType.text;
 
-	viewFormatter!: (propValue: any) => any;
+	viewFormatter!: (propValue: any) => any | null;
 
 	/**
 	 * the name of the property to which this metadata belongs

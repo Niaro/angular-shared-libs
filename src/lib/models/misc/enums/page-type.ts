@@ -1,6 +1,7 @@
-import { Enumeration } from '../enum';
+import { Enumeration } from './enum';
 
 export class PageType extends Enumeration {
+
 	static new = new PageType();
 
 	static edit = new PageType();
@@ -10,4 +11,5 @@ export class PageType extends Enumeration {
 	static view = new PageType();
 
 	static loadError = new PageType();
+
 }

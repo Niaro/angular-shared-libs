@@ -1,10 +1,11 @@
 <ng-container [ngSwitch]="metadata.control.type">
 	<bp-input *ngSwitchCase="FieldControlType.input"
 			  [formControl]="control"
+			  [color]="color"
 			  [name]="metadata.property"
 			  [label]="metadata.label"
 			  [hint]="metadata.hint"
-			  [required]="metadata.required"
+			  [required]="metadata.control.required"
 			  [placeholder]="metadata.placeholder"
 			  [appearance]="appearance">
 	</bp-input>
@@ -12,31 +13,34 @@
 	<bp-input *ngSwitchCase="FieldControlType.textarea"
 			  textarea
 			  [formControl]="control"
+			  [color]="color"
 			  [name]="metadata.property"
 			  [label]="metadata.label"
 			  [hint]="metadata.hint"
-			  [required]="metadata.required"
+			  [required]="metadata.control.required"
 			  [placeholder]="metadata.placeholder"
 			  [appearance]="appearance">
 	</bp-input>
 
 	<bp-input *ngSwitchCase="FieldControlType.number"
 			  [formControl]="control"
+			  [color]="color"
 			  [mask]="numberMask"
 			  [name]="metadata.property"
 			  [label]="metadata.label"
 			  [hint]="metadata.hint"
-			  [required]="metadata.required"
+			  [required]="metadata.control.required"
 			  [placeholder]="metadata.placeholder"
 			  [appearance]="appearance">
 	</bp-input>
 
 	<bp-country-selector *ngSwitchCase="FieldControlType.country"
 						 [formControl]="control"
+						 [color]="color"
 						 [name]="metadata.property"
 						 [label]="metadata.label"
 						 [hint]="metadata.hint"
-						 [required]="metadata.required"
+						 [required]="metadata.control.required"
 						 [placeholder]="metadata.placeholder"
 						 [appearance]="appearance">
 	</bp-country-selector>
@@ -44,10 +48,11 @@
 	<bp-select *ngSwitchCase="FieldControlType.select"
 			   [items]="metadata.control.list"
 			   [formControl]="control"
+			   [color]="color"
 			   [name]="metadata.property"
 			   [label]="metadata.label"
 			   [hint]="metadata.hint"
-			   [required]="metadata.required"
+			   [required]="metadata.control.required"
 			   [placeholder]="metadata.placeholder"
 			   [appearance]="appearance">
 	</bp-select>
@@ -55,10 +60,11 @@
 	<bp-autocomplete *ngSwitchCase="FieldControlType.autocomplete"
 					 [items]="metadata.control.list"
 					 [formControl]="control"
+					 [color]="color"
 					 [name]="metadata.property"
 					 [label]="metadata.label"
 					 [hint]="metadata.hint"
-					 [required]="metadata.required"
+					 [required]="metadata.control.required"
 					 [placeholder]="metadata.placeholder"
 					 [appearance]="appearance">
 	</bp-autocomplete>
@@ -66,16 +72,29 @@
 	<bp-button-toggle *ngSwitchCase="FieldControlType.buttonToggle"
 					  [items]="metadata.control.list"
 					  [formControl]="control"
+					  [color]="color"
 					  [name]="metadata.property"
 					  [label]="metadata.label"
 					  [hint]="metadata.hint"
-					  [required]="metadata.required"
+					  [required]="metadata.control.required"
 					  [placeholder]="metadata.placeholder">
 	</bp-button-toggle>
 
 	<mat-slide-toggle *ngSwitchCase="FieldControlType.switch"
 					  [formControl]="control"
-					  color="primary">
+					  [color]="color">
 		{{ metadata.label }}
 	</mat-slide-toggle>
+
+	<bp-chips *ngSwitchCase="FieldControlType.chip"
+			  [items]="metadata.control.list"
+			  [formControl]="control"
+			  [color]="color"
+			  [name]="metadata.property"
+			  [label]="metadata.label"
+			  [hint]="metadata.hint"
+			  [required]="metadata.control.required"
+			  [placeholder]="metadata.placeholder"
+			  [appearance]="appearance">
+	</bp-chips>
 </ng-container>

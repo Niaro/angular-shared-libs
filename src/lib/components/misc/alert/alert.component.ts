@@ -36,7 +36,6 @@ export class AlertComponent implements OnChanges {
 
 	show = false;
 
-
 	@HostBinding('class.hidden') get hidden() { return isEmpty(this._errors) && isEmpty(this._messages); }
 
 	private get storageKey() { return JSON.stringify(this.errors || this.messages); }
@@ -47,8 +46,8 @@ export class AlertComponent implements OnChanges {
 		if (errors || messages) {
 			const hasContent = !!this.errors || !!this.messages;
 			this.show = hasContent
-				 ? this.frequency === 'always' || this.isCountdownComplete()
-				 : false;
+				? this.frequency === 'always' || this.isCountdownComplete()
+				: false;
 			this.clearContentIfHidden();
 		}
 	}

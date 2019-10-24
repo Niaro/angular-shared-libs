@@ -4,7 +4,7 @@ import * as m from 'moment';
 import { isExtensionOf } from '@bp/shared/utils';
 
 import { PropertiesMetadata } from './properties-metadata';
-import { Enumeration } from '../misc/enum';
+import { Enumeration } from '../misc/enums/enum';
 
 export abstract class MetadataEntity {
 

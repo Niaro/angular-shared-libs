@@ -5,7 +5,7 @@ export const PAGE_SIZE = 25;
 
 export interface IPageQueryParams {
 	page?: string;
-	limit: string;
+	limit: number;
 }
 
 export type PageQueryParamsCtor = Constructor<IPageQueryParams>;
@@ -14,11 +14,11 @@ export function mixinPageQueryParams<T extends Constructor<QueryParamsBase<{ pag
 	(base: T, defaultPageSize = PAGE_SIZE): PageQueryParamsCtor & T {
 	return class extends base {
 		page?: string;
-		limit: string;
+		limit: number;
 
 		constructor(...args: any[]) {
 			super(...args);
-			this.limit = this.routeParams.pageSize || defaultPageSize.toString();
+			this.limit = +(this.routeParams.pageSize || defaultPageSize);
 			this.page = this.routeParams.page;
 		}
 	};

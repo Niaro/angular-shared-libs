@@ -1,23 +1,34 @@
-import { Input, Output, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { isNil, isEqual } from 'lodash-es';
+import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-es';
 import { Subject, of } from 'rxjs';
 import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
 
-import { MetadataEntity, Entity } from '../models';
+import { Entity, PropertiesMetadata, FormScheme, MetadataEntity } from '../models';
 
 import { FormBaseComponent } from './form-base.component';
 
-export abstract class FormEntityBaseComponent<T extends Entity> extends FormBaseComponent<T> {
 
-	@Input() model!: T;
+export abstract class FormEntityBaseComponent<T extends Entity = Entity>
+	extends FormBaseComponent<T>
+	implements OnChanges {
 
-	@Output() readonly modelChange = new Subject();
+	@Input() entity!: T | null;
 
-	abstract type: typeof MetadataEntity;
+	@Output() readonly entityChange = new Subject<T>();
 
-	get isAdding() { return isNil(this.model.id); }
+	@Input() metadata!: PropertiesMetadata;
+
+	@Input() factory!: (v?: Partial<T>) => T;
+
+	get isAdding() { return this.entity && isNil(this.entity.id); }
+
+	get controls(): { [K in NonFunctionPropertyNames<T>]: AbstractControl } | null {
+		return this.form && this.form.controls as any;
+	}
+
+	private formScheme!: FormScheme<T>;
 
 	constructor(
 		protected fb: FormBuilder,
@@ -28,12 +39,50 @@ export abstract class FormEntityBaseComponent<T extends Entity> extends FormBase
 		this.onFormGroupChangeEmitModelChange();
 	}
 
+	ngOnChanges({ entity }: SimpleChanges) {
+		if (entity && this.formScheme)
+			this.entity && this.form ? this.repopulateFormByScheme() : this.setForm();
+	}
+
+	setFormScheme(scheme: FormScheme<T>) {
+		this.formScheme = scheme;
+	}
+
 	label(prop: NonFunctionPropertyNames<T>) {
-		return this.type.getLabel(prop);
+		return this.metadata.get(<string>prop)!.label;
 	}
 
 	meta(prop: NonFunctionPropertyNames<T>) {
-		return this.type.metadata.get(<string>prop);
+		return this.metadata.get(<string>prop);
+	}
+
+	protected setForm() {
+		this.form = this.generateFormByScheme();
+	}
+
+	protected generateFormByScheme(
+		formScheme = this.formScheme,
+		entity: MetadataEntity = this.entity || this.factory()
+	): FormGroup {
+		if (!formScheme)
+			throw new Error('The default behavior of the form entity base class requires the form scheme to be set on the constructor');
+
+		return this.fb.group(mapValues(formScheme, (v, k) => isPlainObject(v)
+			? this.generateFormByScheme(v as FormScheme<any>, get(entity, k))
+			: [get(entity, k), v]
+		));
+	}
+
+	protected repopulateFormByScheme(
+		form = this.form,
+		formScheme = this.formScheme,
+		entity = this.entity
+	) {
+		form && forEach(formScheme, (v, k) => isPlainObject(v)
+			? this.repopulateFormByScheme(form.controls[k] as FormGroup, v as FormScheme<any>, get(entity, k))
+			: (<FormControl>form.controls[k])
+				.setValue(get(entity, k), { emitEvent: false, emitModelToViewChange: true })
+		);
 	}
 
 	private onFormGroupChangeEmitModelChange() {
@@ -47,10 +96,11 @@ export abstract class FormEntityBaseComponent<T extends Entity> extends FormBase
 						)
 					: of(null)
 				),
-				auditTime(500),
-				map(v => v && new (<any>this.type)(v)),
-				filter(v => !isEqual(v, this.model))
+				filter(() => !!this.entityChange.observers.length),
+				auditTime(250),
+				map(v => v && this.factory({ ...this.entity, ...v })),
+				filter(v => !isEqual(v, this.entity))
 			)
-			.subscribe(this.modelChange);
+			.subscribe(this.entityChange);
 	}
 }

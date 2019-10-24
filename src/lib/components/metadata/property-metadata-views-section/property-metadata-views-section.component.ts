@@ -2,7 +2,9 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
 
-import { PropertiesMetadata } from '../../../models';
+import { PropertiesMetadata, Entity } from '../../../models';
+
+export type ViewsSectionScheme<T> = [NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
 
 @Component({
 	selector: 'bp-property-metadata-views-section',
@@ -12,13 +14,15 @@ import { PropertiesMetadata } from '../../../models';
 	animations: [FADE_IN_LIST]
 })
 export class PropertyMetadataViewsSectionComponent {
-	@Input() model!: any;
+
+	@Input() entity!: Entity;
 
 	@Input() metadata!: PropertiesMetadata;
 
-	@Input() propertyMetadataNameGroups!: [string, string?][];
+	@Input() sectionScheme!: ViewsSectionScheme<any>;
 
 	@Input() title!: string;
 
 	@Input() hasSeparator!: boolean;
+
 }

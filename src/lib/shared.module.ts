@@ -17,7 +17,8 @@ import {
 	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent, RoundInputComponent,
 	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
-	PaymentMethodBrandComponent
+	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
+	ImgUploadBtnComponent
 } from './components';
 
 import {
@@ -28,7 +29,8 @@ import {
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
 	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective
+	RouterLinkRootOutletsDirective,
+	ProgressBarDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
@@ -84,6 +86,7 @@ const EXPOSED = [
 	SortDirective,
 	DelayedRenderDirective,
 	DynamicOutletDirective,
+	ProgressBarDirective,
 
 	// controls
 	DateRangeComponent,
@@ -97,7 +100,10 @@ const EXPOSED = [
 	RoundInputComponent,
 	SelectComponent,
 	ButtonToggleComponent,
+	ChipsControlComponent,
+	ImgUploadBtnComponent,
 	PropertyMetadataControlComponent,
+	PropertyMetadataControlsSectionComponent,
 	PropertyMetadataViewComponent,
 	PropertyMetadataViewsSectionComponent,
 

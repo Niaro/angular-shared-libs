@@ -48,7 +48,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange> imp
 			return;
 
 		this.selected = value;
-		this.update(value.dateRange);
+		this.updateValueAndEmitChange(value.dateRange);
 	}
 }
 

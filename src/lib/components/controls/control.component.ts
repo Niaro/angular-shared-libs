@@ -4,6 +4,7 @@ import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, Val
 import { isNil, isEqual } from 'lodash-es';
 
 export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator, OnDestroy {
+
 	@Input() value!: T;
 
 	@Output() readonly valueChange = new Subject<T>();
@@ -59,7 +60,7 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	}
 	// #endregion Implementation of the Validator interface
 
-	update(value: T | string) {
+	updateValueAndEmitChange(value: T | string) {
 		if (isEqual(value, this.value)) {
 			this.validatorOnChange();
 			return;
@@ -71,4 +72,5 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 		this.validatorOnChange();
 		this.cdr.markForCheck();
 	}
+
 }

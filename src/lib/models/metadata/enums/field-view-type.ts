@@ -1,4 +1,4 @@
-import { Enumeration } from '../../misc/enum';
+import { Enumeration } from '../../misc/enums/enum';
 
 export class FieldViewType extends Enumeration {
 	// general
@@ -6,11 +6,19 @@ export class FieldViewType extends Enumeration {
 
 	static boolean = new FieldViewType();
 
+	static booleanCircle = new FieldViewType();
+
 	static money = new FieldViewType();
 
 	static moment = new FieldViewType();
 
 	static email = new FieldViewType();
+
+	static chip = new FieldViewType();
+
+	static link = new FieldViewType();
+
+	static thumbnail = new FieldViewType();
 
 	// special
 	static currency = new FieldViewType();

@@ -87,9 +87,9 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 	}
 	// #endregion Implementation of the Validator interface
 
-	update(input: string) {
+	onInternalControlValueChange(input: string) {
 		this.updateFilteredCountries(input);
-		super.update(input ? Countries.find(input) : null);
+		this.updateValueAndEmitChange(input ? Countries.find(input) : null);
 	}
 
 	private updateWorldwideInCountriesList(list: Country[]) {

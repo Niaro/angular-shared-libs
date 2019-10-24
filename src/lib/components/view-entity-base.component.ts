@@ -1,18 +1,19 @@
 import { Input } from '@angular/core';
 
-import { MetadataEntity, Entity } from '../models';
+import { Entity, PropertiesMetadata } from '../models';
 
 export abstract class ViewEntityBaseComponent<T extends Entity> {
 
-	@Input() model!: T;
+	@Input() entity!: T;
 
-	abstract type: typeof MetadataEntity;
+	@Input() metadata!: PropertiesMetadata;
 
 	label(prop: NonFunctionPropertyNames<T>) {
-		return this.type.getLabel(prop);
+		return this.metadata.get(<string>prop)!.label;
 	}
 
 	meta(prop: NonFunctionPropertyNames<T>) {
-		return this.type.metadata.get(<string>prop);
+		return this.metadata.get(<string>prop);
 	}
+
 }

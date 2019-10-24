@@ -30,12 +30,10 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 
 	@Input() autocomplete!: MatAutocomplete;
 
-	@Input() hideErrorText = false;
-
 	@ViewChild(TextMaskDirective, { static: false }) maskDirective!: TextMaskDirective;
 
-	update(value: string) {
-		super.update(this.maskDirective
+	onInternalControlValueChange(value: string) {
+		this.updateValueAndEmitChange(this.maskDirective
 			&& this.maskDirective.config instanceof NumberMaskConfig
 			&& !this.maskDirective.config.allowLeadingZeroes
 			&& !isEmpty(value)

@@ -1,13 +1,19 @@
 import { assign } from 'lodash-es';
+import { ValidatorFn } from '@angular/forms';
+
 import { FieldControlType } from './enums';
 
 export class PropertyMetadataControl {
 
-	type!: FieldControlType;
+	type = FieldControlType.input;
 
 	list?: any[];
 
-	constructor(data: Partial<PropertyMetadataControl>) {
+	validator?: ValidatorFn;
+
+	required = false;
+
+	constructor(data?: Partial<PropertyMetadataControl>) {
 		assign(this, data);
 	}
 }

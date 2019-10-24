@@ -1,5 +1,8 @@
-<mat-form-field [appearance]="appearance">
-	<mat-label *ngIf="label">{{ label }}</mat-label>
+<mat-form-field [appearance]="appearance"
+				[color]="color">
+	<mat-label *ngIf="label">
+		{{ label }}
+	</mat-label>
 
 	<textarea *ngIf="textarea === ''; else inputTpl"
 			  matInput
@@ -42,5 +45,7 @@
 
 	<mat-hint *ngIf="hint">{{ hint }}</mat-hint>
 
-	<mat-error bpFieldError [bpFieldErrorSuppress]="hideErrorText"></mat-error>
+	<mat-error bpFieldError
+			   [bpFieldErrorSuppress]="hideErrorText">
+	</mat-error>
 </mat-form-field>

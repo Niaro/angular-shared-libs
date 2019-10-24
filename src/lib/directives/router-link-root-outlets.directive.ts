@@ -9,9 +9,10 @@ import { Dictionary } from 'lodash';
  * The native router link directive creates an url relative to the activated route
  * which requires the routes in the secondary outlets to be children of the activated route on
  * the route config. In that case you can access the route in the secondary outlet only being
- * under the activated route. Thus if you need a route in a secondary outlet to be accessible
- * from any point of the app it should be relative to the root route.
- * The purpose of this directive to create an outlet link relative to the root route
+ * under the activated route. Thus if you have a route on the root route config level and you want
+ * to reach it being deep inside the primary routes tree, you have to create an url tree still
+ * related to the root route.
+ * The purpose of this directive to create an outlet link always relative to the root route
  */
 @Directive({
 	// tslint:disable-next-line: directive-selector

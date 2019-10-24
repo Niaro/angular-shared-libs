@@ -48,6 +48,6 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 		if (v.to && this.value.from && this.value.from.isSame(v.to))
 			v.to = this.value.from.clone().endOf('day');
 
-		this.update(new DateRange({ ...this.value, ...v }));
+		this.updateValueAndEmitChange(new DateRange({ ...this.value, ...v }));
 	}
 }

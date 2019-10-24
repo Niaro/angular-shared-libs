@@ -19,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 
 const MODULES = [
 	MatCardModule,
@@ -40,7 +41,8 @@ const MODULES = [
 	MatMomentDateModule,
 	MatAutocompleteModule,
 	MatSlideToggleModule,
-	MatButtonToggleModule
+	MatButtonToggleModule,
+	MatChipsModule
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { Enumeration } from '../../misc/enum';
+import { Enumeration } from '../../misc/enums/enum';
 
 export class CashierButtonMode extends Enumeration {
 	static modal = new CashierButtonMode();

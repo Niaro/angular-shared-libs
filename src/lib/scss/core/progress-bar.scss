@@ -1,0 +1,16 @@
+.progress-bar {
+	overflow: hidden !important;
+	z-index: 0;
+
+	&.mat-primary bp-progress-bar {
+		background: $color-primary;
+	}
+
+	> bp-progress-bar {
+		position: absolute;
+		left: 0;
+		height: 100%;
+		z-index: -1;
+		transition: width $animation-duration linear;
+	}
+}

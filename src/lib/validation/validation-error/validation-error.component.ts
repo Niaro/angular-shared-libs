@@ -17,7 +17,9 @@ import { ValidationErrorStrings } from '../validation-error-strings';
 })
 export class ValidationErrorComponent implements OnChanges {
 	@Input('errors') errors!: IValidationErrors | null;
+
 	@Input() animate = true;
+
 	@HostBinding('class.mat-error') matError = true;
 
 	error$!: Observable<string>;

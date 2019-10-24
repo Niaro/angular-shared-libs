@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2, ElementRef, SimpleChange } from '@angular/core';
 
 import { PropertyMetadata, FieldViewType } from '@bp/shared/models';
 
@@ -13,22 +13,30 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	@Input() label = true;
 
+	@Input() compact = false;
+
 	@Input() metadata!: PropertyMetadata;
 
 	@Input() value: any;
 
+	// @Input() color: ThemePalette;
+
 	constructor(private renderer: Renderer2, private host: ElementRef) { }
 
 	ngOnChanges({ metadata }: SimpleChanges) {
-		if (metadata) {
-			const prev: PropertyMetadata = metadata.previousValue;
-			const curr: PropertyMetadata = metadata.currentValue;
-			this.renderer.removeClass(this.host.nativeElement, prev && prev.viewType.cssClass);
-			this.renderer.addClass(this.host.nativeElement, curr && curr.viewType.cssClass);
-		}
+		metadata && this.setHostClass(metadata);
 	}
 
 	isInteger(value: number) {
 		return Number.isInteger(value);
+	}
+
+	private setHostClass({ previousValue: prev, currentValue: curr }: SimpleChange) {
+		prev && this.renderer.removeClass(this.host.nativeElement, this.getHostClass(prev));
+		curr && this.renderer.addClass(this.host.nativeElement, this.getHostClass(curr));
+	}
+
+	private getHostClass(md: PropertyMetadata) {
+		return `view-type-${md.control.type.cssClass}`;
 	}
 }

@@ -56,7 +56,7 @@ export class IpInputComponent extends FormFieldControlComponent<string> {
 	// 	includeMaskInValue: true
 	// };
 
-	update(ip: string) {
-		this.internalControl.valid && super.update(ip);
+	onInternalControlValueChange(ip: string) {
+		this.internalControl.valid && this.updateValueAndEmitChange(ip);
 	}
 }

@@ -1,5 +1,6 @@
 <ng-container *ngIf="appearance === 'round'; else defaultInputTpl">
 	<bp-round-input [formControl]="internalControl"
+					[color]="color"
 					[placeholder]="placeholder">
 	</bp-round-input>
 
@@ -11,6 +12,7 @@
 <ng-template #defaultInputTpl>
 	<bp-input [label]="label"
 			  [hint]="hint"
+			  [color]="color"
 			  [formControl]="internalControl"
 			  [placeholder]="placeholder">
 	</bp-input>

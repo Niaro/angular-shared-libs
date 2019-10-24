@@ -79,7 +79,11 @@
 .mat-icon-button,
 .mat-stroked-button {
 	transition: $transition-props;
-	transition-property: background, color;
+	transition-property: border-color, background, color;
+}
+
+.mat-stroked-button[disabled] {
+	border-color: $color-border;
 }
 
 .mat-icon-button {
@@ -139,4 +143,9 @@ bp-svg-icon,
 		@include size($icon-size-xl);
 		@include fontsize($icon-size-xl);
 	}
+}
+
+.mat-chip.mat-standard-chip {
+	min-height: 28px;
+	font-weight: 400;
 }

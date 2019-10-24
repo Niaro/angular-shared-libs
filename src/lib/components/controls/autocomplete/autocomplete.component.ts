@@ -68,17 +68,17 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	}
 	// #endregion Implementation of the Validator interface
 
-	update(input: string) {
+	onInternalControlValueChange(input: string) {
 		if (isEmpty(this.items))
 			return;
 
-		const loweredInput = input && input.toString().toLowerCase();
+		const loweredInput = input && input.toString().toLowerCase().trim();
 		this.filtered = loweredInput
 			? this.lowercasedItems.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
 			: this.items;
 		this.cdr.markForCheck();
 
 		const foundLoweredItem = input && this.lowercasedItems.find(v => v.lowered === loweredInput);
-		super.update(foundLoweredItem && foundLoweredItem.item || null);
+		this.updateValueAndEmitChange(foundLoweredItem && foundLoweredItem.item || null);
 	}
 }

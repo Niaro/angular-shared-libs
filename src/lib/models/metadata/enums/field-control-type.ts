@@ -1,4 +1,4 @@
-import { Enumeration } from '../../misc/enum';
+import { Enumeration } from '../../misc/enums/enum';
 
 export class FieldControlType extends Enumeration {
 	// general
@@ -21,6 +21,10 @@ export class FieldControlType extends Enumeration {
 	static autocomplete = new FieldControlType();
 
 	static buttonToggle = new FieldControlType();
+
+	static chip = new FieldControlType();
+
+	static email = new FieldControlType();
 
 	// special
 	static currency = new FieldControlType();

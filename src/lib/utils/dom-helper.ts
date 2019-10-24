@@ -73,13 +73,13 @@ export class $ {
 		return null;
 	}
 
-	static hasParent(target: Element, selector: string | Element): boolean {
+	static hasParent(target: Element, parent: string | Element): boolean {
 		while (target !== document.documentElement) {
 			if (!target.parentElement)
 				return false;
 
 			target = target.parentElement;
-			if (isString(selector) ? target.matches(selector) : target === selector)
+			if (isString(parent) ? target.matches(parent) : target === parent)
 				return true;
 		}
 		return false;

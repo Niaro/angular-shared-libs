@@ -153,6 +153,8 @@ $bg-blur           : 5px;
 $row-panel-cell-size     : 160px;
 $row-panel-cell-head-size: 230px;
 
-$avatar-size: 40px;
+$thumbnail-size: 40px;
+
+$avatar-size: $thumbnail-size;
 
 $z-index-sidenav: 1000000;

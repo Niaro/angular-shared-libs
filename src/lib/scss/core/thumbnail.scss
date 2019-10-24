@@ -1,0 +1,13 @@
+.thumbnail {
+	width: $thumbnail-size;
+	height: $thumbnail-size;
+	border-radius: $thumbnail-size;
+	border: 1px solid $color-border;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $color-light;
+}

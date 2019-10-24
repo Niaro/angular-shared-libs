@@ -1,4 +1,4 @@
-import { Enumeration } from '../../misc/enum';
+import { Enumeration } from '../../misc/enums/enum';
 
 export class CashierEnvironment extends Enumeration {
 	// TODO change to http://localhost:4201/widget-loader/main.js after the repos merging

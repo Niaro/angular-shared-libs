@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn, AsyncValidatorFn, FormArray } from '@angular/forms';
 
-import { isString, isRegExp, merge, keys, isNil, mapKeys } from 'lodash-es';
+import { isString, isRegExp, merge, keys, isNil, mapKeys, isEmpty } from 'lodash-es';
 import { IValidationErrors } from './models';
 
 /**
@@ -160,6 +160,22 @@ export class Validators {
 				: null;
 	}
 
+	static ip(c: AbstractControl): IValidationErrors | null {
+		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+
+		return c.value.match(/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/g)
+			? null
+			: { ip: true };
+	}
+
+	static url(c: AbstractControl): IValidationErrors | null {
+		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
+
+		return c.value.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g)
+			? null
+			: { url: true };
+	}
+
 	/**
 	 * Validator that requires a control to match a regex to its value.
 	 */
@@ -186,30 +202,33 @@ export class Validators {
 	 * Compose multiple validators into a single function that returns the union
 	 * of the individual error maps.
 	 */
-	static compose(validators: ValidatorFn[]): ValidatorFn | null {
+	static compose(validators: (ValidatorFn | null | undefined)[]): ValidatorFn | null {
 		if (!validators)
 			return null;
 
-		const presentValidators = validators.filter(v => v !== null);
-		if (Validators.isEmptyValue(presentValidators))
+		const presentValidators = validators.filter(v => !isNil(v)) as ValidatorFn[];
+		if (isEmpty(presentValidators))
 			return null;
 
-		return (control: AbstractControl) =>
-			Validators.mergeErrors(Validators.executeValidators(control, presentValidators));
+		return (control: AbstractControl) => Validators.mergeErrors(
+			Validators.executeValidators(control, presentValidators)
+		);
 	}
 
-	static composeAsync(validators: AsyncValidatorFn[]): AsyncValidatorFn | null {
+	static composeAsync(validators: (AsyncValidatorFn | null | undefined)[]): AsyncValidatorFn | null {
 		if (!validators)
 			return null;
 
-		const presentValidators = validators.filter(v => v !== null);
-		if (Validators.isEmptyValue(presentValidators))
+		const presentValidators = validators.filter(v => !isNil(v)) as AsyncValidatorFn[];
+
+		if (isEmpty(presentValidators))
 			return null;
 
 		return (control: AbstractControl) => {
-			const promises = Validators.executeAsyncValidators(control, presentValidators).map(
-				Validators.convertToPromise
-			);
+			const promises = Validators
+				.executeAsyncValidators(control, presentValidators)
+				.map(Validators.convertToPromise);
+
 			return Promise.all(promises).then(Validators.mergeErrors);
 		};
 	}
@@ -236,7 +255,7 @@ export class Validators {
 	private static mergeErrors(arrayOfErrors: any[]): IValidationErrors | null {
 		const result = arrayOfErrors.reduce(
 			(accumulator: IValidationErrors | null, errors: IValidationErrors | null) =>
-				errors === null ? accumulator : merge(accumulator),
+				errors === null ? accumulator : merge(accumulator, errors),
 			{}
 		);
 		return keys(result).length === 0 ? null : result;

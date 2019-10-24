@@ -1,6 +1,9 @@
 import { Injectable, InjectionToken, Inject } from '@angular/core';
-import { snakeCase, isEmpty } from 'lodash-es';
-import { Subject } from 'rxjs';
+import { snakeCase, isEmpty, last } from 'lodash-es';
+import { Subject, Observable, from, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { Dictionary } from 'lodash';
+import * as m from 'moment';
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import * as firebase from 'firebase/app';
@@ -9,8 +12,10 @@ import * as firebase from 'firebase/app';
 import 'firebase/storage';
 import 'firebase/functions';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 import { TelemetryService } from './telemetry.service';
+import { Entity, IPageQueryParams, PagedResults, ResponseError } from '../models';
 
 export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 
@@ -19,11 +24,17 @@ export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 })
 export class FirebaseService {
 
+	get currentUser() { return firebase.auth().currentUser; }
+
 	uploadProgress$ = new Subject<number | null>();
 
 	uploadedDownloadUrl$ = new Subject<string>();
 
 	uploadError$ = new Subject<string>();
+
+	private orderBy = 'updatedAt';
+
+	private queryDocumentSnapshotsById: Dictionary<any> = {};
 
 	protected get db() { return firebase.firestore(); }
 
@@ -53,6 +64,133 @@ export class FirebaseService {
 
 		this.storage = firebase.storage();
 		this.functions = firebase.functions();
+	}
+
+	signIn(credentials: { userName: string, password: string }) {
+		return from(firebase.auth().signInWithEmailAndPassword(credentials.userName, credentials.password))
+			.pipe(catchError(this.responseErrorMapper));
+	}
+
+	getDocumentId(collectionPath: string) {
+		return this.db.collection(collectionPath).doc().id;
+	}
+
+	collection(collectionPath: string) {
+		return this.db.collection(collectionPath);
+	}
+
+	doc(documentPath: string) {
+		return this.db.doc(documentPath);
+	}
+
+	batch() {
+		return this.db.batch();
+	}
+
+	arrayUnion(...elements: any[]) {
+		return firebase.firestore.FieldValue.arrayUnion(...elements);
+	}
+
+	arrayRemove(...elements: any[]) {
+		return firebase.firestore.FieldValue.arrayRemove(...elements);
+	}
+
+	onQuerySnapshot<T extends Entity>(
+		path: string,
+		{ page, limit, authorUid }: IPageQueryParams & { authorUid?: string },
+		factory: (data: Partial<T>) => T
+	) {
+		return new Observable<PagedResults<T>>(subscriber => {
+			let query = this.collection(path)
+				.orderBy(this.orderBy, 'desc')
+				.limit(limit);
+
+			if (authorUid)
+				query = query.where('authorUid', '==', authorUid);
+
+			if (page)
+				query = query.startAfter(this.queryDocumentSnapshotsById[page]);
+
+			const unsubscribe = query.onSnapshot(
+				snapshot => {
+					const { docs } = snapshot;
+					const lastDoc = last(docs);
+					const nextPageCursor = docs.length === limit && lastDoc
+						? lastDoc.id
+						: null;
+
+					if (nextPageCursor)
+						this.queryDocumentSnapshotsById[nextPageCursor] = lastDoc;
+
+					subscriber.next(new PagedResults({
+						nextPageCursor,
+						firstPage: !page,
+						records: docs.map(v => factory(v.data() as Partial<T>))
+					}));
+				},
+				e => subscriber.error(e)
+			);
+			return () => unsubscribe();
+		})
+			.pipe(catchError(this.responseErrorMapper));
+	}
+
+	onSnapshot<T>(
+		path: string,
+		factory: (data: Partial<T>) => T
+	) {
+		return new Observable<T[]>(subscriber => {
+			const unsubscribe = this.collection(path).onSnapshot(
+				snapshot => subscriber.next(snapshot.docs.map(v => factory(v.data() as Partial<T>))),
+				e => subscriber.error(e)
+			);
+			return () => unsubscribe();
+		})
+			.pipe(catchError(this.responseErrorMapper));
+	}
+
+	once<T>(documentPath: string): Observable<Partial<T> | null> {
+		return from(this.doc(documentPath).get())
+			.pipe(
+				map(v => (v.data() as Partial<T>) || null),
+				catchError(this.responseErrorMapper)
+			);
+	}
+
+	delete(documentPath: string): Observable<void> {
+		return from(this.doc(documentPath).delete())
+			.pipe(catchError(this.responseErrorMapper));
+	}
+
+	set(documentPath: string, body: Entity): Observable<void> {
+		return from(this.doc(documentPath).set(body.toJSON()))
+			.pipe(catchError(this.responseErrorMapper));
+	}
+
+	save<T extends Entity>(
+		collectionPath: string,
+		entity: T,
+		factory: (data: Partial<T>) => T
+	) {
+		const isAdding = !entity.id;
+		const entityId = entity.id || this.getDocumentId(collectionPath);
+
+		const patch: Partial<Entity> = isAdding
+			? {
+				authorUid: this.currentUser && this.currentUser.uid,
+				createdAt: m(),
+				updatedAt: m()
+			}
+			: { updatedAt: m() };
+		patch.id = entityId;
+
+		entity = factory({
+			...entity,
+			...patch
+		});
+
+		return this.set(`${collectionPath}/${entityId}`, entity)
+			.pipe(map(() => entity));
 	}
 
 	/**
@@ -130,4 +268,8 @@ export class FirebaseService {
 		if (!name) return '';
 		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
 	}
+
+	private responseErrorMapper = (v: firebase.FirebaseError) => throwError(
+		new ResponseError({ messages: [{ type: v.code, message: v.message }] })
+	)
 }

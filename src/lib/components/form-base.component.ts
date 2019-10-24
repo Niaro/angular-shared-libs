@@ -54,7 +54,9 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 	@Output('invalid')
 	readonly invalid$ = new BehaviorSubject(false);
 
-	form$ = new BehaviorSubject<FormGroup | null>(null);
+	readonly valid$ = this.invalid$.pipe(map(v => !v));
+
+	readonly form$ = new BehaviorSubject<FormGroup | null>(null);
 	get form() { return this.form$.value; }
 	set form(value: FormGroup | null) {
 		this.form$.next(value);
@@ -63,7 +65,7 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 
 	showInvalidInputsSnack = true;
 
-	protected destroyed$ = new AsyncVoidSubject();
+	protected readonly destroyed$ = new AsyncVoidSubject();
 
 	constructor(
 		protected fb: FormBuilder,
