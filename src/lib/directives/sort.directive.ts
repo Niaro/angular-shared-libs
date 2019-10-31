@@ -18,7 +18,7 @@ export class SortDirective {
 	) {
 		route.params
 			.pipe(first())
-			.subscribe(({sortField, sortDir }: ISortQueryParams) => {
+			.subscribe(({ sortField, sortDir }: Partial<ISortQueryParams>) => {
 				if (sortField) {
 					sort.active = camelCase(sortField);
 					sort.direction = sortDir || 'desc';

@@ -7,7 +7,7 @@ import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2, OnCha
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgIconComponent implements OnChanges {
-	@Input() name: String;
+	@Input() name!: String;
 
 	private get $host() { return this.host.nativeElement; }
 

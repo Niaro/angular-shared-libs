@@ -16,9 +16,9 @@ const { url: API_URL, version: API_VERSION } = environment.api || { url: '', ver
 	providedIn: 'root',
 })
 export class ApiRequestInterceptorService implements HttpInterceptor {
-	private static instance;
+	private static instance: ApiRequestInterceptorService;
 
-	headers: Dictionary<string> = {
+	headers: Dictionary<string | null> = {
 		[CONTENT_TYPE]: 'application/json',
 		'json-naming-strategy': 'camelcase',
 		'x-api-key': environment.mockKey,
@@ -26,8 +26,11 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302
 		// response code which if handled by the browser redirects the page, but with the service worker used as proxy for the api calls
 		// it doesn't happpen
-		'ngsw-bypass': ''
+		'ngsw-bypass': '',
+		// for cloudlfare access https://developers.cloudflare.com/access/faq/
+		'credentials': 'same-origin'
 	};
+
 	checkAuthorization = false;
 
 	baseUrl = `${API_URL ? (API_URL.includes('api') ? API_URL : `${API_URL}/api`) : '/api'}${API_VERSION ? `/${API_VERSION}` : ''}`;
@@ -43,7 +46,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		return ApiRequestInterceptorService.instance = this;
 	}
 
-	authorized(token: string | null): void {
+	authorized(token: string | null | undefined): void {
 		this.headers.Authorization = token ? `Bearer ${token}` : '';
 		this.authorized$.next(!!token);
 	}
@@ -66,7 +69,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 			url,
 			setHeaders: {
 				...(request.url.startsWith('http') ? {} : this.headers),
-				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE],
+				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE] || '',
 			},
 		}));
 	}

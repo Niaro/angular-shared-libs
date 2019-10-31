@@ -1,19 +1,23 @@
 import { MetadataEntity } from '../metadata/metadata-entity';
 
 export class State extends MetadataEntity {
-	iso: string;
-	name: string;
+	code!: string;
+	name!: string;
 
 	constructor(data: Partial<State>) {
 		super(data);
 		Object.freeze(this);
 	}
 
+	toString() {
+		return this.name;
+	}
+
 	valueOf(): any {
-		return this.iso;
+		return this.code;
 	}
 
 	toJSON() {
-		return this.iso;
+		return this.code;
 	}
 }

@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash-es';
+import { isEqual, assign } from 'lodash-es';
 
 export class Size {
 	constructor(public width: number, public height: number) { }
@@ -12,18 +12,13 @@ export interface IPosition {
 }
 
 export class Position {
-	top: number;
-	bottom: number;
-	left: number;
-	right: number;
+	top!: number;
+	bottom!: number;
+	left!: number;
+	right!: number;
 
 	constructor(position?: Partial<Position>) {
-		if (position) {
-			this.top = position.top;
-			this.bottom = position.bottom;
-			this.left = position.left;
-			this.right = position.right;
-		}
+		position && assign(this, position);
 	}
 
 	equal(d: Position) {

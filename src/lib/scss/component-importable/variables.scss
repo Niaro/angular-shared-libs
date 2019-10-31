@@ -6,8 +6,9 @@ $color-border     : #e2e8ec !default;
 $color-bg         : #fafafa !default;
 $dark-primary-text: $color-dark !default;
 
-$color-primary      : #2578ea;
-$color-primary-light: #6ea6ff;
+$color-primary      : #2578ea !default;
+$color-primary-light: #6ea6ff !default;
+$color-primary-dark : #004db7 !default;
 $color-danger       : #ff6666;
 $color-success      : #00ef77;
 
@@ -15,7 +16,7 @@ $primary-colors: (
 	50      : lighten($color-primary, 40%),
 	100     : $color-primary-light,
 	500     : $color-primary,
-	700     : #004db7,
+	700     : $color-primary-dark,
 	contrast: (
 		100: $dark-primary-text,
 		500: $light-primary-text,
@@ -45,12 +46,12 @@ $danger-colors: (
 	),
 );
 
-$primary: mat-palette($primary-colors);
-$accent : mat-palette($mat-amber, 700, 100, 900);
-$success: mat-palette($success-colors);
-$danger : mat-palette($danger-colors);
-$warning: mat-palette($mat-orange);
-$info   : mat-palette($mat-light-blue);
+$primary: mat-palette($primary-colors) !default;
+$accent : mat-palette($mat-amber, 700, 100, 900) !default;
+$success: mat-palette($success-colors) !default;
+$danger : mat-palette($danger-colors) !default;
+$warning: mat-palette($mat-orange) !default;
+$info   : mat-palette($mat-light-blue) !default;
 
 $palette: (
 	primary: $primary,
@@ -97,6 +98,7 @@ $font-size-md: 14px !default;
 $font-size-lg: 18px !default;
 $font-size-xl: 22px !default;
 
+$font-weight-extra-slim: 100 !default;
 $font-weight-slim      : 300 !default;
 $font-weight-normal    : 400 !default;
 $font-weight-bold      : 500 !default;
@@ -150,3 +152,7 @@ $bg-blur           : 5px;
 
 $row-panel-cell-size     : 160px;
 $row-panel-cell-head-size: 230px;
+
+$avatar-size: 40px;
+
+$z-index-sidenav: 1000000;

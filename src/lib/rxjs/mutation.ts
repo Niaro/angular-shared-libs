@@ -1,4 +1,6 @@
 import { Observable } from 'rxjs';
+import { subscribeOn } from 'rxjs/operators';
+
 import { BpScheduler } from './schedulers';
 
 /**
@@ -10,21 +12,11 @@ import { BpScheduler } from './schedulers';
  * @link https://developer.mozilla.org/en/docs/Web/API/MutationObserver#MutationObserverInit
  * @returns {Observable<MutationRecord[]>}
  */
-export function mutation(target: Node, options: MutationObserverInit = { attributes: true }): Observable<MutationRecord[]> {
-	return Observable
-		.create(observer => {
-			const mo = new MutationObserver(mutations => observer.next(mutations));
+export function fromMutation(target: Node, options: MutationObserverInit = { attributes: true }) {
+	return new Observable<MutationRecord[]>(subscriber => {
+			const mo = new MutationObserver(mutations => subscriber.next(mutations));
 			mo.observe(target, options);
 			return () => mo.disconnect();
 		})
-		.subscribeOn(BpScheduler.outside);
-}
-
-(<any>Observable).fromMutation = mutation;
-
-declare module 'rxjs/internal/Observable' {
-	namespace Observable {
-		// tslint:disable-next-line:no-var-keyword
-		var fromMutation: typeof mutation;
-	}
+		.pipe(subscribeOn(BpScheduler.outside));
 }

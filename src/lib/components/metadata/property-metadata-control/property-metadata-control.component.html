@@ -1,0 +1,81 @@
+<ng-container [ngSwitch]="metadata.control.type">
+	<bp-input *ngSwitchCase="FieldControlType.input"
+			  [formControl]="control"
+			  [name]="metadata.property"
+			  [label]="metadata.label"
+			  [hint]="metadata.hint"
+			  [required]="metadata.required"
+			  [placeholder]="metadata.placeholder"
+			  [appearance]="appearance">
+	</bp-input>
+
+	<bp-input *ngSwitchCase="FieldControlType.textarea"
+			  textarea
+			  [formControl]="control"
+			  [name]="metadata.property"
+			  [label]="metadata.label"
+			  [hint]="metadata.hint"
+			  [required]="metadata.required"
+			  [placeholder]="metadata.placeholder"
+			  [appearance]="appearance">
+	</bp-input>
+
+	<bp-input *ngSwitchCase="FieldControlType.number"
+			  [formControl]="control"
+			  [mask]="numberMask"
+			  [name]="metadata.property"
+			  [label]="metadata.label"
+			  [hint]="metadata.hint"
+			  [required]="metadata.required"
+			  [placeholder]="metadata.placeholder"
+			  [appearance]="appearance">
+	</bp-input>
+
+	<bp-country-selector *ngSwitchCase="FieldControlType.country"
+						 [formControl]="control"
+						 [name]="metadata.property"
+						 [label]="metadata.label"
+						 [hint]="metadata.hint"
+						 [required]="metadata.required"
+						 [placeholder]="metadata.placeholder"
+						 [appearance]="appearance">
+	</bp-country-selector>
+
+	<bp-select *ngSwitchCase="FieldControlType.select"
+			   [items]="metadata.control.list"
+			   [formControl]="control"
+			   [name]="metadata.property"
+			   [label]="metadata.label"
+			   [hint]="metadata.hint"
+			   [required]="metadata.required"
+			   [placeholder]="metadata.placeholder"
+			   [appearance]="appearance">
+	</bp-select>
+
+	<bp-autocomplete *ngSwitchCase="FieldControlType.autocomplete"
+					 [items]="metadata.control.list"
+					 [formControl]="control"
+					 [name]="metadata.property"
+					 [label]="metadata.label"
+					 [hint]="metadata.hint"
+					 [required]="metadata.required"
+					 [placeholder]="metadata.placeholder"
+					 [appearance]="appearance">
+	</bp-autocomplete>
+
+	<bp-button-toggle *ngSwitchCase="FieldControlType.buttonToggle"
+					  [items]="metadata.control.list"
+					  [formControl]="control"
+					  [name]="metadata.property"
+					  [label]="metadata.label"
+					  [hint]="metadata.hint"
+					  [required]="metadata.required"
+					  [placeholder]="metadata.placeholder">
+	</bp-button-toggle>
+
+	<mat-slide-toggle *ngSwitchCase="FieldControlType.switch"
+					  [formControl]="control"
+					  color="primary">
+		{{ metadata.label }}
+	</mat-slide-toggle>
+</ng-container>

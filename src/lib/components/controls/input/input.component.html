@@ -1,28 +1,46 @@
-<input *ngIf="autocomplete; else defaultTpl"
-	   #el
-	   matInput
-	   [placeholder]="placeholder"
-	   [value]="value"
-	   [matAutocomplete]="autocomplete"
-	   [matAutocompleteConnectedTo]="autocompleteOrigin"
-	   (input)="update(el.value)">
+<mat-form-field [appearance]="appearance">
+	<mat-label *ngIf="label">{{ label }}</mat-label>
 
-<ng-template #defaultTpl>
-	<input #el
-		   matInput
-		   [placeholder]="placeholder"
-		   [bpTextMask]="mask"
-		   (input)="!mask && update(el.value)" />
-</ng-template>
+	<textarea *ngIf="textarea === ''; else inputTpl"
+			  matInput
+			  [attr.name]="name"
+			  [formControl]="internalControl"
+			  [placeholder]="placeholder"
+			  [required]="required">
+	</textarea>
 
-<ng-container *ngIf="$input?.value">
-	<div *bpDelayedRender
-		 class="close-btn-wrapper"
-		 @slideRight>
-		<button type="button"
-				mat-icon-button
-				(click)="$input.value=''; update(null)">
-			<mat-icon>close</mat-icon>
-		</button>
+	<ng-template #inputTpl>
+		<input *ngIf="autocomplete; else defaultInputTpl"
+			   matInput
+			   [attr.name]="name"
+			   [formControl]="internalControl"
+			   [placeholder]="placeholder"
+			   [required]="required"
+			   [value]="value"
+			   [matAutocomplete]="autocomplete">
+
+		<ng-template #defaultInputTpl>
+			<input matInput
+				   [attr.name]="name"
+				   [formControl]="internalControl"
+				   [placeholder]="placeholder"
+				   [required]="required"
+				   [bpTextMask]="mask" />
+		</ng-template>
+	</ng-template>
+
+	<div class="close-btn-wrapper">
+		<div [@slideRight]="(internalControl.valueChanges | async) ? 'on' : 'off'">
+			<button type="button"
+					mat-icon-button
+					[disabled]="internalControl.disabled"
+					(click)="internalControl.setValue(null)">
+				<mat-icon>close</mat-icon>
+			</button>
+		</div>
 	</div>
-</ng-container>
+
+	<mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+
+	<mat-error bpFieldError [bpFieldErrorSuppress]="hideErrorText"></mat-error>
+</mat-form-field>

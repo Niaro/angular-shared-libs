@@ -1,16 +1,31 @@
-<bp-input [ngClass]="inputClass"
-		  [formControl]="inputControl"
-		  [placeholder]="placeholder"
-		  [autocomplete]="autocomplete">
-</bp-input>
+<ng-container *ngIf="appearance === 'round'; else defaultInputTpl">
+	<bp-round-input [name]="name"
+					[formControl]="internalControl"
+					[placeholder]="placeholder"
+					[autocomplete]="autocomplete"
+					[throttle]="throttle">
+	</bp-round-input>
 
-<bp-validation-error *ngIf="formControl"
-					 [errors]="formControl.errors">
-</bp-validation-error>
+	<bp-validation-error *ngIf="externalControl"
+						 [errors]="externalControl!.errors">
+	</bp-validation-error>
+</ng-container>
+
+<ng-template #defaultInputTpl>
+	<bp-input [name]="name"
+			  [label]="label"
+			  [hint]="hint"
+			  [required]="required"
+			  [formControl]="internalControl"
+			  [placeholder]="placeholder"
+			  [autocomplete]="autocomplete"
+			  [throttle]="throttle">
+	</bp-input>
+</ng-template>
 
 <mat-autocomplete #autocomplete="matAutocomplete">
 	<mat-option *ngFor="let item of filtered"
 				[value]="item">
-		{{ item }}
+		{{ item.displayName || item.name || item }}
 	</mat-option>
 </mat-autocomplete>

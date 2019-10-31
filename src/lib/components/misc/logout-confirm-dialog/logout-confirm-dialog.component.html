@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>
+	Logout
+</h2>
+
+<mat-dialog-content>
+	Are you sure you want to logout?
+</mat-dialog-content>
+
+<mat-dialog-actions>
+	<button class="cancel mr-auto"
+			mat-stroked-button
+			[mat-dialog-close]="false">
+		Cancel
+	</button>
+
+	<button mat-stroked-button
+			[mat-dialog-close]="true">
+		OK
+	</button>
+</mat-dialog-actions>

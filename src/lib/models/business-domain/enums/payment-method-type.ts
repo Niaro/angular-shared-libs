@@ -11,9 +11,9 @@ export class PaymentMethodType extends Enumeration {
 	static externalLink = new PaymentMethodType();
 	static cryptoWallet = new PaymentMethodType('Crypto Wallets');
 
-	logo: string;
+	logo!: string;
 
-	routeName: string;
+	routeName!: string;
 
 	constructor(displayName?: string) {
 		super(displayName);

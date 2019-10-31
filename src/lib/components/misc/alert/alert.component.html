@@ -12,7 +12,8 @@
 	</button>
 
 	<bp-api-errors *ngIf="_errors"
-				   [src]="_errors">
+				   [src]="_errors"
+				   [showType]="showType">
 	</bp-api-errors>
 
 	<bp-alert-messages *ngIf="_messages"

@@ -29,7 +29,7 @@ export class DatepickerCalendarHeaderComponent extends MatCalendarHeader<m.Momen
 	}
 
 	clear() {
-		this.picker.select(null);
+		this.picker.select(null!);
 		this.picker.close();
 	}
 

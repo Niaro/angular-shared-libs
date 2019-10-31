@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { Countries, Country, CountryCode } from '@bp/shared/models';
-import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { isArray } from 'lodash-es';
 
-import { InputBasedComponent } from '../input-based.component';
+import { FormFieldControlComponent } from '../form-field-control.component';
 
 
 @Component({
@@ -27,10 +27,8 @@ import { InputBasedComponent } from '../input-based.component';
 		}
 	]
 })
-export class CountrySelectorComponent extends InputBasedComponent<Country> implements OnChanges {
-	@Input() formControl: FormControl;
-
-	@Input() excluded: Country[];
+export class CountrySelectorComponent extends FormFieldControlComponent<Country | null> implements OnChanges {
+	@Input() excluded!: Country[];
 
 	@Input() placeholder = 'Country';
 
@@ -40,14 +38,11 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 
 	filtered = Countries.list;
 
-	constructor() {
-		super();
+	ngOnChanges(changes: SimpleChanges) {
+		super.ngOnChanges(changes);
 
-		this.inputControl.valueChanges
-			.subscribe(it => this.onCountryNameChange(it));
-	}
+		const { excluded, hasWorldwide, countries, value } = changes;
 
-	ngOnChanges({ excluded, hasWorldwide, countries, value }: SimpleChanges) {
 		if (excluded)
 			this.countries = isArray(this.excluded)
 				? Countries.list.filter(it => !this.excluded.includes(it))
@@ -67,38 +62,34 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 				: this.value.name;
 
 			this.updateFilteredCountries(countryName);
-			this.inputControl.setValue(countryName, { emitEvent: false });
+			this.internalControl.setValue(countryName, { emitEvent: false });
 		}
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: Country | CountryCode): void {
+	writeValue(value: Country | CountryCode | null): void {
 		Promise
 			.resolve()
 			.then(() => {
-				value = value instanceof Country ? value : Countries.findByCode(value);
-				this.inputControl.setValue(value && value.name || '', { emitViewToModelChange: false });
+				this.value = value instanceof Country
+					? value
+					: value && Countries.findByCode(value);
+				this.internalControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
 	// #region Implementation of the Validator interface
 	protected validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
-		return !value && this.inputControl.value
+		return !value && this.internalControl.value
 			? { 'countryNotFound': true }
 			: null;
 	}
 	// #endregion Implementation of the Validator interface
 
-	onCountryNameChange(input: string) {
+	update(input: string) {
 		this.updateFilteredCountries(input);
-
-		const country = input && Countries.find(input);
-		if (country !== this.value) {
-			this.value = country;
-			this.valueChange.next(country);
-			this.onChange(country);
-		}
+		super.update(input ? Countries.find(input) : null);
 	}
 
 	private updateWorldwideInCountriesList(list: Country[]) {
@@ -110,7 +101,7 @@ export class CountrySelectorComponent extends InputBasedComponent<Country> imple
 	private updateFilteredCountries(input: string) {
 		const loweredCountryName = input && input.toLowerCase();
 		this.filtered = loweredCountryName
-			? this.countries.filter(it => it.lowerCaseName.includes(loweredCountryName))
+			? this.countries.filter(it => it.lowerCaseName && it.lowerCaseName.includes(loweredCountryName))
 			: this.countries;
 	}
 }

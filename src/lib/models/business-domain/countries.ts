@@ -12,18 +12,25 @@ export type CountryCode = ActualCountryCode | 'AQ' | 'BV' | 'GS' | 'HM' | 'PN' |
 // @ts-ignore
 const initiation = intlTelInput;
 
-export const COUNTRY_STATES: { [countryIso: string]: State[] } = mapValues(
+export const COUNTRY_STATES = mapValues(
 	require('./states.json'),
 	(v: Partial<State>[]) => v.map((it: Partial<State>) => new State(it))
-);
+) as unknown as { [countryIso: string]: State[] };
 
 export class Country extends MetadataEntity {
-	readonly name: string;
-	readonly displayName: string;
-	readonly code: CountryCode | 'ALL';
-	readonly dialCode: string;
+
+	readonly name!: string;
+
+	readonly displayName!: string;
+
+	readonly code!: CountryCode | 'ALL';
+
+	readonly dialCode!: string;
+
 	readonly lowerCaseName?: string;
+
 	readonly lowerCaseCode?: string;
+
 	readonly states?: State[];
 
 	constructor(data: Partial<Country>) {

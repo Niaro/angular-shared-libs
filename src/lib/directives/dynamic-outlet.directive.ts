@@ -7,8 +7,8 @@ import { RouterOutlet, ChildrenOutletContexts } from '@angular/router';
 	exportAs: 'outlet'
 })
 export class DynamicOutletDirective implements OnInit, OnDestroy {
-	@Input() name: string;
-	outlet: RouterOutlet;
+	@Input() name!: string;
+	outlet!: RouterOutlet;
 
 	get isActivated() { return this.outlet && this.outlet.isActivated; }
 

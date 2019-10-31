@@ -13,7 +13,7 @@ export type PageQueryParamsCtor = Constructor<IPageQueryParams>;
 export function mixinPageQueryParams<T extends Constructor<QueryParamsBase<{ pageSize: string, page: string }>>>
 	(base: T, defaultPageSize = PAGE_SIZE): PageQueryParamsCtor & T {
 	return class extends base {
-		page: string;
+		page?: string;
 		limit: string;
 
 		constructor(...args: any[]) {

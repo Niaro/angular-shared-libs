@@ -1,6 +1,5 @@
-import { Component, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { isEqual } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
@@ -30,8 +29,8 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 
 	value = new DateRange();
 
-	constructor(private cdr: ChangeDetectorRef) {
-		super();
+	constructor(cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -45,16 +44,10 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	update(v: DateRangeInput) {
+	patch(v: DateRangeInput) {
 		if (v.to && this.value.from && this.value.from.isSame(v.to))
 			v.to = this.value.from.clone().endOf('day');
 
-		const value = new DateRange({ ...this.value, ...v });
-
-		if (!isEqual(value, this.value)) {
-			this.value = value;
-			this.valueChange.next(value);
-			this.onChange(value);
-		}
+		this.update(new DateRange({ ...this.value, ...v }));
 	}
 }

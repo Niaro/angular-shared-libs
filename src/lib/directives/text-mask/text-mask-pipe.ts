@@ -7,14 +7,16 @@ export class TextMaskPipe extends MaskPipe {
 		super(config);
 	}
 
-	transformBody(rawValue: string): TextMask {
+	transformBody(rawValue: string): TextMask | undefined {
 		const resolvedMask = isFunction(this.mask) ? this.mask(rawValue) : this.mask;
 
 		if (!resolvedMask && this.prefixLength === 0 && this.suffixLength === 0)
 			return;
 
 		this.formatChars = resolvedMask
-			? resolvedMask.filter(char => !(char instanceof RegExp)).concat(this.config.placeholderChar) as string[]
+			? resolvedMask
+				.filter(char => !(char instanceof RegExp))
+				.concat(this.config.placeholderChar) as string[]
 			: [];
 
 		if (this.prefixLength === 0 && this.suffixLength === 0 || rawValue === '' || (rawValue[0] === this.prefix[0] && rawValue.length === 1))
@@ -26,7 +28,7 @@ export class TextMaskPipe extends MaskPipe {
 
 		const maskFromRefinedValue = isEmpty(refinedValue)
 			? [null]
-			: refinedValue.split('').map(char => /./);
+			: refinedValue!.split('').map(char => /./);
 
 		return resolvedMask || maskFromRefinedValue;
 	}

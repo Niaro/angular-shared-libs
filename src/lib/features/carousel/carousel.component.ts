@@ -3,14 +3,14 @@ import {
 	SimpleChanges, Input, Output, ViewChild, ViewChildren, TemplateRef, ContentChild,
 	QueryList, ChangeDetectionStrategy, Renderer2
 } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
+import { Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
 import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
 
-import { isNull, isEqual, forOwn, sum } from 'lodash-es';
+import { isEqual, forOwn, sum, get } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
-import { AsyncVoidSubject, OptionalBehaviorSubject, BpScheduler, measure, mutate } from '@bp/shared/rxjs';
+import { AsyncVoidSubject, BpScheduler, measure, mutate, fromMeasure, fromResize } from '@bp/shared/rxjs';
 import { Direction, Dimensions } from '@bp/shared/models';
 import { $ } from '@bp/shared/utils';
 
@@ -31,7 +31,7 @@ export enum ArrowType {
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
-	@Input() itemsPerView: number | null = 1;
+	@Input() itemsPerViewport: number | 'unlimited' = 1;
 	@Input() looped = false;
 	@Input() bullets: boolean | 'always' = false;
 	@Input() arrowType = ArrowType.inner;
@@ -42,41 +42,38 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	@Input() showArrows = true;
 	@Input() resetActiveOnItemsChange = true;
 	@Input('autoplay') autoplayInterval = 0;
-	@Input() slideClass: string;
+	@Input() slideClass?: string;
 	@Input() sortable = false;
-	@Input() sortableItem: (item: any) => boolean;
+	@Input() sortableItem?: (item: any) => boolean;
 	@Input() slideInAnimation = true;
 	@Output('sort') readonly sort$ = new Subject<any[]>();
 
 	@Input()
 	get items() { return this.items$.value; }
-	set items(value) { this.items$.next(value); }
+	set items(value) { this.items$.next(value || []); }
 
 	@Input()
 	get activeItem() {
-		if (!this.items || !this.items.length) return;
-		return this.items[this.activeIndex];
+		if (!this.items.length) return;
+		return get(this.items, this.activeIndex);
 	}
 	set activeItem(value: any) {
-		if (value && (!this.items || !this.items.includes(value)))
-			throw new Error('Item does not belong to carousel items');
+		if (value && !this.items.includes(value))
+			throw new Error('The item does not belong to the carousel items');
 		this._activeIndex = this.items.indexOf(value);
 	}
 
 	@Output('activeItemChange') readonly activeItemChange$ = new Subject<any>();
 	@Output('scrolled') readonly scroll$ = new Subject<Readonly<ICarouselViewportItemsVisibility>>();
 
+	private _activeIndex = -1;
 	get activeIndex() {
-		if (!this.items || !this.items.length) return;
+		if (!this.items.length) return -1;
 		return Math.min(this._activeIndex, this.items.length - 1);
 	}
 
 	get $host(): HTMLElement { return this.host.nativeElement; }
 	get $slides() { return this.$slides$.value; }
-
-	get isShowArrows() {
-		return this.arrowType && this.showArrows && this.arrowType !== ArrowType.none && this.viewsCount > 1;
-	}
 
 	get isShowBullets() {
 		return this.bullets === 'always' || this.bullets && this.items.length > 1;
@@ -85,7 +82,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	slidesVisibility$ = new BehaviorSubject<Readonly<ICarouselViewportItemsVisibility>>({});
 	get slidesVisibility() { return this.slidesVisibility$.value; }
 
-	items$ = new OptionalBehaviorSubject<any[]>();
+	items$ = new BehaviorSubject<any[]>([]);
 
 	prevButtonDisabled$ = this.slidesVisibility$.pipe(
 		map(({ firstFullyVisible }) => (firstFullyVisible === undefined || firstFullyVisible === 0) && !this.looped),
@@ -106,32 +103,30 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		this.prevButtonDisabled$,
 		this.nextButtonDisabled$
 	).pipe(
-		map(([prevDisabled, nextDisabled]) => !(prevDisabled && nextDisabled))
+		map(([prevDisabled, nextDisabled]) => this.arrowType
+			&& this.showArrows
+			&& this.arrowType !== ArrowType.none
+			&& !(prevDisabled && nextDisabled))
 	);
 
 	animate$ = new BehaviorSubject(false);
-	viewportHeight$ = new BehaviorSubject(undefined);
-	currentItemsPerView$ = new BehaviorSubject<number | null>(this.itemsPerView);
+	viewportHeight$ = new BehaviorSubject<number | null>(null);
+	currentItemsPerView$ = new BehaviorSubject<number | 'unlimited'>(this.itemsPerViewport);
 	get currentItemsPerView() { return this.currentItemsPerView$.value; }
 
-	@ContentChild(TemplateRef, { static: false }) template: TemplateRef<any>;
-	@ViewChild('slidesContainer', { static: true }) private slidesContainerRef: ElementRef;
-	@ViewChildren('slide') private slidesQuery: QueryList<ElementRef>;
+	@ContentChild(TemplateRef, { static: false }) template!: TemplateRef<any>;
+	@ViewChild('slidesContainer', { static: true }) private slidesContainerRef!: ElementRef;
+	@ViewChildren('slide') private slidesQuery!: QueryList<ElementRef>;
 
 	private get $slidesContainer(): HTMLElement { return this.slidesContainerRef && this.slidesContainerRef.nativeElement; }
 
-	private get viewsCount() {
-		return (this.items && this.items.length) ? Math.ceil(this.items.length / this.currentItemsPerView) : 0;
-	}
-
-	private _activeIndex = -1;
 	private $slides$ = new BehaviorSubject<HTMLElement[]>([]);
 	private shouldUpdateScroll = false;
-	private slideMaxWidth$ = new BehaviorSubject<number>(undefined);
+	private slideMaxWidth$ = new BehaviorSubject<number | null>(null);
 	public get slideMaxWidth() { return this.slideMaxWidth$.value; }
 	private slideStyle$ = new Subject<Dictionary<string>>();
 	private touch: TouchManager;
-	private autoplayTask: number;
+	private autoplayTask!: number;
 	private destroyed$ = new AsyncVoidSubject();
 
 	constructor(
@@ -140,20 +135,20 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		private touchBuilder: TouchBuilder,
 		private renderer: Renderer2
 	) {
-		this.touch = this.touchBuilder.build(this.$host);
+		this.touch = this.touchBuilder.build(this.$host) as TouchManager;
 		this.touch.swipe$
 			.pipe(takeUntil(this.destroyed$))
 			.subscribe(e => this.onSwipe(e));
 	}
 
-	ngOnChanges({ items, activeItem, itemsPerView }: SimpleChanges) {
+	ngOnChanges({ items, activeItem, itemsPerViewport }: SimpleChanges) {
 		if (items && (items.firstChange || this.resetActiveOnItemsChange))
 			this.activateItem(this.items[0], false);
 
 		Promise
 			.resolve()
 			.then(() => {
-				if (itemsPerView || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
+				if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
 					this.updateItemsPerView();
 				if (items && !items.firstChange)
 					this.updateScroll({ animate: false, distinctVisibility: false });
@@ -171,15 +166,15 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			.subscribe(this.$slides$);
 
 		this.$slides$
-			.pipe(switchMap($slides => Observable.resize(...$slides)))
+			.pipe(switchMap($slides => fromResize(...$slides)))
 			.subscribe(() => this.shouldUpdateScroll && this.updateScroll());
 
 		combineLatest(
 			this.$slides$,
 			this.slideStyle$
 		)
-			.pipe(
-				mutate(([$slides, style]) => $slides.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))))
+			.pipe(mutate(([$slides, style]) => $slides
+				.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))))
 			)
 			.subscribe();
 
@@ -238,20 +233,27 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	}
 
 	activatePrev(forceLooped?: boolean) {
-		if (this.slidesVisibility.firstFullyVisible > 0)
-			this.activateIndex(this.slidesVisibility.firstFullyVisible - 1);
+		if (this.slidesVisibility.firstFullyVisible! > 0)
+			this.activateIndex(this.slidesVisibility.firstFullyVisible! - 1);
 		else if (this.looped || forceLooped)
 			this.activateIndex(this.items.length - 1);
 	}
 
-	drop(event: CdkDragDrop<any[]>) {
-		if (event.previousIndex === event.currentIndex)
+	drop({ previousIndex, currentIndex }: CdkDragDrop<any[]>) {
+		if (previousIndex === currentIndex)
 			return;
 
+		if (this.sortableItem && !this.sortableItem(this.items[currentIndex]))
+			currentIndex = previousIndex;
+
 		const copy = this.items.slice();
-		moveItemInArray(copy, event.previousIndex, event.currentIndex);
+		moveItemInArray(copy, previousIndex, currentIndex);
 		this.items = copy;
-		this.sort$.next(copy);
+
+		if (previousIndex === currentIndex)
+			return;
+
+		this.sort$.next(this.items);
 	}
 
 	private updateScroll({ animate = false, distinctVisibility = true } = {}) {
@@ -264,24 +266,28 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 		this.slideMaxWidth$
 			.pipe(
-				switchMap(slideMaxWidth => Observable
-					.measure(() => slideMaxWidth && this.items.length && this.items.length === this.$slides$.value.length && this.activeIndex > -1
-						? this.$slides$.value.map($slide => new Dimensions({
+				switchMap(slideMaxWidth => fromMeasure(() => slideMaxWidth
+					&& this.items.length
+					&& this.items.length === this.$slides$.value.length
+					&& this.activeIndex > -1
+					? [
+						slideMaxWidth,
+						this.$slides$.value.map($slide => new Dimensions({
 							left: $slide.offsetLeft,
 							width: Math.floor($slide.getBoundingClientRect().width)
 						}))
-						: null
-					)
-				),
-				filter(v => !!v)
+					]
+					: null
+				)),
+				filter(v => !!v),
+				map(v => v as [number, Dimensions[]])
 			)
-
-			.subscribe(offsets => {
-				let maxOffset;
-				if (this.currentItemsPerView === undefined || this.currentItemsPerView === null)
-					maxOffset = sum(offsets.map(({ width }) => width)) - this.slideMaxWidth;
+			.subscribe(([slideMaxWidth, offsets]) => {
+				let maxOffset: number;
+				if (this.currentItemsPerView === 'unlimited')
+					maxOffset = sum(offsets.map(({ width }) => width)) - slideMaxWidth;
 				else
-					maxOffset = this.slideMaxWidth / this.currentItemsPerView * this.items.length - this.slideMaxWidth;
+					maxOffset = slideMaxWidth / this.currentItemsPerView * this.items.length - slideMaxWidth;
 				if (maxOffset < 0)
 					maxOffset = 0;
 				const slideOffset = offsets[this.activeIndex];
@@ -289,7 +295,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 				// calculate visibility indexes
 				const offsetLeft = Math.ceil(offset); // required because slide offset is always integer
-				const offsetRight = offsetLeft + this.slideMaxWidth;
+				const offsetRight = offsetLeft + slideMaxWidth;
 				const lastIndex = this.items.length - 1;
 
 				const visibilityIndexes: ICarouselViewportItemsVisibility = {};
@@ -329,14 +335,13 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	}
 
 	private updateItemsPerView() {
-		Observable
-			.measure(() => {
-				this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerView);
-				return this.$slidesContainer.offsetWidth ? this.$slidesContainer.offsetWidth : undefined;
-			})
+		fromMeasure(() => {
+			this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerViewport);
+			return this.$slidesContainer.offsetWidth ? this.$slidesContainer.offsetWidth : null;
+		})
 			.subscribe((slideMaxWidth) => {
-				let css;
-				if (isNull(this.currentItemsPerView))
+				let css: Dictionary<any>;
+				if (this.currentItemsPerView === 'unlimited')
 					css = {
 						'-ms-flex': null, '-webkit-flex': null, flex: null,
 						'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
@@ -381,7 +386,10 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			.pipe(
 				first(),
 				flatMap(slides => slides),
-				filter((item, index) => this.slidesVisibility.firstPartiallyVisible <= index && index <= this.slidesVisibility.lastPartiallyVisible),
+				filter((item, index) =>
+					this.slidesVisibility.firstPartiallyVisible! <= index
+					&& index <= this.slidesVisibility.lastPartiallyVisible!
+				),
 				measure($slide => $.outerSize($slide).height),
 				max(),
 			)

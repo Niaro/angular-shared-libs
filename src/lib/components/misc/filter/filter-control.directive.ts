@@ -10,7 +10,7 @@ import { UrlHelper } from '@bp/shared/utils';
 	exportAs: 'filterControl'
 })
 export class FilterControlDirective {
-	@Input('bpFilterControl') name: string;
+	@Input('bpFilterControl') name!: string;
 
 	value$ = new OptionalBehaviorSubject<any>();
 	get value() { return this.value$.value; }
@@ -28,7 +28,7 @@ export class FilterControlDirective {
 			this.select.selectionChange
 				.subscribe((v?: MatSelectChange) => this.emit(v && v.value));
 		else
-			this.control.registerOnChange(v => this.emit(v));
+			this.control.registerOnChange((v: any) => this.emit(v));
 	}
 
 	setValue(value: any) {

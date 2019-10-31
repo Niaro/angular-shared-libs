@@ -20,6 +20,10 @@ export class ProcessingFile {
 
 	private _progress$ = new BehaviorSubject(this.startProgressValue);
 	progress$ = this._progress$.asObservable();
+	get progress() { return this._progress$.value; }
+	set progress(val: number) {
+		val > this.startProgressValue && this._progress$.next(val);
+	}
 
 	private _status$ = new BehaviorSubject<ProcessingFileStatus>(ProcessingFileStatus.inProgress);
 	status$ = this._status$.asObservable();
@@ -38,11 +42,9 @@ export class ProcessingFile {
 		private type: 'download' | 'upload'
 	) { }
 
-	progress(val: number) {
-		val > this.startProgressValue && this._progress$.next(val);
-	}
-
 	finish() {
+		if (this.progress < 100)
+			this.progress = 100;
 		this._status$.next(ProcessingFileStatus.finish);
 	}
 

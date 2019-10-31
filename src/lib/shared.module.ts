@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { QuicklinkModule } from 'ngx-quicklink';
 
 import { MaterialModule } from './materials.module';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
@@ -13,7 +14,10 @@ import {
 	CountrySelectorComponent, IpInputComponent, StatusBarComponent, StatusBarContainerDirective,
 	FilterComponent, FilterControlDirective, DatepickerCalendarHeaderComponent, DatePickerComponent,
 	CopyComponent, CountryComponent, PendingBtnComponent, IconBtnComponent, DateRangeShortcutsComponent,
-	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent
+	AlertMessagesComponent, CursorPageAdaptorDirective, AutocompleteComponent, RoundInputComponent,
+	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
+	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
+	PaymentMethodBrandComponent
 } from './components';
 
 import {
@@ -23,7 +27,8 @@ import {
 
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
-	DelayedRenderDirective, DynamicOutletDirective
+	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
+	RouterLinkRootOutletsDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
@@ -41,6 +46,7 @@ const MODULES = [
 	RouterModule,
 	ReactiveFormsModule,
 	LocalStorageModule,
+	QuicklinkModule,
 
 	TouchModule,
 	CarouselModule,
@@ -63,11 +69,16 @@ const EXPOSED = [
 	CopyComponent,
 	CountryComponent,
 	IconBtnComponent,
+	DeleteConfirmDialogComponent,
+	LogoutConfirmDialogComponent,
+	PaymentMethodBrandComponent,
 
 	// directives
 	CursorPageAdaptorDirective,
 	TextMaskDirective,
 	RouterLinkNoOutletsWithHrefDirective,
+	RouterLinkRootOutletsWithHrefDirective,
+	RouterLinkRootOutletsDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
@@ -83,6 +94,12 @@ const EXPOSED = [
 	IpInputComponent,
 	DatePickerComponent,
 	AutocompleteComponent,
+	RoundInputComponent,
+	SelectComponent,
+	ButtonToggleComponent,
+	PropertyMetadataControlComponent,
+	PropertyMetadataViewComponent,
+	PropertyMetadataViewsSectionComponent,
 
 	// pipes
 	UpperFirstPipe,
@@ -100,7 +117,11 @@ const EXPOSED = [
 	imports: MODULES,
 	exports: [...EXPOSED, ...MODULES],
 	declarations: EXPOSED,
-	entryComponents: [DatepickerCalendarHeaderComponent]
+	entryComponents: [
+		DatepickerCalendarHeaderComponent,
+		DeleteConfirmDialogComponent,
+		LogoutConfirmDialogComponent
+	]
 })
 export class SharedModule {
 	static forRoot(): ModuleWithProviders {

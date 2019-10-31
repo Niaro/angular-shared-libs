@@ -11,15 +11,15 @@ export type SortQueryParamsCtor = Constructor<ISortQueryParams>;
 
 export function mixinSortQueryParams<T extends Constructor<QueryParamsBase<ISortQueryParams>>>(base: T): SortQueryParamsCtor & T {
 	return class extends base {
-		sortField: string;
-		sortDir: SortDirection;
+		sortField!: string;
+		sortDir!: SortDirection;
 
 		constructor(...args: any[]) {
 			super(...args);
 
 			if (this.routeParams.sortField) {
 				this.sortField = this.routeParams.sortField;
-				this.sortDir = this.routeParams.sortDir || 'desc';
+				this.sortDir = this.routeParams.sortDir as SortDirection || 'desc';
 			}
 		}
 	};

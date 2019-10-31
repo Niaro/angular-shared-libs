@@ -54,7 +54,7 @@
 }
 
 .mat-sidenav {
-	z-index: 4 !important;
+	z-index: $z-index-sidenav !important;
 }
 
 .cdk-global-scrollblock {
@@ -62,6 +62,7 @@
 }
 
 .mat-form-field-appearance-outline {
+
 	.mat-form-field-prefix,
 	.mat-form-field-suffix {
 		top: unset !important;
@@ -71,4 +72,71 @@
 .mat-select-panel,
 .mat-autocomplete-panel {
 	font-size: $body-font-size;
+}
+
+.mat-button,
+.mat-flat-button,
+.mat-icon-button,
+.mat-stroked-button {
+	transition: $transition-props;
+	transition-property: background, color;
+}
+
+.mat-icon-button {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+
+	.mat-icon {
+		display: block;
+	}
+}
+
+// according to http://google.github.io/material-design-icons/#styling-icons-in-material-design
+$icon-size-sm: 18px;
+$icon-size-md: 24px;
+$icon-size-lg: 36px;
+$icon-size-xl: 48px;
+
+.material-icons {
+	&.sm {
+		font-size: $icon-size-sm;
+	}
+
+	&.md {
+		font-size: $icon-size-md;
+	}
+
+
+	&.lg {
+		font-size: $icon-size-lg;
+	}
+
+	&.xl {
+		font-size: $icon-size-xl;
+	}
+}
+
+bp-svg-icon,
+.mat-icon-button .material-icons,
+.material-icons {
+	&.sm {
+		@include size($icon-size-sm);
+		@include fontsize($icon-size-sm);
+	}
+
+	&.md {
+		@include size($icon-size-md);
+		@include fontsize($icon-size-md);
+	}
+
+	&.lg {
+		@include size($icon-size-lg);
+		@include fontsize($icon-size-lg);
+	}
+
+	&.xl {
+		@include size($icon-size-xl);
+		@include fontsize($icon-size-xl);
+	}
 }

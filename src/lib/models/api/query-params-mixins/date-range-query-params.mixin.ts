@@ -13,8 +13,8 @@ export type DaterangeQueryParamsCtor = Constructor<IDaterangeQueryParams>;
 export function mixinDaterangeQueryParams<T extends Constructor<QueryParamsBase<{ dateRange: string }>>>
 	(base: T): DaterangeQueryParamsCtor & T {
 	return class extends base {
-		from: number;
-		to: number;
+		from!: number;
+		to!: number;
 
 		constructor(...args: any[]) {
 			super(...args);

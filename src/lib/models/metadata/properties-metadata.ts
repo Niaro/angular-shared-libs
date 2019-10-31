@@ -10,6 +10,10 @@ export class PropertiesMetadata {
 		return proto && proto.metadata;
 	}
 
+	private _values!: PropertyMetadata[];
+
+	private _keys!: string[];
+
 	constructor(private readonly metadataHost: MetadataHost) { }
 
 	add(property: string, metadata: Partial<PropertyMetadata>) {
@@ -20,13 +24,8 @@ export class PropertiesMetadata {
 		});
 	}
 
-	get(propName: string): PropertyMetadata {
-		const propMeta = this.dict[propName] || this.protoMetadata && this.protoMetadata.get(propName);
-
-		if (!propMeta)
-			throw new Error(`Metadata for the property ${propName} hasn't been found`);
-
-		return propMeta;
+	get(propName: string): PropertyMetadata | null {
+		return this.dict[propName] || this.protoMetadata && this.protoMetadata.get(propName);
 	}
 
 	has(propName: string): boolean {
@@ -34,16 +33,16 @@ export class PropertiesMetadata {
 	}
 
 	keys(): string[] {
-		return [
+		return this._keys || (this._keys = [
 			...Object.keys(this.dict),
 			...(this.protoMetadata ? this.protoMetadata.keys() : [])
-		];
+		]);
 	}
 
 	values(): PropertyMetadata[] {
-		return [
+		return this._values || (this._values = [
 			...Object.values(this.dict),
 			...(this.protoMetadata ? this.protoMetadata.values() : [])
-		];
+		]);
 	}
 }

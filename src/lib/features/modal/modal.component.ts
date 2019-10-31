@@ -7,5 +7,5 @@ import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@ang
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent {
-	@ViewChild(TemplateRef, { static: true }) template: TemplateRef<any>;
+	@ViewChild(TemplateRef, { static: true }) template!: TemplateRef<any>;
 }

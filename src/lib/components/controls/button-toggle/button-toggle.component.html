@@ -1,0 +1,9 @@
+<label>{{ label }}</label>
+<mat-button-toggle-group [formControl]="internalControl"
+						 [name]="name">
+	<mat-button-toggle *ngIf="!required">{{ resetButtonText }}</mat-button-toggle>
+	<mat-button-toggle *ngFor="let item of items"
+					   [value]="item">
+		{{ item.displayName || item.name || item }}
+	</mat-button-toggle>
+</mat-button-toggle-group>

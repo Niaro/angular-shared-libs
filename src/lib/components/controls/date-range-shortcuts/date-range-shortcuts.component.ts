@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as m from 'moment';
 
@@ -19,46 +19,36 @@ import { ControlComponent } from '../control.component';
 		}
 	]
 })
-export class DateRangeShortcutsComponent extends ControlComponent<DateRange> implements OnInit {
+export class DateRangeShortcutsComponent extends ControlComponent<DateRange> implements AfterViewInit {
 
 	dateRangeShortcuts = DateRangeShortcut.list() as DateRangeShortcut[];
 
-	selected: DateRangeShortcut;
+	selected!: DateRangeShortcut | undefined;
 
-	constructor(private cdr: ChangeDetectorRef) {
-		super();
+	constructor(cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
-	ngOnInit() {
-		this.set(DateRangeShortcut.month);
+	ngAfterViewInit() {
+		this.select(DateRangeShortcut.month);
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue): void {
 		Promise
 			.resolve()
-			.then(() => {
-				if (value) {
-					this.value = DateRange.parse(value);
-					this.selected = this.dateRangeShortcuts.find(v => v.dateRange.isSame(this.value));
-				} else
-					this.set(DateRangeShortcut.month);
-
-				this.cdr.markForCheck();
-			});
+			.then(() => this.select(value && this.dateRangeShortcuts.find(v => v.dateRange.isSame(DateRange.parse(value)))
+				|| DateRangeShortcut.month
+			));
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	update(v: DateRangeShortcut) {
-		if (v !== this.selected)
-			this.set(v);
-	}
+	select(value: DateRangeShortcut) {
+		if (value === this.selected)
+			return;
 
-	private set(value: DateRangeShortcut) {
 		this.selected = value;
-		this.value = value.dateRange;
-		this.valueChange.next(value.dateRange);
-		this.onChange(value.dateRange);
+		this.update(value.dateRange);
 	}
 }
 
@@ -68,7 +58,7 @@ export class DateRangeShortcut extends Enumeration {
 	static quarter = new DateRangeShortcut();
 	// static year = new DateRangeShortcut();
 
-	dateRange: DateRange;
+	dateRange!: DateRange;
 
 	constructor() {
 		super();
@@ -76,8 +66,8 @@ export class DateRangeShortcut extends Enumeration {
 		Promise
 			.resolve()
 			.then(() => {
-				this.dateRange = this.getDateRange();
-				setInterval(() => this.dateRange = this.getDateRange(), 24 * 60 * 60 * 1000);
+				this.dateRange = this.getDateRange()!;
+				setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
 			});
 	}
 

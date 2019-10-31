@@ -1,0 +1,15 @@
+<hr *ngIf="hasSeparator">
+<h3 *ngIf="title" class="mat-h3">{{ title }}</h3>
+
+<div *ngFor="let group of propertyMetadataNameGroups"
+	 @fadeInList
+	 class="row">
+	<ng-container *ngFor="let name of group">
+		<div *ngIf="metadata.get(name) as md"
+			 class="col">
+			<bp-property-metadata-view [metadata]="md"
+									   [value]="model[name]">
+			</bp-property-metadata-view>
+		</div>
+	</ng-container>
+</div>

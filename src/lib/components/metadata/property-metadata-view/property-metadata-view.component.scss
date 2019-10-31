@@ -1,0 +1,26 @@
+@import 'imports';
+
+:host {
+	caption {
+		display: block;
+		text-align: left;
+		font-size: 0.85em;
+		color: $color-semi-dark;
+		margin-bottom: 0.2em;
+	}
+
+	&.boolean {
+		display: flex;
+
+		span {
+			display: inline-flex;
+			align-items: center;
+		}
+	}
+}
+
+:host-context(table) {
+	> div {
+		display: inline;
+	}
+}

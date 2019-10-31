@@ -12,7 +12,7 @@ if (environment.prod && location.hostname !== 'localhost' && environment.logrock
 			shouldAggregateConsoleErrors: true,
 		},
 		network: {
-			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string> }) => {
+			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string | null> }) => {
 				// if the url contains 'ignore'
 				if (request.url.toLowerCase().includes('deposit'))
 					// scrub out the body
@@ -34,15 +34,15 @@ export class TelemetryService {
 
 	private static instance: TelemetryService;
 
-	static routerErrorHandler(error) {
+	static routerErrorHandler(error: any) {
 		TelemetryService.captureError(error, 'router');
 	}
 
-	static appErrorHandler(error) {
+	static appErrorHandler(error: any) {
 		TelemetryService.captureError(error, 'app');
 	}
 
-	private static captureError(error, source) {
+	private static captureError(error: Error | any, source: string) {
 		if (environment.prod)
 			LogRocket.captureException(
 				error instanceof Error ? error : new Error(JSON.stringify(error)),
@@ -63,13 +63,13 @@ export class TelemetryService {
 		LogRocket.identify(uid, { email });
 	}
 
-	captureError(error) {
+	captureError(error: any) {
 		TelemetryService.captureError(error, 'manual');
 	}
 }
 
 export class AppErrorHandler implements ErrorHandler {
-	handleError(error) {
+	handleError(error: any) {
 		TelemetryService.appErrorHandler(error);
 	}
 }

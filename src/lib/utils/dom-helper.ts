@@ -4,6 +4,9 @@ import { Dictionary } from 'lodash';
 import { Dimensions, Size, Position } from '../models/misc/dimensions';
 
 export class $ {
+
+	private static $canvas: HTMLCanvasElement;
+
 	static addClass($el: Element, ...classes: string[]) {
 		for (const cls of classes)
 			this.setClass($el, cls, true);
@@ -23,9 +26,9 @@ export class $ {
 		return $el.classList.contains(cls);
 	}
 
-	static setAttribute($el: Element, name: string, value: string, isAdd: boolean);
-	static setAttribute($el: Element, name: string, isAdd: boolean);
-	static setAttribute($el: Element, name: string, valueOrIsAdd: string | boolean, isAdd?: boolean) {
+	static setAttribute($el: Element, name: string, value: string, isAdd: boolean): void;
+	static setAttribute($el: Element, name: string, isAdd: boolean): void;
+	static setAttribute($el: Element, name: string, valueOrIsAdd: string | boolean, isAdd?: boolean): void {
 		const value = isString(valueOrIsAdd) ? valueOrIsAdd : name;
 		isAdd = isBoolean(valueOrIsAdd) ? valueOrIsAdd : isAdd;
 		isAdd ? $el.setAttribute(name, value) : $el.removeAttribute(name);
@@ -33,7 +36,9 @@ export class $ {
 
 	// Searching methods
 	static siblings(el: Element): Element[] {
-		return Array.from(el.parentNode.childNodes).filter(child => child !== el) as Element[];
+		return el.parentNode
+			? Array.from(el.parentNode.childNodes).filter(child => child !== el) as Element[]
+			: [];
 	}
 
 	static filter(el: Element, selector: string): Element[] {
@@ -44,26 +49,35 @@ export class $ {
 	static find(target: Element, selector?: string): Element[];
 	static find(targetOrSelector: Element | string, selector?: string): Element[] {
 		if (targetOrSelector instanceof Element)
-			return Array.from(targetOrSelector.querySelectorAll(selector)) as Element[];
+			return selector
+				? Array.from(targetOrSelector.querySelectorAll(selector)) as Element[]
+				: [];
 		return Array.from(document.querySelectorAll(targetOrSelector)) as Element[];
 	}
 
-	static findSingle<T = Element>(target: Element | string, selector?: string): T {
+	static findSingle<T = Element>(target: Element | string, selector?: string): T | null {
 		if (target instanceof Element)
-			return target.querySelector(selector) as any as T;
+			return selector ? target.querySelector(selector) as any as T : null;
 		return document.querySelector(<string>target) as any as T;
 	}
 
-	static closest(target: Element, selector: string): Element {
+	static closest(target: Element, selector: string): Element | null {
 		while (target !== document.documentElement) {
+			if (!target.parentElement)
+				return null;
+
 			target = target.parentElement;
 			if (target.matches(selector))
 				return target;
 		}
+		return null;
 	}
 
 	static hasParent(target: Element, selector: string | Element): boolean {
 		while (target !== document.documentElement) {
+			if (!target.parentElement)
+				return false;
+
 			target = target.parentElement;
 			if (isString(selector) ? target.matches(selector) : target === selector)
 				return true;
@@ -94,14 +108,14 @@ export class $ {
 
 	static css(el: HTMLElement, styleName: string, styleValue: any): void;
 	static css(el: HTMLElement, stylesDictionary: { [styleName: string]: any }): void;
-	static css(el: HTMLElement, ...styles): void {
+	static css(el: HTMLElement, ...styles: any[]): void {
 		const dictionary = isObject(styles[0]) ? styles[0] : { [styles[0]]: styles[1] };
-		forIn(dictionary, (value, style) => el.style[style] = value);
+		forIn(dictionary, (value, style) => el.style[style as unknown as number] = value);
 	}
 
 	static attr(el: HTMLElement, attrName: string, attrValue: any): void;
 	static attr(el: HTMLElement, attrsDictionary: { [attrName: string]: any }): void;
-	static attr(el: HTMLElement, ...attrs): void {
+	static attr(el: HTMLElement, ...attrs: any[]): void {
 		const dictionary = isObject(attrs[0]) ? attrs[0] : { [attrs[0]]: attrs[1] };
 		forIn(dictionary, (value, attr) => el.setAttribute(attr, value));
 	}
@@ -109,6 +123,7 @@ export class $ {
 	static parseCss(cssValue: string): number {
 		return Math.ceil(parseFloat(cssValue));
 	}
+
 
 	/**
 	 * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
@@ -118,13 +133,16 @@ export class $ {
 	 *
 	 * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
 	 */
-	static getTextWidth(text: string, font: string) {
+	static getTextWidth(text: string, font: string): number | null {
 		// re-use canvas object for better performance
-		const canvas = $.getTextWidth['canvas'] || ($.getTextWidth['canvas'] = document.createElement('canvas'));
+		const canvas = $.$canvas || ($.$canvas = document.createElement('canvas'));
 		const context = canvas.getContext('2d');
-		context.font = font;
-		const metrics = context.measureText(text);
-		return metrics.width;
+		if (context) {
+			context.font = font;
+			const metrics = context.measureText(text);
+			return metrics.width;
+		}
+		return null;
 	}
 
 	/**
@@ -133,8 +151,8 @@ export class $ {
 	static innerSize(el: Element): Size {
 		const style = getComputedStyle(el);
 		return new Size(
-			el.clientWidth - parseInt(style.paddingLeft) - parseInt(style.paddingRight),
-			el.clientHeight - parseInt(style.paddingTop) - parseInt(style.paddingBottom)
+			el.clientWidth - parseInt(style.paddingLeft || '0') - parseInt(style.paddingRight || '0'),
+			el.clientHeight - parseInt(style.paddingTop || '0') - parseInt(style.paddingBottom || '0')
 		);
 	}
 
@@ -145,8 +163,8 @@ export class $ {
 		const style = getComputedStyle(el);
 		const { width, height } = el.getBoundingClientRect();
 		return new Size(
-			width + parseInt(style.marginLeft) + parseInt(style.marginRight),
-			height + parseInt(style.marginTop) + parseInt(style.marginBottom)
+			width + parseInt(style.marginLeft || '0') + parseInt(style.marginRight || '0'),
+			height + parseInt(style.marginTop || '0') + parseInt(style.marginBottom || '0')
 		);
 	}
 
@@ -193,14 +211,14 @@ export class $ {
 		// Subtract element margins
 		// note: when an element has margin: auto the offsetLeft and marginLeft
 		// are the same in Safari causing offset.left to incorrectly be 0
-		offset.top -= parseFloat(elStyles.marginTop) || 0;
-		offset.left -= parseFloat(elStyles.marginLeft) || 0;
+		offset.top -= parseFloat(elStyles.marginTop || '0');
+		offset.left -= parseFloat(elStyles.marginLeft || '0');
 
 		if (el.offsetParent) {
 			const parentStyles = getComputedStyle(el.offsetParent);
 			// Add offsetParent borders
-			parentOffset.top += parseFloat(parentStyles.borderTopWidth) || 0;
-			parentOffset.left += parseFloat(parentStyles.borderLeftWidth) || 0;
+			parentOffset.top += parseFloat(parentStyles.borderTopWidth || '0');
+			parentOffset.left += parseFloat(parentStyles.borderLeftWidth || '0');
 		}
 
 		// Subtract the two offsets
@@ -210,7 +228,7 @@ export class $ {
 		});
 	}
 
-	static scroll(target: Element | Window, x?: number, y?: number) {
+	static scroll(target: Element | Window, x: number, y: number) {
 		if (target instanceof Window)
 			target.scroll(x, y);
 		else {
@@ -227,7 +245,9 @@ export class $ {
 		let parent = target.parentElement;
 		while (parent) {
 			const { overflow, overflowY, overflowX } = getComputedStyle(parent);
-			if (ScrollValues.includes(overflow) || ScrollValues.includes(overflowY) || ScrollValues.includes(overflowX))
+			if (ScrollValues.includes(overflow as string)
+				|| ScrollValues.includes(overflowY as string)
+				|| ScrollValues.includes(overflowX as string))
 				return parent;
 			parent = parent.parentElement;
 		}
@@ -237,11 +257,11 @@ export class $ {
 	/**
 	 * Cleans targetId from '#' and checks on whitespaces
 	 * @param  {string} targetId
-	 * @return {string}
+	* @return {string}
 	 */
 	static sanitizeTargetId(targetId: string): string {
 		if (/\s+/g.test(targetId))
-			throw new Error(`At sanitizeTargetId('${targetId}') target arrgument has not allowed whitespaces`);
+			throw new Error(`At sanitizeTargetId('${targetId}') target argument has not allowed whitespaces`);
 
 		return targetId.replace(/#/, ''); // remove first matched hash symbol
 	}
@@ -252,11 +272,12 @@ export class $ {
 	 * @param  {string}      targetId string which may represent Id of element or it's name
 	 * @return {HTMLElement}
 	 */
-	static getTarget(targetId: string): HTMLElement {
+	static getTarget(targetId: string): HTMLElement | null {
 		targetId = this.sanitizeTargetId(targetId);
 		const target = targetId && (document.getElementById(targetId) || document.getElementsByName(targetId)[0]);
 		if (target && target.getBoundingClientRect)
 			return <HTMLElement>target;
+		return null;
 	}
 
 	/**
@@ -290,7 +311,7 @@ export class $ {
 
 		if (src)
 			$s.src = src;
-		else {
+		else if (code) {
 			try {
 				$s.appendChild(document.createTextNode(code));
 			} catch (e) {

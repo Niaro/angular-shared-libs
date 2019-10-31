@@ -24,8 +24,8 @@ export class NumberMaskPipe extends MaskPipe {
 			return ['0', this.decimalSymbolRegExp, DIGIT_REGEXP];
 
 		let integer;
-		let fraction: string | (string | RegExp)[];
-		let mask;
+		let fraction!: string | (string | RegExp)[];
+		let mask: (string | RegExp)[];
 		const refinedValue = integer = this.removePrefixAndSuffix(rawValue);
 
 		const indexOfLastDecimal = refinedValue.lastIndexOf(this.config.decimalSeparatorSymbol);
@@ -75,7 +75,7 @@ export class NumberMaskPipe extends MaskPipe {
 
 		if (isNegative)
 			// If user is entering a negative number, add a mask placeholder spot to attract the caret to it.
-			mask = [/-/].concat(mask);
+			mask = [/-/, ...mask];
 
 		return mask;
 	}

@@ -4,15 +4,15 @@ import { isString } from 'lodash-es';
 const CRYPTOS = new Map<CryptoCurrencyCode, CryptoCurrency>();
 
 export class CryptoCurrency extends MetadataEntity {
-	readonly logo: string;
-	readonly name: string;
-	readonly code: CryptoCurrencyCode;
+	readonly logo!: string;
+	readonly name!: string;
+	readonly code!: CryptoCurrencyCode;
 
 	constructor(dataOrCode: Partial<CryptoCurrency> | CryptoCurrencyCode) {
 		super(isString(dataOrCode) ? { code: dataOrCode } : dataOrCode);
 
 		if (CRYPTOS.has(this.code))
-			return CRYPTOS.get(this.code);
+			return CRYPTOS.get(this.code) as CryptoCurrency;
 
 		if (Cryptos[this.code]) {
 			this.name = Cryptos[this.code];

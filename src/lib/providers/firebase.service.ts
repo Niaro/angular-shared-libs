@@ -8,8 +8,9 @@ import * as firebase from 'firebase/app';
 // Add the Firebase products that you want to use
 import 'firebase/storage';
 import 'firebase/functions';
+import 'firebase/firestore';
+
 import { TelemetryService } from './telemetry.service';
-import { IMondayBillingDetailsRequest, IMondayBillingDetailsResponse, INewLead, INewApplicant } from 'firebase/functions/src/models';
 
 export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 
@@ -24,16 +25,20 @@ export class FirebaseService {
 
 	uploadError$ = new Subject<string>();
 
-	private storage: firebase.storage.Storage;
+	protected get db() { return firebase.firestore(); }
 
-	private functions: firebase.functions.Functions;
+	protected storage!: firebase.storage.Storage;
 
-	private uploadTask: firebase.storage.UploadTask;
+	protected functions!: firebase.functions.Functions;
+
+	protected uploadTask!: firebase.storage.UploadTask;
 
 	constructor(
-		private telemetry: TelemetryService,
-		@Inject(FIREBASE_APP_ID) firebaseAppId: string
-	) {
+		protected telemetry: TelemetryService,
+		@Inject(FIREBASE_APP_ID) protected firebaseAppId: string
+	) { }
+
+	ignite(options = {}) {
 		if (isEmpty(firebase.apps))
 			firebase.initializeApp({
 				apiKey: 'AIzaSyCE0HJJUq4otCVdCbdBINJApcVmj3h-isU',
@@ -42,7 +47,8 @@ export class FirebaseService {
 				projectId: 'web-hosting-213618',
 				storageBucket: 'web-hosting-213618.appspot.com',
 				messagingSenderId: '977741303368',
-				appId: firebaseAppId
+				appId: this.firebaseAppId,
+				...options
 			});
 
 		this.storage = firebase.storage();
@@ -83,16 +89,12 @@ export class FirebaseService {
 		);
 	}
 
-	getMondayBillingDetails(req: IMondayBillingDetailsRequest): Promise<IMondayBillingDetailsResponse> {
-		return this.functions.httpsCallable('getMondayBillingDetails')(req);
+	async getFnCall<T, U>(firebaseFunctionName: string, body: T): Promise<U> {
+		return (await this.functions.httpsCallable(firebaseFunctionName)(body)).data;
 	}
 
-	createNewLead(req: INewLead): Promise<void> {
-		return this.functions.httpsCallable('createNewLead')(req) as Promise<any>;
-	}
-
-	createNewApplicant(req: INewApplicant): Promise<void> {
-		return this.functions.httpsCallable('createNewApplicant')(req) as Promise<any>;
+	async postFnCall<T>(firebaseFunctionName: string, body: T): Promise<void> {
+		this.functions.httpsCallable(firebaseFunctionName)(body) as Promise<any>;
 	}
 
 	private async getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
@@ -112,7 +114,7 @@ export class FirebaseService {
 		const fileName = this.getFilenameWithoutExtension(name);
 		const counterRegexp = /_(\d+)$/;
 		const counterMatchInName = fileName.match(counterRegexp);
-		const counter = +(counterMatchInName && counterMatchInName[1]) + 1;
+		const counter = +(counterMatchInName && counterMatchInName[1] || 0) + 1;
 		return name.replace(
 			fileName,
 			counterMatchInName ? fileName.replace(counterRegexp, `_${counter}`) : `${fileName}_${counter}`
@@ -124,8 +126,8 @@ export class FirebaseService {
 		return name.replace(fileName, snakeCase(fileName));
 	}
 
-	private getFilenameWithoutExtension(name: string) {
+	private getFilenameWithoutExtension(name: string): string {
 		if (!name) return '';
-		return /(.+?)(\.[^\.]+$|$)/.exec(name)[1];
+		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
 	}
 }

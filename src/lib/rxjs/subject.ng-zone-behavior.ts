@@ -5,7 +5,7 @@ export class NgZoneBehaviorSubject<T> extends BehaviorSubject<T> {
 	static ngZone: NgZone;
 
 	constructor(_value?: T) {
-		super(_value);
+		super(_value as T);
 	}
 
 	next(value: T): void {

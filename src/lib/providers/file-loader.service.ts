@@ -22,7 +22,7 @@ export class FileLoaderService {
 		this.addToProcessingFiles(file);
 
 		this.http
-			.request(new HttpRequest('GET', url, {
+			.request<Blob>(new HttpRequest('GET', url, {
 				params,
 				responseType: 'blob',
 				reportProgress: true
@@ -33,15 +33,15 @@ export class FileLoaderService {
 				last(), // return last (completed) message to caller
 			)
 			.subscribe({
-				next: (e: HttpResponse<Blob>) => e instanceof HttpResponse && this.save(e.body, file),
-				error: val => this.handleError(val, file)
+				next: e => e instanceof HttpResponse && e.body && saveAs(e.body, file.name),
+				error: (val: any) => this.handleError(val, file),
+				complete: () => this.complete(file)
 			});
 
 		return file;
 	}
 
-	private save(blob: Blob, file: ProcessingFile) {
-		saveAs(blob, file.name);
+	private complete(file: ProcessingFile) {
 		file.finish();
 		this.removeFromProcessingFiles(file);
 	}
@@ -55,7 +55,7 @@ export class FileLoaderService {
 		switch (event.type) {
 			case HttpEventType.UploadProgress:
 			case HttpEventType.DownloadProgress:
-				file.progress(Math.round(100 * event.loaded / event.total));
+				file.progress = Math.round(event.total ? 100 * event.loaded / event.total : 88);
 		}
 	}
 
