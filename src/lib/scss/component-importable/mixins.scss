@@ -10,13 +10,26 @@
 }
 
 @mixin row-wrap($gutter) {
-	$gutter  : $gutter / 2;
+	$half-gutter: $gutter / 2;
 	display  : flex;
 	flex-wrap: wrap;
-	margin   : -$gutter;
+	margin : -$half-gutter;
+
+	&:first-child {
+		margin-bottom: 0;
+	}
+
+	&:last-child {
+		margin-top: 0;
+	}
+
+	&:not(:first-child):not(:last-child) {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 
 	> * {
-		margin: $gutter;
+		margin: $half-gutter;
 	}
 }
 

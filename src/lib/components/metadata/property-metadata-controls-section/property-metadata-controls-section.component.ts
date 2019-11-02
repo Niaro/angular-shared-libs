@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FADE_IN_LIST, FADE_IN } from '@bp/shared/animations';
 
-import { PropertiesMetadata } from '../../../models';
+import { ClassMetadata } from '../../../models';
 
 export type ControlsSectionScheme<T> = [NonFunctionPropertyNames<T>, (NonFunctionPropertyNames<T> | 'stub')?][];
 
@@ -18,7 +18,7 @@ export class PropertyMetadataControlsSectionComponent {
 
 	@Input() form!: FormGroup;
 
-	@Input() metadata!: PropertiesMetadata;
+	@Input() metadata!: ClassMetadata;
 
 	@Input() sectionScheme!: ControlsSectionScheme<any>;
 

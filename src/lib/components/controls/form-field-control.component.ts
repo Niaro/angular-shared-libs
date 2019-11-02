@@ -94,7 +94,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	}
 
 	protected onInternalControlValueChange(v: any) {
-		this.updateValueAndEmitChange(v);
+		this.setValue(v);
 	}
 
 	private listenToInternalControlValueChanges() {

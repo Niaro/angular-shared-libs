@@ -42,6 +42,6 @@ export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 
 	set(v: m.Moment | null) {
 		if (v && this.value && v.isSame(this.value) || v !== this.value)
-			this.updateValueAndEmitChange(v);
+			this.setValue(v);
 	}
 }

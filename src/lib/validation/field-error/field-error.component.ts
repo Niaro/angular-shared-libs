@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectionStrategy, Optional } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { AbstractControl, ValidationErrors, FormGroupDirective, AbstractControlDirective } from '@angular/forms';
 import { switchMap, distinctUntilChanged, map } from 'rxjs/operators';
 import { of } from 'rxjs';

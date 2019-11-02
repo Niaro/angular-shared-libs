@@ -53,9 +53,9 @@ export abstract class Enumeration {
 
 	private id = `enum_${Math.random().toString(36).substr(2, 8)}`;
 
-	constructor(displayName?: string);
+	constructor(displayName?: string | null);
 	constructor(value: number | boolean, displayName?: string);
-	constructor(valueOrDisplayName?: number | boolean | string, displayName?: string) {
+	constructor(valueOrDisplayName?: number | boolean | string | null, displayName?: string) {
 		// do not access the {name} property in the constructor because it is lazy initialized and required all static properties to be present
 		if (Enumeration.isValue(valueOrDisplayName)) {
 			this._value = valueOrDisplayName!.valueOf();

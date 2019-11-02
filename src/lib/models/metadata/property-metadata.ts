@@ -1,10 +1,12 @@
-import { assign, startCase } from 'lodash-es';
+import { assign, startCase, isNil } from 'lodash-es';
 
 import { Enumeration } from '../misc';
 import { FieldViewType } from './enums';
 import { PropertyMetadataControl } from './property-metadata-control';
+import { PropertyMetadataTable } from './property-metadata-table';
 
 export class PropertyMetadata {
+
 	label!: string;
 
 	hint!: string | null;
@@ -25,6 +27,8 @@ export class PropertyMetadata {
 
 	viewFormatter!: (propValue: any) => any | null;
 
+	table: PropertyMetadataTable | null = null;
+
 	/**
 	 * the name of the property to which this metadata belongs
 	 */
@@ -36,8 +40,9 @@ export class PropertyMetadata {
 		assign(this, data);
 
 		this.displayPropertyName = startCase(this.property);
-		this.label = this.label && this.label !== this.displayPropertyName
+		this.label = !isNil(this.label) && this.label !== this.displayPropertyName
 			? this.label
 			: this.displayPropertyName;
 	}
+
 }

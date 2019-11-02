@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, Host, Renderer2, SimpleChanges, OnChanges } from '@angular/core';
-import { Enumeration } from '@bp/shared/models';
+import { Enumeration, Describable } from '@bp/shared/models';
 import { StatusBarContainerDirective } from './status-bar-container.directive';
 
 type StatusPosition = 'top' | 'left';
@@ -11,7 +11,7 @@ type StatusPosition = 'top' | 'left';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusBarComponent implements OnChanges {
-	@Input('src') status!: Enumeration;
+	@Input('src') status!: Enumeration | Describable;
 	@Input() position!: StatusPosition;
 
 	constructor(@Host() private container: StatusBarContainerDirective, private renderer: Renderer2) { }

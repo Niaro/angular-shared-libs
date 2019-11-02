@@ -89,7 +89,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	onInternalControlValueChange(input: string) {
 		this.updateFilteredCountries(input);
-		this.updateValueAndEmitChange(input ? Countries.find(input) : null);
+		this.setValue(input ? Countries.find(input) : null);
 	}
 
 	private updateWorldwideInCountriesList(list: Country[]) {

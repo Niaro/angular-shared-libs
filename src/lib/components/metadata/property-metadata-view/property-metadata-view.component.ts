@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2, ElementRef, SimpleChange } from '@angular/core';
+import {
+	Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2,
+	ElementRef, SimpleChange
+} from '@angular/core';
 
-import { PropertyMetadata, FieldViewType } from '@bp/shared/models';
+import { PropertyMetadata, FieldViewType, PropertyMetadataTable } from '@bp/shared/models';
 
 @Component({
 	selector: 'bp-property-metadata-view',
@@ -17,7 +20,11 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	@Input() metadata!: PropertyMetadata;
 
+	@Input() table?: PropertyMetadataTable;
+
 	@Input() value: any;
+
+	get isCompact() { return !!this.table || this.compact; }
 
 	// @Input() color: ThemePalette;
 

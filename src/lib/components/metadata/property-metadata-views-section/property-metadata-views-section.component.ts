@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
 
-import { PropertiesMetadata, Entity } from '../../../models';
+import { ClassMetadata, Entity } from '../../../models';
 
 export type ViewsSectionScheme<T> = [NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
 
@@ -17,7 +17,7 @@ export class PropertyMetadataViewsSectionComponent {
 
 	@Input() entity!: Entity;
 
-	@Input() metadata!: PropertiesMetadata;
+	@Input() metadata!: ClassMetadata;
 
 	@Input() sectionScheme!: ViewsSectionScheme<any>;
 

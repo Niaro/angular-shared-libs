@@ -57,6 +57,6 @@ export class IpInputComponent extends FormFieldControlComponent<string> {
 	// };
 
 	onInternalControlValueChange(ip: string) {
-		this.internalControl.valid && this.updateValueAndEmitChange(ip);
+		this.internalControl.valid && this.setValue(ip);
 	}
 }

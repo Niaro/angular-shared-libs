@@ -5,6 +5,7 @@ import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
 import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
+import { isNil } from 'lodash-es';
 
 @Component({
 	selector: 'bp-date-range',
@@ -44,10 +45,15 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	patch(v: DateRangeInput) {
+	patch(v: DateRangeInput | null) {
+		if (isNil(v)) {
+			this.setValue(new DateRange());
+			return;
+		}
+
 		if (v.to && this.value.from && this.value.from.isSame(v.to))
 			v.to = this.value.from.clone().endOf('day');
 
-		this.updateValueAndEmitChange(new DateRange({ ...this.value, ...v }));
+		this.setValue(new DateRange({ ...this.value, ...v }));
 	}
 }

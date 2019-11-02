@@ -23,7 +23,7 @@ import {
 
 import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
-	StartCasePipe, TakePipe
+	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe
 } from './pipes';
 
 import {
@@ -116,7 +116,8 @@ const EXPOSED = [
 	SafePipe,
 	ChunkPipe,
 	StartCasePipe,
-	TakePipe
+	TakePipe,
+	PropertiesMetadataColspanPipe
 ];
 
 @NgModule({

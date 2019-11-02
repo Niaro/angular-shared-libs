@@ -48,7 +48,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 			.subscribe(v => this.busy.next(isNumber(v)));
 
 		this.firebase.uploadedDownloadUrl$
-			.subscribe(v => this.updateValueAndEmitChange(v));
+			.subscribe(v => this.setValue(v));
 	}
 
 	ngOnInit() {

@@ -1,3 +1,4 @@
+export * from './ngrx';
 export * from './measure.operator';
 export * from './measure.static';
 export * from './mutate.operator';

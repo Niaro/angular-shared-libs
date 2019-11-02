@@ -60,15 +60,19 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	}
 	// #endregion Implementation of the Validator interface
 
-	updateValueAndEmitChange(value: T | string) {
+	setValue(value: T, { emitChange }: { emitChange: boolean } = { emitChange: true }) {
 		if (isEqual(value, this.value)) {
 			this.validatorOnChange();
 			return;
 		}
 
 		this.value = value as T;
-		this.valueChange.next(value as T);
-		this.onChange(value);
+
+		if (emitChange) {
+			this.valueChange.next(value as T);
+			this.onChange(value);
+		}
+
 		this.validatorOnChange();
 		this.cdr.markForCheck();
 	}

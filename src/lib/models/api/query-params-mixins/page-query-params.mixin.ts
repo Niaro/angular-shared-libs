@@ -1,7 +1,7 @@
 import { Constructor } from './constructor';
 import { QueryParamsBase } from './query-params-base';
 
-export const PAGE_SIZE = 25;
+export const PAGE_SIZE = 24;
 
 export interface IPageQueryParams {
 	page?: string;

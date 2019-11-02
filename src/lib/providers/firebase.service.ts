@@ -47,9 +47,7 @@ export class FirebaseService {
 	constructor(
 		protected telemetry: TelemetryService,
 		@Inject(FIREBASE_APP_ID) protected firebaseAppId: string
-	) { }
-
-	ignite(options = {}) {
+	) {
 		if (isEmpty(firebase.apps))
 			firebase.initializeApp({
 				apiKey: 'AIzaSyCE0HJJUq4otCVdCbdBINJApcVmj3h-isU',
@@ -58,8 +56,7 @@ export class FirebaseService {
 				projectId: 'web-hosting-213618',
 				storageBucket: 'web-hosting-213618.appspot.com',
 				messagingSenderId: '977741303368',
-				appId: this.firebaseAppId,
-				...options
+				appId: this.firebaseAppId
 			});
 
 		this.storage = firebase.storage();
@@ -68,7 +65,7 @@ export class FirebaseService {
 
 	signIn(credentials: { userName: string, password: string }) {
 		return from(firebase.auth().signInWithEmailAndPassword(credentials.userName, credentials.password))
-			.pipe(catchError(this.responseErrorMapper));
+			.pipe(catchError(this.throwAsResponseError));
 	}
 
 	getDocumentId(collectionPath: string) {
@@ -132,7 +129,7 @@ export class FirebaseService {
 			);
 			return () => unsubscribe();
 		})
-			.pipe(catchError(this.responseErrorMapper));
+			.pipe(catchError(this.throwAsResponseError));
 	}
 
 	onSnapshot<T>(
@@ -146,25 +143,33 @@ export class FirebaseService {
 			);
 			return () => unsubscribe();
 		})
-			.pipe(catchError(this.responseErrorMapper));
+			.pipe(catchError(this.throwAsResponseError));
 	}
 
-	once<T>(documentPath: string): Observable<Partial<T> | null> {
+	getListOnce<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
+		return from(this.collection(collectionPath).get())
+			.pipe(
+				map(snapshot => snapshot.docs.map(v => factory(v.data() as Partial<T>))),
+				catchError(this.throwAsResponseError)
+			);
+	}
+
+	getOnce<T>(documentPath: string): Observable<Partial<T> | null> {
 		return from(this.doc(documentPath).get())
 			.pipe(
-				map(v => (v.data() as Partial<T>) || null),
-				catchError(this.responseErrorMapper)
+				map(snapshot => (snapshot.data() as Partial<T>) || null),
+				catchError(this.throwAsResponseError)
 			);
 	}
 
 	delete(documentPath: string): Observable<void> {
 		return from(this.doc(documentPath).delete())
-			.pipe(catchError(this.responseErrorMapper));
+			.pipe(catchError(this.throwAsResponseError));
 	}
 
 	set(documentPath: string, body: Entity): Observable<void> {
 		return from(this.doc(documentPath).set(body.toJSON()))
-			.pipe(catchError(this.responseErrorMapper));
+			.pipe(catchError(this.throwAsResponseError));
 	}
 
 	save<T extends Entity>(
@@ -235,6 +240,16 @@ export class FirebaseService {
 		this.functions.httpsCallable(firebaseFunctionName)(body) as Promise<any>;
 	}
 
+	onAuthStateChange(): Observable<firebase.User | null> {
+		return new Observable(subscriber => firebase
+			.auth()
+			.onAuthStateChanged(
+				v => subscriber.next(v),
+				e => subscriber.error(this.mapToResponseError(e))
+			)
+		);
+	}
+
 	private async getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
 		const fileRef = this.storage
 			.ref(path)
@@ -269,7 +284,8 @@ export class FirebaseService {
 		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
 	}
 
-	private responseErrorMapper = (v: firebase.FirebaseError) => throwError(
-		new ResponseError({ messages: [{ type: v.code, message: v.message }] })
-	)
+	private throwAsResponseError = (v: firebase.FirebaseError) => throwError(this.mapToResponseError(v));
+
+	private mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
+		new ResponseError({ messages: [{ type: e.code, message: e.message }] })
 }

@@ -84,13 +84,17 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 	}
 
 	get urlTree(): UrlTree {
-		const tree = this.router.createUrlTree(this.commands, {
-			relativeTo: this.route,
+		let tree = this.router.createUrlTree([{ outlets: { [PRIMARY_OUTLET]: this.commands }}], {
+			relativeTo: this.route.root,
 			queryParams: this.queryParams,
 			fragment: this.fragment,
 			queryParamsHandling: this.queryParamsHandling,
 			preserveFragment: attrBoolValue(this.preserveFragment)
 		});
+
+		// clone tree, cause createUrlTree creates shared tree with the router and
+		// we don't want to affect inner router state
+		tree = this.router.parseUrl(tree.toString());
 
 		this.removeNonPrimaryOutlets(tree.root);
 

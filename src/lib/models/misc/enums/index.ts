@@ -1,4 +1,4 @@
 export * from './ability';
-export * from './chip';
+export * from './describable';
 export * from './enum';
 export * from './page-type';

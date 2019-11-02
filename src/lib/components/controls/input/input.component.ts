@@ -33,7 +33,7 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 	@ViewChild(TextMaskDirective, { static: false }) maskDirective!: TextMaskDirective;
 
 	onInternalControlValueChange(value: string) {
-		this.updateValueAndEmitChange(this.maskDirective
+		this.setValue(this.maskDirective
 			&& this.maskDirective.config instanceof NumberMaskConfig
 			&& !this.maskDirective.config.allowLeadingZeroes
 			&& !isEmpty(value)

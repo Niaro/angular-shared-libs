@@ -5,7 +5,7 @@ import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-e
 import { Subject, of } from 'rxjs';
 import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
 
-import { Entity, PropertiesMetadata, FormScheme, MetadataEntity } from '../models';
+import { Entity, ClassMetadata, FormScheme, MetadataEntity } from '../models';
 
 import { FormBaseComponent } from './form-base.component';
 
@@ -18,7 +18,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 
 	@Output() readonly entityChange = new Subject<T>();
 
-	@Input() metadata!: PropertiesMetadata;
+	@Input() metadata!: ClassMetadata;
 
 	@Input() factory!: (v?: Partial<T>) => T;
 

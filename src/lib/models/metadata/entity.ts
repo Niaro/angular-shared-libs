@@ -5,7 +5,7 @@ import { Property } from './decorators/property-metadata.decorator';
 import { unixMomentMapper } from './mappers';
 import { FieldViewType } from './enums';
 import { Mapper } from './decorators/mapper.decorator';
-import { View } from './decorators/property-metadata-view.decorator';
+import { View } from './decorators/view.decorator';
 
 export abstract class Entity extends MetadataEntity {
 	@Property()

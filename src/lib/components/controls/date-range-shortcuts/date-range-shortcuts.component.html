@@ -1,6 +1,21 @@
-<button *ngFor="let shortcut of dateRangeShortcuts"
-		class="link interactive"
-		[class.active]="shortcut === selected"
-		(click)="select(shortcut)">
-	{{ shortcut.displayName }}
-</button>
+<mat-select *ngIf="asSelect; else buttonShortCutsTpl"
+			[ngClass]="selectClass"
+			panelClass="mat-primary"
+			placeholder="Period"
+			[value]="selected"
+			(valueChange)="select($event)">
+	<mat-option>-- Period --</mat-option>
+	<mat-option *ngFor="let shortcut of dateRangeShortcuts"
+				[value]="shortcut">
+		{{ shortcut.displayName }}
+	</mat-option>
+</mat-select>
+
+<ng-template #buttonShortCutsTpl>
+	<button *ngFor="let shortcut of dateRangeShortcuts"
+			class="link interactive"
+			[class.active]="shortcut === selected"
+			(click)="select(shortcut)">
+		{{ shortcut.displayName }}
+	</button>
+</ng-template>

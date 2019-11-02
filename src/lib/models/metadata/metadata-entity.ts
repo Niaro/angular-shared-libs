@@ -3,18 +3,18 @@ import * as m from 'moment';
 
 import { isExtensionOf } from '@bp/shared/utils';
 
-import { PropertiesMetadata } from './properties-metadata';
+import { ClassMetadata } from './class-metadata';
 import { Enumeration } from '../misc/enums/enum';
 
 export abstract class MetadataEntity {
 
-	private static _metadata: PropertiesMetadata;
+	private static _metadata: ClassMetadata;
 
-	static get metadata(): PropertiesMetadata {
+	static get metadata(): ClassMetadata {
 		if (has(this, '_metadata'))
 			return this._metadata;
 
-		return this._metadata = new PropertiesMetadata(this);
+		return this._metadata = new ClassMetadata(this);
 	}
 
 	static getMetadata(model: MetadataEntity) {

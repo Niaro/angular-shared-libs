@@ -19,7 +19,7 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 export class PaginatorComponent {
 	Math = Math;
 
-	@Input() pageSizeOptions = [10, 25, 50, 100, 250];
+	@Input() pageSizeOptions = [10, 24, 50, 100, 250];
 
 	@Input() totalLength!: number;
 
@@ -67,7 +67,8 @@ export class PaginatorComponent {
 				distinctUntilChanged((a, b) => isEqual(a, b))
 			)
 			.subscribe(() => {
-				this.page = undefined;
+				if (this.page)
+					this.page = undefined;
 				this.currentPage = 1;
 			});
 

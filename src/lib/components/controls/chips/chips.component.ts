@@ -38,7 +38,7 @@ export interface IChipControlItem {
 export class ChipsControlComponent
 	extends FormFieldControlComponent<IChipControlItem[] | null>
 	implements OnChanges {
-		
+
 	@Input() items!: IChipControlItem[];
 
 	@ViewChild('autocomplete', { static: true }) autocomplete!: MatAutocomplete;
@@ -119,7 +119,7 @@ export class ChipsControlComponent
 	}
 
 	remove(item: IChipControlItem): void {
-		this.updateValueAndEmitChange((this.value || []).filter(v => v !== item));
+		this.setValue((this.value || []).filter(v => v !== item));
 		this.updateFilteredAccordingSelected();
 	}
 
@@ -129,7 +129,7 @@ export class ChipsControlComponent
 	}
 
 	select(...value: IChipControlItem[]) {
-		this.updateValueAndEmitChange(uniq([...(this.value || []), ...value]));
+		this.setValue(uniq([...(this.value || []), ...value]));
 		this.updateFilteredAccordingSelected();
 	}
 

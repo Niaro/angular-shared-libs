@@ -43,6 +43,8 @@ export class DateRange {
 
 	get empty() { return isNil(this.from) && isNil(this.to); }
 
+	get fullRange() { return !!this.from && !!this.to; }
+
 	private _from: m.Moment | undefined;
 	private _to: m.Moment | undefined;
 	private unixText!: string | undefined;

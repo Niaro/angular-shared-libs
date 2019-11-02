@@ -79,6 +79,6 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		this.cdr.markForCheck();
 
 		const foundLoweredItem = input && this.lowercasedItems.find(v => v.lowered === loweredInput);
-		this.updateValueAndEmitChange(foundLoweredItem && foundLoweredItem.item || null);
+		this.setValue(foundLoweredItem && foundLoweredItem.item || null);
 	}
 }

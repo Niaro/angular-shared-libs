@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Input, HostBinding } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as m from 'moment';
 
@@ -19,36 +19,57 @@ import { ControlComponent } from '../control.component';
 		}
 	]
 })
-export class DateRangeShortcutsComponent extends ControlComponent<DateRange> implements AfterViewInit {
+export class DateRangeShortcutsComponent extends ControlComponent<DateRange | null> implements AfterViewInit {
 
-	dateRangeShortcuts = DateRangeShortcut.list() as DateRangeShortcut[];
+	@Input() asSelect!: boolean;
 
-	selected!: DateRangeShortcut | undefined;
+	@Input() includeYear!: boolean;
+
+	@Input() selectClass!: string;
+
+	@Input() default: DateRangeShortcut | null = DateRangeShortcut.month;
+
+	@HostBinding('class.interactive-links') get isInteractiveLinks() { return !this.asSelect; }
+
+	dateRangeShortcuts!: DateRangeShortcut[];
+
+	selected!: DateRangeShortcut | null;
 
 	constructor(cdr: ChangeDetectorRef) {
 		super(cdr);
 	}
 
 	ngAfterViewInit() {
-		this.select(DateRangeShortcut.month);
+		this.dateRangeShortcuts = (this.includeYear
+			? DateRangeShortcut.list()
+			: DateRangeShortcut.list().filter(v => v !== DateRangeShortcut.year)) as DateRangeShortcut[];
+
+		this.default && this.select(DateRangeShortcut.month);
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: DateRangeInputValue): void {
+	writeValue(value: DateRangeInputValue | null): void {
 		Promise
 			.resolve()
-			.then(() => this.select(value && this.dateRangeShortcuts.find(v => v.dateRange.isSame(DateRange.parse(value)))
-				|| DateRangeShortcut.month
-			));
+			.then(() => {
+				const inputDateRage = value && DateRange.parse(value);
+
+				let shortcut = this.default;
+				if (inputDateRage && inputDateRage.fullRange)
+					shortcut = this.dateRangeShortcuts.find(v => v.dateRange.isSame(inputDateRage)) || null;
+
+				this.selected = shortcut;
+				this.setValue(shortcut && shortcut.dateRange, { emitChange: false });
+			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	select(value: DateRangeShortcut) {
+	select(value: DateRangeShortcut | null) {
 		if (value === this.selected)
 			return;
 
 		this.selected = value;
-		this.updateValueAndEmitChange(value.dateRange);
+		this.setValue(value && value.dateRange);
 	}
 }
 
@@ -56,7 +77,7 @@ export class DateRangeShortcut extends Enumeration {
 	static week = new DateRangeShortcut();
 	static month = new DateRangeShortcut();
 	static quarter = new DateRangeShortcut();
-	// static year = new DateRangeShortcut();
+	static year = new DateRangeShortcut();
 
 	dateRange!: DateRange;
 
@@ -81,8 +102,8 @@ export class DateRangeShortcut extends Enumeration {
 				return new DateRange({ from: m().utc().startOf('month'), to });
 			case DateRangeShortcut.quarter:
 				return new DateRange({ from: m().utc().startOf('quarter'), to });
-			// case DateRangeShortcut.year:
-			// 	return new DateRange({ from: m().utc().startOf('year'), to });
+			case DateRangeShortcut.year:
+				return new DateRange({ from: m().utc().startOf('year'), to });
 		}
 	}
 }
