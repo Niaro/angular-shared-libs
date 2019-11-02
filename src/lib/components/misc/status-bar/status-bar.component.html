@@ -1,5 +1,5 @@
 <div [ngClass]="[position]"
-      [matTooltip]="status && status['description'] || status?.displayName"
+      [matTooltip]="status?.description || status?.displayName"
       [matTooltipPosition]="position === 'top' ? 'above' : position"
       matTooltipClass="capitalized">
 </div>
