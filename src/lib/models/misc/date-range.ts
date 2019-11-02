@@ -1,5 +1,5 @@
 import * as m from 'moment';
-import { isNil, assign, isString, chunk } from 'lodash-es';
+import { isNil, assign, isString, chunk, omit } from 'lodash-es';
 
 const RANGE_DELIMITER = ':';
 
@@ -53,7 +53,7 @@ export class DateRange {
 		if (isString(config))
 			return DateRange.parseString(config, format);
 
-		assign(this, config);
+		assign(this, omit(config, ['empty', 'fullRange', 'format']));
 		Object.freeze(this);
 	}
 

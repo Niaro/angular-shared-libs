@@ -40,7 +40,9 @@ export class ProcessingFile {
 	constructor(
 		public name: string,
 		private type: 'download' | 'upload'
-	) { }
+	) {
+		this.name = name.replace(/\//g, ' ̸ ');
+	}
 
 	finish() {
 		if (this.progress < 100)
