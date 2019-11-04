@@ -49,6 +49,10 @@
 					{{ value | currency:'USD':'':isInteger(value) ? '1.0-0' : null }}
 				</ng-container>
 
+				<ng-container *ngSwitchCase="FieldViewType.percent">
+					{{ value | percent:'0.0-2' }}
+				</ng-container>
+
 				<ng-container *ngSwitchCase="FieldViewType.moment">
 					{{ value | moment: metadata.viewFormatter ? metadata.viewFormatter(value) : 'LL LTS'}}
 				</ng-container>

@@ -10,6 +10,8 @@ export class FieldViewType extends Enumeration {
 
 	static money = new FieldViewType();
 
+	static percent = new FieldViewType();
+
 	static moment = new FieldViewType();
 
 	static email = new FieldViewType();
