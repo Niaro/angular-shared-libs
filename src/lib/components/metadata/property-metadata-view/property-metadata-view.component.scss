@@ -14,6 +14,19 @@
 		}
 	}
 
+	bp-copy {
+		margin-bottom: -8px;
+		position: relative;
+		top: -5px;
+	}
+
+	> div {
+		touch-action: initial !important;
+		user-select: initial !important;
+		-webkit-user-drag: initial !important;
+		-webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+	}
+
 	&.view-type-boolean {
 		display: flex;
 

@@ -9,6 +9,13 @@
 					  [matTooltip]="metadata.longHint">
 				help_outline
 			</mat-icon>
+
+			<bp-copy *ngIf="metadata.copyable"
+					 class="ml-1"
+					 size="sm"
+					 [outlined]="true"
+					 [value]="value">
+			</bp-copy>
 		</caption>
 
 		<div *ngIf="value === '' || value === undefined || value === null || value.length === 0; else valueTpl">

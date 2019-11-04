@@ -29,6 +29,8 @@ export class PropertyMetadata {
 
 	table: PropertyMetadataTable | null = null;
 
+	copyable!: boolean;
+
 	/**
 	 * the name of the property to which this metadata belongs
 	 */

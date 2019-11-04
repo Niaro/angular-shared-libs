@@ -2,11 +2,14 @@
 
 <button #copyBtn
 		mat-icon-button
-		matTooltip="Copy"
+		[ngClass]="size"
+		[matTooltip]="tooltipMsg"
 		(click)="copy($event)">
-	<mat-icon>file_copy</mat-icon>
+	<mat-icon [class.material-icons-outlined]="outlined">file_copy</mat-icon>
 </button>
 
-<span class="content" #content>
+<span *ngIf="!value"
+	  #content
+	  class="content">
 	<ng-content></ng-content>
 </span>
