@@ -136,7 +136,7 @@ bp-svg-icon,
 		line-height: $btn-icon-size-sm;
 	}
 
-	&.md {
+	&:not(.sm):not(.lg):not(.xl) {
 		$btn-icon-size-md: $icon-size-md + 16px;
 		@include size($btn-icon-size-md);
 		line-height: $btn-icon-size-md;
