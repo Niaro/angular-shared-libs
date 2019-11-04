@@ -35,6 +35,8 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	selected!: DateRangeShortcut | null;
 
+	writtenValue!: DateRangeInputValue | null;
+
 	constructor(cdr: ChangeDetectorRef) {
 		super(cdr);
 	}
@@ -47,7 +49,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 		/**
 		 * In case on init no one is written a value we set the default one
 		 */
-		setTimeout(() => !this.selected && this.default && this.select(this.default));
+		setTimeout(() => !this.writtenValue && this.default && this.select(this.default));
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -55,9 +57,10 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 		Promise
 			.resolve()
 			.then(() => {
+				this.writtenValue = value;
 				const inputDateRage = value && DateRange.parse(value);
 
-				let shortcut = this.default;
+				let shortcut = !inputDateRage || inputDateRage.empty ? this.default : null;
 				if (inputDateRage && inputDateRage.fullRange)
 					shortcut = this.dateRangeShortcuts.find(v => v.dateRange.isSame(inputDateRage)) || null;
 
