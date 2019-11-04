@@ -44,7 +44,10 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 			? DateRangeShortcut.list()
 			: DateRangeShortcut.list().filter(v => v !== DateRangeShortcut.year)) as DateRangeShortcut[];
 
-		this.default && this.select(DateRangeShortcut.month);
+		/**
+		 * In case on init no one is written a value we set the default one
+		 */
+		setTimeout(() => !this.selected && this.default && this.select(this.default));
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
