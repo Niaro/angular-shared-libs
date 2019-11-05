@@ -21,7 +21,9 @@ export class ModalOutletComponent implements OnInit {
 	@ContentChild(RouterOutlet, { static: true }) outlet!: RouterOutlet;
 
 	private activeDialog!: MatDialogRef<any, any> | null;
+
 	private urlWithOutlet!: string | null;
+
 	private destinationUrl!: string;
 
 	private navigation!: boolean;
@@ -74,7 +76,7 @@ export class ModalOutletComponent implements OnInit {
 
 		this.navigation = false;
 		this.activeDialog = this.dialogsManager.open(cmpt.modal.template, {
-			panelClass: [...cmpt.panelClass, 'bp-overlay-pane']
+			panelClass: [...(cmpt.panelClass || []), 'bp-overlay-pane']
 		});
 
 		this.activeDialog

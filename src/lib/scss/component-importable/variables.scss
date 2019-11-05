@@ -41,7 +41,7 @@ $danger-colors: (
 	700     : #c6323c,
 	contrast: (
 		100: $dark-primary-text,
-		500: $dark-primary-text,
+		500: $light-primary-text,
 		700: $light-primary-text,
 	),
 );
@@ -50,7 +50,7 @@ $primary: mat-palette($primary-colors) !default;
 $accent : mat-palette($mat-amber, 700, 100, 900) !default;
 $success: mat-palette($success-colors) !default;
 $danger : mat-palette($danger-colors) !default;
-$warning: mat-palette($mat-orange) !default;
+$warning: $danger !default;
 $info   : mat-palette($mat-light-blue) !default;
 
 $palette: (
@@ -61,6 +61,8 @@ $palette: (
 	warning: $warning,
 	info   : $info,
 );
+
+$overdue-color: mat-color($danger, 700);
 // #endregion colors
 
 // #region layout
