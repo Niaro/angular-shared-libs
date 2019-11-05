@@ -70,7 +70,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: T): void {
+	writeValue(value: T | null): void {
 		Promise
 			.resolve()
 			.then(() => {
@@ -104,7 +104,10 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			this.internalControl.valueChanges.pipe(auditTime(this.throttle)),
 			this.internalControl.valueChanges
 		)
-			.subscribe(v => this.onInternalControlValueChange(v));
+			.subscribe(v => {
+				this.externalControl && this.externalControl.markAsDirty();
+				this.onInternalControlValueChange(v);
+			});
 	}
 
 	protected reflectExternalControlOnInternal() {

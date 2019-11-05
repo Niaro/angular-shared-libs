@@ -9,6 +9,7 @@
 
 		h1 {
 			margin-top: 0;
+			margin-bottom: 1.5rem;
 		}
 
 		.btn-icon-close {
@@ -24,6 +25,7 @@
 	flex-flow: column;
 	align-items: center;
 	margin: 0 1rem;
+	padding: 1rem 0;
 
 	&.lg {
 		max-width: 900px !important;

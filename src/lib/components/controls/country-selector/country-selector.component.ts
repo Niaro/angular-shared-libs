@@ -38,6 +38,8 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	filtered = Countries.list;
 
+	throttle = 0;
+
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
 
@@ -71,9 +73,11 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 		Promise
 			.resolve()
 			.then(() => {
-				this.value = value instanceof Country
-					? value
-					: value && Countries.findByCode(value);
+				this.setValue(
+					value instanceof Country
+						? value
+						: value && Countries.findByCode(value),
+				{ emitChange: false });
 				this.internalControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
 			});
 	}
@@ -89,6 +93,10 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	onInternalControlValueChange(input: string) {
 		this.updateFilteredCountries(input);
+
+		if (this.value && this.value.name === input)
+			return;
+
 		this.setValue(input ? Countries.find(input) : null);
 	}
 

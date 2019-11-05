@@ -22,7 +22,7 @@ export class ValidationErrorComponent implements OnChanges {
 
 	@HostBinding('class.mat-error') matError = true;
 
-	error$!: Observable<string>;
+	error$!: Observable<string> | null;
 
 	constructor(@Optional() private translate?: TranslateService) { }
 
@@ -33,5 +33,7 @@ export class ValidationErrorComponent implements OnChanges {
 					map(() => new ValidationErrorStrings(this.errors!, this.translate)[0])
 				)
 				: of(new ValidationErrorStrings(this.errors)[0]);
+		else
+			this.error$ = null;
 	}
 }

@@ -1,11 +1,11 @@
 import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { isNil, isEqual } from 'lodash-es';
+import { isNil, isEqual, uniq } from 'lodash-es';
 
 export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator, OnDestroy {
 
-	@Input() value!: T;
+	@Input() value: T | null = null;
 
 	@Output() readonly valueChange = new Subject<T>();
 
@@ -16,6 +16,8 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	protected validator!: ValidatorFn | null;
 
 	protected destroyed$ = new Subject();
+
+	private onChangeCallbacks: ((value: any) => void )[] = [];
 
 	constructor(protected cdr: ChangeDetectorRef) { }
 
@@ -42,7 +44,8 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	}
 
 	registerOnChange(fn: (value: any) => void): void {
-		this.onChange = fn;
+		this.onChangeCallbacks = uniq([...this.onChangeCallbacks, fn]);
+		this.onChange = v => this.onChangeCallbacks.forEach(cb => cb(v));
 	}
 
 	registerOnTouched(fn: () => void): void {
