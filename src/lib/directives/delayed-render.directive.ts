@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 @Directive({ selector: '[bpDelayedRender]' })
 export class DelayedRenderDirective implements OnInit, OnDestroy {
 	private static instantViewsRenderingCounter = 0;
-	private static maxInstantRenderedViews = 10;
+	private static maxInstantRenderedViews = 7;
 
 	private destroyed$ = new AsyncVoidSubject();
 
@@ -26,14 +26,15 @@ export class DelayedRenderDirective implements OnInit, OnDestroy {
 			this.renderView(); // to render in the current event loop a set number of views
 		else
 			// if the rendered views counter exceeds the max we schedule rendering to the next event loops
-			timer(0)
+			timer(DelayedRenderDirective.instantViewsRenderingCounter - DelayedRenderDirective.maxInstantRenderedViews)
 				.pipe(takeUntil(this.destroyed$))
 				.subscribe(() => this.renderView());
 
 		DelayedRenderDirective.instantViewsRenderingCounter++;
 
-		timer(0)
-			.subscribe(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
+		Promise
+			.resolve()
+			.then(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
 	}
 
 	ngOnDestroy() {

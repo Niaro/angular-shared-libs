@@ -1,7 +1,7 @@
 import {
 	Component, OnDestroy, OnChanges, AfterViewInit, ElementRef, ChangeDetectorRef,
 	SimpleChanges, Input, Output, ViewChild, ViewChildren, TemplateRef, ContentChild,
-	QueryList, ChangeDetectionStrategy, Renderer2
+	QueryList, ChangeDetectionStrategy, Renderer2, TrackByFunction
 } from '@angular/core';
 import { Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
 import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
@@ -200,6 +200,10 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		this.autoplayTask && this.stopAutoplay();
 		this.touch.destroy();
 		this.destroyed$.complete();
+	}
+
+	trackBy: TrackByFunction<any> = (index, item) => {
+		return item.id || item.key || item;
 	}
 
 	startAutoplay() {

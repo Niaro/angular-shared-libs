@@ -11,7 +11,7 @@
 			[class.canceled-slide-animation]="(animate$ | async) === false"
 			[@fadeInList]="(items$ | async).length"
 			[@.disabled]="!slideInAnimation">
-			<li *ngFor="let item of (items$ | async); let i = index"
+			<li *ngFor="let item of (items$ | async); let i = index; trackBy: trackBy"
 				#slide
 				class="carousel-slide"
 				[ngClass]="slideClass"
