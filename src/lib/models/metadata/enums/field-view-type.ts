@@ -4,6 +4,8 @@ export class FieldViewType extends Enumeration {
 	// general
 	static text = new FieldViewType();
 
+	static textarea = new FieldViewType();
+
 	static boolean = new FieldViewType();
 
 	static booleanCircle = new FieldViewType();

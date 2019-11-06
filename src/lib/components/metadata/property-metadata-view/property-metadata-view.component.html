@@ -36,6 +36,18 @@
 					{{ value.displayName || value.name || value }}
 				</ng-container>
 
+				<ng-container *ngSwitchCase="FieldViewType.textarea">
+					<ng-container *ngIf="isCompact; else textareaTpl">
+						{{ value }}
+					</ng-container>
+					<ng-template #textareaTpl>
+						<textarea readonly
+								  rows="2"
+								[value]="value">
+						</textarea>
+					</ng-template>
+				</ng-container>
+
 				<bp-country *ngSwitchCase="FieldViewType.country"
 							[src]="value"
 							[compact]="isCompact">

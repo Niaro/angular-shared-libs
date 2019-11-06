@@ -41,6 +41,11 @@
 		max-width: 250px;
 		display: inline-block;
 	}
+
+	textarea {
+		width: 100% !important;
+		border: none;
+	}
 }
 
 :host-context(table) {
