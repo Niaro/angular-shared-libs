@@ -51,9 +51,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
 			});

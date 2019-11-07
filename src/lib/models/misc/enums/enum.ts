@@ -65,12 +65,12 @@ export abstract class Enumeration {
 			// Schedule a microtask at the end of the current event loop
 			// which means that the constructor will have all the enumerations attached to it by the time
 			// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
-			Promise.resolve().then(() => this.init());
+			queueMicrotask(() => this.init());
 		} else {
 			this._displayName = valueOrDisplayName as string;
 
 			// same as the comment above
-			Promise.resolve().then(() => this.init({ valueSameAsName: true }));
+			queueMicrotask(() => this.init({ valueSameAsName: true }));
 		}
 	}
 

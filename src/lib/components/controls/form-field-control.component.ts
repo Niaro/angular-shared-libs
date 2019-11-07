@@ -71,9 +71,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T | null): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(value, { emitViewToModelChange: false });
 			});

@@ -18,9 +18,7 @@ export class PaymentMethodType extends Enumeration {
 	constructor(displayName?: string) {
 		super(displayName);
 
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.routeName = kebabCase(this.name);
 				this.logo = `assets/images/payment-methods/${this.routeName}`;
 			});

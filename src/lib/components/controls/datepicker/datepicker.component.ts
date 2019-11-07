@@ -31,9 +31,7 @@ export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: m.Moment | null): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.value = value;
 				this.cdr.markForCheck();
 			});

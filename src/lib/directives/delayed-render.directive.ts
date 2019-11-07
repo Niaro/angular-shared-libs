@@ -32,9 +32,7 @@ export class DelayedRenderDirective implements OnInit, OnDestroy {
 
 		DelayedRenderDirective.instantViewsRenderingCounter++;
 
-		Promise
-			.resolve()
-			.then(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
+		queueMicrotask(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
 	}
 
 	ngOnDestroy() {

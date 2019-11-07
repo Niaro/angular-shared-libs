@@ -70,9 +70,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: Country | CountryCode | null): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.setValue(
 					value instanceof Country
 						? value

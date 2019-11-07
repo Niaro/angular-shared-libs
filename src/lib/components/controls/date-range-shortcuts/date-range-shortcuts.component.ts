@@ -54,9 +54,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue | null): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.writtenValue = value;
 				const inputDateRage = value && DateRange.parse(value);
 
@@ -90,9 +88,7 @@ export class DateRangeShortcut extends Enumeration {
 	constructor() {
 		super();
 
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.dateRange = this.getDateRange()!;
 				setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
 			});

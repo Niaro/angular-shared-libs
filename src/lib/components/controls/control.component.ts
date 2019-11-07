@@ -35,9 +35,7 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.value = value;
 				this.cdr.markForCheck();
 			});

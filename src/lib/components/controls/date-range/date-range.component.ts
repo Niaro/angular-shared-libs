@@ -36,9 +36,7 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.value = DateRange.parse(value);
 				this.cdr.markForCheck();
 			});

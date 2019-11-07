@@ -70,9 +70,7 @@ export class ChipsControlComponent
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: IChipControlItem[] | null): void {
-		Promise
-			.resolve()
-			.then(() => {
+		queueMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(value);
 				this.updateFilteredAccordingSelected();
