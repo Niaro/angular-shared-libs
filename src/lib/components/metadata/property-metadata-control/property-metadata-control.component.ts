@@ -53,6 +53,6 @@ export class PropertyMetadataControlComponent implements OnChanges {
 	}
 
 	private getHostClass(md: PropertyMetadata) {
-		return `control-type-${md.control.type.cssClass}`;
+		return md.control.type.cssClass;
 	}
 }

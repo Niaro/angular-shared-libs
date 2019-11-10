@@ -96,9 +96,7 @@ export abstract class Enumeration {
 	}
 
 	private getCssClass() {
-		// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
-		// return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
-		return kebabCase(this.name);
+		return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
 	}
 
 	private getValueName() {
