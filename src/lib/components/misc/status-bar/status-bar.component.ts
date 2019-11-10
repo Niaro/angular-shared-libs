@@ -23,13 +23,13 @@ export class StatusBarComponent implements OnChanges {
 		}
 
 		if (status) {
-			this.renderer.removeClass(this.container.$host, this.getStatusClass(status.previousValue));
-			this.renderer.addClass(this.container.$host, this.getStatusClass(status.currentValue));
+			status.previousValue && this.renderer.removeClass(this.container.$host, this.getCssClass(status.previousValue));
+			status.currentValue && this.renderer.addClass(this.container.$host, this.getCssClass(status.currentValue));
 		}
 	}
 
-	private getStatusClass(status: Enumeration) {
-		return `status-${status}`;
+	private getCssClass(status: Enumeration) {
+		return status.cssClass;
 	}
 
 	private getStatusBarClass(position: StatusPosition) {

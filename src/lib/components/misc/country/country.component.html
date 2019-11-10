@@ -6,9 +6,7 @@
 				 name="earth">
 	</bp-svg-icon>
 	<ng-template #defaultTpl>
-		<div class="iti__flag"
-			 [ngClass]="'iti__'+ (country?.lowerCaseCode || '')">
-		</div>
+		<div class="iti__flag iti__{{country?.lowerCaseCode || ''}}"></div>
 	</ng-template>
 </span>
 
