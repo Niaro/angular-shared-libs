@@ -1,6 +1,7 @@
 import { Component, HostBinding, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isNil } from 'lodash-es';
+import * as m from 'moment';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { lineMicrotask } from '@bp/shared/utils';
@@ -51,8 +52,8 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 			return;
 		}
 
-		if (v.to && this.value.from && this.value.from.isSame(v.to))
-			v.to = this.value.from.clone().endOf('day');
+		if (v.to)
+			v.to = m(v.to).endOf('day');
 
 		this.setValue(new DateRange({ ...this.value, ...v }));
 	}
