@@ -3,6 +3,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as m from 'moment';
 
 import { DateRange, Enumeration, DateRangeInputValue } from '@bp/shared/models/misc';
+import { lineMicrotask } from '@bp/shared/utils';
 
 import { ControlComponent } from '../control.component';
 
@@ -54,7 +55,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue | null): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.writtenValue = value;
 				const inputDateRage = value && DateRange.parse(value);
 
@@ -88,7 +89,7 @@ export class DateRangeShortcut extends Enumeration {
 	constructor() {
 		super();
 
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.dateRange = this.getDateRange()!;
 				setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
 			});

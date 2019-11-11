@@ -46,7 +46,9 @@ export class DateRange {
 	get fullRange() { return !!this.from && !!this.to; }
 
 	private _from: m.Moment | undefined;
+
 	private _to: m.Moment | undefined;
+
 	private unixText!: string | undefined;
 
 	constructor(config?: DateRangeInput | string, private format = 'LL') {
@@ -59,6 +61,10 @@ export class DateRange {
 
 	clone() {
 		return new DateRange(this, this.format);
+	}
+
+	toString(): any {
+		return this.unixText;
 	}
 
 	valueOf(): any {

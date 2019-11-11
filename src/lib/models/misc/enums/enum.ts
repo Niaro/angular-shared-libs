@@ -1,4 +1,5 @@
 import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst, kebabCase, isBoolean } from 'lodash-es';
+import { lineMicrotask } from '@bp/shared/utils';
 
 export abstract class Enumeration {
 	private static _list: any[];
@@ -49,6 +50,7 @@ export abstract class Enumeration {
 	cssClass!: string;
 
 	protected _value!: number | boolean | string;
+
 	protected _displayName: string;
 
 	private id = `enum_${Math.random().toString(36).substr(2, 8)}`;
@@ -65,12 +67,14 @@ export abstract class Enumeration {
 			// Schedule a microtask at the end of the current event loop
 			// which means that the constructor will have all the enumerations attached to it by the time
 			// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
-			queueMicrotask(() => this.init());
+			// PS we can't use queryMicrotask since it fires the microtask after the dom is rendered.
+			// and we need the enums to be inited before any components are rendered
+			lineMicrotask(() => this.init());
 		} else {
 			this._displayName = valueOrDisplayName as string;
 
 			// same as the comment above
-			queueMicrotask(() => this.init({ valueSameAsName: true }));
+			lineMicrotask(() => this.init({ valueSameAsName: true }));
 		}
 	}
 

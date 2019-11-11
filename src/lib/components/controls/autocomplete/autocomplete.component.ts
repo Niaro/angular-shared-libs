@@ -2,8 +2,9 @@ import { Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges } f
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
-import { FormFieldControlComponent } from '../form-field-control.component';
+import { lineMicrotask } from '@bp/shared/utils';
 
+import { FormFieldControlComponent } from '../form-field-control.component';
 
 @Component({
 	selector: 'bp-autocomplete',
@@ -51,7 +52,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
 			});

@@ -135,12 +135,12 @@ export class SharedModule {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				...LocalStorageModule.forRoot({
+				...(LocalStorageModule.forRoot({
 					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
-				}).providers,
-				...ModalModule.forRoot().providers,
-				...MaterialModule.forRoot().providers,
+				}).providers || []),
+				...(ModalModule.forRoot().providers || []),
+				...(MaterialModule.forRoot().providers || []),
 
 				RouterService,
 				TelemetryService,

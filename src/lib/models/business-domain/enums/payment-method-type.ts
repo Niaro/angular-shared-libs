@@ -1,5 +1,7 @@
 import { kebabCase } from 'lodash-es';
 
+import { lineMicrotask } from '@bp/shared/utils';
+
 import { Enumeration } from '../../misc';
 
 export class PaymentMethodType extends Enumeration {
@@ -18,7 +20,7 @@ export class PaymentMethodType extends Enumeration {
 	constructor(displayName?: string) {
 		super(displayName);
 
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.routeName = kebabCase(this.name);
 				this.logo = `assets/images/payment-methods/${this.routeName}`;
 			});

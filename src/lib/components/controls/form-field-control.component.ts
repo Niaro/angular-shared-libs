@@ -6,6 +6,7 @@ import { auditTime, switchMap, filter } from 'rxjs/operators';
 import { Subscription, iif } from 'rxjs';
 
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
+import { lineMicrotask } from '@bp/shared/utils';
 
 import { ControlComponent } from './control.component';
 
@@ -71,7 +72,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T | null): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(value, { emitViewToModelChange: false });
 			});

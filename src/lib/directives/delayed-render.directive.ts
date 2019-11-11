@@ -1,8 +1,10 @@
 import { Directive, TemplateRef, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
 import { timer } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { lineMicrotask } from '@bp/shared/utils';
 
 import { AsyncVoidSubject } from '../rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 /**
  * Rendering a significant amount of complex components in one event loop can create a visible freezes of the UI
@@ -32,7 +34,7 @@ export class DelayedRenderDirective implements OnInit, OnDestroy {
 
 		DelayedRenderDirective.instantViewsRenderingCounter++;
 
-		queueMicrotask(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
+		lineMicrotask(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
 	}
 
 	ngOnDestroy() {

@@ -6,6 +6,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { isEmpty, uniq, get, isString } from 'lodash-es';
 
 import { FADE } from '@bp/shared/animations';
+import { lineMicrotask } from '@bp/shared/utils';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
 
@@ -70,7 +71,7 @@ export class ChipsControlComponent
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: IChipControlItem[] | null): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(value);
 				this.updateFilteredAccordingSelected();

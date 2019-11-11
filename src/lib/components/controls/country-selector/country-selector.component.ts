@@ -3,6 +3,8 @@ import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { isArray } from 'lodash-es';
 
+import { lineMicrotask } from '@bp/shared/utils';
+
 import { FormFieldControlComponent } from '../form-field-control.component';
 
 
@@ -70,7 +72,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: Country | CountryCode | null): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.setValue(
 					value instanceof Country
 						? value

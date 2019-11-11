@@ -5,17 +5,16 @@ import {
 } from '@angular/core';
 import { Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
 import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
-
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isEqual, forOwn, sum, get } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { AsyncVoidSubject, BpScheduler, measure, mutate, fromMeasure, fromResize } from '@bp/shared/rxjs';
 import { Direction, Dimensions } from '@bp/shared/models';
-import { $ } from '@bp/shared/utils';
+import { $, lineMicrotask } from '@bp/shared/utils';
 
 import { TouchManager, TouchBuilder, ISwipeEvent } from '../touch';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export enum ArrowType {
 	none = 'none',
@@ -145,7 +144,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		if (items && (items.firstChange || this.resetActiveOnItemsChange))
 			this.activateItem(this.items[0], false);
 
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
 					this.updateItemsPerView();
 				if (items && !items.firstChange)

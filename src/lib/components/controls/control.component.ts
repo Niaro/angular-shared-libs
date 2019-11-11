@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { isNil, isEqual, uniq } from 'lodash-es';
 
+import { lineMicrotask } from '@bp/shared/utils';
+
 export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator, OnDestroy {
 
 	@Input() value: T | null = null;
@@ -35,7 +37,7 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.value = value;
 				this.cdr.markForCheck();
 			});

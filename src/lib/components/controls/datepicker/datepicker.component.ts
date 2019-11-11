@@ -3,6 +3,8 @@ import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@a
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { lineMicrotask } from '@bp/shared/utils';
+
 import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
 
@@ -31,7 +33,7 @@ export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: m.Moment | null): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.value = value;
 				this.cdr.markForCheck();
 			});

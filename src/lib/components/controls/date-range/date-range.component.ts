@@ -1,11 +1,13 @@
 import { Component, HostBinding, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { isNil } from 'lodash-es';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { lineMicrotask } from '@bp/shared/utils';
 import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
+
 import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
-import { isNil } from 'lodash-es';
 
 @Component({
 	selector: 'bp-date-range',
@@ -36,7 +38,7 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue): void {
-		queueMicrotask(() => {
+		lineMicrotask(() => {
 				this.value = DateRange.parse(value);
 				this.cdr.markForCheck();
 			});
