@@ -74,7 +74,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.status">
-					<span class="{{value.cssClass}}"
+					<span class="status-{{value.cssClass}}"
 						  [class.mr-1]="!isCompact"
 						  [class.circle-sm]="!isCompact"
 						  [class.circle]="isCompact"
@@ -106,7 +106,7 @@
 
 				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
 					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status">
-						<span class="{{status.cssClass}}"
+						<span class="status-{{status.cssClass}}"
 							  [class.mr-1]="!isCompact"
 							  [class.circle-sm]="!isCompact"
 							  [class.circle]="isCompact"
@@ -118,7 +118,7 @@
 						</ng-container>
 					</ng-container>
 					<span *ngIf="!metadata.viewFormatter"
-						  class="circle {{value.cssClass}}">
+						  class="circle status-{{value}}">
 					</span>
 				</ng-container>
 
