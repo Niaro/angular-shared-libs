@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
-import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn } from 'rxjs/operators';
+import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn, debounceTime } from 'rxjs/operators';
 import { isEmpty, transform, isNil, difference, fromPairs, get, set } from 'lodash-es';
 
 import { UrlHelper } from '@bp/shared/utils';
@@ -120,7 +120,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		filterControls$
 			.pipe(
 				switchMap(controls => merge(...controls.map(c => c.value$.pipe(
-					auditTime(250),
+					debounceTime(50),
 					map((value): [string, any] => [c.name, value]),
 
 					// if more than one the filter control emits a value during the same event loop,
