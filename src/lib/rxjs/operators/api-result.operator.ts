@@ -3,6 +3,7 @@ import { map, catchError, takeUntil } from 'rxjs/operators';
 import { TypedAction } from '@ngrx/store/src/models';
 
 import { Action, ResponseError } from '../../models';
+
 export function apiResult<T>(
 	success: Action<{ result: T }>,
 	failure: Action<{ apiError: ResponseError }>,
