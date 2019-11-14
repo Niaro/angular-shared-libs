@@ -1,0 +1,17 @@
+<div [class.downloading]="isDownloading$ | async"
+	 [style.width.px]="size"
+	 [style.height.px]="size"
+	 [style.border-radius.px]="size">
+	<div class="placeholder">
+		<mat-icon>image</mat-icon>
+		<ng-content></ng-content>
+	</div>
+
+	<div *ngIf="src"
+		 class="img-background"
+		 [class.show]="showImg$ | async">
+		<div class="img"
+			 [style.background-image]="('url(' + src! + ')') | safe:'style'">
+		</div>
+	</div>
+</div>

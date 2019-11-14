@@ -1,0 +1,24 @@
+@import 'imports';
+
+:host {
+	position: absolute;
+
+	div {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+:host-context(.status-bar-top) {
+	height: $mat-card-status-border-width;
+	top: -$mat-card-status-border-width;
+	left: 0;
+	right: 0;
+}
+
+:host-context(.status-bar-left) {
+	left: -$mat-card-status-border-width;
+	top: 0;
+	bottom: 0;
+	width: $mat-card-status-border-width;
+}

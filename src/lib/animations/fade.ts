@@ -27,3 +27,19 @@ export const FADE = trigger('fade', [
 export const FADE_IN = trigger('fadeIn', [
 	transition(':enter', useAnimation(fadeIn, NORMAL)),
 ]);
+
+const floatFadeOut = animation([
+	style({ position: 'absolute' }),
+	animate(
+		timings,
+		keyframes([
+			style({ opacity: 1 }),
+			style({ opacity: 0 })
+		])
+	)
+]);
+
+export const FADE_IN_FLOAT_FADE_OUT = trigger('fadeInFloatFadeOut', [
+	transition(':enter', useAnimation(fadeIn, NORMAL)),
+	transition(':leave', useAnimation(floatFadeOut, NORMAL)),
+]);

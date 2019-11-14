@@ -58,7 +58,7 @@ export class TouchManager {
 
 		TouchManager.events.forEach(event => {
 			this.subjects[event] = new Subject();
-			set(this, `${event}$`, this.subjects[event].pipe(observeOn(BpScheduler.runInAngularZone)));
+			set(this, `${event}$`, this.subjects[event].pipe(observeOn(BpScheduler.inside)));
 		});
 	}
 

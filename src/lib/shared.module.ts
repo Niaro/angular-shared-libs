@@ -18,7 +18,7 @@ import {
 	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
-	ImgUploadBtnComponent
+	ImgUploadBtnComponent, ImgComponent
 } from './components';
 
 import {
@@ -38,9 +38,9 @@ import { APP_LOCAL_STORAGE_PREFIX } from './models';
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
 
 import {
-	RouterService, TelemetryService, RxJSExtenderService, EnvironmentService, FirebaseService, FileLoaderService,
+	RouterService, TelemetryService, ZoneService, EnvironmentService, FirebaseService, FileLoaderService,
 	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler
-} from './providers';
+} from './providers';s
 
 const MODULES = [
 	CommonModule,
@@ -74,6 +74,7 @@ const EXPOSED = [
 	DeleteConfirmDialogComponent,
 	LogoutConfirmDialogComponent,
 	PaymentMethodBrandComponent,
+	ImgComponent,
 
 	// directives
 	CursorPageAdaptorDirective,
@@ -144,7 +145,7 @@ export class SharedModule {
 
 				RouterService,
 				TelemetryService,
-				RxJSExtenderService,
+				ZoneService,
 				EnvironmentService,
 				FirebaseService,
 				FileLoaderService,
@@ -156,5 +157,5 @@ export class SharedModule {
 	}
 
 	// we inject the service here in order to init the underlying services logic from the the very start
-	constructor(rxjsExtender: RxJSExtenderService) { }
+	constructor(rxjsExtender: ZoneService) { }
 }

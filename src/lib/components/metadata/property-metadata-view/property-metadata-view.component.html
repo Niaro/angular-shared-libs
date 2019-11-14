@@ -43,7 +43,7 @@
 					<ng-template #textareaTpl>
 						<textarea readonly
 								  rows="2"
-								[value]="value">
+								  [value]="value">
 						</textarea>
 					</ng-template>
 				</ng-container>
@@ -74,7 +74,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.status">
-					<span class="status-{{value.cssClass}}"
+					<span [ngClass]="'status-' + value.cssClass"
 						  [class.mr-1]="!isCompact"
 						  [class.circle-sm]="!isCompact"
 						  [class.circle]="isCompact"
@@ -106,7 +106,7 @@
 
 				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
 					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status">
-						<span class="status-{{status.cssClass}}"
+						<span [ngClass]="'status-' + status.cssClass"
 							  [class.mr-1]="!isCompact"
 							  [class.circle-sm]="!isCompact"
 							  [class.circle]="isCompact"
@@ -134,10 +134,10 @@
 					</mat-chip-list>
 				</ng-container>
 
-				<div *ngSwitchCase="FieldViewType.thumbnail"
-					 class="thumbnail"
-					 [style.background-image]="('url(' + value + ')') | safe:'style'">
-				</div>
+				<bp-img *ngSwitchCase="FieldViewType.thumbnail"
+						[size]="40"
+						[url]="value">
+				</bp-img>
 			</div>
 		</ng-template>
 	</ng-container>

@@ -7,7 +7,7 @@ import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { lineMicrotask } from '@bp/shared/utils';
 import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
 
-import { DatepickerCalendarHeaderComponent } from '../../misc/datepicker-calendar-header';
+import { DatepickerCalendarHeaderComponent } from '../../others/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
 
 @Component({

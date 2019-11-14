@@ -4,5 +4,5 @@ export * from './environment.service';
 export * from './file-loader.service';
 export * from './firebase.service';
 export * from './router.service';
-export * from './rxjs-extender.service';
+export * from './zone.service';
 export * from './telemetry.service';

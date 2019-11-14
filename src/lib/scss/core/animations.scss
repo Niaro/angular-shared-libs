@@ -29,3 +29,32 @@
 		transform: rotate(360deg);
 	}
 }
+
+@keyframes pendingRotation {
+	0% {
+		transform: rotate(0);
+	}
+
+	33%,
+	66% {
+		transform: rotate(180deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes flickering {
+	0% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0.5;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
