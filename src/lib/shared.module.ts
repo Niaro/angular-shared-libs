@@ -40,7 +40,7 @@ import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './feat
 import {
 	RouterService, TelemetryService, ZoneService, EnvironmentService, FirebaseService, FileLoaderService,
 	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler
-} from './providers';s
+} from './providers';
 
 const MODULES = [
 	CommonModule,
