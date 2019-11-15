@@ -25,8 +25,10 @@ export class ImgComponent implements OnChanges {
 	ngOnChanges({ url }: SimpleChanges) {
 		if (url && this.url)
 			this.loadImg(this.url);
-		else
+		else {
 			this.src = null;
+			this.isDownloading$.next(false);
+		}
 	}
 
 	private loadImg(url: string) {
