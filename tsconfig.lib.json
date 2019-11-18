@@ -18,7 +18,8 @@
 		]
 	},
 	"angularCompilerOptions": {
-		"annotateForClosureCompiler": true,
+		// "annotateForClosureCompiler": true,
+		"disableTypeScriptVersionCheck": true,
 		"skipTemplateCodegen": true,
 		"strictMetadataEmit": true,
 		"fullTemplateTypeCheck": true,
