@@ -58,7 +58,7 @@
 				</bp-payment-method-brand>
 
 				<ng-container *ngSwitchCase="FieldViewType.money">
-					{{ value | currency:'USD':'':isInteger(value) ? '1.0-0' : null }}
+					{{ value | currency:'USD':'':isInteger(value) ? '1.0-0' : undefined }}
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.percent">

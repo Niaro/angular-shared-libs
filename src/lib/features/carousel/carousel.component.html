@@ -3,13 +3,13 @@
 		 [style.height.px]="viewportHeight$ | async"
 		 cdkDropList
 		 cdkDropListLockAxis="x"
-		 [cdkDropListDisabled]="(items$ | async).length === 1 || !sortable"
+		 [cdkDropListDisabled]="(items$ | async)?.length === 1 || !sortable"
 		 cdkDropListOrientation="horizontal"
 		 (cdkDropListDropped)="drop($event)">
 		<ul #slidesContainer
 			class="carousel-slides"
 			[class.canceled-slide-animation]="(animate$ | async) === false"
-			[@fadeInList]="(items$ | async).length"
+			[@fadeInList]="(items$ | async)?.length"
 			[@.disabled]="!slideInAnimation">
 			<li *ngFor="let item of (items$ | async); let i = index; trackBy: trackBy"
 				#slide
@@ -51,11 +51,11 @@
 
 <div *ngIf="isShowBullets"
 	 class="bullets"
-	 [style.visibility]="(items$ | async).length > (currentItemsPerView$ | async) ? null : 'hidden'">
+	 [style.visibility]="(items$ | async)?.length > (currentItemsPerView$ | async)! || 0 ? null : 'hidden'">
 	<button type="button"
 			class="bullet"
 			*ngFor="let item of (items$ | async); let i = index"
-			[class.active]="(slidesVisibility$ | async).firstFullyVisible <= i && i <= (slidesVisibility$ | async).lastFullyVisible"
+			[class.active]="(slidesVisibility$ | async)?.firstFullyVisible <= i && i <= (slidesVisibility$ | async)?.lastFullyVisible"
 			(click)="activateIndex(i)">
 	</button>
 </div>

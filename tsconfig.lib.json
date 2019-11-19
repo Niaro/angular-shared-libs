@@ -11,20 +11,19 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"importHelpers": true,
-		"types": ["node"],
+		"types": [
+			"node"
+		],
 		"lib": [
 			"dom",
 			"es2018"
 		]
 	},
 	"angularCompilerOptions": {
-		// "annotateForClosureCompiler": true,
 		"disableTypeScriptVersionCheck": true,
-		"skipTemplateCodegen": true,
-		"strictMetadataEmit": true,
 		"fullTemplateTypeCheck": true,
 		"strictInjectionParameters": true,
-		"enableResourceInlining": true
+		"annotationsAs": "decorators"
 	},
 	"exclude": [
 		"src/test.ts",

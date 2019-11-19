@@ -3,6 +3,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { FADE_IN_LIST } from '@bp/shared/animations';
 
 import { ClassMetadata, Entity } from '../../../models';
+import { get } from 'lodash-es';
 
 export type ViewsSectionScheme<T> = [NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
 
@@ -24,5 +25,7 @@ export class PropertyMetadataViewsSectionComponent {
 	@Input() title!: string;
 
 	@Input() hasSeparator!: boolean;
+
+	get = get;
 
 }

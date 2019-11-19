@@ -8,7 +8,7 @@
 	<ng-container *ngFor="let name of group">
 		<bp-property-metadata-view *ngIf="metadata.get(name) as md"
 								   [metadata]="md"
-								   [value]="entity[name]">
+								   [value]="get(entity, name)">
 		</bp-property-metadata-view>
 	</ng-container>
 </div>

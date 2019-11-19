@@ -5,7 +5,7 @@ import { chunk } from 'lodash-es';
 	name: 'chunk'
 })
 export class ChunkPipe implements PipeTransform {
-	transform(array: any[], size: number): any[][] {
-		return chunk(array, size);
+	transform(array: any[] | null, size: number): any[][] {
+		return array ? chunk(array, size) : [];
 	}
 }

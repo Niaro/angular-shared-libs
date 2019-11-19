@@ -150,7 +150,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	// end of ControlValueAccessor
 
 	@HostListener('input', ['$event.target.value'])
-	protected onInput(userInput: string) {
+	onInput(userInput: string) {
 		let value: string | number | null = userInput;
 
 		if (this.textMaskInputManager) {
@@ -173,7 +173,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	@HostListener('paste', ['$event'])
-	protected onPaste(e: ClipboardEvent) {
+	onPaste(e: ClipboardEvent) {
 		if (!this.textMaskInputManager) return;
 
 		if (isEmpty(this.textMaskInputManager.state.previousConformedValue)) {
@@ -183,7 +183,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	@HostListener('blur')
-	protected onBlur() {
+	onBlur() {
 		this.onTouched && this.onTouched();
 
 		if (!this.textMaskInputManager) return;
@@ -193,7 +193,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	@HostListener('focus')
-	protected onFocus() {
+	onFocus() {
 		if (!this.textMaskInputManager) return;
 
 		if (!this.hasValue && this.activeConfig && this.activeConfig.maskOnFocus)
@@ -203,7 +203,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 	@HostListener('mouseup')
 	@HostListener('mousedown')
-	protected updateCaretPosition() {
+	updateCaretPosition() {
 		if (!this.textMaskInputManager) return;
 
 		this.setCaretToValidPosition();
@@ -211,7 +211,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	@HostListener('keydown', ['$event'])
-	protected onKeyDown(e: KeyboardEvent) {
+	onKeyDown(e: KeyboardEvent) {
 		if (!this.textMaskInputManager) return;
 
 		if ([BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW].includes(e.keyCode))

@@ -1,10 +1,7 @@
 import { Component, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-export type DeleteConfirmDialogData = {
-	type: string,
-	name: string,
-};
+import { DeleteConfirmDialogData } from './delete-confirm-dialog-data';
 
 /**
  * The dialog will close with true if user clicks the ok button,
