@@ -24,7 +24,7 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	@Input() value: any;
 
-	get isCompact() { return !!this.table || this.compact; }
+	get isCompact() { return !!this.table || !!this.compact; }
 
 	// @Input() color: ThemePalette;
 

@@ -28,7 +28,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 		return this.form && this.form.controls as any;
 	}
 
-	private formScheme!: FormScheme<T>;
+	private formScheme?: FormScheme<T>;
 
 	constructor(
 		protected fb: FormBuilder,
@@ -40,8 +40,10 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	}
 
 	ngOnChanges({ entity }: SimpleChanges) {
-		if (entity && this.formScheme)
-			this.entity && this.form ? this.repopulateFormByScheme() : this.setForm();
+		if (entity)
+			this.entity && this.form && this.formScheme
+				? this.repopulateFormByScheme()
+				: this.setForm();
 	}
 
 	setFormScheme(scheme: FormScheme<T>) {

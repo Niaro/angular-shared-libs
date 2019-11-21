@@ -250,6 +250,10 @@ export class FirebaseService {
 		);
 	}
 
+	authUseDeviceLang() {
+		firebase.auth().useDeviceLanguage();
+	}
+
 	private async getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
 		const fileRef = this.storage
 			.ref(path)

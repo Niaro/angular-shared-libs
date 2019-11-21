@@ -10,16 +10,16 @@
 		 @fadeInList
 		 class="row">
 		<ng-container *ngFor="let name of group">
-			<ng-container *ngIf="metadata.get(name) as md">
-				<div *ngIf="name === 'stub'; else controlTpl"></div>
-				<ng-template #controlTpl>
+			<div *ngIf="name === 'stub'; else controlTpl"></div>
+			<ng-template #controlTpl>
+				<ng-container *ngIf="metadata.get(name) as md">
 					<bp-property-metadata-control *bpDelayedRender
 												  class="w-100"
 												  [metadata]="md"
 												  [control]="form.controls[name]">
 					</bp-property-metadata-control>
-				</ng-template>
-			</ng-container>
+				</ng-container>
+			</ng-template>
 		</ng-container>
 	</div>
 </ng-container>

@@ -24,6 +24,6 @@ export class CountryComponent implements OnChanges {
 		}
 
 		if (compact)
-			this.compact = true;
+			this.compact = <any>this.compact === '' ? true : this.compact;
 	}
 }
