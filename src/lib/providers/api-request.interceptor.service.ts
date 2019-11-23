@@ -52,7 +52,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-		return !this.checkAuthorization || request.url.includes('auth')
+		return request.url.includes('auth') || request.url.includes('bypass') || !this.checkAuthorization
 			? this.enhanceRequest(request, next)
 			: this.authorized$.pipe(
 				filter(it => !!it),
@@ -62,7 +62,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 	}
 
 	private enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-		const url = request.url.startsWith('http') || request.url.includes('assets')
+		const url = request.url.startsWith('http') || request.url.includes('assets') || request.url.includes('bypass')
 			? request.url
 			: `${this.baseUrl}/${request.url}`;
 		return next.handle(request.clone({

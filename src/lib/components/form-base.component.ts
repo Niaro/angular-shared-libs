@@ -2,7 +2,7 @@ import { Input, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, AbstractControl, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isEmpty, forOwn } from 'lodash-es';
-import { Subject, BehaviorSubject, of, combineLatest, empty } from 'rxjs';
+import { Subject, BehaviorSubject, of, combineLatest, EMPTY } from 'rxjs';
 import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
 
 import { ResponseError, IApiErrorMessage } from '../models';
@@ -157,7 +157,7 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 						startWith(null),
 						map(() => !!v.dirty)
 					)
-					: empty()
+					: EMPTY
 				),
 				distinctUntilChanged()
 			);

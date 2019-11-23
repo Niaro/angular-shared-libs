@@ -59,8 +59,8 @@ export class TelemetryService {
 		return TelemetryService.instance = this;
 	}
 
-	registerUser(uid: string, email: string) {
-		LogRocket.identify(uid, { email });
+	registerUser(uid: string, userTraits: Dictionary<string | number | boolean| null>) {
+		LogRocket.identify(uid, userTraits as any);
 	}
 
 	captureError(error: any) {
