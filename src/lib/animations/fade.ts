@@ -28,6 +28,10 @@ export const FADE_IN = trigger('fadeIn', [
 	transition(':enter', useAnimation(fadeIn, NORMAL)),
 ]);
 
+export const FADE_OUT = trigger('fadeOut', [
+	transition(':leave', useAnimation(fadeOut, NORMAL)),
+]);
+
 const floatFadeOut = animation([
 	style({ position: 'absolute' }),
 	animate(
