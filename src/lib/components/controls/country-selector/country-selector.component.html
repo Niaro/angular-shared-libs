@@ -25,7 +25,8 @@
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete">
 	<mat-option *ngFor="let country of filtered"
-				[value]="country.name">
+				[value]="country.name"
+				[matTooltip]="country === UnitedStatesMinorOutlyingIslands ? country.displayName : ''">
 		<bp-country [src]="country"></bp-country>
 	</mat-option>
 </mat-autocomplete>
