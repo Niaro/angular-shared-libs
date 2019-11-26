@@ -43,13 +43,19 @@ export abstract class Enumeration {
 		return true;
 	}
 
-	get displayName(): string { return this._displayName || this.name || this._value.toString(); }
+	get displayName(): string { return this._displayName || this.name; }
 
-	name!: string;
-
-	cssClass!: string;
+	get name() {
+		return this.value?.toString() ?? '';
+	}
 
 	protected _value!: number | boolean | string;
+
+	get value() {
+		return this._value ?? (this._value = this.getValueName());
+	}
+
+	cssClass!: string;
 
 	protected _displayName: string;
 
@@ -63,40 +69,32 @@ export abstract class Enumeration {
 			this._value = valueOrDisplayName!.valueOf();
 			(<any>this.constructor)[this._value.toString()] = this;
 			this._displayName = displayName as string;
-
-			// Schedule a microtask at the end of the current event loop
-			// which means that the constructor will have all the enumerations attached to it by the time
-			// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
-			// PS we can't use queryMicrotask since it fires the microtask after the dom is rendered.
-			// and we need the enums to be inited before any components are rendered
-			lineMicrotask(() => this.init());
-		} else {
+		} else
 			this._displayName = valueOrDisplayName as string;
 
-			// same as the comment above
-			lineMicrotask(() => this.init({ valueSameAsName: true }));
-		}
+		// Schedule a microtask at the end of the current event loop
+		// which means that the constructor will have all the enumerations attached to it by the time
+		// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
+		// PS we can't use queryMicrotask since it fires the microtask after the dom is rendered.
+		// and we need the enums to be inited before any components are rendered
+		lineMicrotask(() => this.init());
 	}
 
 	valueOf() {
-		return this._value;
+		return this.value;
 	}
 
 	toString(): string | undefined {
-		return this._value ? this._value.toString() : undefined;
+		return this.name;
 	}
 
 	toJSON() {
-		return this._value;
+		return this.value;
 	}
 
-	private init({ valueSameAsName }: { valueSameAsName: boolean } = <any>{}) {
-		this.name = this.getValueName();
+	private init() {
 		this.cssClass = this.getCssClass();
-		this._displayName = this._displayName || upperFirst(lowerCase(this.name));
-
-		if (valueSameAsName)
-			this._value = this.name;
+		this._displayName = this._displayName ?? upperFirst(lowerCase(this.name));
 	}
 
 	private getCssClass() {
