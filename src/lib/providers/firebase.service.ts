@@ -232,12 +232,16 @@ export class FirebaseService {
 		);
 	}
 
-	async getFnCall<T, U>(firebaseFunctionName: string, body: T): Promise<U> {
-		return (await this.functions.httpsCallable(firebaseFunctionName)(body)).data;
+	getFnCall<U, T = any>(firebaseFunctionName: string, body?: T): Observable<U> {
+		return from(this.functions.httpsCallable(firebaseFunctionName)(body))
+			.pipe(
+				map(v => v.data),
+				catchError(this.throwAsResponseError)
+			);
 	}
 
 	async postFnCall<T>(firebaseFunctionName: string, body: T): Promise<void> {
-		this.functions.httpsCallable(firebaseFunctionName)(body) as Promise<any>;
+		await this.functions.httpsCallable(firebaseFunctionName)(body);
 	}
 
 	onAuthStateChange(): Observable<firebase.User | null> {
