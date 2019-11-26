@@ -5,7 +5,7 @@ import createNgrxMiddleware from 'logrocket-ngrx';
 
 import { environment } from '@bp/environment';
 
-if (environment.prod && location.hostname !== 'localhost' && environment.logrocket) {
+if (environment.remoteServer && location.hostname !== 'localhost' && environment.logrocket) {
 	LogRocket.init(environment.logrocket, {
 		release: `${environment.version}`,
 		console: {
@@ -43,7 +43,7 @@ export class TelemetryService {
 	}
 
 	private static captureError(error: Error | any, source: string) {
-		if (environment.prod)
+		if (environment.remoteServer)
 			LogRocket.captureException(
 				error instanceof Error ? error : new Error(JSON.stringify(error)),
 				{ tags: { source } }

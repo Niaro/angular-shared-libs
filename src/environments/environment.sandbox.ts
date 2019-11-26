@@ -5,8 +5,8 @@ import { constants } from './constants';
 
 export const environment: IEnvironment = {
 	name: 'sandbox',
-	prod: true,
-	get dev() { return !this.prod; },
+	remoteServer: true,
+	get localServer() { return !this.remoteServer; },
 	hmr: IS_HMR_MODE,
 	widgetLoaderUrl: 'https://embed-sandbox.bridgerpay.com/cashier',
 

@@ -41,7 +41,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		if (ApiRequestInterceptorService.instance)
 			return ApiRequestInterceptorService.instance;
 
-		environment.dev && this.initMockResponseCodeHook();
+		environment.localServer && this.initMockResponseCodeHook();
 
 		return ApiRequestInterceptorService.instance = this;
 	}

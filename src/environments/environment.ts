@@ -9,8 +9,8 @@ import { constants } from './constants';
 
 export const environment: IEnvironment = {
 	name: 'dev',
-	prod: false,
-	get dev() { return !this.prod; },
+	remoteServer: false,
+	get localServer() { return !this.remoteServer; },
 	hmr: IS_HMR_MODE,
 	api: {
 		url: 'https://37efb36f-87de-42a0-89a3-f2d2a0c46d61.mock.pstmn.io',

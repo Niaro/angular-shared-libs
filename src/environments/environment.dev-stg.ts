@@ -5,8 +5,8 @@ import { constants } from './constants';
 
 export const environment: IEnvironment = {
 	name: 'dev-stg',
-	prod: false,
-	get dev() { return !this.prod; },
+	remoteServer: false,
+	get localServer() { return !this.remoteServer; },
 	hmr: IS_HMR_MODE,
 	widgetLoaderUrl: 'https://embed-stg.bridgerpay.com/cashier',
 
