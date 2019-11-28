@@ -20,7 +20,9 @@ export class TransactionStatus extends Enumeration {
 
 	static declinedDueToInvalidCreditCard = new TransactionStatus();
 
-	static refund = new TransactionStatus();
+	static refunded = new TransactionStatus();
+
+	static partlyRefunded = new TransactionStatus();
 
 	static chargeback = new TransactionStatus();
 
