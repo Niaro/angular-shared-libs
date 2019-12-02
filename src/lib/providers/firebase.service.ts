@@ -14,6 +14,8 @@ import 'firebase/functions';
 import 'firebase/firestore';
 import 'firebase/auth';
 
+import { FB_FUNCTIONS_REGION } from 'bp-firebase';
+
 import { TelemetryService } from './telemetry.service';
 import { Entity, IPageQueryParams, PagedResults, ResponseError } from '../models';
 
@@ -56,11 +58,11 @@ export class FirebaseService {
 				projectId: 'web-hosting-213618',
 				storageBucket: 'web-hosting-213618.appspot.com',
 				messagingSenderId: '977741303368',
-				appId: this.firebaseAppId
+				appId: this.firebaseAppId,
 			});
 
 		this.storage = firebase.storage();
-		this.functions = firebase.functions();
+		this.functions = firebase.app().functions(FB_FUNCTIONS_REGION);
 	}
 
 	signIn(credentials: { userName: string, password: string }) {
