@@ -12,6 +12,7 @@ export class RouterService {
 
 	navigationStart$ = this.router.events.pipe(
 		filter(it => it instanceof NavigationStart),
+		map(v => v as NavigationStart),
 		share()
 	);
 
