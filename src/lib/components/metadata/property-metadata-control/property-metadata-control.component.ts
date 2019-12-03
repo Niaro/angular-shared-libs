@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { ThemePalette } from '@angular/material/core';
 
-import { NumberMaskConfig } from '@bp/shared/directives';
 import { PropertyMetadata, FieldControlType } from '@bp/shared/models';
 import { Validators } from '@bp/shared/validation';
 
@@ -14,6 +13,7 @@ import { Validators } from '@bp/shared/validation';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyMetadataControlComponent implements OnChanges {
+
 	FieldControlType = FieldControlType;
 
 	@Input() metadata!: PropertyMetadata;
