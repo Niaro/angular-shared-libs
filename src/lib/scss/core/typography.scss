@@ -23,6 +23,10 @@ $link-color: $color-primary;
 		transition: opacity $animation-duration $animation-function;
 	}
 
+	&.semi-dark {
+		color: $color-semi-dark;
+	}
+
 	&.interactive {
 		&:after {
 			background: repeating-linear-gradient(to right,

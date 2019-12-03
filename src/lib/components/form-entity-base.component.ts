@@ -5,7 +5,7 @@ import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-e
 import { Subject, of } from 'rxjs';
 import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
 
-import { Entity, ClassMetadata, FormScheme, MetadataEntity } from '../models';
+import { Entity, FormScheme, MetadataEntity } from '../models';
 
 import { FormBaseComponent } from './form-base.component';
 
@@ -17,8 +17,6 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	@Input() entity!: T | null;
 
 	@Output() readonly entityChange = new Subject<T>();
-
-	@Input() metadata!: ClassMetadata;
 
 	@Input() factory!: (v?: Partial<T>) => T;
 
@@ -36,7 +34,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 		protected snackBar: MatSnackBar
 	) {
 		super(fb, cdr, snackBar);
-		this.onFormGroupChangeEmitModelChange();
+		this.onFormGroupChangeEmitEntityChange();
 	}
 
 	ngOnChanges({ entity }: SimpleChanges) {
@@ -48,14 +46,6 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 
 	setFormScheme(scheme: FormScheme<T>) {
 		this.formScheme = scheme;
-	}
-
-	label(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(<string>prop)!.label;
-	}
-
-	meta(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(<string>prop);
 	}
 
 	protected setForm() {
@@ -87,7 +77,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 		);
 	}
 
-	private onFormGroupChangeEmitModelChange() {
+	private onFormGroupChangeEmitEntityChange() {
 		this.form$
 			.pipe(
 				switchMap(v => v

@@ -8,7 +8,7 @@ import { AsyncVoidSubject } from '../rxjs';
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive
- * doesn't remove current presented in url outlets from generated links
+ * doesn't remove current outlets presented in url from generated links
  */
 
 @Directive({

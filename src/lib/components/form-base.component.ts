@@ -5,10 +5,12 @@ import { isEmpty, forOwn } from 'lodash-es';
 import { Subject, BehaviorSubject, of, combineLatest, EMPTY } from 'rxjs';
 import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
 
-import { ResponseError, IApiErrorMessage } from '../models';
+import { ResponseError, IApiErrorMessage, FormGroupConfig, ClassMetadata } from '../models';
 import { AsyncVoidSubject } from '../rxjs';
 
 export abstract class FormBaseComponent<T = any> implements OnDestroy {
+
+	@Input() metadata!: ClassMetadata;
 
 	@Input()
 	get pending() { return this._pending; }
@@ -80,6 +82,14 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 		this.destroyed$.complete();
 	}
 
+	label(prop: NonFunctionPropertyNames<T>) {
+		return this.metadata.get(<string>prop)!.label;
+	}
+
+	meta(prop: NonFunctionPropertyNames<T>) {
+		return this.metadata.get(<string>prop);
+	}
+
 	submit() {
 		if (!this.form)
 			return;
@@ -97,6 +107,10 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 				});
 
 		this.cdr.detectChanges();
+	}
+
+	protected group<U = T>(config: FormGroupConfig<U>): FormGroup {
+		return this.fb.group(config);
 	}
 
 	private revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(control: AbstractControl) {

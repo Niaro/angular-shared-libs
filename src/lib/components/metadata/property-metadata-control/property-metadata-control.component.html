@@ -1,39 +1,17 @@
+<bp-input *ngIf="[FieldControlType.input, FieldControlType.textarea, FieldControlType.number].includes(metadata.control.type)"
+		  [textarea]="!!FieldControlType.textarea"
+		  [number]="!!FieldControlType.number"
+		  [formControl]="control"
+		  [color]="color"
+		  [name]="metadata.property"
+		  [label]="metadata.label"
+		  [hint]="metadata.hint"
+		  [required]="metadata.control.required"
+		  [placeholder]="metadata.placeholder"
+		  [appearance]="appearance">
+</bp-input>
+
 <ng-container [ngSwitch]="metadata.control.type">
-	<bp-input *ngSwitchCase="FieldControlType.input"
-			  [formControl]="control"
-			  [color]="color"
-			  [name]="metadata.property"
-			  [label]="metadata.label"
-			  [hint]="metadata.hint"
-			  [required]="metadata.control.required"
-			  [placeholder]="metadata.placeholder"
-			  [appearance]="appearance">
-	</bp-input>
-
-	<bp-input *ngSwitchCase="FieldControlType.textarea"
-			  textarea
-			  [formControl]="control"
-			  [color]="color"
-			  [name]="metadata.property"
-			  [label]="metadata.label"
-			  [hint]="metadata.hint"
-			  [required]="metadata.control.required"
-			  [placeholder]="metadata.placeholder"
-			  [appearance]="appearance">
-	</bp-input>
-
-	<bp-input *ngSwitchCase="FieldControlType.number"
-			  [formControl]="control"
-			  [color]="color"
-			  [mask]="numberMask"
-			  [name]="metadata.property"
-			  [label]="metadata.label"
-			  [hint]="metadata.hint"
-			  [required]="metadata.control.required"
-			  [placeholder]="metadata.placeholder"
-			  [appearance]="appearance">
-	</bp-input>
-
 	<bp-country-selector *ngSwitchCase="FieldControlType.country"
 						 [formControl]="control"
 						 [color]="color"

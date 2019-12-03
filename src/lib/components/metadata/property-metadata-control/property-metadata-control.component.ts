@@ -24,14 +24,6 @@ export class PropertyMetadataControlComponent implements OnChanges {
 
 	@Input() color: ThemePalette = 'primary';
 
-	numberMask = new NumberMaskConfig({
-		placeholderChar: '\u2000', // whitespace
-		allowDecimal: true,
-		decimalLimit: 2,
-		guide: false,
-		maskOnFocus: true
-	});
-
 	constructor(private renderer: Renderer2, private host: ElementRef) { }
 
 	ngOnChanges({ metadata, control }: SimpleChanges) {

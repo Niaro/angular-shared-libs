@@ -2,10 +2,10 @@ import { ValidatorFn } from '@angular/forms';
 
 import { MetadataEntity } from '../metadata';
 
-export type FormBuilderValue = [any, ValidatorFn | ValidatorFn[]];
+export type FormBuilderValue = [any, (ValidatorFn | ValidatorFn[])?];
 
 export type FormGroupConfig<T extends {}, U = FormBuilderValue> = {
-	[K in keyof T]?: T[K] extends never ? never : U
+	[K in NonFunctionPropertyNames<T>]?: T[K] extends never ? never : U
 };
 
 export type FormScheme<T> = {
