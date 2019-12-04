@@ -16,6 +16,12 @@
 			top: $mat-dialog-padding-v - 2px;
 			right: $mat-dialog-padding-v;
 		}
+
+		.mat-progress-bar {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
 	}
 }
 
