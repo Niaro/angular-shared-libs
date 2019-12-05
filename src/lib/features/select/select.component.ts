@@ -1127,7 +1127,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		if (this.multiple) {
 			offsetX = SELECT_MULTIPLE_PANEL_PADDING_X;
 		} else {
-			let selected = this._selectionModel.selected[0] || this.options.first;
+			const selected = this._selectionModel.selected[0] || this.options.first;
 			offsetX = selected && selected.group ? SELECT_PANEL_INDENT_PADDING_X : SELECT_PANEL_PADDING_X;
 		}
 
@@ -1180,7 +1180,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 			// The first item is partially out of the viewport. Therefore we need to calculate what
 			// portion of it is shown in the viewport and account for it in our offset.
-			let partialItemHeight =
+			const partialItemHeight =
 				itemHeight - (this._getItemCount() * itemHeight - SELECT_PANEL_MAX_HEIGHT) % itemHeight;
 
 			// Because the panel height is longer than the height of the options alone,
