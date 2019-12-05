@@ -1,6 +1,6 @@
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 import { HttpErrorResponse } from '@angular/common/http';
-import { isArray, camelCase, lowerCase, get, isString } from 'lodash-es';
+import { isArray, camelCase, lowerCase, get, isString, has, assign } from 'lodash-es';
 
 export class ResponseError {
 	static get notFound() {
@@ -23,16 +23,15 @@ export class ResponseError {
 		return this.status === StatusCode.internalServerError;
 	}
 
-	constructor(e: HttpErrorResponse | DeepPartial<ResponseError> | string) {
+	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string) {
 		if (isString(e))
 			this.messages = [{ message: e }];
-		else {
+		else if (e instanceof HttpErrorResponse) {
 			this.url = e.url;
 			this.status = e.status! >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
 				? StatusCode.internalServerError
 				: e.status!;
-
-			this.statusText = this.statusText || get(STATUS_CODE_MESSAGES, this.status);
+			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 
 			if (this.status === StatusCode.notFound)
 				this.messages = [{
@@ -43,17 +42,33 @@ export class ResponseError {
 					message: 'The request to the server has failed.',
 					type: 'Please check your connection and try again later or contact the support if the problem persists',
 				}];
-			else if (e instanceof HttpErrorResponse && e.error) {
-				const result: IApiErrorMessage | IApiErrorMessage[] = e.error.result;
-				this.messages = result
-					? isArray(result) ? result : [result]
-					: e.error.response && e.error.response.message && [{ message: lowerCase(e.error.response.message) }] || [];
-			} else
-				this.messages = (<ResponseError>e).messages || [];
-		}
+			else if (e.error)
+				this.extractMessagesFromApiErrorResponse(e.error);
+		} else if (has(e, 'response')) {
+			e = e as IApiErrorResponse;
+			this.status = e.response.code;
+			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
+			this.extractMessagesFromApiErrorResponse(e);
+		} else
+			assign(this, e);
 
 		this.messages.forEach(it => it.field = camelCase(it.field));
 	}
+
+	private extractMessagesFromApiErrorResponse(e: IApiErrorResponse) {
+		this.messages = e.result
+			? isArray(e.result) ? e.result : [e.result]
+			: e.response && e.response.message && [{ message: lowerCase(e.response.message) }] || [];
+	}
+}
+
+export interface IApiErrorResponse {
+	response: {
+		status: string,
+		code: number,
+		message: string
+	};
+	result?: IApiErrorMessage | IApiErrorMessage[];
 }
 
 export interface IApiErrorMessage {

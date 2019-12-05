@@ -4,9 +4,9 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormFieldControlComponent } from '../form-field-control.component';
 
 @Component({
-	selector: 'bp-select',
-	templateUrl: './select.component.html',
-	styleUrls: ['./select.component.scss'],
+	selector: 'bp-select-field',
+	templateUrl: './select-field.component.html',
+	styleUrls: ['./select-field.component.scss'],
 	host: {
 		'(focusout)': 'onTouched()'
 	},

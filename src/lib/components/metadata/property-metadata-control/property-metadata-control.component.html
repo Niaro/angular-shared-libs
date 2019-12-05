@@ -23,7 +23,7 @@
 						 [appearance]="appearance">
 	</bp-country-selector>
 
-	<bp-select *ngSwitchCase="FieldControlType.select"
+	<bp-select-field *ngSwitchCase="FieldControlType.select"
 			   [items]="metadata.control.list"
 			   [formControl]="control"
 			   [color]="color"
@@ -33,7 +33,7 @@
 			   [required]="metadata.control.required"
 			   [placeholder]="metadata.placeholder"
 			   [appearance]="appearance">
-	</bp-select>
+	</bp-select-field>
 
 	<bp-autocomplete *ngSwitchCase="FieldControlType.autocomplete"
 					 [items]="metadata.control.list"

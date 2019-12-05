@@ -4,7 +4,7 @@ import { tap, last, takeUntil } from 'rxjs/operators';
 import { without } from 'lodash-es';
 import { saveAs } from 'file-saver';
 
-import { QueryParamsBase, ProcessingFile } from '../models';
+import { QueryParamsBase, ProcessingFile, ResponseError } from '../models';
 import { OptionalBehaviorSubject } from '../rxjs';
 
 @Injectable({
@@ -46,7 +46,7 @@ export class FileLoaderService {
 		this.removeFromProcessingFiles(file);
 	}
 
-	private handleError(val: any, file: ProcessingFile): void {
+	private handleError(val: ResponseError, file: ProcessingFile): void {
 		file.error(val);
 		this.removeFromProcessingFiles(file);
 	}

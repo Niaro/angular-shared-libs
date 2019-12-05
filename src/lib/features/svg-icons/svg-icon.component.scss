@@ -13,4 +13,9 @@
 		width: 13px;
 		height: 9px;
 	}
+
+	&.export {
+		position: relative;
+		top: -1px;
+	}
 }

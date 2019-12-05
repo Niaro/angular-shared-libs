@@ -25,24 +25,3 @@
 		}
 	}
 }
-
-:host(.text-like-daterange) {
-	input {
-		color: $color-primary;
-		border-bottom: 1px solid fade-out($color-primary, 0.8);
-		transition: border $animation-duration $animation-function;
-		font-weight: $font-weight-normal;
-
-		&:hover {
-			border-bottom-color: transparent;
-		}
-	}
-
-	.to.empty {
-		width: 1.25em;
-	}
-
-	> button {
-		display: none;
-	}
-}

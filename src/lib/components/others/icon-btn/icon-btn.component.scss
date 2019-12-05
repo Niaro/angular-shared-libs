@@ -35,10 +35,14 @@
 			}
 		}
 
-		&.progress ::ng-deep mat-icon {
-			opacity: 0;
+		&.progress ::ng-deep {
+			bp-svg-icon,
+			mat-icon {
+				opacity: 0;
+			}
 		}
 
+		::ng-deep bp-svg-icon,
 		::ng-deep mat-icon {
 			@include iconSize(16px);
 

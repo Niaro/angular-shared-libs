@@ -4,6 +4,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { UrlHelper } from '@bp/shared/utils';
+import { BpSelectComponent } from '@bp/shared/features';
 
 @Directive({
 	selector: '[bpFilterControl]',
@@ -15,11 +16,14 @@ export class FilterControlDirective {
 	value$ = new OptionalBehaviorSubject<any>();
 	get value() { return this.value$.value; }
 
+	get select() { return this.matSelect || this.bpSelect; }
+
 	get control(): ControlValueAccessor { return this.controlValueAccessor && this.controlValueAccessor[0] || this.select; }
 
 	constructor(
 		@Optional() @Inject(NG_VALUE_ACCESSOR) @Self() private controlValueAccessor: ControlValueAccessor[],
-		@Optional() @Self() private select: MatSelect
+		@Optional() @Self() private matSelect: MatSelect,
+		@Optional() @Self() private bpSelect: BpSelectComponent,
 	) {
 		if (!this.control)
 			throw new Error('FilterControlDirective must be used on a component which implements ControlValuesAccessor interface');

@@ -4,7 +4,10 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
-import { filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn, debounceTime } from 'rxjs/operators';
+import {
+	filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn,
+	debounceTime, tap
+} from 'rxjs/operators';
 import { isEmpty, transform, isNil, difference, fromPairs, get, set } from 'lodash-es';
 
 import { UrlHelper } from '@bp/shared/utils';
@@ -20,23 +23,33 @@ export type FilterValue = { [controlName: string]: any };
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent<T = FilterValue> implements OnChanges, AfterContentInit {
+
 	@Input() except: string[] = [];
+
 	@Input() type: 'query' | 'matrix' = 'matrix';
+
 	@Input() defaults: T = <T>{};
 
 	@Output('value') readonly value$: Observable<T>;
 
 	get value() { return this._value$.value; }
-	get empty() { return isEmpty(this.value); }
+
+	empty!: boolean;
 
 	@ContentChildren(FilterControlDirective, { descendants: true })
 	private controlsQuery!: QueryList<FilterControlDirective>;
+
 	private _value$ = new BehaviorSubject<T>(<T>{});
+
 	private defaults$ = new BehaviorSubject<T>(<T>{});
+
 	private defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>>{});
 
 	constructor(private router: Router, private route: ActivatedRoute) {
-		this.value$ = this._value$.pipe(filter(v => v !== undefined));
+		this.value$ = this._value$.pipe(
+			tap(v => this.empty = isEmpty(v)),
+			filter(v => v !== undefined)
+		);
 	}
 
 	ngOnChanges({ defaults }: SimpleChanges) {
@@ -161,6 +174,10 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 				deleted.forEach(v => delete routeParams[v.name]);
 				this.updateUrl(routeParams);
 			});
+	}
+
+	clear() {
+		this.controlsQuery.forEach(v => v.setValue(null));
 	}
 
 	private updateUrl(routeParams: Object) {

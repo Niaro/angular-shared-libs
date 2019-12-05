@@ -29,13 +29,12 @@ import {
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
 	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective,
-	ProgressBarDirective
+	RouterLinkRootOutletsDirective, ProgressBarDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
-import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
+import { TouchModule, CarouselModule, SvgIconsModule, ModalModule, BpSelectModule } from './features';
 
 import {
 	RouterService, TelemetryService, ZoneService, EnvironmentService, FirebaseService, FileLoaderService,
@@ -53,7 +52,8 @@ const MODULES = [
 	TouchModule,
 	CarouselModule,
 	ModalModule,
-	SvgIconsModule
+	SvgIconsModule,
+	BpSelectModule
 ];
 
 const EXPOSED = [
