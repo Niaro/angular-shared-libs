@@ -43,7 +43,7 @@
 			 [class.font-size-override]="!_disableOptionCentering"
 			 [@transformPanel]="multiple ? 'showing-multiple' : 'showing'"
 			 (@transformPanel.done)="_panelDoneAnimatingStream.next($event.toState)"
-			 [style.transformOrigin]="_transformOrigin"
+			 [style.transformOrigin]="_disableOptionCentering ? '50% 0 0' : _transformOrigin"
 			 [style.font-size.px]="_disableOptionCentering ? '' : _triggerFontSize"
 			 (keydown)="_handleKeydown($event)">
 			<ng-content></ng-content>
