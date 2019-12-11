@@ -30,6 +30,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	]
 })
 export class CountrySelectorComponent extends FormFieldControlComponent<Country | null> implements OnChanges {
+
 	@Input() excluded!: Country[];
 
 	@Input() placeholder = 'Country';
@@ -38,7 +39,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() countries = Countries.list;
 
-	@Input() panelClass: string;
+	@Input() panelClass!: string;
 
 	filtered = Countries.list;
 
