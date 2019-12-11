@@ -6,7 +6,7 @@
 	 @fadeInList
 	 class="row">
 	<ng-container *ngFor="let name of group">
-		<bp-property-metadata-view *ngIf="metadata.get($any(name)) as md"
+		<bp-property-metadata-view *ngIf="meta(name) as md"
 								   [metadata]="md"
 								   [value]="get(entity, name)">
 		</bp-property-metadata-view>

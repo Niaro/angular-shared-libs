@@ -28,4 +28,7 @@ export class PropertyMetadataViewsSectionComponent {
 
 	get = get;
 
+	meta(prop: string) {
+		return this.metadata.get<any>(prop);
+	}
 }
