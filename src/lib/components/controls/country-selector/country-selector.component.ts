@@ -38,6 +38,8 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() countries = Countries.list;
 
+	@Input() panelClass: string;
+
 	filtered = Countries.list;
 
 	throttle = 0;

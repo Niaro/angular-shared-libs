@@ -25,7 +25,10 @@ import { ControlComponent } from '../control.component';
 	]
 })
 export class DateRangeComponent extends ControlComponent<DateRange> {
+
 	@Input() showDeleteSign = true;
+
+	@Input() panelClass!: string;
 
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 

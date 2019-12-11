@@ -112,7 +112,7 @@ export const SELECT_PANEL_PADDING_X = 16;
 export const SELECT_PANEL_INDENT_PADDING_X = SELECT_PANEL_PADDING_X * 2;
 
 /** The height of the select items in `em` units. */
-export const SELECT_ITEM_HEIGHT_EM = 1.75;
+export const SELECT_ITEM_HEIGHT_EM = 3;
 
 // TODO(josephperrott): Revert to a constant after 2018 spec updates are fully merged.
 /**
@@ -257,6 +257,8 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	/** Emits whenever the component is destroyed. */
 	private readonly _destroy = new Subject<void>();
 
+	SELECT_PANEL_PADDING_H = SELECT_PANEL_PADDING_X * 2;
+
 	/** The last measured value for the trigger's client bounding rect. */
 	_triggerRect!: ClientRect;
 
@@ -316,7 +318,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	];
 
 	/** Whether the component is disabling centering of the active option over the trigger. */
-	private _disableOptionCentering = false;
+	_disableOptionCentering = false;
 
 	/** Whether the select is focused. */
 	get focused() { return this._focused || this._panelOpen; }
@@ -608,8 +610,9 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 		// Set the font size on the panel element once it exists.
 		this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
-			if (this._triggerFontSize && this.overlayDir.overlayRef &&
-				this.overlayDir.overlayRef.overlayElement) {
+			if (this._triggerFontSize
+				&& this.overlayDir.overlayRef
+				&& this.overlayDir.overlayRef.overlayElement) {
 				this.overlayDir.overlayRef.overlayElement.style.fontSize = `${this._triggerFontSize}px`;
 			}
 		});
@@ -1046,10 +1049,10 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			this._getItemHeight(),
 			this.panel.nativeElement.scrollTop,
 			SELECT_PANEL_MAX_HEIGHT
-		);
-	}
+			);
+		}
 
-	/** Focuses the select element. */
+/** Focuses the select element. */
 	focus(options?: FocusOptions): void {
 		this._elementRef.nativeElement.focus(options);
 	}
@@ -1169,7 +1172,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 		// Disable offset if requested by user by returning 0 as value to offset
 		if (this._disableOptionCentering) {
-			return 0;
+			return this._triggerRect.height;
 		}
 
 		if (this._scrollTop === 0) {

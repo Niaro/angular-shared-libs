@@ -1,11 +1,9 @@
 // we use .mat-select styles
 .mat-select-panel-wrap.bp-select-panel-wrap {
 	.bp-select-panel {
-		max-height: 378px;
-
-		.mat-option {
-			line-height: 1.75em;
-			height: 1.75em;
+		&:not(.font-size-override) .mat-option {
+			line-height: 2.5em;
+			height: 2.5em;
 		}
 	}
 }
@@ -104,11 +102,19 @@
 	}
 }
 
-.mat-select-panel .mat-optgroup-label,
-.mat-select-panel .mat-option {
-	font-size: inherit;
-	line-height: 3em;
-	height: 3em
+.mat-select-panel {
+	&.font-size-override {
+		.mat-optgroup-label,
+		.mat-option {
+			font-size: inherit;
+		}
+	}
+
+	.mat-optgroup-label,
+	.mat-option {
+		line-height: 3em;
+		height: 3em
+	}
 }
 
 .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {

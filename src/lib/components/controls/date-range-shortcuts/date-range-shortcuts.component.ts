@@ -26,7 +26,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	@Input() includeYear!: boolean;
 
-	@Input() selectClass!: string;
+	@Input() panelClass!: string;
 
 	@Input() default: DateRangeShortcut | null = DateRangeShortcut.month;
 

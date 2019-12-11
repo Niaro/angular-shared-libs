@@ -30,6 +30,8 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 export class AutocompleteComponent extends FormFieldControlComponent<any | null> implements OnChanges {
 	@Input() items!: any[];
 
+	@Input() panelClass!: string;
+
 	lowercasedItems!: { lowered: string, item: any }[];
 
 	throttle = 0;

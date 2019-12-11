@@ -30,7 +30,7 @@
 			 [cdkConnectedOverlayOrigin]="origin"
 			 [cdkConnectedOverlayOpen]="panelOpen"
 			 [cdkConnectedOverlayPositions]="_positions"
-			 [cdkConnectedOverlayMinWidth]="_triggerRect?.width"
+			 [cdkConnectedOverlayMinWidth]="_triggerRect?.width + SELECT_PANEL_PADDING_H"
 			 [cdkConnectedOverlayOffsetY]="_offsetY"
 			 (backdropClick)="close()"
 			 (attach)="_onAttached()"
@@ -40,10 +40,11 @@
 		<div #panel
 			 class="mat-select-panel bp-select-panel {{ _getPanelTheme() }}"
 			 [ngClass]="panelClass"
+			 [class.font-size-override]="!_disableOptionCentering"
 			 [@transformPanel]="multiple ? 'showing-multiple' : 'showing'"
 			 (@transformPanel.done)="_panelDoneAnimatingStream.next($event.toState)"
 			 [style.transformOrigin]="_transformOrigin"
-			 [style.font-size.px]="_triggerFontSize"
+			 [style.font-size.px]="_disableOptionCentering ? '' : _triggerFontSize"
 			 (keydown)="_handleKeydown($event)">
 			<ng-content></ng-content>
 		</div>
