@@ -6,6 +6,18 @@
 	font-size: $size;
 }
 
+@mixin iconSizes() {
+	@include iconSize(16px);
+
+	@at-root .md#{&} {
+		@include iconSize(24px);
+	}
+
+	@at-root .lg#{&} {
+		@include iconSize(34px);
+	}
+}
+
 :host {
 	button {
 		$btn-size: 40px;
@@ -44,17 +56,15 @@
 
 		::ng-deep bp-svg-icon,
 		::ng-deep mat-icon {
-			@include iconSize(16px);
-
-			@at-root .md#{&} {
-				@include iconSize(24px);
-			}
-
-			@at-root .lg#{&} {
-				@include iconSize(34px);
-			}
-
 			transition: opacity $animation-duration ease-in-out;
+		}
+
+		::ng-deep mat-icon {
+			@include iconSizes();
+		}
+
+		::ng-deep bp-svg-icon {
+			@include iconSizes();
 		}
 
 		.mat-progress-spinner {

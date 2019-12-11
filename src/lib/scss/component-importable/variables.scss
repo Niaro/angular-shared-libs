@@ -1,10 +1,10 @@
 // #region colors
-$color-light      : #ccc !default;
-$color-semi-dark  : #929292 !default;
-$color-dark       : #333 !default;
-$color-border     : #e2e8ec !default;
-$color-bg         : #fafafa !default;
-$dark-primary-text: $color-dark !default;
+$color-light            : #ccc !default;
+$color-semi-dark        : #929292 !default;
+$color-dark             : #333 !default;
+$color-border           : #e2e8ec !default;
+$color-bg               : #fafafa !default;
+$dark-primary-text      : $color-dark !default;
 $faded-dark-primary-text: fade-out($dark-primary-text, 0.5);
 
 $color-primary      : #2578ea !default;

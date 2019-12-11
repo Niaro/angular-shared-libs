@@ -29,8 +29,7 @@ export abstract class MetadataEntity {
 	}
 
 	static getLabel<T>(prop: NonFunctionPropertyNames<T>) {
-		const meta = this.metadata.get(<string>prop);
-		return meta && meta.label;
+		return this.metadata.get(prop)?.label;
 	}
 
 	constructor(data?: any) {
@@ -44,8 +43,7 @@ export abstract class MetadataEntity {
 	}
 
 	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
-		const meta = this.getMetadata().get(<string>propName);
-		return meta && meta.label;
+		return this.getMetadata().get(propName)?.label;
 	}
 
 	protected assignCustomizer(

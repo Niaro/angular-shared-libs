@@ -23,7 +23,7 @@ import {
 
 import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
-	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe
+	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe, BpCurrencyPipe
 } from './pipes';
 
 import {
@@ -120,7 +120,8 @@ const EXPOSED = [
 	ChunkPipe,
 	StartCasePipe,
 	TakePipe,
-	PropertiesMetadataColspanPipe
+	PropertiesMetadataColspanPipe,
+	BpCurrencyPipe
 ];
 
 @NgModule({
@@ -144,7 +145,7 @@ export class SharedModule {
 				}).providers || []),
 				...(ModalModule.forRoot().providers || []),
 				...(MaterialModule.forRoot().providers || []),
-
+				BpCurrencyPipe,
 				RouterService,
 				TelemetryService,
 				ZoneService,
