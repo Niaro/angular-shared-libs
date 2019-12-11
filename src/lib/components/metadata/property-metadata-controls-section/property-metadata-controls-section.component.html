@@ -12,7 +12,7 @@
 		<ng-container *ngFor="let name of group">
 			<div *ngIf="name === 'stub'; else controlTpl"></div>
 			<ng-template #controlTpl>
-				<ng-container *ngIf="metadata.get(name) as md">
+				<ng-container *ngIf="metadata.get($any(name)) as md">
 					<bp-property-metadata-control *bpDelayedRender
 												  class="w-100"
 												  [metadata]="md"
