@@ -29,7 +29,7 @@ import {
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
 	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective, ProgressBarDirective
+	RouterLinkRootOutletsDirective, ProgressBarDirective, DisabledDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
@@ -88,6 +88,7 @@ const EXPOSED = [
 	DelayedRenderDirective,
 	DynamicOutletDirective,
 	ProgressBarDirective,
+	DisabledDirective,
 
 	// controls
 	DateRangeComponent,
