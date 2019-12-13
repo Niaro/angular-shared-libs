@@ -32,7 +32,8 @@
 
 	.report-setup-pane & {
 		border-color: white;
-		color: white;
+		color: white !important;
+		transition-property: background, box-shadow, opacity;
 	}
 
 	&[disabled] {
