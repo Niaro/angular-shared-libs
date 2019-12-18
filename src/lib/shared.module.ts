@@ -18,7 +18,7 @@ import {
 	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
-	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective
+	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent
 } from './components';
 
 import {
@@ -75,6 +75,7 @@ const EXPOSED = [
 	LogoutConfirmDialogComponent,
 	PaymentMethodBrandComponent,
 	ImgComponent,
+	VersionComponent,
 
 	// directives
 	CursorPageAdaptorDirective,

@@ -9,3 +9,4 @@ export * from './paginator';
 export * from './payment-method-brand';
 export * from './pending-btn';
 export * from './status-bar';
+export * from './version';

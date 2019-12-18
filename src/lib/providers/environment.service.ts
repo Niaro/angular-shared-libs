@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@bp/environment';
-
+console.warn(environment);
 @Injectable({
 	providedIn: 'root'
 })
 export class EnvironmentService {
+
+	version = environment.version;
+
+	name = environment.name;
 
 	get isRemoteServer() { return environment.remoteServer; }
 

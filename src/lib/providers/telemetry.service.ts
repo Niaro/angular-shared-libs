@@ -3,11 +3,11 @@ import { Dictionary } from 'lodash';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
 
-import { environment } from '@bp/environment';
+import { environment as env } from '@bp/environment';
 
-if (environment.remoteServer && location.hostname !== 'localhost' && environment.logrocket) {
-	LogRocket.init(environment.logrocket, {
-		release: `${environment.version}`,
+if (env.remoteServer && location.hostname !== 'localhost' && env.logrocket) {
+	LogRocket.init(env.logrocket, {
+		release: env.name === 'prod' ? env.version.release : env.version.prerelease,
 		console: {
 			shouldAggregateConsoleErrors: true,
 		},
@@ -43,7 +43,7 @@ export class TelemetryService {
 	}
 
 	private static captureError(error: Error | any, source: string) {
-		if (environment.remoteServer)
+		if (env.remoteServer)
 			LogRocket.captureException(
 				error instanceof Error ? error : new Error(JSON.stringify(error)),
 				{ tags: { source } }
