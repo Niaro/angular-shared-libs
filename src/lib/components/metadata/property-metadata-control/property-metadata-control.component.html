@@ -1,60 +1,60 @@
-<bp-input *ngIf="[FieldControlType.input, FieldControlType.textarea, FieldControlType.number].includes(metadata.control.type)"
-		  [textarea]="!!FieldControlType.textarea"
-		  [number]="!!FieldControlType.number"
+<bp-input *ngIf="[FieldControlType.input, FieldControlType.textarea, FieldControlType.number].includes(mdControl.type)"
+		  [textarea]="mdControl.type === FieldControlType.textarea"
+		  [number]="mdControl.type === FieldControlType.number"
 		  [formControl]="control"
 		  [color]="color"
 		  [name]="metadata.property"
 		  [label]="metadata.label"
 		  [hint]="metadata.hint"
-		  [required]="metadata.control.required"
+		  [required]="mdControl.required"
 		  [placeholder]="metadata.placeholder"
 		  [appearance]="appearance">
 </bp-input>
 
-<ng-container [ngSwitch]="metadata.control.type">
+<ng-container [ngSwitch]="mdControl.type">
 	<bp-country-selector *ngSwitchCase="FieldControlType.country"
 						 [formControl]="control"
 						 [color]="color"
 						 [name]="metadata.property"
 						 [label]="metadata.label"
 						 [hint]="metadata.hint"
-						 [required]="metadata.control.required"
+						 [required]="mdControl.required"
 						 [placeholder]="metadata.placeholder"
 						 [appearance]="appearance">
 	</bp-country-selector>
 
 	<bp-select-field *ngSwitchCase="FieldControlType.select"
-			   [items]="metadata.control.list"
+			   [items]="mdControl.list"
 			   [formControl]="control"
 			   [color]="color"
 			   [name]="metadata.property"
 			   [label]="metadata.label"
 			   [hint]="metadata.hint"
-			   [required]="metadata.control.required"
+			   [required]="mdControl.required"
 			   [placeholder]="metadata.placeholder"
 			   [appearance]="appearance">
 	</bp-select-field>
 
 	<bp-autocomplete *ngSwitchCase="FieldControlType.autocomplete"
-					 [items]="metadata.control.list"
+					 [items]="mdControl.list"
 					 [formControl]="control"
 					 [color]="color"
 					 [name]="metadata.property"
 					 [label]="metadata.label"
 					 [hint]="metadata.hint"
-					 [required]="metadata.control.required"
+					 [required]="mdControl.required"
 					 [placeholder]="metadata.placeholder"
 					 [appearance]="appearance">
 	</bp-autocomplete>
 
 	<bp-button-toggle *ngSwitchCase="FieldControlType.buttonToggle"
-					  [items]="metadata.control.list"
+					  [items]="mdControl.list"
 					  [formControl]="control"
 					  [color]="color"
 					  [name]="metadata.property"
 					  [label]="metadata.label"
 					  [hint]="metadata.hint"
-					  [required]="metadata.control.required"
+					  [required]="mdControl.required"
 					  [placeholder]="metadata.placeholder">
 	</bp-button-toggle>
 
@@ -66,13 +66,13 @@
 	</mat-slide-toggle>
 
 	<bp-chips *ngSwitchCase="FieldControlType.chip"
-			  [items]="metadata.control.list"
+			  [items]="mdControl.list"
 			  [formControl]="control"
 			  [color]="color"
 			  [name]="metadata.property"
 			  [label]="metadata.label"
 			  [hint]="metadata.hint"
-			  [required]="metadata.control.required"
+			  [required]="mdControl.required"
 			  [placeholder]="metadata.placeholder"
 			  [appearance]="appearance">
 	</bp-chips>

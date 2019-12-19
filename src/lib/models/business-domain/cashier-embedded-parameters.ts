@@ -43,6 +43,8 @@ export interface ICashierEmbeddedParameters {
 
 	currencyLock: boolean | null;
 
+	showRedirectMessage: boolean | null;
+
 	currency: Currency | null;
 
 	buttonMode: CashierButtonMode | null;

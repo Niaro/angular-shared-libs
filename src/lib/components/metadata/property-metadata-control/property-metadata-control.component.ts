@@ -24,6 +24,8 @@ export class PropertyMetadataControlComponent implements OnChanges {
 
 	@Input() color: ThemePalette = 'primary';
 
+	get mdControl() { return this.metadata?.control; }
+
 	constructor(private renderer: Renderer2, private host: ElementRef) { }
 
 	ngOnChanges({ metadata, control }: SimpleChanges) {

@@ -18,4 +18,6 @@ export class EnvironmentService {
 
 	get isNotProdOrSandbox() { return this.isNotProd && environment.name !== 'sandbox'; }
 
+	isDemostand = location.hostname.includes('cashier-demostand');
+
 }
