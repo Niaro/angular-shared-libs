@@ -1,4 +1,12 @@
 :host {
 	display: inline-flex;
 	flex-flow: column;
+
+	bp-round-input bp-country {
+		margin-left: -5px;
+
+		::ng-deep .earth {
+			top: 1.5px;
+		}
+	}
 }

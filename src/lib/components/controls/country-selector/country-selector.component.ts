@@ -47,6 +47,8 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	UnitedStatesMinorOutlyingIslands = Countries.findByCode('UM');
 
+	worldwide = Countries.worldwide;
+
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
 

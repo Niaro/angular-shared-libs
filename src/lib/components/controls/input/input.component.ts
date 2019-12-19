@@ -26,6 +26,15 @@ export class InputLabelDirective { }
 })
 export class InputHintDirective { }
 
+/**
+ * Allows the user to add prefix.
+ */
+@Directive({
+	// tslint:disable-next-line: directive-selector
+	selector: 'bp-input-prefix, [bpInputPrefix]'
+})
+export class InputPrefixDirective { }
+
 @Component({
 	selector: 'bp-input',
 	templateUrl: './input.component.html',
@@ -42,6 +51,7 @@ export class InputHintDirective { }
 	}]
 })
 export class InputComponent extends FormFieldControlComponent<string | number> {
+
 	@Input() textarea!: boolean;
 
 	@Input() number!: boolean;
@@ -56,6 +66,8 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 	@ContentChild(InputLabelDirective, { static: false }) customLabel?: InputLabelDirective;
 
 	@ContentChild(InputHintDirective, { static: false }) customHint?: InputHintDirective;
+
+	@ContentChild(InputPrefixDirective, { static: false }) prefix?: InputPrefixDirective;
 
 	numberMask = new NumberMaskConfig({
 		placeholderChar: '\u2000', // whitespace

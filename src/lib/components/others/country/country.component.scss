@@ -1,28 +1,53 @@
 @import 'imports';
 
 :host {
+	.flag-wrapper {
+		display: inline-flex;
+	}
+
 	bp-svg-icon {
 		background: white;
 		color: $color-primary;
 		display: inline-flex !important;
-		width: 20px;
-		height: 14px;
+		align-items: center;
+		justify-content: center;
+		height: 1em;
+
+		&,
+		::ng-deep svg {
+			width: 1.3333333em;
+		}
+
+		&.round {
+			&,
+			::ng-deep svg {
+				width: 1em;
+			}
+
+			::ng-deep svg {
+				left: -2px;
+			}
+		}
 
 		::ng-deep svg {
-			width: 20px;
-			height: 12px;
-			position: relative;
-			top: 1px;
+			height: 0.858em;
 		}
 	}
 
-	bp-svg-icon,
-	.iti__flag {
+	.flag {
 		display: inline-block;
 		position: relative;
+		vertical-align: middle;
+		overflow : hidden;
+		border-radius: 3px;
+		box-shadow : 0 0px 5px rgba(0, 0, 0, 0.2);
+
+		&.round {
+			border-radius: 1em;
+		}
 	}
 
 	.capitalized {
-		margin-left: 0.5rem;
+		margin-left: 0.5em;
 	}
 }

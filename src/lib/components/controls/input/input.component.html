@@ -57,6 +57,10 @@
 		</span>
 	</mat-hint>
 
+	<span *ngIf="prefix" matPrefix>
+		<ng-content select="bp-input-prefix"></ng-content>
+	</span>
+
 	<mat-error bpFieldError
 			   [bpFieldErrorSuppress]="hideErrorText">
 	</mat-error>

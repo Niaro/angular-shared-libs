@@ -18,7 +18,8 @@ import {
 	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
-	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent
+	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent,
+	InputPrefixDirective
 } from './components';
 
 import {
@@ -98,6 +99,7 @@ const EXPOSED = [
 	InputComponent,
 	InputHintDirective,
 	InputLabelDirective,
+	InputPrefixDirective,
 	CountrySelectorComponent,
 	IpInputComponent,
 	DatePickerComponent,
