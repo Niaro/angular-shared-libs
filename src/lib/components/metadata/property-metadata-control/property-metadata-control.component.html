@@ -13,6 +13,7 @@
 
 <ng-container [ngSwitch]="mdControl.type">
 	<bp-country-selector *ngSwitchCase="FieldControlType.country"
+						 [countries]="mdControl.list"
 						 [formControl]="control"
 						 [color]="color"
 						 [name]="metadata.property"
@@ -24,15 +25,15 @@
 	</bp-country-selector>
 
 	<bp-select-field *ngSwitchCase="FieldControlType.select"
-			   [items]="mdControl.list"
-			   [formControl]="control"
-			   [color]="color"
-			   [name]="metadata.property"
-			   [label]="metadata.label"
-			   [hint]="metadata.hint"
-			   [required]="mdControl.required"
-			   [placeholder]="metadata.placeholder"
-			   [appearance]="appearance">
+					 [items]="mdControl.list"
+					 [formControl]="control"
+					 [color]="color"
+					 [name]="metadata.property"
+					 [label]="metadata.label"
+					 [hint]="metadata.hint"
+					 [required]="mdControl.required"
+					 [placeholder]="metadata.placeholder"
+					 [appearance]="appearance">
 	</bp-select-field>
 
 	<bp-autocomplete *ngSwitchCase="FieldControlType.autocomplete"

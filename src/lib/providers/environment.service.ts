@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@bp/environment';
-console.warn(environment);
+
 @Injectable({
 	providedIn: 'root'
 })

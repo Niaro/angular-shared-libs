@@ -37,7 +37,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() hasWorldwide = false;
 
-	@Input() countries = Countries.list;
+	@Input() countries!: Country[];
 
 	@Input() panelClass!: string;
 
@@ -59,8 +59,10 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 				? Countries.list.filter(it => !this.excluded.includes(it))
 				: Countries.list;
 
-		if (countries && this.countries)
+		if (countries) {
+			this.countries = this.countries ?? Countries.list;
 			this.filtered = this.countries;
+		}
 
 		if (hasWorldwide || excluded || countries) {
 			this.countries = this.updateWorldwideInCountriesList(this.countries);
