@@ -55,5 +55,5 @@ export interface ICashierEmbeddedParameters {
 	theme: CashierTheme | null;
 
 	language: CashierLanguage | null;
-	
+
 }

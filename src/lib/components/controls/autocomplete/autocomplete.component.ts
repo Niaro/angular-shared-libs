@@ -29,15 +29,15 @@ import { Subject } from 'rxjs';
 	]
 })
 export class AutocompleteComponent extends FormFieldControlComponent<any | null> implements OnChanges {
-	@Input() items!: any[];
+	@Input() items!: any[] | null;
 
 	@Input() panelClass!: string;
 
-	lowercasedItems!: { lowered: string, item: any; }[];
+	lowercasedItems!: { lowered: string, item: any; }[] | null;
 
 	throttle = 0;
 
-	filtered!: any[];
+	filtered!: any[] | null;
 
 	@Output() readonly inputChanges = new Subject<string>();
 
@@ -57,7 +57,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		const { items } = changes;
 
 		if (items) {
-			this.lowercasedItems = this.items && this.items.map(v => ({
+			this.lowercasedItems = this.items && this.items!.map(v => ({
 				lowered: v.toString().toLowerCase(),
 				item: v
 			}));
@@ -79,7 +79,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		return !value && this.internalControl.value
 			? { 'autocompleteNotFound': true }
 			: null;
-	};
+	}
 	// #endregion Implementation of the Validator interface
 
 	onInternalControlValueChange(input: string) {
@@ -88,11 +88,11 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 		const loweredInput = input && input.toString().toLowerCase().trim();
 		this.filtered = loweredInput
-			? this.lowercasedItems.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
+			? this.lowercasedItems!.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
 			: this.items;
 		this.cdr.markForCheck();
 
-		const foundLoweredItem = input && this.lowercasedItems.find(v => v.lowered === loweredInput);
+		const foundLoweredItem = input && this.lowercasedItems!.find(v => v.lowered === loweredInput);
 		this.setValue(foundLoweredItem && foundLoweredItem.item || null);
 	}
 }
