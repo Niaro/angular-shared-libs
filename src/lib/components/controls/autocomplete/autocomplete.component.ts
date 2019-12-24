@@ -1,10 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, Output, ElementRef, ChangeDetectorRef, Optional } from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
 import { lineMicrotask } from '@bp/shared/utils';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
+import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'bp-autocomplete',
@@ -32,11 +33,23 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@Input() panelClass!: string;
 
-	lowercasedItems!: { lowered: string, item: any }[];
+	lowercasedItems!: { lowered: string, item: any; }[];
 
 	throttle = 0;
 
 	filtered!: any[];
+
+	@Output() readonly inputChanges = new Subject<string>();
+
+	constructor(
+		host: ElementRef,
+		cdr: ChangeDetectorRef,
+		@Optional() formGroupDirective?: FormGroupDirective
+	) {
+		super(host, cdr, formGroupDirective);
+
+		this.internalControl.valueChanges.subscribe(v => this.inputChanges.next(v));
+	}
 
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
@@ -55,9 +68,9 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
-			});
+			this.value = value;
+			this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
@@ -66,7 +79,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		return !value && this.internalControl.value
 			? { 'autocompleteNotFound': true }
 			: null;
-	}
+	};
 	// #endregion Implementation of the Validator interface
 
 	onInternalControlValueChange(input: string) {

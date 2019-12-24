@@ -3,7 +3,7 @@ import { NORMAL } from './variables';
 
 const timings = '{{ timing }}s {{ delay }}s {{ease}}';
 
-const fadeIn = animation(animate(
+export const fadeIn = animation(animate(
 	timings,
 	keyframes([
 		style({ opacity: 0 }),
@@ -11,7 +11,7 @@ const fadeIn = animation(animate(
 	])
 ));
 
-const fadeOut = animation(animate(
+export const fadeOut = animation(animate(
 	timings,
 	keyframes([
 		style({ opacity: 1 }),

@@ -11,8 +11,7 @@ const leaveAnimation = '0.2s ease-in-out';
 
 export const ROUTE_HIT_ANIMATIONS = trigger('routeHitAnimations', [
 	transition(getTrue, [
-		// 100vh for a proper rendering for cdk-virtual-scroll-viewport
-		query(`:enter`, style({ opacity: 0, position: 'fixed', height: '100vh' }), optional),
+		query(`:enter`, style({ opacity: 0, position: 'fixed' }), optional),
 
 		query(`:enter .${slideUpOnRouteHit}`, style({ opacity: 0 }), optional),
 

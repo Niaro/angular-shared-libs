@@ -36,6 +36,8 @@ export interface ICashierEmbeddedParameters {
 
 	affiliateId: string | null;
 
+	platformId: string | null;
+
 	ip: string | null;
 
 	directPaymentMethod: PaymentMethodType | null;
@@ -53,4 +55,5 @@ export interface ICashierEmbeddedParameters {
 	theme: CashierTheme | null;
 
 	language: CashierLanguage | null;
+	
 }
