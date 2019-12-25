@@ -29,15 +29,18 @@ import { Subject } from 'rxjs';
 	]
 })
 export class AutocompleteComponent extends FormFieldControlComponent<any | null> implements OnChanges {
-	@Input() items!: any[] | null;
 
-	@Input() panelClass!: string;
+	@Input() items?: any[] | null;
 
-	lowercasedItems!: { lowered: string, item: any; }[] | null;
+	@Input() itemDisplayPropertyName?: string;
+
+	@Input() panelClass?: string;
+
+	lowercasedItems?: { lowered: string, item: any; }[] | null;
 
 	throttle = 0;
 
-	filtered!: any[] | null;
+	filtered?: any[] | null;
 
 	@Output() readonly inputChanges = new Subject<string>();
 
@@ -54,11 +57,11 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
 
-		const { items } = changes;
+		const { items, itemDisplayPropertyName } = changes;
 
-		if (items) {
+		if (items || itemDisplayPropertyName) {
 			this.lowercasedItems = this.items && this.items!.map(v => ({
-				lowered: v.toString().toLowerCase(),
+				lowered: (v[this.itemDisplayPropertyName!] || v)?.toString().toLowerCase(),
 				item: v
 			}));
 			this.filtered = this.items || [];
