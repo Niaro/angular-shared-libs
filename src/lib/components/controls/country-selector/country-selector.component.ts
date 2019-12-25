@@ -37,7 +37,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() hasWorldwide = false;
 
-	@Input() countries!: Country[];
+	@Input() countries = Countries.list;
 
 	@Input() panelClass!: string;
 

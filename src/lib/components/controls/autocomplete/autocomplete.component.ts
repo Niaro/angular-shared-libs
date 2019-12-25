@@ -40,7 +40,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	throttle = 0;
 
-	filtered?: any[] | null;
+	filtered!: any[] | null;
 
 	@Output() readonly inputChanges = new Subject<string>();
 
@@ -92,7 +92,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		const loweredInput = input && input.toString().toLowerCase().trim();
 		this.filtered = loweredInput
 			? this.lowercasedItems!.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
-			: this.items;
+			: this.items || [];
 		this.cdr.markForCheck();
 
 		const foundLoweredItem = input && this.lowercasedItems!.find(v => v.lowered === loweredInput);

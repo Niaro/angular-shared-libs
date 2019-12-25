@@ -30,6 +30,6 @@
 <mat-autocomplete #autocomplete="matAutocomplete" [class]="panelClass">
 	<mat-option *ngFor="let item of filtered"
 				[value]="item">
-		{{ item[itemDisplayPropertyName] || item.displayName || item.name || item }}
+		{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
 	</mat-option>
 </mat-autocomplete>
