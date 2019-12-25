@@ -1,4 +1,7 @@
-import { Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, Output, ElementRef, ChangeDetectorRef, Optional } from '@angular/core';
+import {
+	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, Output, ElementRef,
+	ChangeDetectorRef, Optional, ContentChild, TemplateRef
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
@@ -36,13 +39,15 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@Input() panelClass?: string;
 
+	@Output() readonly inputChanges = new Subject<string>();
+
+	@ContentChild(TemplateRef, { static: false }) optionTpl?: TemplateRef<any>;
+
 	lowercasedItems?: { lowered: string, item: any; }[] | null;
 
 	throttle = 0;
 
 	filtered!: any[] | null;
-
-	@Output() readonly inputChanges = new Subject<string>();
 
 	constructor(
 		host: ElementRef,
@@ -50,6 +55,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		@Optional() formGroupDirective?: FormGroupDirective
 	) {
 		super(host, cdr, formGroupDirective);
+
 
 		this.internalControl.valueChanges.subscribe(v => this.inputChanges.next(v));
 	}

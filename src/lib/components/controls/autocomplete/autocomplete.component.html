@@ -27,9 +27,15 @@
 	</bp-input>
 </ng-template>
 
-<mat-autocomplete #autocomplete="matAutocomplete" [class]="panelClass">
+<mat-autocomplete #autocomplete="matAutocomplete"
+				  [class]="panelClass">
 	<mat-option *ngFor="let item of filtered"
 				[value]="item">
-		{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
+		<ng-container *ngIf="optionTpl; else defaultOptionTpl">
+			<ng-container *ngTemplateOutlet="optionTpl; context: { '\$implicit': item }"></ng-container>
+		</ng-container>
+		<ng-template #defaultOptionTpl>
+			{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
+		</ng-template>
 	</mat-option>
 </mat-autocomplete>
