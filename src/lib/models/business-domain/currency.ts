@@ -8,7 +8,9 @@ const CURRENCIES_CODES = <const>['USD', 'EUR', 'ALL', 'AFN', 'DZD', 'AOA', 'XCD'
 export type CurrencyCode = typeof CURRENCIES_CODES[number];
 
 export class Currency extends MetadataEntity {
+
 	static list = CURRENCIES_CODES.map(it => new Currency(<any>it));
+
 	private static created: Map<CurrencyCode, Currency>;
 
 	readonly symbol!: string;
