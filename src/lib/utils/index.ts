@@ -7,5 +7,6 @@ export * from './line-microtask';
 export * from './object-normalize';
 export * from './paginate-array';
 export * from './resize-sensor';
+export * from './string-utils';
 export * from './uniq-id';
 export * from './url-helper';

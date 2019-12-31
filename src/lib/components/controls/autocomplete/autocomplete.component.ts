@@ -5,7 +5,7 @@ import {
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
-import { lineMicrotask } from '@bp/shared/utils';
+import { lineMicrotask, includes, match } from '@bp/shared/utils';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
 import { Subject } from 'rxjs';
@@ -38,6 +38,8 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	@Input() itemDisplayPropertyName?: string;
 
 	@Input() panelClass?: string;
+
+	@Input() filterListFn?: (item: any, search: string) => boolean;
 
 	@Output() readonly inputChanges = new Subject<string>();
 
@@ -95,13 +97,23 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		if (isEmpty(this.items))
 			return;
 
-		const loweredInput = input && input.toString().toLowerCase().trim();
-		this.filtered = loweredInput
-			? this.lowercasedItems!.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
+		input = input && input.toString().trim();
+		this.filtered = input
+			? this.items!.filter(v => this.filterItem(v, input))
 			: this.items || [];
 		this.cdr.markForCheck();
 
-		const foundLoweredItem = input && this.lowercasedItems!.find(v => v.lowered === loweredInput);
-		this.setValue(foundLoweredItem && foundLoweredItem.item || null);
+		const found = this.items!.find(v => match(this.getItemCompareString(v), input));
+		this.setValue(found || null);
+	}
+
+	private filterItem(item: any, search: string) {
+		return this.filterListFn
+			? this.filterListFn(item, search)
+			: includes(this.getItemCompareString(item), search);
+	}
+
+	private getItemCompareString(item: any) {
+		return (item[this.itemDisplayPropertyName!] || item)?.toString();
 	}
 }
