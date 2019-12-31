@@ -7,7 +7,9 @@ import { environment as env } from '@bp/environment';
 
 if (env.remoteServer && location.hostname !== 'localhost' && env.logrocket) {
 	LogRocket.init(env.logrocket, {
-		release: env.name === 'prod' ? env.version.release : env.version.prerelease,
+		release: env.name === 'prod' && !location.hostname.includes('demostand')
+			? env.version.release
+			: env.version.prerelease,
 		console: {
 			shouldAggregateConsoleErrors: true,
 		},
