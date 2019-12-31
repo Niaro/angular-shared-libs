@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuicklinkModule } from 'ngx-quicklink';
+import { ToastrModule } from 'ngx-toastr';
 
 import { MaterialModule } from './materials.module';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
@@ -19,7 +20,7 @@ import {
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
 	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent,
-	InputPrefixDirective
+	InputPrefixDirective, ToastComponent
 } from './components';
 
 import {
@@ -49,6 +50,7 @@ const MODULES = [
 	ReactiveFormsModule,
 	LocalStorageModule,
 	QuicklinkModule,
+	ToastrModule,
 
 	TouchModule,
 	CarouselModule,
@@ -77,6 +79,7 @@ const EXPOSED = [
 	PaymentMethodBrandComponent,
 	ImgComponent,
 	VersionComponent,
+	ToastComponent,
 
 	// directives
 	CursorPageAdaptorDirective,
@@ -133,6 +136,7 @@ const EXPOSED = [
 	exports: [...EXPOSED, ...MODULES],
 	declarations: EXPOSED,
 	entryComponents: [
+		ToastComponent,
 		DatepickerCalendarHeaderComponent,
 		DeleteConfirmDialogComponent,
 		LogoutConfirmDialogComponent
@@ -149,6 +153,15 @@ export class SharedModule {
 				}).providers || []),
 				...(ModalModule.forRoot().providers || []),
 				...(MaterialModule.forRoot().providers || []),
+				...(ToastrModule.forRoot({
+					toastComponent: ToastComponent,
+					timeOut: 5000,
+					preventDuplicates: true,
+					closeButton: true,
+					resetTimeoutOnDuplicate: true,
+					maxOpened: 5,
+					progressBar: true
+				}).providers || []),
 				BpCurrencyPipe,
 				RouterService,
 				TelemetryService,

@@ -1,0 +1,72 @@
+@import 'imports';
+
+$toaster-palette: (
+	success: $success,
+	error : $danger,
+	warning: $warning,
+	info : $primary
+);
+
+$border-radius: 5px;
+
+:host {
+	@include mat-elevation($mat-card-elevation, $mat-elevation-color, 0.75);
+	pointer-events: all;
+	position: relative;
+	overflow: hidden;
+	margin: 0 0 1rem;
+	padding: 1rem;
+	width: 300px;
+	border-radius: $border-radius;
+	color: $dark-primary-text;
+	background: white;
+	display: block;
+	transition: box-shadow $transition-props;
+	border-left: $border-radius solid;
+	font-size: 16px;
+
+	&:hover {
+		@include mat-elevation(15, $mat-elevation-color, 1);
+		opacity: 1;
+		cursor: pointer;
+	}
+
+	@each $type,
+	$scheme in $toaster-palette {
+		&.toast-#{$type} {
+			border-left-color: mat-color($scheme);
+
+			.toast-progress {
+				background: mat-color($scheme);
+			}
+		}
+	}
+
+	.toast-progress {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		height: 3px;
+		opacity: 0.2;
+	}
+
+	.toast-title {
+		font-weight: bold;
+	}
+
+	.toast-message {
+		word-wrap: break-word;
+	}
+
+	.btn-icon-close {
+		position: relative;
+		right: -0.25rem;
+		margin-top: -0.31rem;
+		margin-bottom: -0.5rem;
+		float: right;
+
+		&:hover {
+			background: #0000000d;
+		}
+	}
+}

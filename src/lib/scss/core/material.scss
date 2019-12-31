@@ -95,36 +95,30 @@
 }
 
 // according to http://google.github.io/material-design-icons/#styling-icons-in-material-design
+$icon-size-xs: 14px;
 $icon-size-sm: 18px;
 $icon-size-md: 24px;
 $icon-size-lg: 36px;
 $icon-size-xl: 48px;
 
+$material-icons-sizes: (
+	xs: $icon-size-xs,
+	sm: $icon-size-sm,
+	md: $icon-size-md,
+	lg: $icon-size-lg,
+	xl: $icon-size-xl
+);
+
 bp-svg-icon,
 .material-icons {
 
-	&.sm,
-	.mat-icon-button.sm & {
-		@include size($icon-size-sm);
-		@include fontsize($icon-size-sm);
-	}
-
-	&.md,
-	.mat-icon-button.md & {
-		@include size($icon-size-md);
-		@include fontsize($icon-size-md);
-	}
-
-	&.lg,
-	.mat-icon-button.lg & {
-		@include size($icon-size-lg);
-		@include fontsize($icon-size-lg);
-	}
-
-	&.xl,
-	.mat-icon-button.xs & {
-		@include size($icon-size-xl);
-		@include fontsize($icon-size-xl);
+	@each $type,
+	$size in $material-icons-sizes {
+		&.#{$type},
+		.mat-icon-button.#{$type} & {
+			@include size($size);
+			@include fontsize($size);
+		}
 	}
 
 }
@@ -138,13 +132,19 @@ bp-svg-icon,
 		display: block;
 	}
 
+	&.xs {
+		$btn-icon-size-xs: 30px;
+		@include size($btn-icon-size-xs);
+		line-height: $btn-icon-size-xs;
+	}
+
 	&.sm {
 		$btn-icon-size-sm: $icon-size-sm + 8px;
 		@include size($btn-icon-size-sm);
 		line-height: $btn-icon-size-sm;
 	}
 
-	&:not(.sm):not(.lg):not(.xl) {
+	&:not(.xs):not(.sm):not(.lg):not(.xl) {
 		$btn-icon-size-md: $icon-size-md + 16px;
 		@include size($btn-icon-size-md);
 		line-height: $btn-icon-size-md;
