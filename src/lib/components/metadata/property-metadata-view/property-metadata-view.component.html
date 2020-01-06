@@ -1,7 +1,7 @@
 <div [matTooltip]="table?.ellipsis ? value : null"
 	 matTooltipPosition="above">
 	<ng-container *ngIf="metadata.viewType !== FieldViewType.boolean; else booleanViewTypeTpl">
-		<caption *ngIf="label && !table">
+		<caption *ngIf="label && !table" class="property-metadata-view-caption">
 			{{ metadata.label }}
 
 			<mat-icon *ngIf="metadata.longHint"

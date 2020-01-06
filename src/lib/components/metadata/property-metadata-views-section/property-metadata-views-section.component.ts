@@ -29,6 +29,9 @@ export class PropertyMetadataViewsSectionComponent {
 	get = get;
 
 	meta(prop: string) {
-		return this.metadata.get<any>(prop);
+		const md = this.metadata.get<any>(prop);
+		if (!md)
+			console.warn(`${prop} doesn't have metadata on ${this.entity?.constructor.name}`);
+		return md;
 	}
 }
