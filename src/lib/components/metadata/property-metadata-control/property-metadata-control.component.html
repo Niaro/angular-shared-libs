@@ -62,7 +62,8 @@
 	<mat-slide-toggle *ngSwitchCase="FieldControlType.switch"
 					  [formControl]="control"
 					  [name]="metadata.property"
-					  [color]="color">
+					  [color]="color"
+					  (click)="control.markAsTouched()">
 		{{ metadata.label }}
 	</mat-slide-toggle>
 

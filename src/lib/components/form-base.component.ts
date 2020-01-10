@@ -169,7 +169,7 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 				switchMap(v => v
 					? v.statusChanges.pipe(
 						startWith(null),
-						map(() => !!v.dirty)
+						map(() => !!v.dirty && !!v.touched)
 					)
 					: EMPTY
 				),
