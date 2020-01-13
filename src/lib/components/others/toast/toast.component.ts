@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
-import { Toast, ToastrService, ToastPackage } from 'ngx-toastr';
+import { Toast, ToastrService, ToastPackage, IndividualConfig } from 'ngx-toastr';
 
 import { TIMINGS, SEMI_SLOW, FADE } from '@bp/shared/animations';
+
+export type ToastConfig = IndividualConfig & { undoBtn: boolean };
 
 @Component({
 	selector: 'bp-toast',
@@ -39,6 +41,10 @@ import { TIMINGS, SEMI_SLOW, FADE } from '@bp/shared/animations';
 })
 export class ToastComponent extends Toast {
 
+	options!: ToastConfig;
+
+	undoBtnText = 'undo';
+
 	constructor(
 		protected toasterService: ToastrService,
 		public toasterPackage: ToastPackage,
@@ -50,5 +56,12 @@ export class ToastComponent extends Toast {
 	updateProgress() {
 		super.updateProgress();
 		this.cdr.detectChanges();
+	}
+
+	undo(event: Event) {
+		event.stopPropagation();
+		this.undoBtnText = 'undid';
+		this.toastPackage.triggerAction();
+		return false;
 	}
 }

@@ -13,7 +13,9 @@ import { AsyncVoidSubject } from '../rxjs';
  */
 @Directive({ selector: '[bpDelayedRender]' })
 export class DelayedRenderDirective implements OnInit, OnDestroy {
+
 	private static instantViewsRenderingCounter = 0;
+
 	private static maxInstantRenderedViews = 7;
 
 	private destroyed$ = new AsyncVoidSubject();
@@ -28,7 +30,7 @@ export class DelayedRenderDirective implements OnInit, OnDestroy {
 			this.renderView(); // to render in the current event loop a set number of views
 		else
 			// if the rendered views counter exceeds the max we schedule rendering to the next event loops
-			timer(DelayedRenderDirective.instantViewsRenderingCounter - DelayedRenderDirective.maxInstantRenderedViews)
+			timer((DelayedRenderDirective.instantViewsRenderingCounter - DelayedRenderDirective.maxInstantRenderedViews) * 10)
 				.pipe(takeUntil(this.destroyed$))
 				.subscribe(() => this.renderView());
 

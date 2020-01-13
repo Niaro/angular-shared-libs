@@ -25,9 +25,14 @@ export class PaginatorComponent {
 
 	@Input() pageLength!: number;
 
+	@Input() scrollTarget?: HTMLElement;
+
 	@Output('page') readonly page$ = new OptionalBehaviorSubject<string | undefined>();
 	get page() { return this.page$.value; }
-	set page(value: string | undefined) { this.page$.next(value); }
+	set page(value: string | undefined) {
+		this.scrollTarget?.scrollIntoView();
+		this.page$.next(value);
+	}
 
 	readonly pageSize$ = new BehaviorSubject(PAGE_SIZE);
 	get pageSize() { return this.pageSize$.value; }
@@ -88,12 +93,12 @@ export class PaginatorComponent {
 	onBack = () => {
 		this.page = this.getBackPage().toString();
 		this.currentPage = this.getBackPage();
-	}
+	};
 
 	onNext = () => {
 		this.page = this.getNextPage().toString();
 		this.currentPage = this.getNextPage();
-	}
+	};
 
 	hasBack = () => this.offset >= this.pageSize;
 

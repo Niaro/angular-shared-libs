@@ -1,3 +1,4 @@
+export * from './clone-and-splice';
 export * from './dom-helper';
 export * from './fastdom';
 export * from './is-extension-of';
