@@ -56,4 +56,6 @@ export interface ICashierEmbeddedParameters {
 
 	language: CashierLanguage | null;
 
+	onlyCreditCardPaymentMethod?: boolean | null;
+
 }
