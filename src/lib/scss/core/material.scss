@@ -10,6 +10,7 @@
 		h1 {
 			margin-top: 0;
 			margin-bottom: $mat-dialog-header-margin;
+			color: $color-dark;
 		}
 
 		.btn-icon-close {
@@ -22,19 +23,6 @@
 			top: 0;
 			left: 0;
 		}
-	}
-}
-
-.bp-overlay-pane {
-	width: 100%;
-	display: flex;
-	flex-flow: column;
-	align-items: center;
-	margin: 0 1rem;
-	padding: 1rem 0;
-
-	&.lg {
-		max-width: 900px !important;
 	}
 }
 

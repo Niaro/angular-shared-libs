@@ -1,0 +1,50 @@
+@import 'imports';
+
+::ng-deep .bp-modal-overlay-pane {
+	width: 100%;
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	margin: 0 1rem;
+	padding: 1rem 0;
+
+	&.lg {
+		max-width: 900px !important;
+	}
+
+	.mat-dialog-container {
+		padding: $modal-padding-v $modal-padding-h;
+
+		h1 {
+			font-size: 32px;
+			line-height: 1.2;
+		}
+
+		.logo-short-text {
+			position: absolute;
+			top: 31px;
+			left: 30px;
+			color: $color-primary;
+		}
+
+		.btn-modal-icon-close {
+			position: absolute;
+			color: $color-semi-dark;
+			z-index: 2;
+			$size: 60px;
+			top: 27px;
+			right: 27px;
+			width: $size;
+			height: $size;
+
+			::ng-deep svg {
+				width: $size / 2;
+				height: $size / 2;
+			}
+
+			&:hover {
+				color: $color-dark;
+			}
+		}
+	}
+}
