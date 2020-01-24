@@ -37,7 +37,7 @@
 	}
 
 	&[disabled] {
-		.bp-overlay-pane.report-setup-pane & {
+		.bp-modal-overlay-pane.report-setup-pane & {
 			background: $color-primary;
 			color: white;
 			opacity: 0.33;

@@ -52,6 +52,8 @@ export interface ICashierEmbeddedParameters {
 
 	buttonMode: CashierButtonMode | null;
 
+	depositButtonText: string | null;
+
 	theme: CashierTheme | null;
 
 	language: CashierLanguage | null;
