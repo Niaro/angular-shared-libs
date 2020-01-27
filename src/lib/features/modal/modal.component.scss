@@ -8,8 +8,12 @@
 	margin: 0 1rem;
 	padding: 1rem 0;
 
+	&.md {
+		max-width: $modal-max-width-md !important;
+	}
+
 	&.lg {
-		max-width: 900px !important;
+		max-width: $modal-max-width-lg !important;
 	}
 
 	.mat-dialog-container {

@@ -5,17 +5,17 @@
 
 	.mat-dialog-container {
 		border-radius: $border-card-radius;
-		padding: $mat-dialog-padding;
+		padding: $dialog-padding;
 
 		h1 {
 			margin-top: 0;
-			margin-bottom: $mat-dialog-header-margin;
+			margin-bottom: $dialog-header-margin;
 			color: $color-dark;
 		}
 
 		.btn-icon-close {
-			top: $mat-dialog-padding-v - 2px;
-			right: $mat-dialog-padding-v;
+			top: $dialog-padding-v - 2px;
+			right: $dialog-padding-v;
 		}
 
 		.mat-progress-bar {
