@@ -161,15 +161,15 @@ $avatar-size: $thumbnail-size;
 $z-index-sidenav: 1000000;
 $z-index-max    : 2147483647;
 
-$dialog-padding-v    : 24px !default;
-$dialog-padding-h    : $dialog-padding-v * 2 !default;
-$dialog-padding      : $dialog-padding-v $dialog-padding-h;
+$dialog-padding-y    : 24px !default;
+$dialog-padding-x    : $dialog-padding-y * 2 !default;
+$dialog-padding      : $dialog-padding-y $dialog-padding-x;
 $dialog-header-margin: 1.5rem;
 $dialog-footer-margin: 1.8rem;
 $dialog-max-width-md : 600px;
 $dialog-max-width-lg : 900px;
 
-$modal-padding-v   : 32px;
-$modal-padding-h   : 48px;
+$modal-padding-y   : 32px;
+$modal-padding-x   : 48px;
 $modal-max-width-md: $dialog-max-width-md;
 $modal-max-width-lg: $dialog-max-width-lg;

@@ -6,6 +6,7 @@ export * from './moment.pipe';
 export * from './properties-metadata-colspan.pipe';
 export * from './safe.pipe';
 export * from './start-case.pipe';
+export * from './sum-by.pipe';
 export * from './take.pipe';
 export * from './to-key-value-pairs.pipe';
 export * from './upper-first.pipe';
