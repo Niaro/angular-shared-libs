@@ -8,7 +8,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	templateUrl: './button-toggle.component.html',
 	styleUrls: ['./button-toggle.component.scss'],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [{

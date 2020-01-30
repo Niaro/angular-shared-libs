@@ -1,3 +1,9 @@
-:host {
+@import 'imports';
 
+::ng-deep .mat-autocomplete-panel .mat-option {
+	&.mat-selected,
+	&.selected {
+		background: $color-primary !important;
+		color: white !important;
+	}
 }

@@ -1,6 +1,6 @@
 import { Component, OnChanges, ChangeDetectionStrategy, Input, SimpleChanges } from '@angular/core';
 import { fromEvent, BehaviorSubject } from 'rxjs';
-import { first, delay, tap, map } from 'rxjs/operators';
+import { first, delay, share } from 'rxjs/operators';
 
 import { pending } from '@bp/shared/rxjs';
 
@@ -39,16 +39,20 @@ export class ImgComponent implements OnChanges {
 			this.src = url;
 			this.showImg$.next(true);
 			this.isDownloading$.next(false);
-		} else
-			fromEvent(img, 'load')
+		} else {
+			const load$ = fromEvent(img, 'load')
 				.pipe(
 					first(),
 					pending(this.isDownloading$),
-					tap(() => this.src = url),
-					delay(100), // the time for the img to be rendered
-					map(() => true)
-				)
-				.subscribe(this.showImg$);
+					share()
+				);
+			load$
+				.subscribe(() => this.src = url);
+
+			load$
+				.pipe(delay(100)) // wait til the img is rendered then show it to apply smooth animation
+				.subscribe(() => this.showImg$.next(true));
+		}
 	}
 
 }

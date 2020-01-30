@@ -5,7 +5,11 @@ import { isNil, isEqual, uniq } from 'lodash-es';
 
 import { lineMicrotask } from '@bp/shared/utils';
 
-export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator, OnDestroy {
+import { Destroyable } from '../destroyable';
+
+export abstract class ControlComponent<T = any>
+	extends Destroyable
+	implements ControlValueAccessor, Validator, OnDestroy {
 
 	@Input() value: T | null = null;
 
@@ -17,14 +21,10 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 
 	protected validator!: ValidatorFn | null;
 
-	protected destroyed$ = new Subject();
+	private onChangeCallbacks: ((value: any) => void)[] = [];
 
-	private onChangeCallbacks: ((value: any) => void )[] = [];
-
-	constructor(protected cdr: ChangeDetectorRef) { }
-
-	ngOnDestroy() {
-		this.destroyed$.next();
+	constructor(protected cdr: ChangeDetectorRef) {
+		super();
 	}
 
 	validatorOnChange = () => { };
@@ -38,9 +38,9 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.cdr.markForCheck();
-			});
+			this.value = value;
+			this.cdr.markForCheck();
+		});
 	}
 
 	registerOnChange(fn: (value: any) => void): void {
@@ -63,7 +63,7 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	}
 	// #endregion Implementation of the Validator interface
 
-	setValue(value: T, { emitChange }: { emitChange: boolean } = { emitChange: true }) {
+	setValue(value: T, { emitChange }: { emitChange: boolean; } = { emitChange: true }) {
 		if (isEqual(value, this.value)) {
 			this.validatorOnChange();
 			return;

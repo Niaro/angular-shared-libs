@@ -10,7 +10,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	templateUrl: './ip-input.component.html',
 	styleUrls: ['./ip-input.component.scss'],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [

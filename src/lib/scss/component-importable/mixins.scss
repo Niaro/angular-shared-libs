@@ -120,6 +120,12 @@
 	height: $height;
 }
 
+@mixin matIconSize($width, $height: $width) {
+	width: $width;
+	height: $height;
+	line-height: $height;
+}
+
 @mixin font($size: 16px, $lineheight: $size, $weight: 400) {
 	font-size: $size;
 	line-height: $lineheight;
@@ -141,6 +147,7 @@
 
 @mixin afterBottomBorder($color: $color-border, $width: 1px) {
 	border-bottom: none;
+	position: relative;
 
 	&:after {
 		content: '';
@@ -151,5 +158,21 @@
 		bottom: 0;
 		left: 0;
 		right: 0;
+	}
+}
+
+@mixin beforeLeftBorder($color: $color-border, $width: 1px) {
+	border-left: none;
+	position: relative;
+
+	&:before {
+		content: '';
+		width: $width;
+		background: $color;
+		display: block;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		top: 0;
 	}
 }

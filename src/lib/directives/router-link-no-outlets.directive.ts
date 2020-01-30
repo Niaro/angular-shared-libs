@@ -1,10 +1,10 @@
-import { Directive, Input, OnChanges, OnDestroy, HostBinding, HostListener } from '@angular/core';
+import { Directive, Input, OnChanges, HostBinding, HostListener } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
 import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, UrlSegmentGroup, QueryParamsHandling } from '@angular/router';
-import { takeUntil, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { isString } from 'lodash-es';
 
-import { AsyncVoidSubject } from '../rxjs';
+import { Destroyable } from '../components/destroyable';
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive
@@ -14,7 +14,7 @@ import { AsyncVoidSubject } from '../rxjs';
 @Directive({
 	selector: 'a[routerLinkNoOutlets]' // tslint:disable-line
 })
-export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestroy {
+export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements OnChanges {
 
 	@Input()
 	set routerLinkNoOutlets(commands: any[] | string) {
@@ -44,23 +44,23 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 	@HostBinding() href!: string;
 
 	private commands: any[] = [];
-	private destroyed$ = new AsyncVoidSubject();
 
 	constructor(
 		private router: Router,
 		private route: ActivatedRoute,
 		private locationStrategy: LocationStrategy
 	) {
+		super();
+
 		router.events
 			.pipe(
-				takeUntil(this.destroyed$),
+				this.takeUntilDestroyed,
 				filter(e => e instanceof NavigationEnd)
 			)
 			.subscribe(() => this.updateTargetUrlAndHref());
 	}
 
 	ngOnChanges() { this.updateTargetUrlAndHref(); }
-	ngOnDestroy() { this.destroyed$.complete(); }
 
 	@HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'])
 	onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean {

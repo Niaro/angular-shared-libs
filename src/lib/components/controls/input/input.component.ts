@@ -41,7 +41,7 @@ export class InputPrefixDirective { }
 	styleUrls: ['./input.component.scss'],
 	animations: [STATEFUL_SLIDE_RIGHT],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [{
@@ -77,7 +77,11 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 		maskOnFocus: true
 	});
 
-	onInternalControlValueChange(value: string) {
+	/**
+	 * If the autocomplete is present, the value of the internal control could
+	 * be as string as an item of the autocomplete list which is any
+	 */
+	onInternalControlValueChange(value: string | any) {
 		this.setValue(this.maskDirective
 			&& this.maskDirective.config instanceof NumberMaskConfig
 			&& !this.maskDirective.config.allowLeadingZeroes

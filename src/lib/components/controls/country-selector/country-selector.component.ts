@@ -13,7 +13,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	templateUrl: './country-selector.component.html',
 	styleUrls: ['./country-selector.component.scss'],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [

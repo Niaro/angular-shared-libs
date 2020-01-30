@@ -30,6 +30,7 @@
 <mat-autocomplete #autocomplete="matAutocomplete"
 				  [class]="panelClass">
 	<mat-option *ngFor="let item of filtered"
+				[class.selected]="item === value"
 				[value]="item">
 		<ng-container *ngIf="optionTpl; else defaultOptionTpl">
 			<ng-container *ngTemplateOutlet="optionTpl; context: { '\$implicit': item }"></ng-container>

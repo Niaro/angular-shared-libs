@@ -1,7 +1,8 @@
 <div [matTooltip]="table?.ellipsis ? value : null"
 	 matTooltipPosition="above">
 	<ng-container *ngIf="metadata.viewType !== FieldViewType.boolean; else booleanViewTypeTpl">
-		<caption *ngIf="label && !table" class="property-metadata-view-caption">
+		<caption *ngIf="label && !table"
+				 class="property-metadata-view-caption">
 			{{ metadata.label }}
 
 			<mat-icon *ngIf="metadata.longHint"
@@ -105,7 +106,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
-					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status">
+					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status;">
 						<span [ngClass]="'status-' + status.cssClass"
 							  [class.mr-1]="!isCompact"
 							  [class.circle-sm]="!isCompact"
@@ -125,7 +126,7 @@
 				<ng-container *ngSwitchCase="FieldViewType.chip">
 					<mat-chip-list *ngIf="value?.length"
 								   [selectable]="false">
-						<mat-chip *ngFor="let chip of value"
+						<mat-chip *ngFor="let chip of value;"
 								  selected
 								  [matTooltip]="chip.description"
 								  [matTooltipPosition]="isCompact ? 'above' : 'below'">
@@ -143,14 +144,14 @@
 	</ng-container>
 
 	<ng-template #booleanViewTypeTpl>
-		<ng-container *ngIf="table; else defaultBooleanViewTypeTpl">
-			<mat-icon>
-				{{ value ? 'check' : 'remove' }}
-			</mat-icon>
-		</ng-container>
+		<mat-icon *ngIf="table; else defaultBooleanViewTypeTpl;"
+				  [ngClass]="booleanIcon">
+			{{ booleanIcon }}
+		</mat-icon>
+
 		<ng-template #defaultBooleanViewTypeTpl>
-			<span>
-				<mat-icon class="mr-1">{{ value ? 'check' : 'close' }}</mat-icon>
+			<span [ngClass]="booleanIcon">
+				<mat-icon class="mr-1">{{ booleanIcon }}</mat-icon>
 				{{ metadata.label }}
 			</span>
 		</ng-template>

@@ -21,7 +21,7 @@ export interface IChipControlItem {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [FADE],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	providers: [
 		{

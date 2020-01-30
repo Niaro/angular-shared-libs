@@ -1,4 +1,4 @@
-import { Input, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Input, Output, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, AbstractControl, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isEmpty, forOwn } from 'lodash-es';
@@ -6,9 +6,10 @@ import { Subject, BehaviorSubject, of, combineLatest, EMPTY } from 'rxjs';
 import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
 
 import { ResponseError, IApiErrorMessage, FormGroupConfig, ClassMetadata } from '../models';
-import { AsyncVoidSubject } from '../rxjs';
 
-export abstract class FormBaseComponent<T = any> implements OnDestroy {
+import { Destroyable } from './destroyable';
+
+export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 	@Input() metadata!: ClassMetadata;
 
@@ -67,19 +68,14 @@ export abstract class FormBaseComponent<T = any> implements OnDestroy {
 
 	showInvalidInputsSnack = true;
 
-	protected readonly destroyed$ = new AsyncVoidSubject();
-
 	constructor(
 		protected fb: FormBuilder,
 		protected cdr: ChangeDetectorRef,
 		protected snackBar: MatSnackBar
 	) {
+		super();
 		this.setupInvalidObservable();
 		this.setupCanSaveObservable();
-	}
-
-	ngOnDestroy() {
-		this.destroyed$.complete();
 	}
 
 	label(prop: NonFunctionPropertyNames<T>) {

@@ -28,6 +28,8 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	// @Input() color: ThemePalette;
 
+	get booleanIcon() { return this.value ? 'check' : 'close'; }
+
 	constructor(private renderer: Renderer2, private host: ElementRef) { }
 
 	ngOnChanges({ metadata }: SimpleChanges) {

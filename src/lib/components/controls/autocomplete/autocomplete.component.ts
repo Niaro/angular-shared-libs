@@ -3,7 +3,7 @@ import {
 	ChangeDetectorRef, Optional, ContentChild, TemplateRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isString } from 'lodash-es';
 
 import { lineMicrotask, includes, match } from '@bp/shared/utils';
 
@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 	styleUrls: ['./autocomplete.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	providers: [
 		{
@@ -80,7 +80,10 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	writeValue(value: any): void {
 		lineMicrotask(() => {
 			this.value = value;
-			this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
+			this.internalControl.setValue(this.value && this.value.toString() || '', {
+				emitViewToModelChange: false,
+				emitEvent: false
+			});
 		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
@@ -90,20 +93,28 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		return !value && this.internalControl.value
 			? { 'autocompleteNotFound': true }
 			: null;
-	}
+	};
 	// #endregion Implementation of the Validator interface
 
-	onInternalControlValueChange(input: string) {
+	/**
+	 * the value of the internal control could
+	 * be as string as an item of the autocomplete list which is any
+	 */
+	onInternalControlValueChange(value: string | null | any) {
 		if (isEmpty(this.items))
 			return;
 
-		input = input && input.toString().trim();
-		this.filtered = input
-			? this.items!.filter(v => this.filterItem(v, input))
-			: this.items || [];
-		this.cdr.markForCheck();
+		let found: any;
+		if (isString(value)) {
+			value = value.toString().trim();
+			this.filtered = this.items!.filter(v => this.filterItem(v, value));
+			found = this.items!.find(v => match(this.getItemCompareString(v), value));
+		} else {
+			this.filtered = this.items!;
+			found = value;
+		}
 
-		const found = this.items!.find(v => match(this.getItemCompareString(v), input));
+		this.cdr.markForCheck();
 		this.setValue(found || null);
 	}
 

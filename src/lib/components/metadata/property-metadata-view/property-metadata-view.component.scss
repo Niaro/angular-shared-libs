@@ -15,11 +15,22 @@
 	}
 
 	&.view-type-boolean {
-		display: flex;
+		&,
+		> div {
+			display: flex;
+		}
 
 		span {
 			display: inline-flex;
 			align-items: center;
+
+			&.check {
+				margin-left: -3px;
+			}
+
+			&.close {
+				margin-left: -4px;
+			}
 		}
 	}
 

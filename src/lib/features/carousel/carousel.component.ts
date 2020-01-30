@@ -4,15 +4,16 @@ import {
 	QueryList, ChangeDetectionStrategy, Renderer2, TrackByFunction
 } from '@angular/core';
 import { Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
-import { takeUntil, startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
+import { startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isEqual, forOwn, sum, get } from 'lodash-es';
 import { Dictionary } from 'lodash';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
-import { AsyncVoidSubject, BpScheduler, measure, mutate, fromMeasure, fromResize } from '@bp/shared/rxjs';
+import { BpScheduler, measure, mutate, fromMeasure, fromResize } from '@bp/shared/rxjs';
 import { Direction, Dimensions } from '@bp/shared/models';
 import { $, lineMicrotask } from '@bp/shared/utils';
+import { Destroyable } from '@bp/shared/components/destroyable';
 
 import { TouchManager, TouchBuilder, ISwipeEvent } from '../touch';
 
@@ -29,7 +30,9 @@ export enum ArrowType {
 	animations: [FADE_IN_LIST],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class CarouselComponent
+	extends Destroyable
+	implements AfterViewInit, OnChanges, OnDestroy {
 	@Input() itemsPerViewport: number | 'unlimited' = 1;
 	@Input() looped = false;
 	@Input() bullets: boolean | 'always' = false;
@@ -126,7 +129,6 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	private slideStyle$ = new Subject<Dictionary<string>>();
 	private touch: TouchManager;
 	private autoplayTask!: number;
-	private destroyed$ = new AsyncVoidSubject();
 
 	constructor(
 		private host: ElementRef,
@@ -134,9 +136,11 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 		private touchBuilder: TouchBuilder,
 		private renderer: Renderer2
 	) {
+		super();
+
 		this.touch = this.touchBuilder.build(this.$host) as TouchManager;
 		this.touch.swipe$
-			.pipe(takeUntil(this.destroyed$))
+			.pipe(this.takeUntilDestroyed)
 			.subscribe(e => this.onSwipe(e));
 	}
 
@@ -145,13 +149,13 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 			this.activateItem(this.items[0], false);
 
 		lineMicrotask(() => {
-				if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
-					this.updateItemsPerView();
-				if (items && !items.firstChange)
-					this.updateScroll({ animate: false, distinctVisibility: false });
-				else if (activeItem && !activeItem.firstChange)
-					this.updateScroll({ animate: false });
-			});
+			if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
+				this.updateItemsPerView();
+			if (items && !items.firstChange)
+				this.updateScroll({ animate: false, distinctVisibility: false });
+			else if (activeItem && !activeItem.firstChange)
+				this.updateScroll({ animate: false });
+		});
 	}
 
 	ngAfterViewInit() {
@@ -177,7 +181,7 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 		fromEvent(window, 'resize')
 			.pipe(
-				takeUntil(this.destroyed$),
+				this.takeUntilDestroyed,
 				subscribeOn(BpScheduler.outside)
 			)
 			.subscribe(() => this.onResize());
@@ -194,14 +198,13 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 	}
 
 	ngOnDestroy() {
+		super.ngOnDestroy();
+
 		this.autoplayTask && this.stopAutoplay();
 		this.touch.destroy();
-		this.destroyed$.complete();
 	}
 
-	trackBy: TrackByFunction<any> = (index, item) => {
-		return item.id || item.key || item;
-	}
+	trackBy: TrackByFunction<any> = (index, item) => item.id || item.key || item;
 
 	startAutoplay() {
 		this.stopAutoplay();

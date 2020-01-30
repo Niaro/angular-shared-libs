@@ -11,7 +11,7 @@ import { InputComponent } from '../input';
 	styleUrls: ['./round-input.component.scss'],
 	animations: [SLIDE_RIGHT],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [{

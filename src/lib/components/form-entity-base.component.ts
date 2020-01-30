@@ -8,6 +8,7 @@ import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
 import { Entity, FormScheme, MetadataEntity } from '../models';
 
 import { FormBaseComponent } from './form-base.component';
+import { OptionalBehaviorSubject } from '../rxjs';
 
 
 export abstract class FormEntityBaseComponent<T extends Entity = Entity>
@@ -19,6 +20,8 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	@Output() readonly entityChange = new Subject<T>();
 
 	@Input() factory!: (v?: Partial<T>) => T;
+
+	entity$ = new OptionalBehaviorSubject<T | null>();
 
 	get isAdding() { return this.entity && isNil(this.entity.id); }
 
@@ -38,10 +41,12 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	}
 
 	ngOnChanges({ entity }: SimpleChanges) {
-		if (entity)
+		if (entity) {
+			this.entity$.next(this.entity);
 			this.entity && this.form && this.formScheme
 				? this.repopulateFormByScheme()
 				: this.setForm();
+		}
 	}
 
 	setFormScheme(scheme: FormScheme<T>) {

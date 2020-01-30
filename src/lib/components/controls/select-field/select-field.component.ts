@@ -8,7 +8,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	templateUrl: './select-field.component.html',
 	styleUrls: ['./select-field.component.scss'],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [{

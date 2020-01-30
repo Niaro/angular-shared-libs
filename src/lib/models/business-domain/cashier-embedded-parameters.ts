@@ -42,6 +42,8 @@ export interface ICashierEmbeddedParameters {
 
 	directPaymentMethod: PaymentMethodType | null;
 
+	hideHeader: boolean | null;
+
 	showFooter: boolean | null;
 
 	currencyLock: boolean | null;
@@ -57,6 +59,8 @@ export interface ICashierEmbeddedParameters {
 	theme: CashierTheme | null;
 
 	language: CashierLanguage | null;
+
+	// not exposed to merchants
 
 	onlyCreditCardPaymentMethod?: boolean | null;
 
