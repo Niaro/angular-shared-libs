@@ -6,6 +6,8 @@ export class TransactionStatus extends Enumeration {
 
 	static approved = new TransactionStatus();
 
+	static approvedOnHold = new TransactionStatus();
+
 	static inProcess = new TransactionStatus();
 
 	static pending = new TransactionStatus();
