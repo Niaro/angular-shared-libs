@@ -86,11 +86,6 @@ $mat-elevation-opacity         : 0.4;
 $mat-elevation-color           : black;
 $mat-card-grid-aisle           : 1.5rem;
 $mat-card-grid-aisle-half      : 0.75rem;
-$mat-dialog-padding-v          : 24px !default;
-$mat-dialog-padding-h          : $mat-dialog-padding-v * 2 !default;
-$mat-dialog-padding            : $mat-dialog-padding-v $mat-dialog-padding-h;
-$mat-dialog-header-margin      : 1.5rem;
-$mat-dialog-footer-margin      : 1.8rem;
 // #endregion mat-cards
 
 // #region icons
@@ -167,5 +162,15 @@ $avatar-size: $thumbnail-size;
 $z-index-sidenav: 1000000;
 $z-index-max    : 2147483647;
 
-$modal-padding-v: 32px;
-$modal-padding-h: 48px;
+$dialog-padding-y    : 24px !default;
+$dialog-padding-x    : $dialog-padding-y * 2 !default;
+$dialog-padding      : $dialog-padding-y $dialog-padding-x;
+$dialog-header-margin: 1.5rem;
+$dialog-footer-margin: 1.8rem;
+$dialog-max-width-md : 600px;
+$dialog-max-width-lg : 900px;
+
+$modal-padding-y   : 32px;
+$modal-padding-x   : 48px;
+$modal-max-width-md: $dialog-max-width-md;
+$modal-max-width-lg: $dialog-max-width-lg;

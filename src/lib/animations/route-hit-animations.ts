@@ -30,9 +30,9 @@ export const ROUTE_HIT_ANIMATIONS = trigger('routeHitAnimations', [
 					optional
 				),
 				group([
-					query(`:enter`, style({ opacity: 1, position: 'static' }), optional),
+					query(`:enter:not(bp-right-drawer)`, style({ opacity: 1, position: 'static' }), optional),
 					query(
-						`:enter > *${except}`,
+						`:enter:not(bp-right-drawer) > *${except}`,
 						[
 							style({
 								transform: 'translateY(-3%)',

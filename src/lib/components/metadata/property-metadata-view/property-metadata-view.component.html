@@ -144,13 +144,13 @@
 
 	<ng-template #booleanViewTypeTpl>
 		<ng-container *ngIf="table; else defaultBooleanViewTypeTpl">
-			<mat-icon class="mr-1">
+			<mat-icon>
 				{{ value ? 'check' : 'remove' }}
 			</mat-icon>
 		</ng-container>
 		<ng-template #defaultBooleanViewTypeTpl>
-			<span *ngIf="value">
-				<mat-icon class="mr-1">check</mat-icon>
+			<span>
+				<mat-icon class="mr-1">{{ value ? 'check' : 'close' }}</mat-icon>
 				{{ metadata.label }}
 			</span>
 		</ng-template>

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { isInteger } from 'lodash-es';
+import { isInteger, isNil } from 'lodash-es';
 
 import { CurrencyCode, Currency } from '../models';
 
@@ -12,7 +12,10 @@ export class BpCurrencyPipe implements PipeTransform {
 	/**
 	 * if currencyCode is null no currency symbol gets rendered
 	 */
-	transform(value: number, currencyOrCurrencyCode?: Currency | CurrencyCode) {
+	transform(value: number | null, currencyOrCurrencyCode?: Currency | CurrencyCode) {
+		if (isNil(value))
+			return '';
+
 		const currency = currencyOrCurrencyCode
 			? currencyOrCurrencyCode instanceof Currency ? currencyOrCurrencyCode : new Currency(currencyOrCurrencyCode)
 			: undefined;

@@ -25,7 +25,7 @@ import {
 
 import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
-	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe, BpCurrencyPipe
+	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe, BpCurrencyPipe, SumByPipe
 } from './pipes';
 
 import {
@@ -128,7 +128,8 @@ const EXPOSED = [
 	StartCasePipe,
 	TakePipe,
 	PropertiesMetadataColspanPipe,
-	BpCurrencyPipe
+	BpCurrencyPipe,
+	SumByPipe
 ];
 
 @NgModule({
