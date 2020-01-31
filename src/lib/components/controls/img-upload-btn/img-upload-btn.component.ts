@@ -33,7 +33,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 
 	@ViewChild('filePicker', { static: true }) filePickerRef!: ElementRef<HTMLInputElement>;
 
-	@Output() readonly busy = new Subject();
+	@Output('busy') readonly busy$ = new Subject();
 
 	get filePicker() { return this.filePickerRef.nativeElement; }
 
@@ -45,7 +45,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 		super(cdr);
 
 		this.firebase.uploadProgress$
-			.subscribe(v => this.busy.next(isNumber(v)));
+			.subscribe(v => this.busy$.next(isNumber(v)));
 
 		this.firebase.uploadedDownloadUrl$
 			.subscribe(v => this.setValue(v));

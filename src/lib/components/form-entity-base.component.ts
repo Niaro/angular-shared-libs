@@ -16,7 +16,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 
 	@Input() entity!: T | null;
 
-	@Output() readonly entityChange = new Subject<T>();
+	@Output('entityChange') readonly entityChange$ = new Subject<T>();
 
 	@Input() factory!: (v?: Partial<T>) => T;
 
@@ -88,11 +88,11 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 						)
 					: of(null)
 				),
-				filter(() => !!this.entityChange.observers.length),
+				filter(() => !!this.entityChange$.observers.length),
 				auditTime(250),
 				map(v => v && this.factory({ ...this.entity, ...v })),
 				filter(v => !isEqual(v, this.entity))
 			)
-			.subscribe(this.entityChange);
+			.subscribe(this.entityChange$);
 	}
 }

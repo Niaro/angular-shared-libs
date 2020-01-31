@@ -5,14 +5,14 @@ import { ZoneService } from '@bp/shared/providers/zone.service';
 
 type callback = (pending: boolean) => any;
 
-export function pending<T>(callbackOrSubject: callback | Subject<boolean>): OperatorFunction<T, T> {
-	return (source: Observable<T>) => {
+export function pending<T>(callbackOrSubject$: callback | Subject<boolean>): OperatorFunction<T, T> {
+	return (source$: Observable<T>) => {
 		let currentState: boolean;
 		const emit = (state: boolean) => {
 			if (state !== currentState)
-				callbackOrSubject instanceof Subject
-					? callbackOrSubject.next(state)
-					: ZoneService.zone.runTask(() => callbackOrSubject(state));
+				callbackOrSubject$ instanceof Subject
+					? callbackOrSubject$.next(state)
+					: ZoneService.zone.runTask(() => callbackOrSubject$(state));
 			currentState = state;
 		};
 
@@ -21,7 +21,7 @@ export function pending<T>(callbackOrSubject: callback | Subject<boolean>): Oper
 				emit(true);
 				subscriber.complete();
 			}),
-			source.pipe(tap({
+			source$.pipe(tap({
 				next: () => emit(false),
 				error: () => emit(false),
 				complete: () => emit(false)

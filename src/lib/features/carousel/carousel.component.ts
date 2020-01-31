@@ -177,8 +177,8 @@ export class CarouselComponent implements AfterViewInit, OnChanges, OnDestroy {
 
 		fromEvent(window, 'resize')
 			.pipe(
+				subscribeOn(BpScheduler.outside),
 				takeUntil(this.destroyed$),
-				subscribeOn(BpScheduler.outside)
 			)
 			.subscribe(() => this.onResize());
 

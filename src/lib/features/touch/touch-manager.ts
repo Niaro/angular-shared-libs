@@ -12,6 +12,7 @@ const MOVE_MIN_LENGTH = 10;
 const SWIPE_MIN_LENGTH = 30;
 
 export class TouchManager {
+
 	static events = [ // TODO: Change to string enums after TS 2.4 release
 		'touchStart', 'touchMove', 'touchEnd', 'touchCancel',
 		'tap', 'singleTap', 'doubleTap', 'longTap',
@@ -19,36 +20,52 @@ export class TouchManager {
 	];
 
 	touchStart$!: Observable<TouchEvent>;
+
 	touchMove$!: Observable<TouchEvent>;
+
 	touchEnd$!: Observable<TouchEvent>;
+
 	touchCancel$!: Observable<TouchEvent>;
 
 	tap$!: Observable<TouchEvent>;
+
 	singleTap$!: Observable<TouchEvent>;
+
 	doubleTap$!: Observable<TouchEvent>;
+
 	longTap$!: Observable<TouchEvent>;
 
 	pan$!: Observable<IPanEvent>;
+
 	swipe$!: Observable<ISwipeEvent>;
+
 	pinch$!: Observable<IPinchEvent>;
+
 	rotate$!: Observable<IRotateEvent>;
 
 	private isMoved!: boolean;
+
 	private isDoubleTap!: boolean;
+
 	private startPosition!: Point;
+
 	private lastPosition!: Point;
+
 	private lastVector!: Vector;
 
 	// position at previous tap
-	// position at previous tap
 	private prevPosition!: Point;
+
 	private prevTime!: Date;
 
 	private timeouts = new Map<TimeoutType, number>();
+
 	private subjects: { [event: string]: Subject<TouchEvent> } = {};
+
 	private subscriptions: Subscription[] = [];
 
 	constructor($element: Element, zone: NgZone) {
+
 		this.subscriptions.push(...zone.runOutsideAngular(() => [
 			fromEvent<TouchEvent>($element, 'touchstart').subscribe(e => this.onStart(e)),
 			fromEvent<TouchEvent>($element, 'touchmove').subscribe(e => this.onMove(e)),

@@ -53,8 +53,8 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 	) {
 		router.events
 			.pipe(
+				filter(e => e instanceof NavigationEnd),
 				takeUntil(this.destroyed$),
-				filter(e => e instanceof NavigationEnd)
 			)
 			.subscribe(() => this.updateTargetUrlAndHref());
 	}

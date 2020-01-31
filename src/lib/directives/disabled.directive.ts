@@ -15,9 +15,9 @@ export class DisabledDirective implements OnChanges {
 
 	private get $host() { return this.host.nativeElement as HTMLElement; }
 
-	private storedPointerEventsStyle!: string | null;
+	private store$dPointerEventsStyle!: string | null;
 
-	private storedTabIndex!: string | null;
+	private store$dTabIndex!: string | null;
 
 	constructor(private host: ElementRef) { }
 
@@ -29,17 +29,17 @@ export class DisabledDirective implements OnChanges {
 	}
 
 	private setVeil() {
-		this.storedPointerEventsStyle = this.$host.style.pointerEvents;
-		this.storedTabIndex = this.$host.getAttribute('tabindex');
+		this.store$dPointerEventsStyle = this.$host.style.pointerEvents;
+		this.store$dTabIndex = this.$host.getAttribute('tabindex');
 		this.$host.setAttribute('tabindex', '-1');
 		this.$host.style.pointerEvents = 'none';
 		this.$host.appendChild(this.$veil);
 	}
 
 	private removeVeil() {
-		this.$host.style.pointerEvents = this.storedPointerEventsStyle;
-		if (this.storedTabIndex !== null)
-			this.$host.setAttribute('tabindex', this.storedTabIndex);
+		this.$host.style.pointerEvents = this.store$dPointerEventsStyle;
+		if (this.store$dTabIndex !== null)
+			this.$host.setAttribute('tabindex', this.store$dTabIndex);
 		this.$veil.remove();
 	}
 

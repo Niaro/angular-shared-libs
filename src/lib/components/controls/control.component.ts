@@ -9,7 +9,7 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 
 	@Input() value: T | null = null;
 
-	@Output() readonly valueChange = new Subject<T>();
+	@Output('valueChange') readonly valueChange$ = new Subject<T>();
 
 	@HostBinding('class.control') isControl = true;
 
@@ -72,7 +72,7 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 		this.value = value as T;
 
 		if (emitChange) {
-			this.valueChange.next(value as T);
+			this.valueChange$.next(value as T);
 			this.onChange(value);
 		}
 

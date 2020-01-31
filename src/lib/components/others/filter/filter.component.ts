@@ -62,7 +62,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			.pipe(
 				startWith(this.controlsQuery),
 				map((q: QueryList<FilterControlDirective>) => q.toArray()),
-				shareReplay(1)
+				shareReplay({ refCount: false, bufferSize: 1 })
 			);
 
 		/**

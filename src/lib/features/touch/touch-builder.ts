@@ -5,6 +5,7 @@ import { TouchManager } from './touch-manager';
 
 @Injectable()
 export class TouchBuilder {
+
 	constructor(private zone: NgZone) { }
 
 	build(elementOrSelector: string | Element): TouchManager | null {

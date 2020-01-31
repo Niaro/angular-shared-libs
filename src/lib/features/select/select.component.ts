@@ -255,7 +255,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	private _uid = `mat-select-${nextUniqueId++}`;
 
 	/** Emits whenever the component is destroyed. */
-	private readonly _destroy = new Subject<void>();
+	private readonly _destroy$ = new Subject<void>();
 
 	SELECT_PANEL_PADDING_H = SELECT_PANEL_PADDING_X * 2;
 
@@ -284,7 +284,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	_transformOrigin = 'top';
 
 	/** Emits when the panel element is finished transforming in. */
-	_panelDoneAnimatingStream = new Subject<string>();
+	_panelDoneAnimating$ = new Subject<string>();
 
 	/** Strategy that will be used to handle scrolling while the select panel is open. */
 	_scrollStrategy: ScrollStrategy;
@@ -449,7 +449,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	private _id!: string;
 
 	/** Combined stream of all of the child options' change events. */
-	readonly optionSelectionChanges: Observable<MatOptionSelectionChange> = defer(() => {
+	readonly optionSelectionChanges$: Observable<MatOptionSelectionChange> = defer(() => {
 		const options = this.options;
 
 		if (options) {
@@ -461,18 +461,18 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 		return this._ngZone.onStable
 			.asObservable()
-			.pipe(take(1), switchMap(() => this.optionSelectionChanges));
+			.pipe(take(1), switchMap(() => this.optionSelectionChanges$));
 	}) as Observable<MatOptionSelectionChange>;
 
 	/** Event emitted when the select panel has been toggled. */
 	@Output() readonly openedChange = new EventEmitter<boolean>();
 
 	/** Event emitted when the select has been opened. */
-	@Output('opened') readonly _openedStream: Observable<void> =
+	@Output('opened') readonly _opened$: Observable<void> =
 		this.openedChange.pipe(filter(o => o), map(() => { }));
 
 	/** Event emitted when the select has been closed. */
-	@Output('closed') readonly _closedStream: Observable<void> =
+	@Output('closed') readonly _closed$: Observable<void> =
 		this.openedChange.pipe(filter(o => !o), map(() => { }));
 
 	/** Event emitted when the selected value has been changed by the user. */
@@ -525,8 +525,8 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		// We need `distinctUntilChanged` here, because some browsers will
 		// fire the animation end event twice for the same animation. See:
 		// https://github.com/angular/angular/issues/24084
-		this._panelDoneAnimatingStream
-			.pipe(distinctUntilChanged(), takeUntil(this._destroy))
+		this._panelDoneAnimating$
+			.pipe(distinctUntilChanged(), takeUntil(this._destroy$))
 			.subscribe(() => {
 				if (this.panelOpen) {
 					this._scrollTop = 0;
@@ -539,7 +539,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			});
 
 		this._viewportRuler.change()
-			.pipe(takeUntil(this._destroy))
+			.pipe(takeUntil(this._destroy$))
 			.subscribe(() => {
 				if (this._panelOpen) {
 					this._triggerRect = this.trigger.nativeElement.getBoundingClientRect();
@@ -551,12 +551,12 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	ngAfterContentInit() {
 		this._initKeyManager();
 
-		this._selectionModel.changed.pipe(takeUntil(this._destroy)).subscribe(event => {
+		this._selectionModel.changed.pipe(takeUntil(this._destroy$)).subscribe(event => {
 			event.added.forEach(option => option.select());
 			event.removed.forEach(option => option.deselect());
 		});
 
-		this.options.changes.pipe(startWith(null), takeUntil(this._destroy)).subscribe(() => {
+		this.options.changes.pipe(startWith(null), takeUntil(this._destroy$)).subscribe(() => {
 			this._resetOptions();
 			this._initializeSelection();
 		});
@@ -581,8 +581,8 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	}
 
 	ngOnDestroy() {
-		this._destroy.next();
-		this._destroy.complete();
+		this._destroy$.next();
+		this._destroy$.complete();
 		this.stateChanges.complete();
 	}
 
@@ -904,7 +904,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			.withHorizontalOrientation(this._isRtl() ? 'rtl' : 'ltr')
 			.withAllowedModifierKeys(['shiftKey']);
 
-		this._keyManager.tabOut.pipe(takeUntil(this._destroy)).subscribe(() => {
+		this._keyManager.tabOut.pipe(takeUntil(this._destroy$)).subscribe(() => {
 			// Select the active item when tabbing away. This is consistent with how the native
 			// select behaves. Note that we only want to do this in single selection mode.
 			if (!this.multiple && this._keyManager.activeItem) {
@@ -917,7 +917,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			this.close();
 		});
 
-		this._keyManager.change.pipe(takeUntil(this._destroy)).subscribe(() => {
+		this._keyManager.change.pipe(takeUntil(this._destroy$)).subscribe(() => {
 			if (this._panelOpen && this.panel) {
 				this._scrollActiveOptionIntoView();
 			} else if (!this._panelOpen && !this.multiple && this._keyManager.activeItem) {
@@ -928,9 +928,9 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 	/** Drops current option subscriptions and IDs and resets from scratch. */
 	private _resetOptions(): void {
-		const changedOrDestroyed = merge(this.options.changes, this._destroy);
+		const changedOrDestroyed$ = merge(this.options.changes, this._destroy$);
 
-		this.optionSelectionChanges.pipe(takeUntil(changedOrDestroyed)).subscribe(event => {
+		this.optionSelectionChanges$.pipe(takeUntil(changedOrDestroyed$)).subscribe(event => {
 			this._onSelect(event.source, event.isUserInput);
 
 			if (event.isUserInput && !this.multiple && this._panelOpen) {
@@ -942,7 +942,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		// Listen to changes in the internal state of the options and react accordingly.
 		// Handles cases like the labels of the selected options changing.
 		merge(...this.options.map(option => option._stateChanges))
-			.pipe(takeUntil(changedOrDestroyed))
+			.pipe(takeUntil(changedOrDestroyed$))
 			.subscribe(() => {
 				this._changeDetectorRef.markForCheck();
 				this.stateChanges.next();
