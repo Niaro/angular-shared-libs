@@ -41,7 +41,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@Input() filterListFn?: (item: any, search: string) => boolean;
 
-	@Output() readonly inputChanges = new Subject<string>();
+	@Output('inputChanges') readonly inputChanges$ = new Subject<string>();
 
 	@ContentChild(TemplateRef, { static: false }) optionTpl?: TemplateRef<any>;
 
@@ -59,7 +59,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		super(host, cdr, formGroupDirective);
 
 
-		this.internalControl.valueChanges.subscribe(v => this.inputChanges.next(v));
+		this.internalControl.valueChanges.subscribe(v => this.inputChanges$.next(v));
 	}
 
 	ngOnChanges(changes: SimpleChanges) {

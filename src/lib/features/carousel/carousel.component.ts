@@ -181,8 +181,8 @@ export class CarouselComponent
 
 		fromEvent(window, 'resize')
 			.pipe(
+				subscribeOn(BpScheduler.outside),
 				this.takeUntilDestroyed,
-				subscribeOn(BpScheduler.outside)
 			)
 			.subscribe(() => this.onResize());
 

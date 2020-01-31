@@ -7,11 +7,11 @@
 	<div class="mat-select-value bp-select-value"
 		 [ngSwitch]="empty">
 		<span class="mat-select-placeholder bp-select-placeholder"
-			  *ngSwitchCase="true">{{placeholder || '\u00A0'}}</span>
+			  *ngSwitchCase="true">{{ placeholder || '\u00A0' }}</span>
 		<span class="mat-select-value-text bp-select-value-text"
 			  *ngSwitchCase="false"
 			  [ngSwitch]="!!customTrigger">
-			<span *ngSwitchDefault>{{triggerValue || '\u00A0'}}</span>
+			<span *ngSwitchDefault>{{ triggerValue || '\u00A0' }}</span>
 			<ng-content select="bp-select-trigger"
 						*ngSwitchCase="true"></ng-content>
 		</span>
@@ -42,7 +42,7 @@
 			 [ngClass]="panelClass"
 			 [class.font-size-override]="!_disableOptionCentering"
 			 [@transformPanel]="multiple ? 'showing-multiple' : 'showing'"
-			 (@transformPanel.done)="_panelDoneAnimatingStream.next($event.toState)"
+			 (@transformPanel.done)="_panelDoneAnimating$.next($event.toState)"
 			 [style.transformOrigin]="_disableOptionCentering ? '50% 0 0' : _transformOrigin"
 			 [style.font-size.px]="_disableOptionCentering ? '' : _triggerFontSize"
 			 (keydown)="_handleKeydown($event)">

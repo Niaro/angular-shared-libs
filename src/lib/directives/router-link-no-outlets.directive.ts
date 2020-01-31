@@ -54,8 +54,8 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 
 		router.events
 			.pipe(
+				filter(e => e instanceof NavigationEnd),
 				this.takeUntilDestroyed,
-				filter(e => e instanceof NavigationEnd)
 			)
 			.subscribe(() => this.updateTargetUrlAndHref());
 	}
