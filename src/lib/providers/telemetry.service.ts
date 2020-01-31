@@ -14,13 +14,13 @@ if (env.remoteServer && location.hostname !== 'localhost' && env.logrocket) {
 			shouldAggregateConsoleErrors: true,
 		},
 		network: {
-			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string | null> }) => {
+			requestSanitizer: request => {
 				// if the url contains 'ignore'
 				if (request.url.toLowerCase().includes('deposit'))
 					// scrub out the body
-					request.body = null;
+					request.body = undefined;
 
-				request.headers['Authorization'] = null;
+				request.headers['Authorization'] = undefined;
 				return request;
 			},
 		},
