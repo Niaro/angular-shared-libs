@@ -1,5 +1,4 @@
 import { assign, escapeRegExp } from 'lodash-es';
-import 'rxjs/add/observable/of';
 
 export class TextMaskConfig {
 	/**
