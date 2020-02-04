@@ -14,7 +14,7 @@ if (env.remoteServer && location.hostname !== 'localhost' && env.logrocket) {
 			shouldAggregateConsoleErrors: true,
 		},
 		network: {
-			requestSanitizer: (request) => {
+			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string | undefined>; }) => {
 				// if the url contains 'ignore'
 				if (request.url.toLowerCase().includes('deposit'))
 					// scrub out the body
