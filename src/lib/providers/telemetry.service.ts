@@ -44,7 +44,7 @@ export class TelemetryService {
 		TelemetryService.captureError(error, 'app');
 	}
 
-	private static captureError(error: Error | any, source: string) {
+	static captureError(error: Error | any, source: string) {
 		if (env.remoteServer)
 			LogRocket.captureException(
 				error instanceof Error ? error : new Error(JSON.stringify(error)),
