@@ -3,6 +3,7 @@ export * from './api-response.interceptor.service';
 export * from './environment.service';
 export * from './file-loader.service';
 export * from './firebase.service';
+export * from './intercom.service';
 export * from './router.service';
 export * from './telemetry.service';
 export * from './title.service';
