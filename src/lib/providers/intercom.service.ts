@@ -6,30 +6,29 @@ import { EnvironmentService } from './environment.service';
 
 declare var Intercom: (action: 'boot' | 'update' | 'shutdown', options?: Object) => void;
 
+type BootConfig = { name: string, email: string, created_at?: string; };
+
 @Injectable({
 	providedIn: 'root'
 })
 export class IntercomService {
 
-	private _inited = false;
+	private _isFirstBoot = true;
 
 	constructor(
 		private router: RouterService,
 		private env: EnvironmentService
 	) { }
 
-	init(config?: { name: string, email: string, created_at?: string; }) {
-		if (!this._inited) {
+	boot(config?: BootConfig) {
+		if (this._isFirstBoot) {
 			this._injectScript();
 			this._updateOrShutdownOnPageChange();
 		}
 
-		Intercom('boot', {
-			app_id: this.env.isProd ? 'wnux4tup' : 'ubsz57yv',
-			...(config ?? {})
-		});
+		this._boot(config);
 
-		this._inited = true;
+		this._isFirstBoot = false;
 	}
 
 	company(company: {
@@ -42,6 +41,13 @@ export class IntercomService {
 		created_at?: number,
 	}) {
 		this._update({ company });
+	}
+
+	private _boot(config?: BootConfig) {
+		Intercom('boot', {
+			app_id: this.env.isProd ? 'wnux4tup' : 'ubsz57yv',
+			...(config ?? {})
+		});
 	}
 
 	private _updateOrShutdownOnPageChange() {

@@ -36,7 +36,8 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 						.pipe(map(v => new ResponseError(JSON.parse(v)))),
 					of(new ResponseError(e))
 				).pipe(flatMap(error => {
-					this.router.tryNavigateOnResponseError(error);
+					if (!error.url || !error.url.includes('do-not-redirect-on-500x'))
+						this.router.tryNavigateOnResponseError(error);
 					return throwError(error);
 				}))
 				));
