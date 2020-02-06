@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { timer, EMPTY } from 'rxjs';
+import { timer, EMPTY, of } from 'rxjs';
 import { map, first, shareReplay } from 'rxjs/operators';
 
 import { environment } from '@bp/environment';
@@ -55,7 +55,7 @@ export class IntercomService {
 				first(v => !!v),
 				shareReplay({ bufferSize: 1, refCount: false })
 		)
-		: EMPTY;
+		: of(undefined);
 
 	constructor(
 		private _env: EnvironmentService,
@@ -83,7 +83,7 @@ export class IntercomService {
 		this.update({ company });
 	}
 
-	getUserId(): Promise<string> {
+	getUserId(): Promise<string | undefined> {
 		return this._userId$.toPromise();
 	}
 
@@ -93,9 +93,10 @@ export class IntercomService {
 
 	private async _integrateIntercomAndLogrocket() {
 		const userId = await this.getUserId();
-		console.warn('intercome user id', userId);
-		this._linkLogrocketSessionsToIntercomUser(userId);
-		this._trackLogrocketSessionOnIntercom();
+		if (userId) {
+			this._linkLogrocketSessionsToIntercomUser(userId);
+			this._trackLogrocketSessionOnIntercom();
+		}
 	}
 
 	private _linkLogrocketSessionsToIntercomUser(userId: string) {
