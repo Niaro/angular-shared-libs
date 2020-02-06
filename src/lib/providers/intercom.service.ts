@@ -7,6 +7,7 @@ import { environment } from '@bp/environment';
 import { $ } from '../utils';
 import { RouterService } from './router.service';
 import { TelemetryService } from './telemetry.service';
+import { EnvironmentService } from './environment.service';
 
 type IntercomCompany = {
 	id: string,
@@ -19,6 +20,7 @@ type IntercomCompany = {
 };
 
 type IntercomConfig = {
+	source?: 'promo-website' | 'merchant-admin',
 	app_id?: string;
 	user_id?: string;
 	email?: string;
@@ -46,7 +48,7 @@ export class IntercomService {
 
 	private _isFirstBoot = true;
 
-	private _userId$ = this.enabled
+	private _userId$ = this.enabled && this._env.isRemoteServer
 		? timer(0, 50)
 			.pipe(
 				map(() => <string><unknown>Intercom('getVisitorId')),
@@ -56,6 +58,7 @@ export class IntercomService {
 		: EMPTY;
 
 	constructor(
+		private _env: EnvironmentService,
 		private _router: RouterService,
 		private _telemetry: TelemetryService
 	) { }
@@ -64,7 +67,7 @@ export class IntercomService {
 		if (this._isFirstBoot) {
 			this._injectScript();
 			this._updateOrShutdownOnPageChange();
-			this._integrateIntercomAndLogrocket();
+			this._env.isRemoteServer && this._integrateIntercomAndLogrocket();
 		}
 
 		this._boot(config);
@@ -96,7 +99,7 @@ export class IntercomService {
 
 	private _linkLogrocketSessionsToIntercomUser(userId: string) {
 		this.update({
-			logrocketURL: this._telemetry.getUserLogrocketUrl(userId)
+			logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
 		});
 	}
 
