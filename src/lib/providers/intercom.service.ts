@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { timer, EMPTY, of } from 'rxjs';
+import { timer, of } from 'rxjs';
 import { map, first, shareReplay } from 'rxjs/operators';
 
 import { environment } from '@bp/environment';
