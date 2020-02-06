@@ -51,7 +51,7 @@ export class IntercomService {
 	private _userId$ = this.enabled && this._env.isRemoteServer
 		? timer(0, 50)
 			.pipe(
-				map(() => <string><unknown>Intercom('getVisitorId')),
+				map(() => <string><unknown>((<any>window).Intercom && Intercom('getVisitorId'))),
 				first(v => !!v),
 				shareReplay({ bufferSize: 1, refCount: false })
 		)
@@ -93,6 +93,7 @@ export class IntercomService {
 
 	private async _integrateIntercomAndLogrocket() {
 		const userId = await this.getUserId();
+		console.warn('intercome user id', userId);
 		this._linkLogrocketSessionsToIntercomUser(userId);
 		this._trackLogrocketSessionOnIntercom();
 	}
