@@ -2,6 +2,8 @@ import { Injectable, ErrorHandler } from '@angular/core';
 import { Dictionary } from 'lodash';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
+import { bindCallback } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { environment as env } from '@bp/environment';
 
@@ -61,7 +63,17 @@ export class TelemetryService {
 		return TelemetryService.instance = this;
 	}
 
-	registerUser(uid: string, userTraits: Dictionary<string | number | boolean| null>) {
+	getUserLogrocketUrl(userId: string) {
+		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
+	}
+
+	getSessionUrl() {
+		return bindCallback(LogRocket.getSessionURL)()
+			.pipe(map(([url]) => url))
+			.toPromise();
+	}
+
+	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
 		LogRocket.identify(uid, userTraits as any);
 	}
 

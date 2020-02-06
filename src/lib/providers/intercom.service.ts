@@ -1,29 +1,70 @@
 import { Injectable } from '@angular/core';
+import { timer, EMPTY } from 'rxjs';
+import { map, first, shareReplay } from 'rxjs/operators';
+
+import { environment } from '@bp/environment';
+
 import { $ } from '../utils';
-
 import { RouterService } from './router.service';
-import { EnvironmentService } from './environment.service';
+import { TelemetryService } from './telemetry.service';
 
-declare var Intercom: (action: 'boot' | 'update' | 'shutdown', options?: Object) => void;
+type IntercomCompany = {
+	id: string,
+	name: string,
+	plan?: string,
+	website?: string,
+	monthly_spend?: number,
+	upgraded_at?: number;
+	created_at?: number,
+};
 
-type BootConfig = { name: string, email: string, created_at?: string; };
+type IntercomConfig = {
+	app_id?: string;
+	user_id?: string;
+	email?: string;
+	name?: string;
+	created_at?: string;
+	company?: IntercomCompany;
+	[key: string]: string | Object | undefined;
+};
+
+type Intercom = {
+	(action: 'boot' | 'update', options?: IntercomConfig): void;
+	(action: 'shutdown'): void;
+	(action: 'getVisitorId'): string | undefined;
+	(action: 'trackEvent', event: string, data?: Dictionary<string>): void;
+};
+
+declare var Intercom: Intercom;
 
 @Injectable({
 	providedIn: 'root'
 })
 export class IntercomService {
 
+	enabled = !!environment.intercom;
+
 	private _isFirstBoot = true;
 
+	private _userId$ = this.enabled
+		? timer(0, 50)
+			.pipe(
+				map(() => <string><unknown>Intercom('getVisitorId')),
+				first(v => !!v),
+				shareReplay({ bufferSize: 1, refCount: false })
+		)
+		: EMPTY;
+
 	constructor(
-		private router: RouterService,
-		private env: EnvironmentService
+		private _router: RouterService,
+		private _telemetry: TelemetryService
 	) { }
 
-	boot(config?: BootConfig) {
+	boot(config?: IntercomConfig) {
 		if (this._isFirstBoot) {
 			this._injectScript();
 			this._updateOrShutdownOnPageChange();
+			this._integrateIntercomAndLogrocket();
 		}
 
 		this._boot(config);
@@ -31,34 +72,51 @@ export class IntercomService {
 		this._isFirstBoot = false;
 	}
 
-	company(company: {
-		id: string,
-		name: string,
-		plan?: string,
-		website?: string,
-		monthly_spend?: number,
-		upgraded_at?: number;
-		created_at?: number,
-	}) {
-		this._update({ company });
+	update(options?: IntercomConfig) {
+		Intercom('update', options);
 	}
 
-	private _boot(config?: BootConfig) {
+	company(company: IntercomCompany) {
+		this.update({ company });
+	}
+
+	getUserId(): Promise<string> {
+		return this._userId$.toPromise();
+	}
+
+	trackEvent(event: string, data?: Dictionary<string>) {
+		Intercom('trackEvent', event, data);
+	}
+
+	private async _integrateIntercomAndLogrocket() {
+		const userId = await this.getUserId();
+		this._linkLogrocketSessionsToIntercomUser(userId);
+		this._trackLogrocketSessionOnIntercom();
+	}
+
+	private _linkLogrocketSessionsToIntercomUser(userId: string) {
+		this.update({
+			logrocketURL: this._telemetry.getUserLogrocketUrl(userId)
+		});
+	}
+
+	private async _trackLogrocketSessionOnIntercom() {
+		const sessionURL = await this._telemetry.getSessionUrl();
+		this.trackEvent('LogRocket', { sessionURL });
+	}
+
+	private _boot(config?: IntercomConfig) {
 		Intercom('boot', {
-			app_id: this.env.isProd ? 'wnux4tup' : 'ubsz57yv',
+			app_id: environment.intercom,
 			...(config ?? {})
 		});
 	}
 
 	private _updateOrShutdownOnPageChange() {
-		this.router.navigationEnd$.subscribe(v => {
-			this._update();
+		this._router.navigationEnd$.subscribe(v => {
+			this.update();
 			v.url.includes('intro') && this._shutdown();
 		});
-	}
-
-	private _update(options?: Object) {
-		Intercom('update', options);
 	}
 
 	private _shutdown() {
@@ -67,7 +125,7 @@ export class IntercomService {
 
 	private _injectScript() {
 		$.addScriptCodeToBody({
-			code: `(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/wnux4tup'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();`
+			code: `(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/${environment.intercom}'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();`
 		});
 	}
 }
