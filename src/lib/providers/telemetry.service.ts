@@ -1,8 +1,6 @@
 import { Injectable, ErrorHandler } from '@angular/core';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
-import { bindCallback } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { environment as env } from '@bp/environment';
 
@@ -48,7 +46,7 @@ export class TelemetryService {
 		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
 	}
 
-	getSessionUrl() {
+	getSessionUrl(): Promise<string> {
 		return new Promise(resolve => LogRocket.getSessionURL(v => resolve(v)));
 	}
 
