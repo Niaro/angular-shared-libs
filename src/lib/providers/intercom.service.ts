@@ -67,7 +67,8 @@ export class IntercomService {
 		if (this._isFirstBoot) {
 			this._injectScript();
 			this._updateOrShutdownOnPageChange();
-			this._env.isRemoteServer && this._integrateIntercomAndLogrocket();
+			this._trackLogrocketSessionOnIntercom();
+			this._env.isRemoteServer && this._linkLogrocketSessionsToIntercomUser();
 		}
 
 		this._boot(config);
@@ -91,24 +92,16 @@ export class IntercomService {
 		Intercom('trackEvent', event, data);
 	}
 
-	private async _integrateIntercomAndLogrocket() {
+	private async _linkLogrocketSessionsToIntercomUser() {
 		const userId = await this.getUserId();
-		console.warn('userId', userId);
-		if (userId) {
-			this._linkLogrocketSessionsToIntercomUser(userId);
-			this._trackLogrocketSessionOnIntercom();
-		}
-	}
-
-	private _linkLogrocketSessionsToIntercomUser(userId: string) {
-		this.update({
-			logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
-		});
+		if (userId)
+			this.update({
+				logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
+			});
 	}
 
 	private async _trackLogrocketSessionOnIntercom() {
 		const sessionURL = await this._telemetry.getSessionUrl();
-		console.warn('sessonUrl', sessionURL);
 		this.trackEvent('LogRocket', { sessionURL });
 	}
 
