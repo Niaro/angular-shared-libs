@@ -1,5 +1,4 @@
 import { Injectable, ErrorHandler } from '@angular/core';
-import { Dictionary } from 'lodash';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
 import { bindCallback } from 'rxjs';
@@ -7,27 +6,9 @@ import { map } from 'rxjs/operators';
 
 import { environment as env } from '@bp/environment';
 
-if (env.remoteServer && location.hostname !== 'localhost' && env.logrocket) {
-	LogRocket.init(env.logrocket, {
-		release: env.name === 'prod' && !location.hostname.includes('demostand')
-			? env.version.release
-			: env.version.prerelease,
-		console: {
-			shouldAggregateConsoleErrors: true,
-		},
-		network: {
-			requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string | undefined>; }) => {
-				// if the url contains 'ignore'
-				if (request.url.toLowerCase().includes('deposit'))
-					// scrub out the body
-					request.body = undefined;
+import { initLogrocketIfOnRemoteServer } from './logrocket';
 
-				request.headers['Authorization'] = undefined;
-				return request;
-			},
-		},
-	});
-}
+initLogrocketIfOnRemoteServer();
 
 @Injectable({
 	providedIn: 'root'
