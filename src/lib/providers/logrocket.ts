@@ -19,15 +19,17 @@ export function initLogrocketIfOnRemoteServer() {
 function assignAssetsUrlIfPrivateApp(): { baseHref: string; } | undefined {
 	const isMerchantAdminApp = env.logrocket?.includes('merchant-admin');
 	const isAdminApp = /^(?!.*merchant).*admin.*$/.test(env.logrocket || '');
+	const isDemostand = env.logrocket?.includes('demostand');
 
-	if (!isMerchantAdminApp && !isAdminApp)
+	if (!isMerchantAdminApp && !isAdminApp && !isDemostand)
 		return;
 
 	const merchantPrefixOrEmpty = isMerchantAdminApp ? 'merchant-' : '';
-	const baseHref = `https://storage.googleapis.com/${merchantPrefixOrEmpty}admin-logrocket-assets/${env.name}/${env.version.prerelease}/`;
-	console.warn(baseHref);
+
 	return {
-		baseHref
+		baseHref: isDemostand
+			? 'https://cashier-demostand.web.app/'
+			: `https://storage.googleapis.com/${merchantPrefixOrEmpty}admin-logrocket-assets/${env.name}/${env.version.prerelease}/`
 	};
 }
 
