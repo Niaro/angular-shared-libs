@@ -1,31 +1,12 @@
 import { Injectable, ErrorHandler } from '@angular/core';
-import { Dictionary } from 'lodash';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
 
 import { environment as env } from '@bp/environment';
 
-if (env.remoteServer && location.hostname !== 'localhost' && env.logrocket) {
-	LogRocket.init(env.logrocket, {
-		release: env.name === 'prod' && !location.hostname.includes('demostand')
-			? env.version.release
-			: env.version.prerelease,
-		console: {
-			shouldAggregateConsoleErrors: true,
-		},
-		network: {
-			requestSanitizer: request => {
-				// if the url contains 'ignore'
-				if (request.url.toLowerCase().includes('deposit'))
-					// scrub out the body
-					request.body = undefined;
+import { initLogrocketIfOnRemoteServer } from './logrocket';
 
-				request.headers['Authorization'] = undefined;
-				return request;
-			},
-		},
-	});
-}
+initLogrocketIfOnRemoteServer();
 
 @Injectable({
 	providedIn: 'root'
@@ -44,7 +25,7 @@ export class TelemetryService {
 		TelemetryService.captureError(error, 'app');
 	}
 
-	private static captureError(error: Error | any, source: string) {
+	static captureError(error: Error | any, source: string) {
 		if (env.remoteServer)
 			LogRocket.captureException(
 				error instanceof Error ? error : new Error(JSON.stringify(error)),
@@ -61,7 +42,15 @@ export class TelemetryService {
 		return TelemetryService.instance = this;
 	}
 
-	registerUser(uid: string, userTraits: Dictionary<string | number | boolean| null>) {
+	getUserLogrocketUrl(userId: string) {
+		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
+	}
+
+	getSessionUrl(): Promise<string> {
+		return new Promise(resolve => LogRocket.getSessionURL(v => resolve(v)));
+	}
+
+	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
 		LogRocket.identify(uid, userTraits as any);
 	}
 

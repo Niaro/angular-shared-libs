@@ -40,7 +40,7 @@ import { TouchModule, CarouselModule, SvgIconsModule, ModalModule, BpSelectModul
 
 import {
 	RouterService, TelemetryService, ZoneService, EnvironmentService, FirebaseService, FileLoaderService,
-	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler, TitleService
+	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler, TitleService, IntercomService
 } from './providers';
 
 const MODULES = [
@@ -172,6 +172,7 @@ export class SharedModule {
 				FirebaseService,
 				FileLoaderService,
 				TitleService,
+				IntercomService,
 				{ provide: HTTP_INTERCEPTORS, useClass: ApiResponseInterceptorService, multi: true },
 				{ provide: HTTP_INTERCEPTORS, useClass: ApiRequestInterceptorService, multi: true },
 				{ provide: ErrorHandler, useClass: AppErrorHandler },
