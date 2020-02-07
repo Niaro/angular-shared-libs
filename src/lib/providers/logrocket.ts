@@ -24,9 +24,10 @@ function assignAssetsUrlIfPrivateApp(): { baseHref: string; } | undefined {
 		return;
 
 	const merchantPrefixOrEmpty = isMerchantAdminApp ? 'merchant-' : '';
-
+	const baseHref = `https://storage.googleapis.com/${merchantPrefixOrEmpty}admin-logrocket-assets/${env.name}/${env.version.prerelease}/`;
+	console.warn(baseHref);
 	return {
-		baseHref: `https://storage.googleapis.com/${merchantPrefixOrEmpty}admin-logrocket-assets/${env.name}/${env.version.prerelease}`
+		baseHref
 	};
 }
 

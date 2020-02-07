@@ -108,6 +108,7 @@ export class IntercomService {
 
 	private async _trackLogrocketSessionOnIntercom() {
 		const sessionURL = await this._telemetry.getSessionUrl();
+		console.warn('sessonUrl', sessionURL);
 		this.trackEvent('LogRocket', { sessionURL });
 	}
 
