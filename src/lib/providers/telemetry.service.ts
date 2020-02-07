@@ -49,9 +49,7 @@ export class TelemetryService {
 	}
 
 	getSessionUrl() {
-		return bindCallback(LogRocket.getSessionURL)()
-			.pipe(map(([url]) => url))
-			.toPromise();
+		return new Promise(resolve => LogRocket.getSessionURL(v => resolve(v)));
 	}
 
 	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
