@@ -93,6 +93,7 @@ export class IntercomService {
 
 	private async _integrateIntercomAndLogrocket() {
 		const userId = await this.getUserId();
+		console.warn('userId');
 		if (userId) {
 			this._linkLogrocketSessionsToIntercomUser(userId);
 			this._trackLogrocketSessionOnIntercom();
