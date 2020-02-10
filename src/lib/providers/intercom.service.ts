@@ -52,8 +52,7 @@ export class IntercomService {
 		? timer(0, 50)
 			.pipe(
 				map(() => <string><unknown>((<any>window).Intercom && Intercom('getVisitorId'))),
-				first(v => !!v),
-				shareReplay({ bufferSize: 1, refCount: false })
+				first(v => !!v)
 		)
 		: of(undefined);
 
