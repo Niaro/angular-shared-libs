@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { timer, of } from 'rxjs';
-import { map, first, shareReplay } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 import { environment } from '@bp/environment';
 
