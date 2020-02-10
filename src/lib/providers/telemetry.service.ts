@@ -4,9 +4,7 @@ import createNgrxMiddleware from 'logrocket-ngrx';
 
 import { environment as env } from '@bp/environment';
 
-import { initLogrocketIfOnRemoteServer } from './logrocket';
-
-initLogrocketIfOnRemoteServer();
+import { whenOnRemoteServerInitLogrocket } from './logrocket';
 
 @Injectable({
 	providedIn: 'root'
@@ -14,6 +12,8 @@ initLogrocketIfOnRemoteServer();
 export class TelemetryService {
 
 	static logrocketMetaReducer = createNgrxMiddleware(LogRocket);
+
+	static enabled = whenOnRemoteServerInitLogrocket();
 
 	private static instance: TelemetryService;
 
@@ -34,6 +34,8 @@ export class TelemetryService {
 		else
 			console.error(error);
 	}
+
+	get enabled() { return TelemetryService.enabled; }
 
 	constructor() {
 		if (TelemetryService.instance)

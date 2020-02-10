@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { filter, startWith, first, switchMap } from 'rxjs/operators';
-import { LocalStorageService } from 'angular-2-local-storage';
-import { Dictionary } from 'lodash';
+import { filter, first, switchMap } from 'rxjs/operators';
 
 import { environment } from '@bp/environment';
 
+export const BYPASS_INTERCEPTOR = 'bypass-interceptor';
 export const CORRELATION_ID_KEY = 'x-correlation-id';
-const MOCK_RESPONSE_CODE = 'x-mock-response-code';
 const CONTENT_TYPE = 'Content-Type';
 const { url: API_URL, version: API_VERSION } = environment.api || { url: '', version: '' };
 
@@ -21,8 +19,6 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 	headers: Dictionary<string | null> = {
 		[CONTENT_TYPE]: 'application/json',
 		'json-naming-strategy': 'camelcase',
-		'x-api-key': environment.mockKey,
-		[MOCK_RESPONSE_CODE]: '200',
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302
 		// response code which if handled by the browser redirects the page, but with the service worker used as proxy for the api calls
 		// it doesn't happpen
@@ -31,19 +27,21 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		'credentials': 'same-origin'
 	};
 
-	checkAuthorization = false;
+	private _shouldWaitForAuthorizationToken = false;
 
 	baseUrl = `${API_URL ? (API_URL.includes('api') ? API_URL : `${API_URL}/api`) : '/api'}${API_VERSION ? `/${API_VERSION}` : ''}`;
 
 	private authorized$ = new BehaviorSubject(false);
 
-	constructor(private localStorage: LocalStorageService) {
+	constructor() {
 		if (ApiRequestInterceptorService.instance)
 			return ApiRequestInterceptorService.instance;
 
-		environment.localServer && this.initMockResponseCodeHook();
-
 		return ApiRequestInterceptorService.instance = this;
+	}
+
+	waitForAuthorizationTokenOnXHRs() {
+		this._shouldWaitForAuthorizationToken = true;
 	}
 
 	authorized(token: string | null | undefined): void {
@@ -52,7 +50,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-		return request.url.includes('auth') || request.url.includes('bypass') || !this.checkAuthorization
+		return this._checkShouldWaitForAuthorizationToken(request)
 			? this.enhanceRequest(request, next)
 			: this.authorized$.pipe(
 				filter(it => !!it),
@@ -61,12 +59,17 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 			);
 	}
 
+	private _checkShouldWaitForAuthorizationToken(request: HttpRequest<any>) {
+		return !request.url.includes('auth')
+			&& !request.url.includes(BYPASS_INTERCEPTOR)
+			&& this._shouldWaitForAuthorizationToken;
+	}
+
 	private enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
-		const url = request.url.startsWith('http') || request.url.includes('assets') || request.url.includes('bypass')
-			? request.url
-			: `${this.baseUrl}/${request.url}`;
 		return next.handle(request.clone({
-			url,
+			url: this._shouldIncludeBaseHrefIntoXHRUrl(request)
+				? `${this.baseUrl}/${request.url}`
+				: request.url,
 			setHeaders: {
 				...(request.url.startsWith('http') ? {} : this.headers),
 				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this.headers[CONTENT_TYPE] || '',
@@ -74,20 +77,9 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 		}));
 	}
 
-	private initMockResponseCodeHook() {
-		this.localStorage.setItems$
-			.pipe(
-				filter(e => e.key === MOCK_RESPONSE_CODE),
-				startWith({
-					key: MOCK_RESPONSE_CODE,
-					newvalue: this.localStorage.get<string>(MOCK_RESPONSE_CODE),
-				})
-			)
-			.subscribe(e => (this.headers[e.key] = e.newvalue ? e.newvalue : '200'));
-
-		Object.defineProperty(window, 'bpMockResponseCode', {
-			get: () => this.localStorage.get(MOCK_RESPONSE_CODE),
-			set: (value: string) => this.localStorage.set(MOCK_RESPONSE_CODE, value),
-		});
+	private _shouldIncludeBaseHrefIntoXHRUrl(request: HttpRequest<any>) {
+		return !request.url.startsWith('http')
+			&& !request.url.includes('assets')
+			&& !request.url.includes(BYPASS_INTERCEPTOR);
 	}
 }
