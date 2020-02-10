@@ -4,10 +4,11 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { filter, map } from 'rxjs/operators';
 import { unset, has } from 'lodash-es';
 
+import { MODAL_OUTLET } from '@bp/shared/models/constants';
+
 import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 
-export const MODAL_OUTLET = 'modal';
 const URL_TREE_PRIMARY_MODAL_OUTLET_PATH = `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`;
 const URL_TREE_MODAL_OUTLET_PATH = `root.children.${MODAL_OUTLET}`;
 
@@ -76,7 +77,7 @@ export class ModalOutletComponent implements OnInit {
 
 		this.navigation = false;
 		this.activeDialog = this.dialogsManager.open(cmpt.modal.template, {
-			panelClass: [...(cmpt.panelClass || []), 'bp-overlay-pane']
+			panelClass: [...(cmpt.panelClass || []), 'bp-modal-overlay-pane']
 		});
 
 		this.activeDialog

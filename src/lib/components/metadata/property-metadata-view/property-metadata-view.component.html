@@ -57,8 +57,8 @@
 										 [src]="value">
 				</bp-payment-method-brand>
 
-				<ng-container *ngSwitchCase="FieldViewType.money">
-					{{ value | currency:'USD':'':isInteger(value) ? '1.0-0' : undefined }}
+				<ng-container *ngSwitchCase="FieldViewType.currency">
+					{{ value | bpCurrency }}
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.percent">
@@ -69,7 +69,7 @@
 					{{ value | moment: metadata.viewFormatter ? metadata.viewFormatter(value) : 'LL LTS'}}
 				</ng-container>
 
-				<ng-container *ngSwitchCase="FieldViewType.currency">
+				<ng-container *ngSwitchCase="FieldViewType.currencyCode">
 					{{ value.symbol === value.code ? '' : value.symbol }} {{ value.code }}
 				</ng-container>
 
@@ -144,13 +144,13 @@
 
 	<ng-template #booleanViewTypeTpl>
 		<ng-container *ngIf="table; else defaultBooleanViewTypeTpl">
-			<mat-icon class="mr-1">
+			<mat-icon>
 				{{ value ? 'check' : 'remove' }}
 			</mat-icon>
 		</ng-container>
 		<ng-template #defaultBooleanViewTypeTpl>
-			<span *ngIf="value">
-				<mat-icon class="mr-1">check</mat-icon>
+			<span>
+				<mat-icon class="mr-1">{{ value ? 'check' : 'close' }}</mat-icon>
 				{{ metadata.label }}
 			</span>
 		</ng-template>

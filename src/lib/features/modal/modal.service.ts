@@ -13,4 +13,8 @@ export class ModalService {
 	);
 
 	constructor(private dialog: MatDialog) { }
+
+	closeAll() {
+		this.dialog.closeAll();
+	}
 }

@@ -2,6 +2,7 @@ import { BehaviorSubject, AsyncSubject } from 'rxjs';
 
 import { AsyncVoidSubject } from '../../rxjs';
 import { Enumeration } from '../misc';
+import { ResponseError } from './response-error';
 
 export class ProcessingFileStatus extends Enumeration {
 	static inProgress = new ProcessingFileStatus();
@@ -28,12 +29,16 @@ export class ProcessingFile {
 	private _status$ = new BehaviorSubject<ProcessingFileStatus>(ProcessingFileStatus.inProgress);
 	status$ = this._status$.asObservable();
 	get status() { return this._status$.value; }
+
 	get isInProgress() { return this.status === ProcessingFileStatus.inProgress; }
+
 	get isFinished() { return this.status === ProcessingFileStatus.finish; }
+
 	get isCanceled() { return this.status === ProcessingFileStatus.canceled; }
+
 	get hasError() { return this.status === ProcessingFileStatus.error; }
 
-	error$ = new AsyncSubject<string>();
+	error$ = new AsyncSubject<ResponseError>();
 
 	cancel$ = new AsyncVoidSubject();
 
@@ -50,7 +55,7 @@ export class ProcessingFile {
 		this._status$.next(ProcessingFileStatus.finish);
 	}
 
-	error(val: string) {
+	error(val: ResponseError) {
 		this.error$.next(val);
 		this.error$.complete();
 		this._status$.next(ProcessingFileStatus.error);

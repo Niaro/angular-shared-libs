@@ -9,11 +9,11 @@ export abstract class ViewEntityBaseComponent<T extends Entity> {
 	@Input() metadata!: ClassMetadata;
 
 	label(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(<string>prop)!.label;
+		return this.metadata.get(prop)!.label;
 	}
 
 	meta(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(<string>prop);
+		return this.metadata.get(prop);
 	}
 
 }

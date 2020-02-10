@@ -5,9 +5,8 @@ type MetadataHost = { metadata: ClassMetadata };
 export class ClassMetadata {
 	private dict: { [property: string]: PropertyMetadata } = { };
 
-	private get protoMetadata() {
-		const proto = <MetadataHost>Object.getPrototypeOf(this.metadataHost);
-		return proto && proto.metadata;
+	private get protoMetadata(): ClassMetadata | undefined {
+		return (<MetadataHost>Object.getPrototypeOf(this.metadataHost))?.metadata;
 	}
 
 	private _values!: PropertyMetadata[];
@@ -24,25 +23,25 @@ export class ClassMetadata {
 		});
 	}
 
-	get(propName: string): PropertyMetadata | null {
-		return this.dict[propName] || this.protoMetadata && this.protoMetadata.get(propName);
+	get<T>(propName: NonFunctionPropertyNames<T>): PropertyMetadata | null {
+		return this.dict[<string>propName] ?? this.protoMetadata?.get(propName);
 	}
 
-	has(propName: string): boolean {
-		return !!(this.dict[propName] || this.protoMetadata && this.protoMetadata.has(propName));
+	has<T>(propName: NonFunctionPropertyNames<T>): boolean {
+		return !!(this.dict[<string>propName] ?? this.protoMetadata?.has(propName));
 	}
 
 	keys(): string[] {
 		return this._keys || (this._keys = [
 			...Object.keys(this.dict),
-			...(this.protoMetadata ? this.protoMetadata.keys() : [])
+			...(this.protoMetadata?.keys() ?? [])
 		]);
 	}
 
 	values(): PropertyMetadata[] {
 		return this._values || (this._values = [
 			...Object.values(this.dict),
-			...(this.protoMetadata ? this.protoMetadata.values() : [])
+			...(this.protoMetadata?.values() ?? [])
 		]);
 	}
 }

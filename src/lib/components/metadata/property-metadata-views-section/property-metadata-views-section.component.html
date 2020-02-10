@@ -2,13 +2,15 @@
 <h3 *ngIf="title"
 	class="mat-h3">{{ title }}</h3>
 
-<div *ngFor="let group of sectionScheme"
-	 @fadeInList
-	 class="row">
-	<ng-container *ngFor="let name of group">
-		<bp-property-metadata-view *ngIf="metadata.get(name) as md"
-								   [metadata]="md"
-								   [value]="get(entity, name)">
-		</bp-property-metadata-view>
-	</ng-container>
+<div @fadeInList>
+	<div *ngFor="let group of sectionScheme"
+		 class="row"
+		 @fadeInList>
+		<ng-container *ngFor="let name of group">
+			<bp-property-metadata-view *bpDelayedRender
+									   [metadata]="meta(name)"
+									   [value]="get(entity, name)">
+			</bp-property-metadata-view>
+		</ng-container>
+	</div>
 </div>

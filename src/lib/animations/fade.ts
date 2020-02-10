@@ -1,18 +1,16 @@
 import { trigger, transition, useAnimation, animation, animate, keyframes, style } from '@angular/animations';
-import { NORMAL } from './variables';
+import { NORMAL, TIMINGS } from './variables';
 
-const timings = '{{ timing }}s {{ delay }}s {{ease}}';
-
-const fadeIn = animation(animate(
-	timings,
+export const fadeIn = animation(animate(
+	TIMINGS,
 	keyframes([
 		style({ opacity: 0 }),
 		style({ opacity: 1 })
 	])
 ));
 
-const fadeOut = animation(animate(
-	timings,
+export const fadeOut = animation(animate(
+	TIMINGS,
 	keyframes([
 		style({ opacity: 1 }),
 		style({ opacity: 0 })
@@ -35,7 +33,7 @@ export const FADE_OUT = trigger('fadeOut', [
 const floatFadeOut = animation([
 	style({ position: 'absolute' }),
 	animate(
-		timings,
+		TIMINGS,
 		keyframes([
 			style({ opacity: 1 }),
 			style({ opacity: 0 })

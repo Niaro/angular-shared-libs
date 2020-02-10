@@ -10,12 +10,18 @@ import { Country, CountryCode, Countries } from '../../../models';
 })
 export class CountryComponent implements OnChanges {
 	@Input() src!: CountryCode | Country;
+
 	@Input() compact!: boolean;
 
+	@Input() hideTooltip!: boolean;
+
+	@Input() round!: boolean;
+
 	country!: Country | null;
+
 	isWorldwide = false;
 
-	ngOnChanges({ compact, src }: SimpleChanges) {
+	ngOnChanges({ compact, src, hideTooltip, round }: SimpleChanges) {
 		if (src) {
 			this.country = this.src instanceof Country
 				? this.src
@@ -25,5 +31,11 @@ export class CountryComponent implements OnChanges {
 
 		if (compact)
 			this.compact = <any>this.compact === '' ? true : this.compact;
+
+		if (hideTooltip)
+			this.hideTooltip = <any>this.hideTooltip === '' ? true : this.hideTooltip;
+
+		if (round)
+			this.round = <any>this.round === '' ? true : this.round;
 	}
 }

@@ -20,7 +20,16 @@ $link-color: $color-primary;
 		height: 1px;
 		background: transparent;
 		opacity: 0.4;
-		transition: opacity $animation-duration $animation-function;
+		transition: $animation-duration $animation-function;
+		transition-property: background, opacity;
+	}
+
+	&:hover:after {
+		background: currentColor;
+	}
+
+	&.semi-dark {
+		color: $color-semi-dark;
 	}
 
 	&.interactive {

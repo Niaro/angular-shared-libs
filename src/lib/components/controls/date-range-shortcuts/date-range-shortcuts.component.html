@@ -1,15 +1,15 @@
-<mat-select *ngIf="asSelect; else buttonShortCutsTpl"
-			[ngClass]="selectClass"
-			panelClass="mat-primary"
-			placeholder="Period"
-			[value]="selected"
-			(valueChange)="select($event)">
+<bp-select *ngIf="asSelect; else buttonShortCutsTpl"
+		   placeholder="Period"
+		   [panelClass]="['mat-primary', panelClass]"
+		   [value]="selected"
+		   [disableOptionCentering]="true"
+		   (valueChange)="select($event)">
 	<mat-option>-- Period --</mat-option>
 	<mat-option *ngFor="let shortcut of dateRangeShortcuts"
 				[value]="shortcut">
 		{{ shortcut.displayName }}
 	</mat-option>
-</mat-select>
+</bp-select>
 
 <ng-template #buttonShortCutsTpl>
 	<button *ngFor="let shortcut of dateRangeShortcuts"

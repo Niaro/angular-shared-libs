@@ -25,13 +25,20 @@ import { ControlComponent } from '../control.component';
 	]
 })
 export class DateRangeComponent extends ControlComponent<DateRange> {
+
 	@Input() showDeleteSign = true;
+
+	@Input() noFutureDates = true;
+
+	@Input() panelClass!: string;
 
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 
 	@HostBinding('class.empty') get empty() { return this.value.empty; }
 
 	value = new DateRange();
+
+	currentDay = m();
 
 	constructor(cdr: ChangeDetectorRef) {
 		super(cdr);

@@ -9,6 +9,6 @@ export * from './img-upload-btn';
 export * from './input';
 export * from './ip-input';
 export * from './round-input';
-export * from './select';
+export * from './select-field';
 export * from './control.component';
 export * from './form-field-control.component';

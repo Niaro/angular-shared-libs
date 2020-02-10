@@ -26,4 +26,8 @@ export class PropertyMetadataControlsSectionComponent {
 
 	@Input() hasSeparator!: boolean;
 
+	meta(prop: string) {
+		return this.metadata.get<any>(prop);
+	}
+
 }

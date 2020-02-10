@@ -1,6 +1,7 @@
 import { trigger, transition, useAnimation, query, stagger, style } from '@angular/animations';
-import { fadeIn } from 'ng-animate';
+
 import { NORMAL } from './variables';
+import { fadeIn } from './fade';
 
 export const FADE_IN_LIST = trigger('fadeInList', [
 	transition('* => *', [ // each time the binding value changes
@@ -8,7 +9,7 @@ export const FADE_IN_LIST = trigger('fadeInList', [
 			':enter',
 			[
 				style({ opacity: 0 }),
-				stagger(100, useAnimation(fadeIn, NORMAL))
+				stagger(50, useAnimation(fadeIn, NORMAL))
 			],
 			{ optional: true }
 		)

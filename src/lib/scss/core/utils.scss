@@ -66,6 +66,10 @@
 	box-shadow: none !important;
 }
 
+.font-weight-light {
+	font-weight: 400;
+}
+
 .flex {
 	display: flex;
 }
@@ -98,6 +102,10 @@
 .flex-baseline {
 	display: flex;
 	align-items: baseline;
+}
+
+.inline-flex {
+	display: inline-flex;
 }
 
 .absolute {
@@ -583,6 +591,10 @@
 
 .m-auto {
 	margin: auto !important;
+}
+
+.mh-auto {
+	margin: 0 auto !important;
 }
 
 .mt-auto,

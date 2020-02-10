@@ -22,11 +22,6 @@
 		width: $icon-size;
 		height: $icon-size;
 		margin-right: 0.5em;
-
-		&.export {
-			position: relative;
-			top: -1px;
-		}
 	}
 
 	.mat-button-wrapper {
@@ -37,11 +32,12 @@
 
 	.report-setup-pane & {
 		border-color: white;
-		color: white;
+		color: white !important;
+		transition-property: background, box-shadow, opacity;
 	}
 
 	&[disabled] {
-		.bp-overlay-pane.report-setup-pane & {
+		.bp-modal-overlay-pane.report-setup-pane & {
 			background: $color-primary;
 			color: white;
 			opacity: 0.33;

@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { ThemePalette } from '@angular/material/core';
 
-import { NumberMaskConfig } from '@bp/shared/directives';
 import { PropertyMetadata, FieldControlType } from '@bp/shared/models';
 import { Validators } from '@bp/shared/validation';
 
@@ -14,6 +13,7 @@ import { Validators } from '@bp/shared/validation';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyMetadataControlComponent implements OnChanges {
+
 	FieldControlType = FieldControlType;
 
 	@Input() metadata!: PropertyMetadata;
@@ -24,13 +24,7 @@ export class PropertyMetadataControlComponent implements OnChanges {
 
 	@Input() color: ThemePalette = 'primary';
 
-	numberMask = new NumberMaskConfig({
-		placeholderChar: '\u2000', // whitespace
-		allowDecimal: true,
-		decimalLimit: 2,
-		guide: false,
-		maskOnFocus: true
-	});
+	get mdControl() { return this.metadata?.control; }
 
 	constructor(private renderer: Renderer2, private host: ElementRef) { }
 

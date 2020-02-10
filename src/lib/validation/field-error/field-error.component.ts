@@ -15,6 +15,7 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldErrorComponent implements OnChanges, AfterViewInit {
+
 	@Input('bpFieldError') formControlOrName!: AbstractControl | string;
 
 	@Input('bpFieldErrorSuppress') suppress = false;

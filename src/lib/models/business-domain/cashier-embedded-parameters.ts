@@ -1,5 +1,6 @@
 import { PaymentMethodType, CashierButtonMode, CashierTheme } from './enums';
 import { Currency } from './currency';
+import { CashierLanguage } from './cashier-languages';
 
 export interface ICashierEmbeddedParameters {
 
@@ -35,6 +36,8 @@ export interface ICashierEmbeddedParameters {
 
 	affiliateId: string | null;
 
+	platformId: string | null;
+
 	ip: string | null;
 
 	directPaymentMethod: PaymentMethodType | null;
@@ -43,9 +46,18 @@ export interface ICashierEmbeddedParameters {
 
 	currencyLock: boolean | null;
 
+	showRedirectMessage: boolean | null;
+
 	currency: Currency | null;
 
 	buttonMode: CashierButtonMode | null;
 
+	depositButtonText: string | null;
+
 	theme: CashierTheme | null;
+
+	language: CashierLanguage | null;
+
+	onlyCreditCardPaymentMethod?: boolean | null;
+
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpResponse, HttpEvent, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError, iif, from, of } from 'rxjs';
+import { catchError, map, flatMap } from 'rxjs/operators';
 import { isNil, fromPairs } from 'lodash-es';
 
 import { ResponseError, IApiResponse } from '../models';
@@ -30,12 +30,17 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 					} else
 						return e;
 				}),
-				catchError((e: HttpErrorResponse) => {
-					const error = new ResponseError(e);
-					this.router.tryNavigateOnResponseError(error);
+				catchError((e: HttpErrorResponse) => iif(
+					() => e.error instanceof Blob,
+					from((new Response(e.error)).text())
+						.pipe(map(v => new ResponseError(JSON.parse(v)))),
+					of(new ResponseError(e))
+				).pipe(flatMap(error => {
+					if (!error.url || !error.url.includes('do-not-redirect-on-500x'))
+						this.router.tryNavigateOnResponseError(error);
 					return throwError(error);
-				})
-			);
+				}))
+				));
 	}
 
 	private cleanseParams(params: HttpParams) {

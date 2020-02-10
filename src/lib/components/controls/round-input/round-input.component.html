@@ -1,3 +1,9 @@
+<span *ngIf="prefix"
+	  matPrefix
+	  class="prefix">
+	<ng-content select="bp-input-prefix"></ng-content>
+</span>
+
 <input *ngIf="autocomplete; else defaultTpl"
 	   #el
 	   matInput

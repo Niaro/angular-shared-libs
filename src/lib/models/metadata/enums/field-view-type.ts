@@ -10,7 +10,7 @@ export class FieldViewType extends Enumeration {
 
 	static booleanCircle = new FieldViewType();
 
-	static money = new FieldViewType();
+	static currency = new FieldViewType();
 
 	static percent = new FieldViewType();
 
@@ -25,7 +25,7 @@ export class FieldViewType extends Enumeration {
 	static thumbnail = new FieldViewType();
 
 	// special
-	static currency = new FieldViewType();
+	static currencyCode = new FieldViewType();
 
 	static cryptoCurrency = new FieldViewType();
 

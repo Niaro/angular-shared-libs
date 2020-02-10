@@ -21,13 +21,21 @@
 			  [formControl]="internalControl"
 			  [placeholder]="placeholder"
 			  [autocomplete]="autocomplete"
-			  [throttle]="throttle">
+			  [throttle]="throttle"
+			  [appearance]="appearance"
+			  [hideErrorText]="hideErrorText">
 	</bp-input>
 </ng-template>
 
-<mat-autocomplete #autocomplete="matAutocomplete">
+<mat-autocomplete #autocomplete="matAutocomplete"
+				  [class]="panelClass">
 	<mat-option *ngFor="let item of filtered"
 				[value]="item">
-		{{ item.displayName || item.name || item }}
+		<ng-container *ngIf="optionTpl; else defaultOptionTpl">
+			<ng-container *ngTemplateOutlet="optionTpl; context: { '\$implicit': item }"></ng-container>
+		</ng-container>
+		<ng-template #defaultOptionTpl>
+			{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
+		</ng-template>
 	</mat-option>
 </mat-autocomplete>

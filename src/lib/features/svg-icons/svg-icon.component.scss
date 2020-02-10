@@ -13,4 +13,14 @@
 		width: 13px;
 		height: 9px;
 	}
+
+	&.jira {
+		width: 24px;
+		height: 24px;
+	}
+
+	&.export {
+		position: relative;
+		top: -1px;
+	}
 }

@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuicklinkModule } from 'ngx-quicklink';
+import { ToastrModule } from 'ngx-toastr';
 
 import { MaterialModule } from './materials.module';
 import { FieldErrorComponent, ValidationErrorComponent } from './validation';
@@ -18,28 +19,28 @@ import {
 	PropertyMetadataControlComponent, SelectComponent, ButtonToggleComponent, PropertyMetadataViewComponent,
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
-	ImgUploadBtnComponent, ImgComponent
+	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent,
+	InputPrefixDirective, ToastComponent
 } from './components';
 
 import {
 	UpperFirstPipe, IsPresentPipe, LowerCasePipe, ToKeyValuePairsPipe, MomentPipe, SafePipe, ChunkPipe,
-	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe
+	StartCasePipe, TakePipe, PropertiesMetadataColspanPipe, BpCurrencyPipe, SumByPipe
 } from './pipes';
 
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
 	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective,
-	ProgressBarDirective
+	RouterLinkRootOutletsDirective, ProgressBarDirective, DisabledDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
-import { TouchModule, CarouselModule, SvgIconsModule, ModalModule } from './features';
+import { TouchModule, CarouselModule, SvgIconsModule, ModalModule, BpSelectModule } from './features';
 
 import {
 	RouterService, TelemetryService, ZoneService, EnvironmentService, FirebaseService, FileLoaderService,
-	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler
+	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler, TitleService, IntercomService
 } from './providers';
 
 const MODULES = [
@@ -49,11 +50,13 @@ const MODULES = [
 	ReactiveFormsModule,
 	LocalStorageModule,
 	QuicklinkModule,
+	ToastrModule,
 
 	TouchModule,
 	CarouselModule,
 	ModalModule,
-	SvgIconsModule
+	SvgIconsModule,
+	BpSelectModule
 ];
 
 const EXPOSED = [
@@ -75,6 +78,8 @@ const EXPOSED = [
 	LogoutConfirmDialogComponent,
 	PaymentMethodBrandComponent,
 	ImgComponent,
+	VersionComponent,
+	ToastComponent,
 
 	// directives
 	CursorPageAdaptorDirective,
@@ -88,12 +93,16 @@ const EXPOSED = [
 	DelayedRenderDirective,
 	DynamicOutletDirective,
 	ProgressBarDirective,
+	DisabledDirective,
 
 	// controls
 	DateRangeComponent,
 	DateRangeShortcutsComponent,
 	DatepickerCalendarHeaderComponent,
 	InputComponent,
+	InputHintDirective,
+	InputLabelDirective,
+	InputPrefixDirective,
 	CountrySelectorComponent,
 	IpInputComponent,
 	DatePickerComponent,
@@ -118,7 +127,9 @@ const EXPOSED = [
 	ChunkPipe,
 	StartCasePipe,
 	TakePipe,
-	PropertiesMetadataColspanPipe
+	PropertiesMetadataColspanPipe,
+	BpCurrencyPipe,
+	SumByPipe
 ];
 
 @NgModule({
@@ -126,6 +137,7 @@ const EXPOSED = [
 	exports: [...EXPOSED, ...MODULES],
 	declarations: EXPOSED,
 	entryComponents: [
+		ToastComponent,
 		DatepickerCalendarHeaderComponent,
 		DeleteConfirmDialogComponent,
 		LogoutConfirmDialogComponent
@@ -142,13 +154,24 @@ export class SharedModule {
 				}).providers || []),
 				...(ModalModule.forRoot().providers || []),
 				...(MaterialModule.forRoot().providers || []),
-
+				...(ToastrModule.forRoot({
+					toastComponent: ToastComponent,
+					timeOut: 5000,
+					preventDuplicates: true,
+					closeButton: true,
+					resetTimeoutOnDuplicate: true,
+					maxOpened: 5,
+					progressBar: true
+				}).providers || []),
+				BpCurrencyPipe,
 				RouterService,
 				TelemetryService,
 				ZoneService,
 				EnvironmentService,
 				FirebaseService,
 				FileLoaderService,
+				TitleService,
+				IntercomService,
 				{ provide: HTTP_INTERCEPTORS, useClass: ApiResponseInterceptorService, multi: true },
 				{ provide: HTTP_INTERCEPTORS, useClass: ApiRequestInterceptorService, multi: true },
 				{ provide: ErrorHandler, useClass: AppErrorHandler },

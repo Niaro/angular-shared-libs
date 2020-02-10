@@ -1,10 +1,15 @@
 <mat-form-field [appearance]="appearance"
 				[color]="color">
-	<mat-label *ngIf="label">
-		{{ label }}
+	<mat-label *ngIf="label || customLabel">
+		<span [ngSwitch]="!!customLabel">
+			<span *ngSwitchDefault>{{ label }}</span>
+			<ng-content *ngSwitchCase="true"
+						select="bp-input-label">
+			</ng-content>
+		</span>
 	</mat-label>
 
-	<textarea *ngIf="textarea === ''; else inputTpl"
+	<textarea *ngIf="textarea; else inputTpl"
 			  matInput
 			  [attr.name]="name"
 			  [formControl]="internalControl"
@@ -28,7 +33,7 @@
 				   [formControl]="internalControl"
 				   [placeholder]="placeholder"
 				   [required]="required"
-				   [bpTextMask]="mask" />
+				   [bpTextMask]="number ? numberMask : mask" />
 		</ng-template>
 	</ng-template>
 
@@ -43,7 +48,18 @@
 		</div>
 	</div>
 
-	<mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+	<mat-hint *ngIf="hint || customHint">
+		<span [ngSwitch]="!!customHint">
+			<span *ngSwitchDefault>{{ hint }}</span>
+			<ng-content *ngSwitchCase="true"
+						select="bp-input-hint">
+			</ng-content>
+		</span>
+	</mat-hint>
+
+	<span *ngIf="prefix" matPrefix>
+		<ng-content select="bp-input-prefix"></ng-content>
+	</span>
 
 	<mat-error bpFieldError
 			   [bpFieldErrorSuppress]="hideErrorText">

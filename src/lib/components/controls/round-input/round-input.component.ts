@@ -21,6 +21,9 @@ import { InputComponent } from '../input';
 	}]
 })
 export class RoundInputComponent extends InputComponent {
+
 	@HostBinding('class.rounded-input') round = true;
+
 	autocompleteOrigin = { elementRef: this.host };
+
 }

@@ -26,7 +26,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	@Input() includeYear!: boolean;
 
-	@Input() selectClass!: string;
+	@Input() panelClass!: string;
 
 	@Input() default: DateRangeShortcut | null = DateRangeShortcut.month;
 
@@ -46,6 +46,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 		this.dateRangeShortcuts = (this.includeYear
 			? DateRangeShortcut.list()
 			: DateRangeShortcut.list().filter(v => v !== DateRangeShortcut.year)) as DateRangeShortcut[];
+		this.cdr.detectChanges();
 
 		/**
 		 * In case on init no one is written a value we set the default one
@@ -56,16 +57,16 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue | null): void {
 		lineMicrotask(() => {
-				this.writtenValue = value;
-				const inputDateRage = value && DateRange.parse(value);
+			this.writtenValue = value;
+			const inputDateRage = value && DateRange.parse(value);
 
-				let shortcut = !inputDateRage || inputDateRage.empty ? this.default : null;
-				if (inputDateRage && inputDateRage.fullRange)
-					shortcut = this.dateRangeShortcuts.find(v => v.dateRange.isSame(inputDateRage)) || null;
+			let shortcut = !inputDateRage || inputDateRage.empty ? this.default : null;
+			if (inputDateRage && inputDateRage.fullRange)
+				shortcut = this.dateRangeShortcuts.find(v => v.dateRange.isSame(inputDateRage)) || null;
 
-				this.selected = shortcut;
-				this.setValue(shortcut && shortcut.dateRange, { emitChange: false });
-			});
+			this.selected = shortcut;
+			this.setValue(shortcut && shortcut.dateRange, { emitChange: false });
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
@@ -90,9 +91,9 @@ export class DateRangeShortcut extends Enumeration {
 		super();
 
 		lineMicrotask(() => {
-				this.dateRange = this.getDateRange()!;
-				setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
-			});
+			this.dateRange = this.getDateRange()!;
+			setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
+		});
 	}
 
 	private getDateRange() {

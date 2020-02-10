@@ -6,7 +6,7 @@ export class PageType extends Enumeration {
 
 	static edit = new PageType();
 
-	static copy = new PageType();
+	static clone = new PageType();
 
 	static view = new PageType();
 

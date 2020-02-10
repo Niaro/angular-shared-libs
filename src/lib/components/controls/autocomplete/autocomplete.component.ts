@@ -1,10 +1,14 @@
-import { Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import {
+	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, Output, ElementRef,
+	ChangeDetectorRef, Optional, ContentChild, TemplateRef
+} from '@angular/core';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
-import { lineMicrotask } from '@bp/shared/utils';
+import { lineMicrotask, includes, match } from '@bp/shared/utils';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
+import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'bp-autocomplete',
@@ -28,22 +32,44 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	]
 })
 export class AutocompleteComponent extends FormFieldControlComponent<any | null> implements OnChanges {
-	@Input() items!: any[];
 
-	lowercasedItems!: { lowered: string, item: any }[];
+	@Input() items?: any[] | null;
+
+	@Input() itemDisplayPropertyName?: string;
+
+	@Input() panelClass?: string;
+
+	@Input() filterListFn?: (item: any, search: string) => boolean;
+
+	@Output() readonly inputChanges = new Subject<string>();
+
+	@ContentChild(TemplateRef, { static: false }) optionTpl?: TemplateRef<any>;
+
+	lowercasedItems?: { lowered: string, item: any; }[] | null;
 
 	throttle = 0;
 
-	filtered!: any[];
+	filtered!: any[] | null;
+
+	constructor(
+		host: ElementRef,
+		cdr: ChangeDetectorRef,
+		@Optional() formGroupDirective?: FormGroupDirective
+	) {
+		super(host, cdr, formGroupDirective);
+
+
+		this.internalControl.valueChanges.subscribe(v => this.inputChanges.next(v));
+	}
 
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
 
-		const { items } = changes;
+		const { items, itemDisplayPropertyName } = changes;
 
-		if (items) {
-			this.lowercasedItems = this.items && this.items.map(v => ({
-				lowered: v.toString().toLowerCase(),
+		if (items || itemDisplayPropertyName) {
+			this.lowercasedItems = this.items && this.items!.map(v => ({
+				lowered: (v[this.itemDisplayPropertyName!] || v)?.toString().toLowerCase(),
 				item: v
 			}));
 			this.filtered = this.items || [];
@@ -53,9 +79,9 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
-			});
+			this.value = value;
+			this.internalControl.setValue(this.value && this.value.toString() || '', { emitViewToModelChange: false });
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
@@ -71,13 +97,23 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		if (isEmpty(this.items))
 			return;
 
-		const loweredInput = input && input.toString().toLowerCase().trim();
-		this.filtered = loweredInput
-			? this.lowercasedItems.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
-			: this.items;
+		input = input && input.toString().trim();
+		this.filtered = input
+			? this.items!.filter(v => this.filterItem(v, input))
+			: this.items || [];
 		this.cdr.markForCheck();
 
-		const foundLoweredItem = input && this.lowercasedItems.find(v => v.lowered === loweredInput);
-		this.setValue(foundLoweredItem && foundLoweredItem.item || null);
+		const found = this.items!.find(v => match(this.getItemCompareString(v), input));
+		this.setValue(found || null);
+	}
+
+	private filterItem(item: any, search: string) {
+		return this.filterListFn
+			? this.filterListFn(item, search)
+			: includes(this.getItemCompareString(item), search);
+	}
+
+	private getItemCompareString(item: any) {
+		return (item[this.itemDisplayPropertyName!] || item)?.toString();
 	}
 }

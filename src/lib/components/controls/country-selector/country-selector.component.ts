@@ -30,6 +30,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 	]
 })
 export class CountrySelectorComponent extends FormFieldControlComponent<Country | null> implements OnChanges {
+
 	@Input() excluded!: Country[];
 
 	@Input() placeholder = 'Country';
@@ -38,11 +39,15 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() countries = Countries.list;
 
+	@Input() panelClass!: string;
+
 	filtered = Countries.list;
 
 	throttle = 0;
 
 	UnitedStatesMinorOutlyingIslands = Countries.findByCode('UM');
+
+	worldwide = Countries.worldwide;
 
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
@@ -54,8 +59,10 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 				? Countries.list.filter(it => !this.excluded.includes(it))
 				: Countries.list;
 
-		if (countries && this.countries)
+		if (countries) {
+			this.countries = this.countries ?? Countries.list;
 			this.filtered = this.countries;
+		}
 
 		if (hasWorldwide || excluded || countries) {
 			this.countries = this.updateWorldwideInCountriesList(this.countries);

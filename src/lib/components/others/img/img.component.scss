@@ -11,19 +11,8 @@
 		transition: $transition-props;
 		transition-property: border-color, box-shadow;
 
-		img {
-			position: absolute;
-			transition: opacity $transition-props;
-			top: 0;
-			left: 0;
-			opacity: 0;
-			z-index: 1;
-			height: 100%;
-			width: 100%;
-
-			&.show {
-				opacity: 1;
-			}
+		&.show .img-background {
+			opacity: 1;
 		}
 
 		.img-background {
@@ -34,10 +23,6 @@
 			opacity: 0;
 			z-index: 1;
 			background: white;
-
-			&.show {
-				opacity: 1;
-			}
 
 			&,
 			.img {

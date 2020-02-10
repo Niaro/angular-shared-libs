@@ -1,10 +1,10 @@
 // #region colors
-$color-light      : #ccc !default;
-$color-semi-dark  : #929292 !default;
-$color-dark       : #333 !default;
-$color-border     : #e2e8ec !default;
-$color-bg         : #fafafa !default;
-$dark-primary-text: $color-dark !default;
+$color-light            : #ccc !default;
+$color-semi-dark        : #929292 !default;
+$color-dark             : #333 !default;
+$color-border           : #e2e8ec !default;
+$color-bg               : #fafafa !default;
+$dark-primary-text      : $color-dark !default;
 $faded-dark-primary-text: fade-out($dark-primary-text, 0.5);
 
 $color-primary      : #2578ea !default;
@@ -25,10 +25,10 @@ $primary-colors: (
 	),
 );
 $success-colors: (
-	50      : lighten($color-success, 10%),
-	100     : #7bffcb,
-	500     : $color-success,
-	700     : #00ca6a,
+	50 : lighten($color-success, 10%),
+	100: lighten($color-success, 10%),
+	500: $color-success,
+	700: #00ca6a,
 	contrast: (
 		100: $dark-primary-text,
 		500: $dark-primary-text,
@@ -64,6 +64,7 @@ $palette: (
 );
 
 $overdue-color: mat-color($danger, 700);
+$refund-color : #9999ff;
 // #endregion colors
 
 // #region layout
@@ -84,9 +85,6 @@ $mat-elevation-opacity         : 0.4;
 $mat-elevation-color           : black;
 $mat-card-grid-aisle           : 1.5rem;
 $mat-card-grid-aisle-half      : 0.75rem;
-$mat-dialog-padding-v          : 24px !default;
-$mat-dialog-padding-h          : $mat-dialog-padding-v * 2 !default;
-$mat-dialog-padding            : $mat-dialog-padding-v $mat-dialog-padding-h;
 // #endregion mat-cards
 
 // #region icons
@@ -162,3 +160,16 @@ $avatar-size: $thumbnail-size;
 
 $z-index-sidenav: 1000000;
 $z-index-max    : 2147483647;
+
+$dialog-padding-y    : 24px !default;
+$dialog-padding-x    : $dialog-padding-y * 2 !default;
+$dialog-padding      : $dialog-padding-y $dialog-padding-x;
+$dialog-header-margin: 1.5rem;
+$dialog-footer-margin: 1.8rem;
+$dialog-max-width-md : 600px;
+$dialog-max-width-lg : 900px;
+
+$modal-padding-y   : 32px;
+$modal-padding-x   : 48px;
+$modal-max-width-md: $dialog-max-width-md;
+$modal-max-width-lg: $dialog-max-width-lg;

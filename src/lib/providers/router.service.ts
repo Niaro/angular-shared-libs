@@ -16,6 +16,12 @@ export class RouterService {
 		share()
 	);
 
+	navigationEnd$ = this.router.events.pipe(
+		filter(it => it instanceof NavigationEnd),
+		map(v => v as NavigationEnd),
+		share()
+	);
+
 	isNavigateToErrorPage = true;
 
 	constructor(

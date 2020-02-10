@@ -105,7 +105,7 @@ export class Countries {
 	private static countryByCountryCode = new Map<CountryCode, Country>(Countries.list
 		.map(it => [it.code, it] as [CountryCode, Country])
 	);
-	private static countryNames = Countries.list.map(v => v.name.toLowerCase());
+	private static countryNames = Countries.list.map(v => v.lowerCaseName);
 
 	static find(countryName: string) {
 		countryName = countryName.toLowerCase();
