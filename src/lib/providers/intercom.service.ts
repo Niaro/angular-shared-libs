@@ -20,7 +20,7 @@ type IntercomCompany = {
 };
 
 type IntercomConfig = {
-	source?: 'promo-website' | 'merchant-admin',
+	source?: string,
 	app_id?: string;
 	user_id?: string;
 	email?: string;
