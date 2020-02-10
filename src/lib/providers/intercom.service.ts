@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { timer, of, defer } from 'rxjs';
-import { map, first, filter } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 
 import { environment as env } from '@bp/environment';
 
