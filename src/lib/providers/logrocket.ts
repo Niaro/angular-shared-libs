@@ -2,9 +2,9 @@ import * as LogRocket from 'logrocket';
 
 import { environment as env } from '@bp/environment';
 
-export function initLogrocketIfOnRemoteServer() {
+export function whenOnRemoteServerInitLogrocket() {
 	if (env.localServer || !env.logrocket)
-		return;
+		return false;
 
 	LogRocket.init(env.logrocket, {
 		release: env.version.prerelease,
@@ -14,6 +14,8 @@ export function initLogrocketIfOnRemoteServer() {
 		},
 		network: sanitizeNetwork(),
 	});
+
+	return true;
 }
 
 function assignAssetsUrlIfPrivateApp(): { baseHref: string; } | undefined {
