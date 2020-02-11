@@ -44,6 +44,12 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	externalControl$ = new OptionalBehaviorSubject<FormControl | null>();
 
+	get $host() { return <HTMLElement>this.host.nativeElement; }
+
+	get isFocused() {
+		return this.$host === document.activeElement || this.$host.contains(document.activeElement);
+	}
+
 	private updateSubscription = Subscription.EMPTY;
 
 	constructor(
@@ -73,9 +79,9 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T | null): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.internalControl.setValue(value, { emitViewToModelChange: false });
-			});
+			this.value = value;
+			this.internalControl.setValue(value, { emitViewToModelChange: false });
+		});
 	}
 
 	setDisabledState?(isDisabled: boolean) {
@@ -90,7 +96,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 		return this.internalControl.invalid
 			? { 'invalid': true }
 			: null;
-	}
+	};
 
 	protected onInternalControlValueChange(v: any) {
 		this.setValue(v);

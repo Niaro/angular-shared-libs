@@ -10,7 +10,7 @@ $control-radius: 30px;
 	.mat-form-field {
 		width: 100%;
 
-		::ng-deep .mat-form-field-flex {
+		.mat-form-field-flex {
 			padding-right: $close-btn-size + $close-btn-margin * 2;
 		}
 
@@ -64,6 +64,37 @@ $control-radius: 30px;
 		&.mat-form-field-appearance-fill .close-btn-wrapper {
 			top: -10px;
 			right: -($close-btn-size + $close-btn-margin);
+		}
+	}
+}
+
+:host(.pending) ::ng-deep {
+	.mat-form-field-flex {
+		&:hover,
+		&:focus {
+			+ .mat-form-field-underline:after {
+				opacity: 1;
+			}
+		}
+	}
+
+	.mat-form-field-underline {
+		&:before,
+		&:after {
+			content: '';
+			height: 1px;
+			background: mat-color($amber-palette);
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			transform-origin: 50%;
+			animation: pulsing 1.4s linear infinite;
+		}
+
+		&:after {
+			transition: opacity $transition-props;
+			opacity: 0;
+			height: 2px;
 		}
 	}
 }

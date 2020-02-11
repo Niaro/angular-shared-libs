@@ -1,14 +1,18 @@
 import {
 	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, Output, ElementRef,
-	ChangeDetectorRef, Optional, ContentChild, TemplateRef
+	ChangeDetectorRef, Optional, ContentChild, TemplateRef, ViewChild
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { isEmpty, isString } from 'lodash-es';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 import { lineMicrotask, includes, match } from '@bp/shared/utils';
+import { FADE_IN_LIST } from '@bp/shared/animations';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
-import { Subject } from 'rxjs';
+
+import { InputComponent } from '../input';
+import { RoundInputComponent } from '../round-input';
 
 @Component({
 	selector: 'bp-autocomplete',
@@ -29,7 +33,8 @@ import { Subject } from 'rxjs';
 			useExisting: AutocompleteComponent,
 			multi: true
 		}
-	]
+	],
+	animations: [FADE_IN_LIST]
 })
 export class AutocompleteComponent extends FormFieldControlComponent<any | null> implements OnChanges {
 
@@ -41,15 +46,25 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@Input() filterListFn?: (item: any, search: string) => boolean;
 
+	@Input() pending?: boolean;
+
 	@Output('inputChanges') readonly inputChanges$ = new Subject<string>();
 
 	@ContentChild(TemplateRef, { static: false }) optionTpl?: TemplateRef<any>;
+
+	@ViewChild(InputComponent, { static: false }) input?: InputComponent;
+
+	@ViewChild(RoundInputComponent, { static: false }) roundInput?: RoundInputComponent;
+
+	get isFocusedInput() { return this.input?.isFocused || this.roundInput?.isFocused; }
+
+	get autocompleteTrigger() { return this.input?.autocompleteTrigger || this.roundInput?.autocompleteTrigger; }
 
 	lowercasedItems?: { lowered: string, item: any; }[] | null;
 
 	throttle = 0;
 
-	filtered!: any[] | null;
+	filtered$ = new BehaviorSubject<any[]>([]);
 
 	constructor(
 		host: ElementRef,
@@ -57,7 +72,6 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		@Optional() formGroupDirective?: FormGroupDirective
 	) {
 		super(host, cdr, formGroupDirective);
-
 
 		this.internalControl.valueChanges.subscribe(v => this.inputChanges$.next(v));
 	}
@@ -72,7 +86,9 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 				lowered: (v[this.itemDisplayPropertyName!] || v)?.toString().toLowerCase(),
 				item: v
 			}));
-			this.filtered = this.items || [];
+			this.filtered$.next(this.items || []);
+
+			this.isFocused && this.autocompleteTrigger?.openPanel();
 		}
 	}
 
@@ -107,10 +123,10 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		let found: any;
 		if (isString(value)) {
 			value = value.toString().trim();
-			this.filtered = this.items!.filter(v => this.filterItem(v, value));
+			this.filtered$.next(this.items!.filter(v => this.filterItem(v, value)));
 			found = this.items!.find(v => match(this.getItemCompareString(v), value));
 		} else {
-			this.filtered = this.items!;
+			this.filtered$.next(this.items!);
 			found = value;
 		}
 

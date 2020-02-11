@@ -94,18 +94,25 @@ export class FirebaseService {
 		return firebase.firestore.FieldValue.arrayRemove(...elements);
 	}
 
-	onQuerySnapshot<T extends Entity>(
-		path: string,
-		{ page, limit, authorUid }: IPageQueryParams & { authorUid?: string },
+	getCollectionByQueryOnSnapshot<T>(
+		collectionPath: string,
+		{ page, limit, authorUid, searchTerms, orderBy }: IPageQueryParams & {
+			authorUid?: string,
+			searchTerms?: string[];
+			orderBy?: string;
+		},
 		factory: (data: Partial<T>) => T
 	) {
 		return new Observable<PagedResults<T>>(subscriber => {
-			let query = this.collection(path)
-				.orderBy(this.orderBy, 'desc')
+			let query = this.collection(collectionPath)
+				.orderBy(orderBy || this.orderBy, 'desc')
 				.limit(limit);
 
 			if (authorUid)
 				query = query.where('authorUid', '==', authorUid);
+
+			if (searchTerms)
+				query = query.where('searchTerms', 'array-contains-any', searchTerms);
 
 			if (page)
 				query = query.startAfter(this.queryDocumentSnapshotsById[page]);
@@ -134,12 +141,12 @@ export class FirebaseService {
 			.pipe(catchError(this.throwAsResponseError));
 	}
 
-	onSnapshot<T>(
-		path: string,
+	getCollectionOnSnapshot<T>(
+		collectionPath: string,
 		factory: (data: Partial<T>) => T
 	) {
 		return new Observable<T[]>(subscriber => {
-			const unsubscribe = this.collection(path).onSnapshot(
+			const unsubscribe = this.collection(collectionPath).onSnapshot(
 				snapshot => subscriber.next(snapshot.docs.map(v => factory(v.data() as Partial<T>))),
 				e => subscriber.error(e)
 			);
@@ -148,7 +155,7 @@ export class FirebaseService {
 			.pipe(catchError(this.throwAsResponseError));
 	}
 
-	getListOnce<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
+	getCollection<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
 		return from(this.collection(collectionPath).get())
 			.pipe(
 				map(snapshot => snapshot.docs.map(v => factory(v.data() as Partial<T>))),
@@ -156,7 +163,21 @@ export class FirebaseService {
 			);
 	}
 
-	getOnce<T>(documentPath: string): Observable<Partial<T> | null> {
+	getDocumentOnSnapshot<T>(
+		documentPath: string,
+		factory: (data: Partial<T>) => T
+	) {
+		return new Observable<T>(subscriber => {
+			const unsubscribe = this.doc(documentPath).onSnapshot(
+				snapshot => subscriber.next(factory(snapshot.data() as Partial<T>)),
+				e => subscriber.error(e)
+			);
+			return () => unsubscribe();
+		})
+			.pipe(catchError(this.throwAsResponseError));
+	}
+
+	getDocument<T>(documentPath: string): Observable<Partial<T> | null> {
 		return from(this.doc(documentPath).get())
 			.pipe(
 				map(snapshot => (snapshot.data() as Partial<T>) || null),
@@ -169,8 +190,8 @@ export class FirebaseService {
 			.pipe(catchError(this.throwAsResponseError));
 	}
 
-	set(documentPath: string, body: Entity): Observable<void> {
-		return from(this.doc(documentPath).set(body.toJSON()))
+	set(documentPath: string, body: Object): Observable<void> {
+		return from(this.doc(documentPath).set(JSON.parse(JSON.stringify(body))))
 			.pipe(catchError(this.throwAsResponseError));
 	}
 

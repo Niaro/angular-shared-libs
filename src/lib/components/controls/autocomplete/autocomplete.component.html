@@ -13,7 +13,8 @@
 </ng-container>
 
 <ng-template #defaultInputTpl>
-	<bp-input [name]="name"
+	<bp-input [pending]="pending"
+			  [name]="name"
 			  [color]="color"
 			  [label]="label"
 			  [hint]="hint"
@@ -29,14 +30,16 @@
 
 <mat-autocomplete #autocomplete="matAutocomplete"
 				  [class]="panelClass">
-	<mat-option *ngFor="let item of filtered"
-				[class.selected]="item === value"
-				[value]="item">
-		<ng-container *ngIf="optionTpl; else defaultOptionTpl">
-			<ng-container *ngTemplateOutlet="optionTpl; context: { '\$implicit': item }"></ng-container>
-		</ng-container>
-		<ng-template #defaultOptionTpl>
-			{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
-		</ng-template>
-	</mat-option>
+	<div [@fadeInList]="(filtered$ | async)?.length">
+		<mat-option *ngFor="let item of filtered$ | async"
+					[class.selected]="item === value"
+					[value]="item">
+			<ng-container *ngIf="optionTpl; else defaultOptionTpl">
+				<ng-container *ngTemplateOutlet="optionTpl; context: { '\$implicit': item }"></ng-container>
+			</ng-container>
+			<ng-template #defaultOptionTpl>
+				{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
+			</ng-template>
+		</mat-option>
+	</div>
 </mat-autocomplete>

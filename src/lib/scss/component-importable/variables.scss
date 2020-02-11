@@ -48,8 +48,10 @@ $danger-colors: (
 	),
 );
 
+$amber-palette: mat-palette($mat-amber, 700, 100, 900);
+
 $primary: mat-palette($primary-colors) !default;
-$accent : mat-palette($mat-amber, 700, 100, 900) !default;
+$accent : $amber-palette !default;
 $success: mat-palette($success-colors) !default;
 $danger : mat-palette($danger-colors) !default;
 $warning: $danger !default;

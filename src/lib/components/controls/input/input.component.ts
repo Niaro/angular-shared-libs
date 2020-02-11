@@ -1,5 +1,5 @@
-import { Component, Input, ChangeDetectionStrategy, ViewChild, Directive, ContentChild } from '@angular/core';
-import { MatAutocomplete } from '@angular/material/autocomplete';
+import { Component, Input, ChangeDetectionStrategy, ViewChild, Directive, ContentChild, HostBinding } from '@angular/core';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
@@ -59,6 +59,12 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 	@Input() mask!: TextMaskConfig;
 
 	@Input() autocomplete!: MatAutocomplete;
+
+	@Input()
+	@HostBinding('class.pending')
+	pending?: boolean;
+
+	@ViewChild(MatAutocompleteTrigger, { static: false }) autocompleteTrigger?: MatAutocompleteTrigger;
 
 	@ViewChild(TextMaskDirective, { static: false }) maskDirective?: TextMaskDirective;
 
