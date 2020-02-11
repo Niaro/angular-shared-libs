@@ -51,12 +51,12 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return this._checkShouldWaitForAuthorizationToken(request)
-			? this.enhanceRequest(request, next)
-			: this.authorized$.pipe(
+			? this.authorized$.pipe(
 				filter(it => !!it),
 				first(),
 				switchMap(() => this.enhanceRequest(request, next))
-			);
+			)
+			: this.enhanceRequest(request, next);
 	}
 
 	private _checkShouldWaitForAuthorizationToken(request: HttpRequest<any>) {

@@ -80,14 +80,6 @@ export class IntercomService {
 		this._isFirstBoot = false;
 	}
 
-	private _whenTelemetryEnabledSaveSessionOnIntercom() {
-		if (!this._telemetry.enabled)
-			return;
-
-		this._trackLogrocketSessionOnIntercom();
-		this._linkLogrocketSessionsToIntercomUser();
-	}
-
 	update(config?: IntercomConfig) {
 		this._user_id = config?.user_id;
 		this._whenTelemetryEnabledSaveSessionOnIntercom();
@@ -108,6 +100,14 @@ export class IntercomService {
 
 	shutdown() {
 		Intercom('shutdown');
+	}
+
+	private _whenTelemetryEnabledSaveSessionOnIntercom() {
+		if (!this._telemetry.enabled)
+			return;
+
+		this._trackLogrocketSessionOnIntercom();
+		this._linkLogrocketSessionsToIntercomUser();
 	}
 
 	private async _linkLogrocketSessionsToIntercomUser() {
