@@ -81,12 +81,18 @@ export class IntercomService {
 	}
 
 	update(config?: IntercomConfig) {
+		if (!this.enabled)
+			return;
+
 		this._user_id = config?.user_id;
 		this._whenTelemetryEnabledSaveSessionOnIntercom();
 		Intercom('update', config);
 	}
 
 	company(company: IntercomCompany) {
+		if (!this.enabled)
+			return;
+
 		this.update({ company });
 	}
 
@@ -95,10 +101,16 @@ export class IntercomService {
 	}
 
 	trackEvent(event: string, data?: Dictionary<string>) {
+		if (!this.enabled)
+			return;
+
 		Intercom('trackEvent', event, data);
 	}
 
 	shutdown() {
+		if (!this.enabled)
+			return;
+
 		Intercom('shutdown');
 	}
 
