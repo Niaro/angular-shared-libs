@@ -1,4 +1,4 @@
-import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
+import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges, Directive } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-es';
@@ -11,6 +11,7 @@ import { FormBaseComponent } from './form-base.component';
 import { OptionalBehaviorSubject } from '../rxjs';
 
 
+@Directive()
 export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	extends FormBaseComponent<T>
 	implements OnChanges {

@@ -1,6 +1,6 @@
 import { FormControl, ValidatorFn, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-import { Input, ElementRef, Optional, SimpleChanges, OnChanges, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Input, ElementRef, Optional, SimpleChanges, OnChanges, ChangeDetectorRef, OnInit, Directive } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { auditTime, switchMap, filter } from 'rxjs/operators';
 import { Subscription, iif } from 'rxjs';
@@ -10,6 +10,7 @@ import { lineMicrotask } from '@bp/shared/utils';
 
 import { ControlComponent } from './control.component';
 
+@Directive()
 export abstract class FormFieldControlComponent<T> extends ControlComponent<T> implements OnChanges, OnInit {
 
 	@Input() formControl!: FormControl;

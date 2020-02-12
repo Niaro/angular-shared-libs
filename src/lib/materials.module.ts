@@ -50,7 +50,7 @@ const MODULES = [
 	exports: MODULES,
 })
 export class MaterialModule {
-	static forRoot(): ModuleWithProviders {
+	static forRoot(): ModuleWithProviders<MaterialModule> {
 		return {
 			ngModule: MaterialModule,
 			providers: [

@@ -23,7 +23,7 @@ export class CopyComponent {
 	/** @private */
 	clipboardTextareaRef!: ElementRef;
 
-	@ViewChild('content', { static: false })
+	@ViewChild('content')
 	/** @private */
 	contentRef!: ElementRef;
 

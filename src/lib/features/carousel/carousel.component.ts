@@ -138,7 +138,7 @@ export class CarouselComponent
 	currentItemsPerView$ = new BehaviorSubject<number | 'unlimited'>(this.itemsPerViewport);
 	get currentItemsPerView() { return this.currentItemsPerView$.value; }
 
-	@ContentChild(TemplateRef, { static: false }) template!: TemplateRef<any>;
+	@ContentChild(TemplateRef) template!: TemplateRef<any>;
 
 	@ViewChildren('slide') private _slidesQuery!: QueryList<ElementRef>;
 

@@ -333,7 +333,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	trigger!: ElementRef;
 
 	/** Panel containing the select options. */
-	@ViewChild('panel', { static: false })
+	@ViewChild('panel')
 	panel!: ElementRef;
 
 	/** Overlay pane containing the options. */
@@ -355,7 +355,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	};
 
 	/** User-supplied override of the trigger element. */
-	@ContentChild(BpSelectTrigger, { static: false })
+	@ContentChild(BpSelectTrigger)
 	customTrigger!: BpSelectTrigger;
 
 	/** Placeholder to be shown if no value has been selected. */

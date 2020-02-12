@@ -64,16 +64,16 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 	@HostBinding('class.pending')
 	pending?: boolean;
 
-	@ViewChild(MatAutocompleteTrigger, { static: false }) autocompleteTrigger?: MatAutocompleteTrigger;
+	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger?: MatAutocompleteTrigger;
 
-	@ViewChild(TextMaskDirective, { static: false }) maskDirective?: TextMaskDirective;
+	@ViewChild(TextMaskDirective) maskDirective?: TextMaskDirective;
 
 	/** User-supplied override of the label element. */
-	@ContentChild(InputLabelDirective, { static: false }) customLabel?: InputLabelDirective;
+	@ContentChild(InputLabelDirective) customLabel?: InputLabelDirective;
 
-	@ContentChild(InputHintDirective, { static: false }) customHint?: InputHintDirective;
+	@ContentChild(InputHintDirective) customHint?: InputHintDirective;
 
-	@ContentChild(InputPrefixDirective, { static: false }) prefix?: InputPrefixDirective;
+	@ContentChild(InputPrefixDirective) prefix?: InputPrefixDirective;
 
 	numberMask = new NumberMaskConfig({
 		placeholderChar: '\u2000', // whitespace

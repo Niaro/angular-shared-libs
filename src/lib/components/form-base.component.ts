@@ -1,4 +1,4 @@
-import { Input, Output, ChangeDetectorRef } from '@angular/core';
+import { Input, Output, ChangeDetectorRef, Directive } from '@angular/core';
 import { FormGroup, AbstractControl, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isEmpty, forOwn } from 'lodash-es';
@@ -9,6 +9,7 @@ import { ResponseError, IApiErrorMessage, FormGroupConfig, ClassMetadata } from 
 
 import { Destroyable } from './destroyable';
 
+@Directive()
 export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 	@Input() metadata!: ClassMetadata;

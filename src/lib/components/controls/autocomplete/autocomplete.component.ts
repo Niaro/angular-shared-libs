@@ -50,11 +50,11 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@Output('inputChanges') readonly inputChanges$ = new Subject<string>();
 
-	@ContentChild(TemplateRef, { static: false }) optionTpl?: TemplateRef<any>;
+	@ContentChild(TemplateRef) optionTpl?: TemplateRef<any>;
 
-	@ViewChild(InputComponent, { static: false }) input?: InputComponent;
+	@ViewChild(InputComponent) input?: InputComponent;
 
-	@ViewChild(RoundInputComponent, { static: false }) roundInput?: RoundInputComponent;
+	@ViewChild(RoundInputComponent) roundInput?: RoundInputComponent;
 
 	get isFocusedInput() { return this.input?.isFocused || this.roundInput?.isFocused; }
 

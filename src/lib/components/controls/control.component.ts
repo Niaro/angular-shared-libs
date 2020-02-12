@@ -1,4 +1,4 @@
-import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef, Directive } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { isNil, isEqual, uniq } from 'lodash-es';
@@ -7,6 +7,7 @@ import { lineMicrotask } from '@bp/shared/utils';
 
 import { Destroyable } from '../destroyable';
 
+@Directive()
 export abstract class ControlComponent<T = any>
 	extends Destroyable
 	implements ControlValueAccessor, Validator, OnDestroy {
