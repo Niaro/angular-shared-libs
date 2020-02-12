@@ -12,6 +12,7 @@ import { PropertyMetadata, FieldViewType, PropertyMetadataTable } from '@bp/shar
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyMetadataViewComponent implements OnChanges {
+	// tslint:disable-next-line: naming-convention
 	FieldViewType = FieldViewType;
 
 	@Input() label = true;
@@ -30,22 +31,25 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	get booleanIcon() { return this.value ? 'check' : 'close'; }
 
-	constructor(private renderer: Renderer2, private host: ElementRef) { }
+	constructor(
+		private _renderer: Renderer2,
+		private _host: ElementRef
+	) { }
 
 	ngOnChanges({ metadata }: SimpleChanges) {
-		metadata && this.setHostClass(metadata);
+		metadata && this._setHostClass(metadata);
 	}
 
 	isInteger(value: number) {
 		return Number.isInteger(value);
 	}
 
-	private setHostClass({ previousValue: prev, currentValue: curr }: SimpleChange) {
-		prev && this.renderer.removeClass(this.host.nativeElement, this.getHostClass(prev));
-		curr && this.renderer.addClass(this.host.nativeElement, this.getHostClass(curr));
+	private _setHostClass({ previousValue: prev, currentValue: curr }: SimpleChange) {
+		prev && this._renderer.removeClass(this._host.nativeElement, this._getHostClass(prev));
+		curr && this._renderer.addClass(this._host.nativeElement, this._getHostClass(curr));
 	}
 
-	private getHostClass(md: PropertyMetadata) {
+	private _getHostClass(md: PropertyMetadata) {
 		return `view-type-${md.viewType.cssClass}`;
 	}
 }

@@ -14,7 +14,7 @@ import { UrlHelper } from '@bp/shared/utils';
 
 import { FilterControlDirective } from './filter-control.directive';
 
-export type FilterValue = { [controlName: string]: any };
+export type FilterValue = { [controlName: string]: any; };
 
 @Component({
 	selector: 'bp-filter',
@@ -37,15 +37,18 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	empty!: boolean;
 
 	@ContentChildren(FilterControlDirective, { descendants: true })
-	private controlsQuery!: QueryList<FilterControlDirective>;
+	private _controlsQuery!: QueryList<FilterControlDirective>;
 
 	private _value$ = new BehaviorSubject<T>(<T>{});
 
-	private defaults$ = new BehaviorSubject<T>(<T>{});
+	private _defaults$ = new BehaviorSubject<T>(<T>{});
 
-	private defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>>{});
+	private _defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>>{});
 
-	constructor(private router: Router, private route: ActivatedRoute) {
+	constructor(
+		private _router: Router,
+		private _route: ActivatedRoute
+	) {
 		this.value$ = this._value$.pipe(
 			tap(v => this.empty = isEmpty(v)),
 			filter(v => v !== undefined)
@@ -53,14 +56,14 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	}
 
 	ngOnChanges({ defaults }: SimpleChanges) {
-		defaults && this.defaults$.next(this.defaults);
+		defaults && this._defaults$.next(this.defaults);
 	}
 
 	ngAfterContentInit() {
-		const filterControls$ = this.controlsQuery
+		const filterControls$ = this._controlsQuery
 			.changes
 			.pipe(
-				startWith(this.controlsQuery),
+				startWith(this._controlsQuery),
 				map((q: QueryList<FilterControlDirective>) => q.toArray()),
 				shareReplay({ refCount: false, bufferSize: 1 })
 			);
@@ -70,7 +73,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		 */
 		combineLatest(
 			filterControls$,
-			this.defaults$
+			this._defaults$
 		)
 			.pipe(
 				filter(([, defaults]) => !isEmpty(defaults)),
@@ -80,15 +83,15 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					<Stringify<T>>{}
 				))
 			)
-			.subscribe(this.defaultsStringed$);
+			.subscribe(this._defaultsStringed$);
 
 		/**
 		 * Update the filter controls on the route params change
 		 */
 		combineLatest(
 			filterControls$,
-			this.type === 'matrix' ? this.route.params : this.route.queryParams,
-			this.defaultsStringed$
+			this.type === 'matrix' ? this._route.params : this._route.queryParams,
+			this._defaultsStringed$
 		)
 			.pipe(
 				map(([controls, params, defaults]) => controls.map(c => ({
@@ -143,7 +146,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					observeOn(asyncScheduler)
 				)))),
 				map(([controlName, value]): [Params, string, string | undefined] => [
-					this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route),
+					this.type === 'matrix' ? UrlHelper.getRouteParams(this._route) : UrlHelper.getQueryParams(this._route),
 					controlName,
 					UrlHelper.toRouteString(value)
 				]),
@@ -152,12 +155,12 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			.subscribe(([routeParams, controlName, newRouteValue]) => {
 				this.except.forEach(v => delete routeParams[v]);
 
-				if (isNil(newRouteValue) || newRouteValue === get(this.defaultsStringed$.value, controlName))
+				if (isNil(newRouteValue) || newRouteValue === get(this._defaultsStringed$.value, controlName))
 					delete routeParams[controlName];
 				else
 					routeParams[controlName] = newRouteValue;
 
-				this.updateUrl(routeParams);
+				this._updateUrl(routeParams);
 			});
 
 		/**
@@ -170,20 +173,20 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 				filter(v => v.length > 0)
 			)
 			.subscribe(deleted => {
-				const routeParams = this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route);
+				const routeParams = this.type === 'matrix' ? UrlHelper.getRouteParams(this._route) : UrlHelper.getQueryParams(this._route);
 				deleted.forEach(v => delete routeParams[v.name]);
-				this.updateUrl(routeParams);
+				this._updateUrl(routeParams);
 			});
 	}
 
 	clear() {
-		this.controlsQuery.forEach(v => v.setValue(null));
+		this._controlsQuery.forEach(v => v.setValue(null));
 	}
 
-	private updateUrl(routeParams: Object) {
+	private _updateUrl(routeParams: Object) {
 		if (this.type === 'matrix')
-			this.router.navigate([routeParams], { relativeTo: this.route });
+			this._router.navigate([routeParams], { relativeTo: this._route });
 		else
-			this.router.navigate([], { queryParams: routeParams, relativeTo: this.route });
+			this._router.navigate([], { queryParams: routeParams, relativeTo: this._route });
 	}
 }

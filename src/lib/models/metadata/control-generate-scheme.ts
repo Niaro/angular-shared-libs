@@ -11,21 +11,21 @@ export class GenerateSchemeControl {
 
 	withinMatFormField = true;
 
-	private defaultValue: number | boolean | string;
+	private _defaultValue: number | boolean | string;
 
 	constructor({ key, value }: { key: string, value: number | boolean | string }) {
 		this.key = key;
-		this.defaultValue = value;
+		this._defaultValue = value;
 		this.isRender = ['payment_method_type', 'is_live', 'is3d_secure'].includes(key) ? false : true;
 		this.label = startCase(key);
-		this.type = this.getType();
+		this.type = this._getType();
 		this.withinMatFormField = this.type !== 'switch';
 	}
 
-	private getType() {
-		if (isNumber(this.defaultValue))
+	private _getType() {
+		if (isNumber(this._defaultValue))
 			return 'number';
-		if (isBoolean(this.defaultValue))
+		if (isBoolean(this._defaultValue))
 			return 'switch';
 		if (['public_key'].includes(this.key))
 			return 'textarea';

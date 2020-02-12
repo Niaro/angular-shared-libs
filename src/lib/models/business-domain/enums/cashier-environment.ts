@@ -26,7 +26,12 @@ export class CashierEnvironment extends Enumeration {
 		'https://api.bridgerpay.com'
 	);
 
-	constructor(displayName: string, public embedScriptSrc: string, public api: string) {
+	constructor(
+		displayName: string,
+		// tslint:disable: parameter-properties
+		public embedScriptSrc: string,
+		public api: string
+	) {
 		super(displayName);
 	}
 }

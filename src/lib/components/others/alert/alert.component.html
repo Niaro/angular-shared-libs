@@ -11,13 +11,13 @@
 		<bp-svg-icon name="close"></bp-svg-icon>
 	</button>
 
-	<bp-api-errors *ngIf="_errors"
-				   [src]="_errors"
+	<bp-api-errors *ngIf="errors"
+				   [src]="errors"
 				   [showType]="showType">
 	</bp-api-errors>
 
-	<bp-alert-messages *ngIf="_messages"
-					   [src]="_messages">
+	<bp-alert-messages *ngIf="messages"
+					   [src]="messages">
 	</bp-alert-messages>
 
 	<ng-content></ng-content>

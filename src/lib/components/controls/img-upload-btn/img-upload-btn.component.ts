@@ -57,7 +57,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 				this.isExceededAllowedSize = !!(this.file && (this.file.size > (15 * 1024 * 1024)));
 				if (!this.isExceededAllowedSize && this.file)
 					this.firebase.upload(this.file, this.bucketPath);
-				this.cdr.detectChanges();
+				this._cdr.detectChanges();
 			});
 	}
 

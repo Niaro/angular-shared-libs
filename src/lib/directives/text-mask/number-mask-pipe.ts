@@ -1,15 +1,18 @@
+import { isNumber } from 'lodash-es';
 import { NumberMaskConfig } from './text-mask.config';
 import { MaskPipe } from './mask-pipe';
-import { isNumber } from 'lodash-es';
 
 const NON_DIGITS_REGEXP = /\D+/g;
 const DIGIT_REGEXP = /\d/;
 
 export class NumberMaskPipe extends MaskPipe {
+
 	get thousandsSeparatorSymbolLength() {
 		return this.config.thousandsSeparatorSymbol && this.config.thousandsSeparatorSymbol.length || 0;
 	}
+
 	decimalSymbolRegExp: RegExp;
+
 	digitRegExp = DIGIT_REGEXP;
 
 	constructor(public config = new NumberMaskConfig()) {
@@ -17,16 +20,17 @@ export class NumberMaskPipe extends MaskPipe {
 		this.decimalSymbolRegExp = new RegExp(`\\${this.config.decimalSeparatorSymbol}`);
 	}
 
-	transformBody(rawValue: string) {
+	protected _transformBody(rawValue: string) {
 		if (rawValue === '' || (rawValue[0] === this.prefix[0] && rawValue.length === 1))
 			return [DIGIT_REGEXP];
-		else if (rawValue === this.config.decimalSeparatorSymbol && this.config.allowDecimal)
+
+		if (rawValue === this.config.decimalSeparatorSymbol && this.config.allowDecimal)
 			return ['0', this.decimalSymbolRegExp, DIGIT_REGEXP];
 
 		let integer;
 		let fraction!: string | (string | RegExp)[];
 		let mask: (string | RegExp)[];
-		const refinedValue = integer = this.removePrefixAndSuffix(rawValue);
+		const refinedValue = integer = this._removePrefixAndSuffix(rawValue);
 
 		const indexOfLastDecimal = refinedValue.lastIndexOf(this.config.decimalSeparatorSymbol);
 		const hasDecimal = indexOfLastDecimal !== -1;
@@ -35,7 +39,7 @@ export class NumberMaskPipe extends MaskPipe {
 		if (hasDecimal && (this.config.allowDecimal || this.config.requireDecimal)) {
 			integer = refinedValue.slice(0, indexOfLastDecimal);
 			fraction = refinedValue.slice(indexOfLastDecimal + 1, refinedValue.length);
-			fraction = this.convertToMask(fraction.replace(NON_DIGITS_REGEXP, ''));
+			fraction = this._convertToMask(fraction.replace(NON_DIGITS_REGEXP, ''));
 		}
 
 		if (isNumber(this.config.integerLimit)) {
@@ -51,10 +55,10 @@ export class NumberMaskPipe extends MaskPipe {
 			integer = integer.replace(/^0+(0$|[^0])/, '$1');
 
 		integer = this.config.includeThousandsSeparator
-			? this.addThousandsSeparator(integer)
+			? this._addThousandsSeparator(integer)
 			: integer;
 
-		mask = integer ? this.convertToMask(integer) : [DIGIT_REGEXP];
+		mask = integer ? this._convertToMask(integer) : [DIGIT_REGEXP];
 
 		if ((hasDecimal && this.config.allowDecimal) || this.config.requireDecimal === true) {
 			if (refinedValue[indexOfLastDecimal - 1] !== this.config.decimalSeparatorSymbol)
@@ -80,14 +84,14 @@ export class NumberMaskPipe extends MaskPipe {
 		return mask;
 	}
 
-	private convertToMask(text: string) {
+	private _convertToMask(text: string) {
 		return text
 			.split('')
 			.map(char => DIGIT_REGEXP.test(char) ? DIGIT_REGEXP : char);
 	}
 
 	// http://stackoverflow.com/a/10899795/604296
-	private addThousandsSeparator(n: { replace: (arg0: RegExp, arg1: string) => void; }) {
+	private _addThousandsSeparator(n: { replace: (arg0: RegExp, arg1: string) => void; }) {
 		return n.replace(/\B(?=(\d{3})+(?!\d))/g, this.config.thousandsSeparatorSymbol);
 	}
 }

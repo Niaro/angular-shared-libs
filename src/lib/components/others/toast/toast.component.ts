@@ -46,16 +46,16 @@ export class ToastComponent extends Toast {
 	undoBtnText = 'undo';
 
 	constructor(
-		protected toasterService: ToastrService,
 		public toasterPackage: ToastPackage,
-		private cdr: ChangeDetectorRef
+		protected _toasterService: ToastrService,
+		private _cdr: ChangeDetectorRef
 	) {
-		super(toasterService, toasterPackage);
+		super(_toasterService, toasterPackage);
 	}
 
 	updateProgress() {
 		super.updateProgress();
-		this.cdr.detectChanges();
+		this._cdr.detectChanges();
 	}
 
 	undo(event: Event) {

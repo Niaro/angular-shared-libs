@@ -59,10 +59,11 @@ export class ChipsControlComponent
 	ngOnChanges(changes: SimpleChanges) {
 		super.ngOnChanges(changes);
 
+		// tslint:disable-next-line: early-exit
 		if (changes.items) {
 			this.lowercasedItems = this.items && this.items.map(item => ({
+				item,
 				lowered: this.getDisplayName(item).toLowerCase(),
-				item
 			}));
 
 			this.filtered = this.items || [];
@@ -74,7 +75,7 @@ export class ChipsControlComponent
 		lineMicrotask(() => {
 				this.value = value;
 				this.internalControl.setValue(value);
-				this.updateFilteredAccordingSelected();
+				this._updateFilteredAccordingSelected();
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
@@ -83,7 +84,7 @@ export class ChipsControlComponent
 		return get(v, 'displayName') || get(v, 'name') || v.toString();
 	}
 
-	onInternalControlValueChange(input: string) {
+	protected _onInternalControlValueChange(input: string) {
 		if (isEmpty(this.items) || !isString(input))
 			return;
 
@@ -94,7 +95,7 @@ export class ChipsControlComponent
 
 		const value = this.value || [];
 		this.filtered = this.filtered.filter(v => !value.includes(v));
-		this.cdr.markForCheck();
+		this._cdr.markForCheck();
 	}
 
 	add({ input, value }: MatChipInputEvent): void {
@@ -119,7 +120,7 @@ export class ChipsControlComponent
 
 	remove(item: IChipControlItem): void {
 		this.setValue((this.value || []).filter(v => v !== item));
-		this.updateFilteredAccordingSelected();
+		this._updateFilteredAccordingSelected();
 	}
 
 	selected({ option: { value } }: MatAutocompleteSelectedEvent): void {
@@ -129,10 +130,10 @@ export class ChipsControlComponent
 
 	select(...value: IChipControlItem[]) {
 		this.setValue(uniq([...(this.value || []), ...value]));
-		this.updateFilteredAccordingSelected();
+		this._updateFilteredAccordingSelected();
 	}
 
-	private updateFilteredAccordingSelected() {
+	private _updateFilteredAccordingSelected() {
 		this.filtered = this.items.filter(v => this.value && !this.value.includes(v));
 	}
 }

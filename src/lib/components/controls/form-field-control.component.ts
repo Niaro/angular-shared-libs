@@ -37,27 +37,27 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	internalControl = new FormControl();
 
 	get externalControl(): FormControl | null {
-		return this.formControl || this.form && this.form.controls[this.formControlName] as FormControl || null;
+		return this.formControl || this.form && <FormControl>this.form.controls[this.formControlName] || null;
 	}
 
-	get form() { return this.formGroupDirective && this.formGroupDirective.form; }
+	get form() { return this._formGroupDirective && this._formGroupDirective.form; }
 
 	externalControl$ = new OptionalBehaviorSubject<FormControl | null>();
 
-	get $host() { return <HTMLElement>this.host.nativeElement; }
+	get $host() { return <HTMLElement>this._host.nativeElement; }
 
 	get isFocused() {
 		return this.$host === document.activeElement || this.$host.contains(document.activeElement);
 	}
 
-	private updateSubscription = Subscription.EMPTY;
+	private _updateSubscription = Subscription.EMPTY;
 
 	constructor(
-		protected host: ElementRef,
-		protected cdr: ChangeDetectorRef,
-		@Optional() private formGroupDirective?: FormGroupDirective
+		protected _host: ElementRef,
+		protected _cdr: ChangeDetectorRef,
+		@Optional() private _formGroupDirective?: FormGroupDirective
 	) {
-		super(cdr);
+		super(_cdr);
 	}
 
 	ngOnChanges({ formControl, formControlName, throttle, value }: SimpleChanges) {
@@ -68,12 +68,12 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			this.writeValue(this.value);
 
 		if (throttle)
-			this.listenToInternalControlValueChanges();
+			this._listenToInternalControlValueChanges();
 	}
 
 	ngOnInit() {
-		this.listenToInternalControlValueChanges();
-		this.reflectExternalControlOnInternal();
+		this._listenToInternalControlValueChanges();
+		this._reflectExternalControlOnInternal();
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -92,30 +92,30 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
-	protected validator: ValidatorFn | null = (): ValidationErrors | null => {
+	protected _validator: ValidatorFn | null = (): ValidationErrors | null => {
 		return this.internalControl.invalid
 			? { 'invalid': true }
 			: null;
-	};
+	}
 
-	protected onInternalControlValueChange(v: any) {
+	protected _onInternalControlValueChange(v: any) {
 		this.setValue(v);
 	}
 
-	private listenToInternalControlValueChanges() {
-		this.updateSubscription.unsubscribe();
-		this.updateSubscription = iif(
+	private _listenToInternalControlValueChanges() {
+		this._updateSubscription.unsubscribe();
+		this._updateSubscription = iif(
 			() => !!this.throttle,
 			this.internalControl.valueChanges.pipe(auditTime(this.throttle)),
 			this.internalControl.valueChanges
 		)
 			.subscribe(v => {
 				this.externalControl && this.externalControl.markAsDirty();
-				this.onInternalControlValueChange(v);
+				this._onInternalControlValueChange(v);
 			});
 	}
 
-	protected reflectExternalControlOnInternal() {
+	protected _reflectExternalControlOnInternal() {
 		this.externalControl$
 			.subscribe(external => this.internalControl.setValidators(external && external.validator));
 
@@ -124,6 +124,6 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 				filter(v => !!v),
 				switchMap(v => v!.statusChanges),
 			)
-			.subscribe(() => this.cdr.markForCheck());
+			.subscribe(() => this._cdr.markForCheck());
 	}
 }

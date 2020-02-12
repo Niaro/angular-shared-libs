@@ -26,63 +26,66 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	get isAdding() { return this.entity && isNil(this.entity.id); }
 
 	get controls(): { [K in NonFunctionPropertyNames<T>]: AbstractControl } | null {
-		return this.form && this.form.controls as any;
+		return this.form && <any>this.form.controls;
 	}
 
-	private formScheme?: FormScheme<T>;
+	private _formScheme?: FormScheme<T>;
 
 	constructor(
-		protected fb: FormBuilder,
-		protected cdr: ChangeDetectorRef,
-		protected snackBar: MatSnackBar
+		protected _fb: FormBuilder,
+		protected _cdr: ChangeDetectorRef,
+		protected _snackBar: MatSnackBar
 	) {
-		super(fb, cdr, snackBar);
-		this.onFormGroupChangeEmitEntityChange();
+		super(_fb, _cdr, _snackBar);
+		this._onFormGroupChangeEmitEntityChange();
 	}
 
 	ngOnChanges({ entity }: SimpleChanges) {
-		if (entity) {
-			this.entity$.next(this.entity);
-			this.entity && this.form && this.formScheme
-				? this.repopulateFormByScheme()
-				: this.setForm();
-		}
+		if (entity)
+			this._updateFormScheme();
+	}
+
+	private _updateFormScheme() {
+		this.entity$.next(this.entity);
+		this.entity && this.form && this._formScheme
+			? this._repopulateFormByScheme()
+			: this._setForm();
 	}
 
 	setFormScheme(scheme: FormScheme<T>) {
-		this.formScheme = scheme;
+		this._formScheme = scheme;
 	}
 
-	protected setForm() {
-		this.form = this.generateFormByScheme();
+	protected _setForm() {
+		this.form = this._generateFormByScheme();
 	}
 
-	protected generateFormByScheme(
-		formScheme = this.formScheme,
+	protected _generateFormByScheme(
+		formScheme = this._formScheme,
 		entity: MetadataEntity = this.entity || this.factory()
 	): FormGroup {
 		if (!formScheme)
 			throw new Error('The default behavior of the form entity base class requires the form scheme to be set on the constructor');
 
-		return this.fb.group(mapValues(formScheme, (v, k) => isPlainObject(v)
-			? this.generateFormByScheme(v as FormScheme<any>, get(entity, k))
+		return this._fb.group(mapValues(formScheme, (v, k) => isPlainObject(v)
+			? this._generateFormByScheme(<FormScheme<any>>v, get(entity, k))
 			: [get(entity, k), v]
 		));
 	}
 
-	protected repopulateFormByScheme(
+	protected _repopulateFormByScheme(
 		form = this.form,
-		formScheme = this.formScheme,
+		formScheme = this._formScheme,
 		entity = this.entity
 	) {
 		form && forEach(formScheme, (v, k) => isPlainObject(v)
-			? this.repopulateFormByScheme(form.controls[k] as FormGroup, v as FormScheme<any>, get(entity, k))
+			? this._repopulateFormByScheme(<FormGroup>form.controls[k], <FormScheme<any>>v, get(entity, k))
 			: (<FormControl>form.controls[k])
 				.setValue(get(entity, k), { emitEvent: false, emitModelToViewChange: true })
 		);
 	}
 
-	private onFormGroupChangeEmitEntityChange() {
+	private _onFormGroupChangeEmitEntityChange() {
 		this.form$
 			.pipe(
 				switchMap(v => v

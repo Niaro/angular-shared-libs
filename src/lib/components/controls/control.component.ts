@@ -19,11 +19,11 @@ export abstract class ControlComponent<T = any>
 
 	@HostBinding('class.empty') get empty() { return isNil(this.value) || (<any>this.value) === ''; }
 
-	protected validator!: ValidatorFn | null;
+	protected _validator!: ValidatorFn | null;
 
-	private onChangeCallbacks: ((value: any) => void)[] = [];
+	private _onChangeCallbacks: ((value: any) => void)[] = [];
 
-	constructor(protected cdr: ChangeDetectorRef) {
+	constructor(protected _cdr: ChangeDetectorRef) {
 		super();
 	}
 
@@ -39,13 +39,13 @@ export abstract class ControlComponent<T = any>
 	writeValue(value: T): void {
 		lineMicrotask(() => {
 			this.value = value;
-			this.cdr.markForCheck();
+			this._cdr.markForCheck();
 		});
 	}
 
 	registerOnChange(fn: (value: any) => void): void {
-		this.onChangeCallbacks = uniq([...this.onChangeCallbacks, fn]);
-		this.onChange = v => this.onChangeCallbacks.forEach(cb => cb(v));
+		this._onChangeCallbacks = uniq([...this._onChangeCallbacks, fn]);
+		this.onChange = v => this._onChangeCallbacks.forEach(cb => cb(v));
 	}
 
 	registerOnTouched(fn: () => void): void {
@@ -59,7 +59,7 @@ export abstract class ControlComponent<T = any>
 	}
 
 	validate(c: AbstractControl): ValidationErrors | null {
-		return this.validator ? this.validator(c) : null;
+		return this._validator ? this._validator(c) : null;
 	}
 	// #endregion Implementation of the Validator interface
 
@@ -69,15 +69,15 @@ export abstract class ControlComponent<T = any>
 			return;
 		}
 
-		this.value = value as T;
+		this.value = <T>value;
 
 		if (emitChange) {
-			this.valueChange$.next(value as T);
+			this.valueChange$.next(<T>value);
 			this.onChange(value);
 		}
 
 		this.validatorOnChange();
-		this.cdr.markForCheck();
+		this._cdr.markForCheck();
 	}
 
 }

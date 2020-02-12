@@ -12,7 +12,7 @@ export class CryptoCurrency extends MetadataEntity {
 		super(isString(dataOrCode) ? { code: dataOrCode } : dataOrCode);
 
 		if (CRYPTOS.has(this.code))
-			return CRYPTOS.get(this.code) as CryptoCurrency;
+			return <CryptoCurrency>CRYPTOS.get(this.code);
 
 		if (Cryptos[this.code]) {
 			this.name = Cryptos[this.code];
@@ -39,6 +39,7 @@ export class CryptoCurrency extends MetadataEntity {
 
 export type CryptoCurrencyCode = Exclude<keyof typeof Cryptos, 'prototype'>;
 
+// tslint:disable: naming-convention
 class Cryptos {
 	static ADA = 'Cardano';
 	static B2BX = 'B2BX';

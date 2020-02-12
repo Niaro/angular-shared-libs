@@ -16,23 +16,23 @@ export class FilterControlDirective {
 	value$ = new OptionalBehaviorSubject<any>();
 	get value() { return this.value$.value; }
 
-	get select() { return this.matSelect || this.bpSelect; }
+	get select() { return this._matSelect || this._bpSelect; }
 
-	get control(): ControlValueAccessor { return this.controlValueAccessor && this.controlValueAccessor[0] || this.select; }
+	get control(): ControlValueAccessor { return this._controlValueAccessor && this._controlValueAccessor[0] || this.select; }
 
 	constructor(
-		@Optional() @Inject(NG_VALUE_ACCESSOR) @Self() private controlValueAccessor: ControlValueAccessor[],
-		@Optional() @Self() private matSelect: MatSelect,
-		@Optional() @Self() private bpSelect: BpSelectComponent,
+		@Optional() @Inject(NG_VALUE_ACCESSOR) @Self() private _controlValueAccessor: ControlValueAccessor[],
+		@Optional() @Self() private _matSelect: MatSelect,
+		@Optional() @Self() private _bpSelect: BpSelectComponent,
 	) {
 		if (!this.control)
 			throw new Error('FilterControlDirective must be used on a component which implements ControlValuesAccessor interface');
 
 		if (this.select)
 			this.select.selectionChange
-				.subscribe((v?: MatSelectChange) => this.emit(v && v.value));
+				.subscribe((v?: MatSelectChange) => this._emit(v && v.value));
 		else
-			this.control.registerOnChange((v: any) => this.emit(v));
+			this.control.registerOnChange((v: any) => this._emit(v));
 	}
 
 	setValue(value: any) {
@@ -43,7 +43,7 @@ export class FilterControlDirective {
 			this.control.writeValue(value);
 	}
 
-	private emit(value?: any) {
+	private _emit(value?: any) {
 		value = value && value.valueOf();
 		if ((value && UrlHelper.toRouteString(value)) !== (this.value && UrlHelper.toRouteString(this.value.valueOf())))
 			this.value$.next(value);

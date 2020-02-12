@@ -1,10 +1,10 @@
 <button [class.progress]="inProgress"
-		[class.disabled]="disabled"
+		[class.disabled]="disabledOrPending"
 		type="button"
 		matRipple
 		matRippleCentered="centered"
-		[matRippleDisabled]="disabled"
-		(click)="disabled && $event.stopPropagation()">
+		[matRippleDisabled]="disabledOrPending"
+		(click)="disabledOrPending && $event.stopPropagation()">
 	<ng-content></ng-content>
 
 	<mat-progress-spinner *ngIf="inProgress"

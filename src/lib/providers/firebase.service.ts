@@ -2,7 +2,6 @@ import { Injectable, InjectionToken, Inject } from '@angular/core';
 import { snakeCase, isEmpty, last } from 'lodash-es';
 import { Subject, Observable, from, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Dictionary } from 'lodash';
 import * as m from 'moment';
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
@@ -34,21 +33,21 @@ export class FirebaseService {
 
 	uploadError$ = new Subject<string>();
 
-	private orderBy = 'updatedAt';
+	private _orderBy = 'updatedAt';
 
-	private queryDocumentSnapshotsById: Dictionary<any> = {};
+	private _queryDocumentSnapshotsById: Dictionary<any> = {};
 
-	protected get db() { return firebase.firestore(); }
+	protected get _db() { return firebase.firestore(); }
 
-	protected storage!: firebase.storage.Storage;
+	protected _storage!: firebase.storage.Storage;
 
-	protected functions!: firebase.functions.Functions;
+	protected _functions!: firebase.functions.Functions;
 
-	protected uploadTask!: firebase.storage.UploadTask;
+	protected _uploadTask!: firebase.storage.UploadTask;
 
 	constructor(
-		protected telemetry: TelemetryService,
-		@Inject(FIREBASE_APP_ID) protected firebaseAppId: string
+		protected _telemetry: TelemetryService,
+		@Inject(FIREBASE_APP_ID) protected _firebaseAppId: string
 	) {
 		if (isEmpty(firebase.apps))
 			firebase.initializeApp({
@@ -58,32 +57,32 @@ export class FirebaseService {
 				projectId: 'web-hosting-213618',
 				storageBucket: 'web-hosting-213618.appspot.com',
 				messagingSenderId: '977741303368',
-				appId: this.firebaseAppId,
+				appId: this._firebaseAppId,
 			});
 
-		this.storage = firebase.storage();
-		this.functions = firebase.app().functions(FB_FUNCTIONS_REGION);
+		this._storage = firebase.storage();
+		this._functions = firebase.app().functions(FB_FUNCTIONS_REGION);
 	}
 
 	signIn(credentials: { userName: string, password: string }) {
 		return from(firebase.auth().signInWithEmailAndPassword(credentials.userName, credentials.password))
-			.pipe(catchError(this.throwAsResponseError));
+			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	getDocumentId(collectionPath: string) {
-		return this.db.collection(collectionPath).doc().id;
+		return this._db.collection(collectionPath).doc().id;
 	}
 
 	collection(collectionPath: string) {
-		return this.db.collection(collectionPath);
+		return this._db.collection(collectionPath);
 	}
 
 	doc(documentPath: string) {
-		return this.db.doc(documentPath);
+		return this._db.doc(documentPath);
 	}
 
 	batch() {
-		return this.db.batch();
+		return this._db.batch();
 	}
 
 	arrayUnion(...elements: any[]) {
@@ -105,7 +104,7 @@ export class FirebaseService {
 	) {
 		return new Observable<PagedResults<T>>(subscriber => {
 			let query = this.collection(collectionPath)
-				.orderBy(orderBy || this.orderBy, 'desc')
+				.orderBy(orderBy || this._orderBy, 'desc')
 				.limit(limit);
 
 			if (authorUid)
@@ -115,7 +114,7 @@ export class FirebaseService {
 				query = query.where('searchTerms', 'array-contains-any', searchTerms);
 
 			if (page)
-				query = query.startAfter(this.queryDocumentSnapshotsById[page]);
+				query = query.startAfter(this._queryDocumentSnapshotsById[page]);
 
 			const unsubscribe = query.onSnapshot(
 				snapshot => {
@@ -126,19 +125,19 @@ export class FirebaseService {
 						: null;
 
 					if (nextPageCursor)
-						this.queryDocumentSnapshotsById[nextPageCursor] = lastDoc;
+						this._queryDocumentSnapshotsById[nextPageCursor] = lastDoc;
 
 					subscriber.next(new PagedResults({
 						nextPageCursor,
 						firstPage: !page,
-						records: docs.map(v => factory(v.data() as Partial<T>))
+						records: docs.map(v => factory(<Partial<T>>v.data()))
 					}));
 				},
 				e => subscriber.error(e)
 			);
 			return () => unsubscribe();
 		})
-			.pipe(catchError(this.throwAsResponseError));
+			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	getCollectionOnSnapshot<T>(
@@ -147,19 +146,19 @@ export class FirebaseService {
 	) {
 		return new Observable<T[]>(subscriber => {
 			const unsubscribe = this.collection(collectionPath).onSnapshot(
-				snapshot => subscriber.next(snapshot.docs.map(v => factory(v.data() as Partial<T>))),
+				snapshot => subscriber.next(snapshot.docs.map(v => factory(<Partial<T>>v.data()))),
 				e => subscriber.error(e)
 			);
 			return () => unsubscribe();
 		})
-			.pipe(catchError(this.throwAsResponseError));
+			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	getCollection<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
 		return from(this.collection(collectionPath).get())
 			.pipe(
-				map(snapshot => snapshot.docs.map(v => factory(v.data() as Partial<T>))),
-				catchError(this.throwAsResponseError)
+				map(snapshot => snapshot.docs.map(v => factory(<Partial<T>>v.data()))),
+				catchError(this._throwAsResponseError)
 			);
 	}
 
@@ -169,30 +168,30 @@ export class FirebaseService {
 	) {
 		return new Observable<T>(subscriber => {
 			const unsubscribe = this.doc(documentPath).onSnapshot(
-				snapshot => subscriber.next(factory(snapshot.data() as Partial<T>)),
+				snapshot => subscriber.next(factory(<Partial<T>>snapshot.data())),
 				e => subscriber.error(e)
 			);
 			return () => unsubscribe();
 		})
-			.pipe(catchError(this.throwAsResponseError));
+			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	getDocument<T>(documentPath: string): Observable<Partial<T> | null> {
 		return from(this.doc(documentPath).get())
 			.pipe(
-				map(snapshot => (snapshot.data() as Partial<T>) || null),
-				catchError(this.throwAsResponseError)
+				map(snapshot => (<Partial<T>>snapshot.data()) || null),
+				catchError(this._throwAsResponseError)
 			);
 	}
 
 	delete(documentPath: string): Observable<void> {
 		return from(this.doc(documentPath).delete())
-			.pipe(catchError(this.throwAsResponseError));
+			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	set(documentPath: string, body: Object): Observable<void> {
 		return from(this.doc(documentPath).set(JSON.parse(JSON.stringify(body))))
-			.pipe(catchError(this.throwAsResponseError));
+			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	save<T extends Entity>(
@@ -231,22 +230,22 @@ export class FirebaseService {
 		const startProgressValue = 25;
 
 		this.uploadProgress$.next(startProgressValue);
-		this.uploadTask && this.uploadTask.cancel();
+		this._uploadTask && this._uploadTask.cancel();
 
-		const fileRef = await this.getFileRef(file.name, path);
+		const fileRef = await this._getFileRef(file.name, path);
 
-		this.uploadTask = fileRef.put(file);
+		this._uploadTask = fileRef.put(file);
 
-		this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+		this._uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
 			snapshot => {
 				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 				progress > startProgressValue && this.uploadProgress$.next(progress);
 			},
 			error => {
 				this.uploadError$.next(error.message);
-				this.telemetry.captureError(error);
+				this._telemetry.captureError(error);
 			},
-			() => this.uploadTask.snapshot.ref
+			() => this._uploadTask.snapshot.ref
 				.getDownloadURL()
 				.then((downloadURL) => {
 					this.uploadedDownloadUrl$.next(downloadURL);
@@ -256,15 +255,15 @@ export class FirebaseService {
 	}
 
 	getFnCall<U, T = any>(firebaseFunctionName: string, body?: T): Observable<U> {
-		return from(this.functions.httpsCallable(firebaseFunctionName)(body))
+		return from(this._functions.httpsCallable(firebaseFunctionName)(body))
 			.pipe(
 				map(v => v.data),
-				catchError(this.throwAsResponseError)
+				catchError(this._throwAsResponseError)
 			);
 	}
 
 	async postFnCall<T>(firebaseFunctionName: string, body: T): Promise<void> {
-		await this.functions.httpsCallable(firebaseFunctionName)(body);
+		await this._functions.httpsCallable(firebaseFunctionName)(body);
 	}
 
 	onAuthStateChange(): Observable<firebase.User | null> {
@@ -272,7 +271,7 @@ export class FirebaseService {
 			.auth()
 			.onAuthStateChanged(
 				v => subscriber.next(v),
-				e => subscriber.error(this.mapToResponseError(e))
+				e => subscriber.error(this._mapToResponseError(e))
 			)
 		);
 	}
@@ -281,21 +280,21 @@ export class FirebaseService {
 		firebase.auth().useDeviceLanguage();
 	}
 
-	private async getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
-		const fileRef = this.storage
+	private async _getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
+		const fileRef = this._storage
 			.ref(path)
-			.child(this.snakeCaseFileName(fileName));
+			.child(this._snakeCaseFileName(fileName));
 
 		const existFileMetadata: firebase.storage.FullMetadata = await fileRef.getMetadata()
 			.catch(() => { /* swallow 404 error since the empty var would be there is no file found */ });
 
 		return existFileMetadata
-			? await this.getFileRef(this.increaseFileNameCounter(existFileMetadata.name), path)
+			? await this._getFileRef(this._increaseFileNameCounter(existFileMetadata.name), path)
 			: fileRef;
 	}
 
-	private increaseFileNameCounter(name: string) {
-		const fileName = this.getFilenameWithoutExtension(name);
+	private _increaseFileNameCounter(name: string) {
+		const fileName = this._getFilenameWithoutExtension(name);
 		const counterRegexp = /_(\d+)$/;
 		const counterMatchInName = fileName.match(counterRegexp);
 		const counter = +(counterMatchInName && counterMatchInName[1] || 0) + 1;
@@ -305,18 +304,18 @@ export class FirebaseService {
 		);
 	}
 
-	private snakeCaseFileName(name: string) {
-		const fileName = this.getFilenameWithoutExtension(name);
+	private _snakeCaseFileName(name: string) {
+		const fileName = this._getFilenameWithoutExtension(name);
 		return name.replace(fileName, snakeCase(fileName));
 	}
 
-	private getFilenameWithoutExtension(name: string): string {
+	private _getFilenameWithoutExtension(name: string): string {
 		if (!name) return '';
 		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
 	}
 
-	private throwAsResponseError = (v: firebase.FirebaseError) => throwError(this.mapToResponseError(v));
+	private _throwAsResponseError = (v: firebase.FirebaseError) => throwError(this._mapToResponseError(v));
 
-	private mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
+	private _mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
 		new ResponseError({ messages: [{ type: e.code, message: e.message }] })
 }

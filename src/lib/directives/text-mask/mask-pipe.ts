@@ -24,17 +24,17 @@ export abstract class MaskPipe {
 
 	transform(rawValue: string): TextMask | undefined {
 		rawValue = isNil(rawValue) ? '' : rawValue;
-		const bodyMask = this.transformBody(rawValue);
-		return bodyMask && this.tryAddPrefixAndSuffix(bodyMask)
+		const bodyMask = this._transformBody(rawValue);
+		return bodyMask && this._tryAddPrefixAndSuffix(bodyMask)
 			.filter(char => !isUndefined(char));
 	}
 
-	protected abstract transformBody(rawValue: string): TextMask | undefined;
+	protected abstract _transformBody(rawValue: string): TextMask | undefined;
 
 	/**
 	 * Method is getting rid of prefix and suffix chars from input value
 	 */
-	protected removePrefixAndSuffix(rawValue: string) {
+	protected _removePrefixAndSuffix(rawValue: string) {
 		const refinedRawValue = this.prefixRegExp && this.prefixRegExp.test(rawValue)
 			? rawValue.substring(this.prefixLength)
 			: rawValue;
@@ -43,7 +43,7 @@ export abstract class MaskPipe {
 			: refinedRawValue;
 	}
 
-	protected tryAddPrefixAndSuffix(mask: TextMask): TextMask {
+	protected _tryAddPrefixAndSuffix(mask: TextMask): TextMask {
 		if (this.prefixLength > 0)
 			mask = this.prefix.split('').concat(<any>mask);
 

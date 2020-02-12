@@ -16,6 +16,7 @@ import { ValidationErrorStrings } from '../validation-error-strings';
 	animations: [SLIDE]
 })
 export class ValidationErrorComponent implements OnChanges {
+
 	@Input('errors') errors!: IValidationErrors | null;
 
 	@Input() animate = true;
@@ -24,13 +25,14 @@ export class ValidationErrorComponent implements OnChanges {
 
 	error$!: Observable<string> | null;
 
-	constructor(@Optional() private translate?: TranslateService) { }
+	constructor(@Optional() private _translate?: TranslateService) { }
 
 	ngOnChanges() {
+		// tslint:disable-next-line: early-exit
 		if (this.errors)
-			this.error$ = this.translate
-				? this.translate.onLangChange.pipe(
-					map(() => new ValidationErrorStrings(this.errors!, this.translate)[0])
+			this.error$ = this._translate
+				? this._translate.onLangChange.pipe(
+					map(() => new ValidationErrorStrings(this.errors!, this._translate)[0])
 				)
 				: of(new ValidationErrorStrings(this.errors)[0]);
 		else

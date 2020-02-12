@@ -137,7 +137,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	 * Character that acts as a decimal point
 	 * @default separator of current culture
 	 */
-	decimalSeparatorSymbol = this.getLocaleDecimalSeparatorSymbol();
+	decimalSeparatorSymbol = this._getLocaleDecimalSeparatorSymbol();
 
 	/**
 	 * How many digits to allow after the decimal
@@ -204,7 +204,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	// 	return super.assign(config);
 	// }
 
-	private getLocaleDecimalSeparatorSymbol(): string {
+	private _getLocaleDecimalSeparatorSymbol(): string {
 		return 1.1.toLocaleString().substring(1, 2);
 	}
 }

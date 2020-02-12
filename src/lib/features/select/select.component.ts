@@ -1,3 +1,4 @@
+// tslint:disable
 /**
  * We copied the mat-select implementation because they hardcode some constants
  * which we need to be changeable at runtime
@@ -1246,6 +1247,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		// If the panel is scrolled to the very top, it won't be able to fit the panel
 		// by scrolling, so set the offset to 0 to allow the fallback position to take
 		// effect.
+		// tslint:disable-next-line: early-exit
 		if (this._scrollTop <= 0) {
 			this._scrollTop = 0;
 			this._offsetY = 0;
@@ -1268,6 +1270,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		// If the panel is scrolled to the very bottom, it won't be able to fit the
 		// panel by scrolling, so set the offset to 0 to allow the fallback position
 		// to take effect.
+		// tslint:disable-next-line: early-exit
 		if (this._scrollTop >= maxScroll) {
 			this._scrollTop = maxScroll;
 			this._offsetY = 0;

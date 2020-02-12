@@ -14,16 +14,16 @@ const { url: API_URL, version: API_VERSION } = environment.api || { url: '', ver
 	providedIn: 'root',
 })
 export class ApiRequestInterceptorService implements HttpInterceptor {
-	private static instance: ApiRequestInterceptorService;
+	private static _instance: ApiRequestInterceptorService;
 
 	headers: Dictionary<string | null> = {
 		[CONTENT_TYPE]: 'application/json',
 		'json-naming-strategy': 'camelcase',
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302
 		// response code which if handled by the browser redirects the page, but with the service worker used as proxy for the api calls
-		// it doesn't happpen
+		// it doesn't happen
 		'ngsw-bypass': '',
-		// for cloudlfare access https://developers.cloudflare.com/access/faq/
+		// for cloudflare access https://developers.cloudflare.com/access/faq/
 		'credentials': 'same-origin'
 	};
 
@@ -31,13 +31,14 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 
 	baseUrl = `${API_URL ? (API_URL.includes('api') ? API_URL : `${API_URL}/api`) : '/api'}${API_VERSION ? `/${API_VERSION}` : ''}`;
 
-	private authorized$ = new BehaviorSubject(false);
+	private _authorized$ = new BehaviorSubject(false);
 
 	constructor() {
-		if (ApiRequestInterceptorService.instance)
-			return ApiRequestInterceptorService.instance;
+		console.warn('API INTERCEPTOR');
+		if (ApiRequestInterceptorService._instance)
+			return ApiRequestInterceptorService._instance;
 
-		return ApiRequestInterceptorService.instance = this;
+		return ApiRequestInterceptorService._instance = this;
 	}
 
 	waitForAuthorizationTokenOnXHRs() {
@@ -46,17 +47,17 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 
 	authorized(token: string | null | undefined): void {
 		this.headers.Authorization = token ? `Bearer ${token}` : '';
-		this.authorized$.next(!!token);
+		this._authorized$.next(!!token);
 	}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return this._checkShouldWaitForAuthorizationToken(request)
-			? this.authorized$.pipe(
+			? this._authorized$.pipe(
 				filter(it => !!it),
 				first(),
-				switchMap(() => this.enhanceRequest(request, next))
+				switchMap(() => this._enhanceRequest(request, next))
 			)
-			: this.enhanceRequest(request, next);
+			: this._enhanceRequest(request, next);
 	}
 
 	private _checkShouldWaitForAuthorizationToken(request: HttpRequest<any>) {
@@ -65,7 +66,7 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 			&& this._shouldWaitForAuthorizationToken;
 	}
 
-	private enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+	private _enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next.handle(request.clone({
 			url: this._shouldIncludeBaseHrefIntoXHRUrl(request)
 				? `${this.baseUrl}/${request.url}`

@@ -12,7 +12,7 @@ export abstract class Destroyable implements OnDestroy {
 		this.destroyed$.complete();
 	}
 
-	takeUntilDestroyed = <T>(source: Observable<T>) => source
+	takeUntilDestroyed = <T>(source$: Observable<T>) => source$
 		.pipe(takeUntil(this.destroyed$))
 
 }

@@ -3,7 +3,6 @@ import { QueryParamsHandling, Router, ActivatedRoute, NavigationEnd, UrlTree, Ev
 import { Subscription } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
 import { isString, isObject } from 'lodash-es';
-import { Dictionary } from 'lodash';
 
 /**
  * The native router link directive creates an url relative to the activated route
@@ -24,7 +23,7 @@ export class RouterLinkRootOutletsWithHrefDirective implements OnChanges, OnDest
 		if (!isObject(outlets))
 			throw new Error('RouterLinkOutlets accepts only a dictionary where the keys are the outlet names and the values are the route commands');
 
-		this.commands = [{ outlets }];
+		this._commands = [{ outlets }];
 	}
 
 	@HostBinding('attr.target') @Input() target!: string;
@@ -43,24 +42,25 @@ export class RouterLinkRootOutletsWithHrefDirective implements OnChanges, OnDest
 
 	@Input() state?: { [k: string]: any };
 
-	private commands: any[] = [];
+	private _commands: any[] = [];
 
-	private subscription: Subscription;
+	private _subscription: Subscription;
 
 	// the url displayed on the anchor element.
 	@HostBinding() href!: string;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private locationStrategy: LocationStrategy
+		private _router: Router,
+		private _route: ActivatedRoute,
+		private _locationStrategy: LocationStrategy
 	) {
-		this.subscription = router.events
-			.subscribe((s: Event) => s instanceof NavigationEnd && this.updateTargetUrlAndHref());
+		this._subscription = _router.events
+			.subscribe((s: Event) => s instanceof NavigationEnd && this._updateTargetUrlAndHref());
 	}
 
-	ngOnChanges(changes: {}): any { this.updateTargetUrlAndHref(); }
-	ngOnDestroy(): any { this.subscription.unsubscribe(); }
+	ngOnChanges(changes: {}): any { this._updateTargetUrlAndHref(); }
+
+	ngOnDestroy(): any { this._subscription.unsubscribe(); }
 
 	@HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'])
 	onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean {
@@ -70,7 +70,7 @@ export class RouterLinkRootOutletsWithHrefDirective implements OnChanges, OnDest
 		if (isString(this.target) && this.target !== '_self')
 			return true;
 
-		this.router.navigateByUrl(this.urlTree, {
+		this._router.navigateByUrl(this.urlTree, {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
 			replaceUrl: attrBoolValue(this.replaceUrl),
 			state: this.state
@@ -79,13 +79,13 @@ export class RouterLinkRootOutletsWithHrefDirective implements OnChanges, OnDest
 		return false;
 	}
 
-	private updateTargetUrlAndHref(): void {
-		this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+	private _updateTargetUrlAndHref(): void {
+		this.href = this._locationStrategy.prepareExternalUrl(this._router.serializeUrl(this.urlTree));
 	}
 
 	get urlTree(): UrlTree {
-		return this.router.createUrlTree(this.commands, {
-			relativeTo: this.route.root,
+		return this._router.createUrlTree(this._commands, {
+			relativeTo: this._route.root,
 			queryParams: this.queryParams,
 			fragment: this.fragment,
 			queryParamsHandling: this.queryParamsHandling,
@@ -105,7 +105,7 @@ export class RouterLinkRootOutletsDirective {
 		if (!isObject(outlets))
 			throw new Error('RouterLinkOutlets accepts only a dictionary where the keys are the outlet names and the values are the route commands');
 
-		this.commands = [{ outlets }];
+		this._commands = [{ outlets }];
 	}
 
 	@Input() queryParams !: { [k: string]: any };
@@ -122,13 +122,13 @@ export class RouterLinkRootOutletsDirective {
 
 	@Input() state?: { [k: string]: any };
 
-	private commands: any[] = [];
+	private _commands: any[] = [];
 
-	private preserve !: boolean;
+	private _preserve !: boolean;
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
+		private _router: Router,
+		private _route: ActivatedRoute,
 		// tslint:disable-next-line: no-attribute-decorator
 		@Attribute('tabindex') tabIndex: string,
 		renderer: Renderer2,
@@ -144,16 +144,16 @@ export class RouterLinkRootOutletsDirective {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
 			replaceUrl: attrBoolValue(this.replaceUrl),
 		};
-		this.router.navigateByUrl(this.urlTree, extras);
+		this._router.navigateByUrl(this.urlTree, extras);
 		return true;
 	}
 
 	get urlTree(): UrlTree {
-		return this.router.createUrlTree(this.commands, {
-			relativeTo: this.route.root,
+		return this._router.createUrlTree(this._commands, {
+			relativeTo: this._route.root,
 			queryParams: this.queryParams,
 			fragment: this.fragment,
-			preserveQueryParams: attrBoolValue(this.preserve),
+			preserveQueryParams: attrBoolValue(this._preserve),
 			queryParamsHandling: this.queryParamsHandling,
 			preserveFragment: attrBoolValue(this.preserveFragment),
 		});

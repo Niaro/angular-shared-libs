@@ -50,11 +50,11 @@ export class IntercomService {
 
 	private _isFirstBoot = true;
 
-	private _user_id?: string;
+	private _userId?: string;
 
 	private _userId$ = this.enabled
-		? defer(() => this._user_id
-			? of(this._user_id)
+		? defer(() => this._userId
+			? of(this._userId)
 			: timer(0, 50)
 				.pipe(
 					map(() => <string><unknown>((<any>window).Intercom && Intercom('getVisitorId'))),
@@ -81,7 +81,7 @@ export class IntercomService {
 	}
 
 	update(config?: IntercomConfig) {
-		this._user_id = config?.user_id;
+		this._userId = config?.user_id;
 		this._whenTelemetryEnabledSaveSessionOnIntercom();
 		Intercom('update', config);
 	}
@@ -112,10 +112,13 @@ export class IntercomService {
 
 	private async _linkLogrocketSessionsToIntercomUser() {
 		const userId = await this.getUserId();
-		if (userId)
-			this.update({
-				logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
-			});
+
+		if (!userId)
+			return;
+
+		this.update({
+			logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
+		});
 	}
 
 	private async _trackLogrocketSessionOnIntercom() {

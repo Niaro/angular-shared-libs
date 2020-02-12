@@ -32,6 +32,7 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 
 	@Input() panelClass!: string;
 
+	// tslint:disable-next-line: naming-convention
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 
 	@HostBinding('class.empty') get empty() { return this.value.empty; }
@@ -48,7 +49,7 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	writeValue(value: DateRangeInputValue): void {
 		lineMicrotask(() => {
 				this.value = DateRange.parse(value);
-				this.cdr.markForCheck();
+				this._cdr.markForCheck();
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface

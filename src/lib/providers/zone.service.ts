@@ -6,11 +6,11 @@ export class ZoneService {
 	static zone: NgZone;
 
 	static run<T>(fn: (...args: any[]) => T): T {
-		return this.zone.run(fn);
+		return ZoneService.zone.run(fn);
 	}
 
 	static runOutside<T>(fn: (...args: any[]) => T): T {
-		return this.zone.runOutsideAngular(fn);
+		return ZoneService.zone.runOutsideAngular(fn);
 	}
 
 	constructor(zone: NgZone) {

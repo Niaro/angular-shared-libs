@@ -11,28 +11,33 @@ type StatusPosition = 'top' | 'left';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusBarComponent implements OnChanges {
+
 	@Input('src') status!: Describable;
+
 	@Input() position!: StatusPosition;
 
-	constructor(@Host() private container: StatusBarContainerDirective, private renderer: Renderer2) { }
+	constructor(
+		@Host() private _container: StatusBarContainerDirective,
+		private _renderer: Renderer2
+	) { }
 
 	ngOnChanges({ position, status }: SimpleChanges) {
 		if (position) {
-			this.renderer.removeClass(this.container.$host, this.getStatusBarClass(position.previousValue));
-			this.renderer.addClass(this.container.$host, this.getStatusBarClass(position.currentValue));
+			this._renderer.removeClass(this._container.$host, this._getStatusBarClass(position.previousValue));
+			this._renderer.addClass(this._container.$host, this._getStatusBarClass(position.currentValue));
 		}
 
 		if (status) {
-			this.renderer.removeClass(this.container.$host, this.getStatusClass(status.previousValue));
-			this.renderer.addClass(this.container.$host, this.getStatusClass(status.currentValue));
+			this._renderer.removeClass(this._container.$host, this._getStatusClass(status.previousValue));
+			this._renderer.addClass(this._container.$host, this._getStatusClass(status.currentValue));
 		}
 	}
 
-	private getStatusClass(status: Enumeration) {
+	private _getStatusClass(status: Enumeration) {
 		return `status-${status}`;
 	}
 
-	private getStatusBarClass(position: StatusPosition) {
+	private _getStatusBarClass(position: StatusPosition) {
 		return `status-bar-${position}`;
 	}
 }

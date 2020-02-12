@@ -3,7 +3,10 @@ import { isNil, assign, isString, chunk, omit } from 'lodash-es';
 
 const RANGE_DELIMITER = ':';
 
-export type DateRangeInput = { from?: m.MomentInput, to?: m.MomentInput };
+export type DateRangeInput = {
+	from?: m.MomentInput;
+	to?: m.MomentInput;
+};
 
 export type DateRangeInputValue = DateRange | DateRangeInput | string;
 
@@ -27,17 +30,17 @@ export class DateRange {
 
 	get from() { return this._from; }
 	set from(value) {
-		this._from = value && this.parseMoment(value);
-		this.fromFormatted = this._from && this._from.format(this.format);
-		this.setUnixText();
+		this._from = value && this._parseMoment(value);
+		this.fromFormatted = this._from && this._from.format(this._format);
+		this._setUnixText();
 	}
 	fromFormatted: string | undefined;
 
 	get to() { return this._to; }
 	set to(value) {
-		this._to = value && this.parseMoment(value);
-		this.toFormatted = this._to && this._to.format(this.format);
-		this.setUnixText();
+		this._to = value && this._parseMoment(value);
+		this.toFormatted = this._to && this._to.format(this._format);
+		this._setUnixText();
 	}
 	toFormatted: string | undefined;
 
@@ -49,9 +52,16 @@ export class DateRange {
 
 	private _to: m.Moment | undefined;
 
-	private unixText!: string | undefined;
+	private _unixText!: string | undefined;
 
-	constructor(config?: DateRangeInput | string, private format = 'LL') {
+	private _format!: string;
+
+	constructor(
+		config?: DateRangeInput | string,
+		format = 'LL'
+	) {
+		this._format = format;
+
 		if (isString(config))
 			return DateRange.parseString(config, format);
 
@@ -60,15 +70,15 @@ export class DateRange {
 	}
 
 	clone() {
-		return new DateRange(this, this.format);
+		return new DateRange(this, this._format);
 	}
 
 	toString(): any {
-		return this.unixText;
+		return this._unixText;
 	}
 
 	valueOf(): any {
-		return this.unixText;
+		return this._unixText;
 	}
 
 	unix() {
@@ -88,20 +98,20 @@ export class DateRange {
 	}
 
 	isSame(other: DateRange) {
-		return this.unixText === other.unixText;
+		return this._unixText === other._unixText;
 	}
 
-	private setUnixText() {
-		const from = this.getUnixString(this._from);
-		const to = this.getUnixString(this._to);
-		this.unixText = from || to ? `${from}${RANGE_DELIMITER}${to}` : undefined;
+	private _setUnixText() {
+		const from = this._getUnixString(this._from);
+		const to = this._getUnixString(this._to);
+		this._unixText = from || to ? `${from}${RANGE_DELIMITER}${to}` : undefined;
 	}
 
-	private getUnixString(moment?: m.Moment) {
+	private _getUnixString(moment?: m.Moment) {
 		return moment ? moment.format('X') : '';
 	}
 
-	private parseMoment(value: m.MomentInput): m.Moment {
+	private _parseMoment(value: m.MomentInput): m.Moment {
 		return m.isMoment(value) ? value : m(value);
 	}
 }

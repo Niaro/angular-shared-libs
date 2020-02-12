@@ -1,34 +1,36 @@
 import { Directive, ElementRef, Output, OnDestroy } from '@angular/core';
 import { TouchBuilder } from './touch-builder';
-import { TouchManager } from './touch-manager';
 
 @Directive({
 	selector: '[bpRotate],[bpPinch],[bpSwipe],[bpDoubleTap],[bpLongTap],[bpSingleTap],[bpTap],[bpPan]'
 })
 export class TouchDirective implements OnDestroy {
 
-	private touchManager = this.touchBuilder.build(this.host.nativeElement) as TouchManager;
+	private _touchManager = this._touchBuilder.build(this._host.nativeElement)!;
 
-	@Output('bpRotate') readonly rotate$ = this.touchManager.rotate$;
+	@Output('bpRotate') readonly rotate$ = this._touchManager.rotate$;
 
-	@Output('bpPinch') readonly pinch$ = this.touchManager.pinch$;
+	@Output('bpPinch') readonly pinch$ = this._touchManager.pinch$;
 
-	@Output('bpSwipe') readonly swipe$ = this.touchManager.swipe$;
+	@Output('bpSwipe') readonly swipe$ = this._touchManager.swipe$;
 
-	@Output('bpDoubleTap') readonly doubleTap$ = this.touchManager.doubleTap$;
+	@Output('bpDoubleTap') readonly doubleTap$ = this._touchManager.doubleTap$;
 
-	@Output('bpLongTap') readonly longTap$ = this.touchManager.longTap$;
+	@Output('bpLongTap') readonly longTap$ = this._touchManager.longTap$;
 
-	@Output('bpSingleTap') readonly singleTap$ = this.touchManager.singleTap$;
+	@Output('bpSingleTap') readonly singleTap$ = this._touchManager.singleTap$;
 
-	@Output('bpTap') readonly tap$ = this.touchManager.tap$;
+	@Output('bpTap') readonly tap$ = this._touchManager.tap$;
 
-	@Output('bpPan') readonly pan$ = this.touchManager.pan$;
+	@Output('bpPan') readonly pan$ = this._touchManager.pan$;
 
-	constructor(private host: ElementRef, private touchBuilder: TouchBuilder) { }
+	constructor(
+		private _host: ElementRef,
+		private _touchBuilder: TouchBuilder
+	) { }
 
 	ngOnDestroy() {
-		this.touchManager.destroy();
+		this._touchManager.destroy();
 	}
 
 }

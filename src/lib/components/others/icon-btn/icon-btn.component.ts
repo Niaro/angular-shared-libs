@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { FADE } from '@bp/shared/animations';
 import { isNumber } from 'lodash-es';
+
+import { FADE } from '@bp/shared/animations';
 
 @Component({
 	selector: 'bp-icon-btn',
@@ -15,9 +16,9 @@ export class IconBtnComponent {
 
 	@Input() progress!: number;
 
-	@Input('disabled') _disabled!: boolean;
+	@Input() disabled!: boolean;
 
-	get disabled() { return this._disabled || this.pending; }
+	get disabledOrPending() { return this.disabled || this.pending; }
 
 	get inProgress() { return this.pending || isNumber(this.progress); }
 

@@ -6,6 +6,7 @@ import { isExtensionOf } from '@bp/shared/utils';
 import { ClassMetadata } from './class-metadata';
 import { Enumeration } from '../misc/enums/enum';
 
+// tslint:disable: no-static-this
 export abstract class MetadataEntity {
 
 	private static _metadata: ClassMetadata;
@@ -25,7 +26,7 @@ export abstract class MetadataEntity {
 	}
 
 	static getMetaPropertyNames<T>(): NonFunctionPropertyNames<T>[] {
-		return this.metadata.keys() as any;
+		return <any>this.metadata.keys();
 	}
 
 	static getLabel<T>(prop: NonFunctionPropertyNames<T>) {
@@ -33,9 +34,9 @@ export abstract class MetadataEntity {
 	}
 
 	constructor(data?: any) {
-		this.applyPropertyAttributes();
-		assignWith(this, data, (...args) => this.assignCustomizer(...args));
-		this.setDefaults();
+		this._applyPropertyAttributes();
+		assignWith(this, data, (...args) => this._assignCustomizer(...args));
+		this._setDefaults();
 	}
 
 	getMetadata() {
@@ -46,7 +47,7 @@ export abstract class MetadataEntity {
 		return this.getMetadata().get(propName)?.label;
 	}
 
-	protected assignCustomizer(
+	protected _assignCustomizer(
 		currValue: any,
 		srcValue: any,
 		key: string | undefined,
@@ -77,7 +78,7 @@ export abstract class MetadataEntity {
 		return srcValue;
 	}
 
-	private applyPropertyAttributes() {
+	private _applyPropertyAttributes() {
 		this.getMetadata()
 			.values()
 			.filter(v => v.unserializable)
@@ -88,7 +89,7 @@ export abstract class MetadataEntity {
 			}));
 	}
 
-	private setDefaults() {
+	private _setDefaults() {
 		this.getMetadata()
 			.values()
 			.filter(v => v.default !== undefined && isNil((<any>this)[v.property]))

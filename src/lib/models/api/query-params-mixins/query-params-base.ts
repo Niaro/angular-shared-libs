@@ -1,5 +1,6 @@
 export class QueryParamsBase<T = any> {
-	protected routeParams!: Partial<Typify<T, string>>;
+
+	protected _routeParams!: Partial<Typify<T, string>>;
 
 	constructor(routeParams: Partial<T>) {
 		Object.defineProperty(this, 'routeParams', {

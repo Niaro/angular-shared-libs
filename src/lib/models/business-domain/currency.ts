@@ -11,7 +11,7 @@ export class Currency extends MetadataEntity {
 
 	static list = CURRENCIES_CODES.map(it => new Currency(<any>it));
 
-	private static created: Map<CurrencyCode, Currency>;
+	private static _created: Map<CurrencyCode, Currency>;
 
 	readonly symbol!: string;
 
@@ -24,22 +24,22 @@ export class Currency extends MetadataEntity {
 
 	constructor(dataOrCode: Partial<Currency> | CurrencyCode) {
 		super(isString(dataOrCode)
-			? <any>{ code: dataOrCode.toUpperCase() as CurrencyCode }
+			? <any>{ code: <CurrencyCode>dataOrCode.toUpperCase() }
 			: dataOrCode
 		);
 
-		if (!Currency.created)
-			Currency.created = new Map<CurrencyCode, Currency>();
+		if (!Currency._created)
+			Currency._created = new Map<CurrencyCode, Currency>();
 
-		if (Currency.created.has(this.code))
-			return Currency.created.get(this.code) as Currency;
+		if (Currency._created.has(this.code))
+			return <Currency>Currency._created.get(this.code);
 
 		if (!CURRENCIES_CODES.includes(this.code))
 			throw new Error(`Such currency doesn't exist - ${this.code}`);
 
 		this.symbol = getCurrencySymbol(this.code, 'narrow');
 
-		Currency.created.set(this.code, this);
+		Currency._created.set(this.code, this);
 
 		this.displayName = this.code === this.symbol
 			? this.code

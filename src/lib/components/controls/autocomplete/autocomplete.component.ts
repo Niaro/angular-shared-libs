@@ -81,6 +81,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 		const { items, itemDisplayPropertyName } = changes;
 
+		// tslint:disable-next-line: early-exit
 		if (items || itemDisplayPropertyName) {
 			this.lowercasedItems = this.items && this.items!.map(v => ({
 				lowered: (v[this.itemDisplayPropertyName!] || v)?.toString().toLowerCase(),
@@ -105,42 +106,43 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	// #endregion Implementation of the ControlValueAccessor interface
 
 	// #region Implementation of the Validator interface
-	protected validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
+	// tslint:disable-next-line: no-unnecessary-type-annotation
+	protected _validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
 		return !value && this.internalControl.value
 			? { 'autocompleteNotFound': true }
 			: null;
-	};
+	}
 	// #endregion Implementation of the Validator interface
 
 	/**
 	 * the value of the internal control could
 	 * be as string as an item of the autocomplete list which is any
 	 */
-	onInternalControlValueChange(value: string | null | any) {
+	protected _onInternalControlValueChange(value: string | null | any) {
 		if (isEmpty(this.items))
 			return;
 
 		let found: any;
 		if (isString(value)) {
 			value = value.toString().trim();
-			this.filtered$.next(this.items!.filter(v => this.filterItem(v, value)));
-			found = this.items!.find(v => match(this.getItemCompareString(v), value));
+			this.filtered$.next(this.items!.filter(v => this._filterItem(v, value)));
+			found = this.items!.find(v => match(this._getItemCompareString(v), value));
 		} else {
 			this.filtered$.next(this.items!);
 			found = value;
 		}
 
-		this.cdr.markForCheck();
+		this._cdr.markForCheck();
 		this.setValue(found || null);
 	}
 
-	private filterItem(item: any, search: string) {
+	private _filterItem(item: any, search: string) {
 		return this.filterListFn
 			? this.filterListFn(item, search)
-			: includes(this.getItemCompareString(item), search);
+			: includes(this._getItemCompareString(item), search);
 	}
 
-	private getItemCompareString(item: any) {
+	private _getItemCompareString(item: any) {
 		return (item[this.itemDisplayPropertyName!] || item)?.toString();
 	}
 }

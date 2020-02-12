@@ -18,7 +18,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	set pending(value: boolean) {
 		this._pending = value;
 		this.errors = null;
-		this.disableOnPending();
+		this._disableOnPending();
 	}
 	private _pending = false;
 
@@ -42,7 +42,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 		if (isEmpty(value.messages))
 			this._error = this.errors = null;
-		this.cdr.detectChanges();
+		this._cdr.detectChanges();
 	}
 	private _error!: ResponseError | null;
 	errors!: IApiErrorMessage[] | null;
@@ -63,19 +63,19 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	get form() { return this.form$.value; }
 	set form(value: FormGroup | null) {
 		this.form$.next(value);
-		this.disableOnPending();
+		this._disableOnPending();
 	}
 
 	showInvalidInputsSnack = true;
 
 	constructor(
-		protected fb: FormBuilder,
-		protected cdr: ChangeDetectorRef,
-		protected snackBar: MatSnackBar
+		protected _fb: FormBuilder,
+		protected _cdr: ChangeDetectorRef,
+		protected _snackBar: MatSnackBar
 	) {
 		super();
-		this.setupInvalidObservable();
-		this.setupCanSaveObservable();
+		this._setupInvalidObservable();
+		this._setupCanSaveObservable();
 	}
 
 	label(prop: NonFunctionPropertyNames<T>) {
@@ -90,30 +90,30 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 		if (!this.form)
 			return;
 
-		this.revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(this.form);
+		this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(this.form);
 
 		if (this.form.valid)
 			this.submitted$.next(this.form.value);
 		else if (this.showInvalidInputsSnack)
-			this.snackBar.open(
+			this._snackBar.open(
 				'Some inputs are invalid!',
 				undefined,
 				{
 					panelClass: 'error'
 				});
 
-		this.cdr.detectChanges();
+		this._cdr.detectChanges();
 	}
 
-	protected group<U = T>(config: FormGroupConfig<U>): FormGroup {
-		return this.fb.group(config);
+	protected _group<U = T>(config: FormGroupConfig<U>): FormGroup {
+		return this._fb.group(config);
 	}
 
-	private revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(control: AbstractControl) {
+	private _revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(control: AbstractControl) {
 		if (control instanceof FormGroup)
-			forOwn(control.controls, c => this.revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
+			forOwn(control.controls, c => this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
 		else if (control instanceof FormArray)
-			control.controls.forEach(c => this.revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
+			control.controls.forEach(c => this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
 		else if (control instanceof FormControl) {
 			control.updateValueAndValidity();
 
@@ -124,16 +124,17 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 		}
 	}
 
-	private disableOnPending() {
-		if (this.form) {
-			if (this.pending)
-				this.form.disable({ emitEvent: false });
-			else
-				this.form.enable({ emitEvent: false });
-		}
+	private _disableOnPending() {
+		if (!this.form)
+			return;
+
+		if (this.pending)
+			this.form.disable({ emitEvent: false });
+		else
+			this.form.enable({ emitEvent: false });
 	}
 
-	private setupInvalidObservable() {
+	private _setupInvalidObservable() {
 		this.form$
 			.pipe(
 				switchMap(v => v
@@ -148,7 +149,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			.subscribe(this.invalid$);
 	}
 
-	private setupCanSaveObservable() {
+	private _setupCanSaveObservable() {
 		const validForm$ = this.form$.pipe(
 			switchMap(v => v
 				? v.statusChanges.pipe(

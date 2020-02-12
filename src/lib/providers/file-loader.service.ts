@@ -15,43 +15,43 @@ export class FileLoaderService {
 	private _processingFiles$ = new OptionalBehaviorSubject<ProcessingFile[]>([]);
 	processingFiles$ = this._processingFiles$.asObservable();
 
-	constructor(private http: HttpClient) { }
+	constructor(private _http: HttpClient) { }
 
 	download(name: string, url: string, params: QueryParamsBase): ProcessingFile {
 		const file = new ProcessingFile(name, 'download');
-		this.addToProcessingFiles(file);
+		this._addToProcessingFiles(file);
 
-		this.http
+		this._http
 			.request<Blob>(new HttpRequest('GET', url, {
 				params,
 				responseType: 'blob',
 				reportProgress: true
 			}))
 			.pipe(
-				tap(e => this.updateProgress(e, file)),
+				tap(e => this._updateProgress(e, file)),
 				takeUntil(file.cancel$),
 				last(), // return last (completed) message to caller
 			)
 			.subscribe({
 				next: e => e instanceof HttpResponse && e.body && saveAs(e.body, file.name),
-				error: (val: any) => this.handleError(val, file),
-				complete: () => this.complete(file)
+				error: (val) => this._handleError(val, file),
+				complete: () => this._complete(file)
 			});
 
 		return file;
 	}
 
-	private complete(file: ProcessingFile) {
+	private _complete(file: ProcessingFile) {
 		file.finish();
-		this.removeFromProcessingFiles(file);
+		this._removeFromProcessingFiles(file);
 	}
 
-	private handleError(val: ResponseError, file: ProcessingFile): void {
+	private _handleError(val: ResponseError, file: ProcessingFile): void {
 		file.error(val);
-		this.removeFromProcessingFiles(file);
+		this._removeFromProcessingFiles(file);
 	}
 
-	private updateProgress(event: HttpEvent<any>, file: ProcessingFile) {
+	private _updateProgress(event: HttpEvent<any>, file: ProcessingFile) {
 		switch (event.type) {
 			case HttpEventType.UploadProgress:
 			case HttpEventType.DownloadProgress:
@@ -59,11 +59,11 @@ export class FileLoaderService {
 		}
 	}
 
-	private addToProcessingFiles(file: ProcessingFile) {
+	private _addToProcessingFiles(file: ProcessingFile) {
 		this._processingFiles$.next([...(this._processingFiles$.value || []), file]);
 	}
 
-	private removeFromProcessingFiles(file: ProcessingFile) {
+	private _removeFromProcessingFiles(file: ProcessingFile) {
 		this._processingFiles$.next(without(this._processingFiles$.value, file));
 	}
 

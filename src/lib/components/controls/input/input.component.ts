@@ -87,7 +87,7 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 	 * If the autocomplete is present, the value of the internal control could
 	 * be as string as an item of the autocomplete list which is any
 	 */
-	onInternalControlValueChange(value: string | any) {
+	protected _onInternalControlValueChange(value: string | any) {
 		this.setValue(this.maskDirective
 			&& this.maskDirective.config instanceof NumberMaskConfig
 			&& !this.maskDirective.config.allowLeadingZeroes

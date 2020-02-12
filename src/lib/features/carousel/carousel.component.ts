@@ -7,20 +7,19 @@ import { Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
 import { startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isEqual, forOwn, sum, get } from 'lodash-es';
-import { Dictionary } from 'lodash';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { BpScheduler, measure, mutate, fromMeasure, fromResize } from '@bp/shared/rxjs';
-import { Direction, Dimensions } from '@bp/shared/models';
 import { $, lineMicrotask } from '@bp/shared/utils';
+import { Direction, Dimensions } from '@bp/shared/models';
 import { Destroyable } from '@bp/shared/components/destroyable';
 
 import { TouchManager, TouchBuilder, ISwipeEvent } from '../touch';
 
-export enum ArrowType {
-	none = 'none',
-	inner = 'inner',
-	circled = 'circled'
+export enum CarouselArrowType {
+	None = 'none',
+	Inner = 'inner',
+	Circled = 'circled'
 }
 
 @Component({
@@ -33,21 +32,40 @@ export enum ArrowType {
 export class CarouselComponent
 	extends Destroyable
 	implements AfterViewInit, OnChanges, OnDestroy {
+
+	// tslint:disable-next-line: naming-convention
+	CarouselArrowType = CarouselArrowType;
+
 	@Input() itemsPerViewport: number | 'unlimited' = 1;
+
 	@Input() looped = false;
+
 	@Input() bullets: boolean | 'always' = false;
-	@Input() arrowType = ArrowType.inner;
+
+	@Input() arrowType = CarouselArrowType.Inner;
+
 	@Input() arrowSize: 'sm' | 'md' = 'md';
+
 	@Input() mobileWidth = 414;
+
 	@Input() responsive = true;
+
 	@Input() autoheight = false;
+
 	@Input() showArrows = true;
+
 	@Input() resetActiveOnItemsChange = true;
+
 	@Input('autoplay') autoplayInterval = 0;
+
 	@Input() slideClass?: string;
+
 	@Input() sortable = false;
+
 	@Input() sortableItem?: (item: any) => boolean;
+
 	@Input() slideInAnimation = true;
+
 	@Output('sort') readonly sort$ = new Subject<any[]>();
 
 	@Input()
@@ -66,6 +84,7 @@ export class CarouselComponent
 	}
 
 	@Output('activeItemChange') readonly activeItemChange$ = new Subject<any>();
+
 	@Output('scrolled') readonly scroll$ = new Subject<Readonly<ICarouselViewportItemsVisibility>>();
 
 	private _activeIndex = -1;
@@ -74,8 +93,9 @@ export class CarouselComponent
 		return Math.min(this._activeIndex, this.items.length - 1);
 	}
 
-	get $host(): HTMLElement { return this.host.nativeElement; }
-	get $slides() { return this.$slides$.value; }
+	get $host(): HTMLElement { return this._host.nativeElement; }
+
+	get $slides() { return this._$slides$.value; }
 
 	get isShowBullets() {
 		return this.bullets === 'always' || this.bullets && this.items.length > 1;
@@ -107,41 +127,49 @@ export class CarouselComponent
 	).pipe(
 		map(([prevDisabled, nextDisabled]) => this.arrowType
 			&& this.showArrows
-			&& this.arrowType !== ArrowType.none
+			&& this.arrowType !== CarouselArrowType.None
 			&& !(prevDisabled && nextDisabled))
 	);
 
 	animate$ = new BehaviorSubject(false);
+
 	viewportHeight$ = new BehaviorSubject<number | null>(null);
+
 	currentItemsPerView$ = new BehaviorSubject<number | 'unlimited'>(this.itemsPerViewport);
 	get currentItemsPerView() { return this.currentItemsPerView$.value; }
 
 	@ContentChild(TemplateRef, { static: false }) template!: TemplateRef<any>;
-	@ViewChild('slidesContainer', { static: true }) private slidesContainerRef!: ElementRef;
-	@ViewChildren('slide') private slidesQuery!: QueryList<ElementRef>;
 
-	private get $slidesContainer(): HTMLElement { return this.slidesContainerRef && this.slidesContainerRef.nativeElement; }
+	@ViewChildren('slide') private _slidesQuery!: QueryList<ElementRef>;
 
-	private $slides$ = new BehaviorSubject<HTMLElement[]>([]);
-	private shouldUpdateScroll = false;
-	private slideMaxWidth$ = new BehaviorSubject<number | null>(null);
-	public get slideMaxWidth() { return this.slideMaxWidth$.value; }
-	private slideStyle$ = new Subject<Dictionary<string>>();
-	private touch: TouchManager;
-	private autoplayTask!: number;
+	@ViewChild('slidesContainer', { static: true }) private _slidesContainerRef!: ElementRef;
+	private get _$slidesContainer(): HTMLElement { return this._slidesContainerRef && this._slidesContainerRef.nativeElement; }
+
+	private _slideMaxWidth$ = new BehaviorSubject<number | null>(null);
+	get slideMaxWidth() { return this._slideMaxWidth$.value; }
+
+	private _$slides$ = new BehaviorSubject<HTMLElement[]>([]);
+
+	private _shouldUpdateScroll = false;
+
+	private _slideStyle$ = new Subject<Dictionary<string>>();
+
+	private _touch: TouchManager;
+
+	private _autoplayTask!: number;
 
 	constructor(
-		private host: ElementRef,
-		private cdr: ChangeDetectorRef,
-		private touchBuilder: TouchBuilder,
-		private renderer: Renderer2
+		private _host: ElementRef,
+		private _cdr: ChangeDetectorRef,
+		private _touchBuilder: TouchBuilder,
+		private _renderer: Renderer2
 	) {
 		super();
 
-		this.touch = this.touchBuilder.build(this.$host) as TouchManager;
-		this.touch.swipe$
+		this._touch = <TouchManager>this._touchBuilder.build(this.$host);
+		this._touch.swipe$
 			.pipe(this.takeUntilDestroyed)
-			.subscribe(e => this.onSwipe(e));
+			.subscribe(e => this._onSwipe(e));
 	}
 
 	ngOnChanges({ items, activeItem, itemsPerViewport }: SimpleChanges) {
@@ -150,32 +178,32 @@ export class CarouselComponent
 
 		lineMicrotask(() => {
 			if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
-				this.updateItemsPerView();
+				this._updateItemsPerView();
 			if (items && !items.firstChange)
-				this.updateScroll({ animate: false, distinctVisibility: false });
+				this._updateScroll({ animate: false, distinctVisibility: false });
 			else if (activeItem && !activeItem.firstChange)
-				this.updateScroll({ animate: false });
+				this._updateScroll({ animate: false });
 		});
 	}
 
 	ngAfterViewInit() {
-		this.slidesQuery.changes
+		this._slidesQuery.changes
 			.pipe(
-				startWith<QueryList<ElementRef>>(this.slidesQuery),
+				startWith<QueryList<ElementRef>>(this._slidesQuery),
 				map(q => q.toArray().map(ref => ref.nativeElement))
 			)
-			.subscribe(this.$slides$);
+			.subscribe(this._$slides$);
 
-		this.$slides$
+		this._$slides$
 			.pipe(switchMap($slides => fromResize(...$slides)))
-			.subscribe(() => this.shouldUpdateScroll && this.updateScroll());
+			.subscribe(() => this._shouldUpdateScroll && this._updateScroll());
 
 		combineLatest(
-			this.$slides$,
-			this.slideStyle$
+			this._$slides$,
+			this._slideStyle$
 		)
 			.pipe(mutate(([$slides, style]) => $slides
-				.forEach($slide => forOwn(style, (v, k) => this.renderer.setStyle($slide, k, v))))
+				.forEach($slide => forOwn(style, (v, k) => this._renderer.setStyle($slide, k, v))))
 			)
 			.subscribe();
 
@@ -184,24 +212,24 @@ export class CarouselComponent
 				subscribeOn(BpScheduler.outside),
 				this.takeUntilDestroyed,
 			)
-			.subscribe(() => this.onResize());
+			.subscribe(() => this._onResize());
 
-		this.updateItemsPerView();
+		this._updateItemsPerView();
 
 		setTimeout(() => {
-			this.updateItemsPerView(); // required second time because slides container width is not determined in modal
-			this.updateScroll();
+			this._updateItemsPerView(); // required second time because slides container width is not determined in modal
+			this._updateScroll();
 		}, 100); // 100ms required for modal
 
 		this.startAutoplay();
-		this.cdr.detectChanges();
+		this._cdr.detectChanges();
 	}
 
 	ngOnDestroy() {
 		super.ngOnDestroy();
 
-		this.autoplayTask && this.stopAutoplay();
-		this.touch.destroy();
+		this._autoplayTask && this.stopAutoplay();
+		this._touch.destroy();
 	}
 
 	trackBy: TrackByFunction<any> = (index, item) => item.id || item.key || item;
@@ -209,18 +237,18 @@ export class CarouselComponent
 	startAutoplay() {
 		this.stopAutoplay();
 		if (this.autoplayInterval)
-			this.autoplayTask = +setInterval(() => this.activateNext(true), this.autoplayInterval);
+			this._autoplayTask = +setInterval(() => this.activateNext(true), this.autoplayInterval);
 	}
 
 	stopAutoplay() {
-		this.autoplayTask && clearInterval(this.autoplayTask);
+		this._autoplayTask && clearInterval(this._autoplayTask);
 	}
 
 	activateItem(item: any, animate = true) {
 		if (item === this.activeItem) return;
 
 		this.activeItem = item;
-		this.shouldUpdateScroll && this.updateScroll({ animate });
+		this._shouldUpdateScroll && this._updateScroll({ animate });
 		this.activeItemChange$.next(this.activeItem);
 	}
 
@@ -260,23 +288,23 @@ export class CarouselComponent
 		this.sort$.next(this.items);
 	}
 
-	private updateScroll({ animate = false, distinctVisibility = true } = {}) {
-		if (!this.slidesQuery) return;
+	private _updateScroll({ animate = false, distinctVisibility = true } = {}) {
+		if (!this._slidesQuery) return;
 
 		if (!animate) {
 			this.animate$.next(false);
 			setTimeout(() => this.animate$.next(true), 50);
 		}
 
-		this.slideMaxWidth$
+		this._slideMaxWidth$
 			.pipe(
 				switchMap(slideMaxWidth => fromMeasure(() => slideMaxWidth
 					&& this.items.length
-					&& this.items.length === this.$slides$.value.length
+					&& this.items.length === this._$slides$.value.length
 					&& this.activeIndex > -1
 					? [
 						slideMaxWidth,
-						this.$slides$.value.map($slide => new Dimensions({
+						this._$slides$.value.map($slide => new Dimensions({
 							left: $slide.offsetLeft,
 							width: Math.floor($slide.getBoundingClientRect().width)
 						}))
@@ -284,7 +312,7 @@ export class CarouselComponent
 					: null
 				)),
 				filter(v => !!v),
-				map(v => v as [number, Dimensions[]])
+				map(v => <[number, Dimensions[]]>v)
 			)
 			.subscribe(([slideMaxWidth, offsets]) => {
 				let maxOffset: number;
@@ -324,69 +352,71 @@ export class CarouselComponent
 					i++;
 				visibilityIndexes.lastPartiallyVisible = i - 1;
 
-				this.renderer.setStyle(this.$slidesContainer, 'transform', `translateX(${-offset}px)`);
+				this._renderer.setStyle(this._$slidesContainer, 'transform', `translateX(${-offset}px)`);
 
 				if (!distinctVisibility || !isEqual(visibilityIndexes, this.slidesVisibility$.value)) {
 					this.slidesVisibility$.next(visibilityIndexes);
 					this.scroll$.next(visibilityIndexes);
-					this.shouldUpdateScroll = true;
+					this._shouldUpdateScroll = true;
 				}
 
-				this.autoheight && this.setViewportHeightByCurrentView();
+				this.autoheight && this._setViewportHeightByCurrentView();
 
-				this.cdr.detectChanges();
+				this._cdr.detectChanges();
 			});
 	}
 
-	private updateItemsPerView() {
+	private _updateItemsPerView() {
 		fromMeasure(() => {
 			this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerViewport);
-			return this.$slidesContainer.offsetWidth ? this.$slidesContainer.offsetWidth : null;
+			return this._$slidesContainer.offsetWidth ? this._$slidesContainer.offsetWidth : null;
 		})
 			.subscribe((slideMaxWidth) => {
 				let css: Dictionary<any>;
 				if (this.currentItemsPerView === 'unlimited')
-					css = {
-						'-ms-flex': null, '-webkit-flex': null, flex: null,
-						'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
-						width: 'initial'
-					};
+				css = {
+					'-ms-flex': null, '-webkit-flex': null, flex: null,
+					'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
+					width: 'initial'
+				};
 				else {
 					// use width instead of flex-basis because IE 11 doesn't respect padding on flex-item
 					// @link https://github.com/philipwalton/flexbugs#7-flex-basis-doesnt-account-for-box-sizingborder-box
 					const flex = '0 0 auto';
 					css = {
-						'-ms-flex': flex, '-webkit-flex': flex, flex,
+						flex,
+						'-ms-flex': flex,
+						'-webkit-flex': flex,
 						width: `${Math.trunc(100 / this.currentItemsPerView)}%`
 					};
 				}
 
 				if (slideMaxWidth)
-					css['max-width'] = `${slideMaxWidth}px`;
+				css['max-width'] = `${slideMaxWidth}px`;
 
-				this.slideStyle$.next(css);
-				this.slideMaxWidth$.next(slideMaxWidth);
-			});
+					this._slideStyle$.next(css);
+					this._slideMaxWidth$.next(slideMaxWidth);
+				});
+			}
+
+	private _onResize() {
+		this._updateItemsPerView();
+		this._updateScroll({ animate: false });
 	}
 
-	private onResize() {
-		this.updateItemsPerView();
-		this.updateScroll({ animate: false });
-	}
-
-	private onSwipe(e: ISwipeEvent) {
+	private _onSwipe(e: ISwipeEvent) {
 		switch (e.bpDirection) {
-			case Direction.right:
+			case Direction.Right:
 				this.activatePrev();
 				break;
-			case Direction.left:
+			case Direction.Left:
 				this.activateNext();
 				break;
 		}
 	}
 
-	private setViewportHeightByCurrentView() {
-		this.$slides$
+	private _setViewportHeightByCurrentView() {
+		this._$slides$
 			.pipe(
 				first(),
 				flatMap(slides => slides),
@@ -399,7 +429,7 @@ export class CarouselComponent
 			)
 			.subscribe(height => {
 				this.viewportHeight$.next(height);
-				this.cdr.detectChanges();
+				this._cdr.detectChanges();
 			});
 	}
 }

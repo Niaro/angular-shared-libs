@@ -46,7 +46,7 @@
 	<ng-container *ngFor="let country of filtered">
 		<mat-option *bpDelayedRender
 					[value]="country.name"
-					[matTooltip]="country === UnitedStatesMinorOutlyingIslands ? country.displayName : ''">
+					[matTooltip]="country === unitedStatesMinorOutlyingIslands ? country.displayName : ''">
 			<bp-country class="ml-1" [src]="country"></bp-country>
 		</mat-option>
 	</ng-container>

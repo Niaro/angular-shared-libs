@@ -40,112 +40,112 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	config = new TextMaskConfig();
 
 	valueChange$: Observable<string | number | null>;
-	get value() { return this.value$.value.value; }
+	get value() { return this._value$.value.value; }
 
-	private value$ = new BehaviorSubject<{
+	private _value$ = new BehaviorSubject<{
 		value: string | number | null,
 		source: ValueSource | undefined
 	}>
 		({ value: null, source: undefined });
 
-	private activeConfig!: TextMaskConfig | null;
+	private _activeConfig!: TextMaskConfig | null;
 
-	private get $host(): HTMLElement { return this.host.nativeElement; }
-	private $input!: HTMLInputElement;
+	private get _$host(): HTMLElement { return this._host.nativeElement; }
+	private _$input!: HTMLInputElement;
 
-	private get hasValue() {
-		return !isEmpty(this.$input.value)
-			&& this.activeConfig
-			&& this.$input.value !== this.activeConfig.placeholder;
+	private get _hasValue() {
+		return !isEmpty(this._$input.value)
+			&& this._activeConfig
+			&& this._$input.value !== this._activeConfig.placeholder;
 	}
-	private get isInputSelectable() { return ['text', 'search', 'url', 'tel', 'password'].includes(this.$input.type); }
-	private textMaskInputManager!: {
+	private get _isInputSelectable() { return ['text', 'search', 'url', 'tel', 'password'].includes(this._$input.type); }
+	private _textMaskInputManager!: {
 		state: {
 			previousConformedValue: string,
 			previousOnRejectRawValue: string
 		},
 		update: (val: string) => void
 	} | null;
-	private firstMaskCharIndex = -1;
-	private lastMaskCharIndex = -1;
+	private _firstMaskCharIndex = -1;
+	private _lastMaskCharIndex = -1;
 
-	private maskPipe!: MaskPipe | NumberMaskPipe;
-	private isEmptyPlaceholderOnInit!: boolean;
-	private viewInit$ = new AsyncVoidSubject();
-	private ready$ = new AsyncVoidSubject();
+	private _maskPipe!: MaskPipe | NumberMaskPipe;
+	private _isEmptyPlaceholderOnInit!: boolean;
+	private _viewInit$ = new AsyncVoidSubject();
+	private _ready$ = new AsyncVoidSubject();
 
-	private onChange!: (v: any) => void;
-	private onTouched!: () => void;
+	private _onChange!: (v: any) => void;
+	private _onTouched!: () => void;
 
 	constructor(
-		private host: ElementRef,
-		private renderer: Renderer2
+		private _host: ElementRef,
+		private _renderer: Renderer2
 	) {
-		this.valueChange$ = this.value$
+		this.valueChange$ = this._value$
 			.pipe(
 				skip(1), // initial value
-				filter(({ source }) => source === ValueSource.ui),
+				filter(({ source }) => source === ValueSource.Ui),
 				map(({ value }) => value)
 			);
 	}
 
 	async ngOnChanges({ rtTextMask }: SimpleChanges) {
-		await this.viewInit$.toPromise();
+		await this._viewInit$.toPromise();
 
-		this.updateDirectiveState();
+		this._updateDirectiveState();
 
-		if (this.textMaskInputManager && this.$input.value)
-			this.updateInputAndControlOnConfigChange(!rtTextMask.firstChange && !isEqual(rtTextMask.previousValue, rtTextMask.currentValue));
+		if (this._textMaskInputManager && this._$input.value)
+			this._updateInputAndControlOnConfigChange(!rtTextMask.firstChange && !isEqual(rtTextMask.previousValue, rtTextMask.currentValue));
 
-		this.ready$.complete();
+		this._ready$.complete();
 	}
 
 	ngOnInit() {
-		if (this.$host.tagName === 'INPUT')
+		if (this._$host.tagName === 'INPUT')
 			// `textMask` directive is used directly on an input element
-			this.$input = this.$host as HTMLInputElement;
+			this._$input = <HTMLInputElement>this._$host;
 		else
 			// `textMask` directive is used on an abstracted input element, `ion-input`, `md-input`, etc
-			this.$input = this.$host.getElementsByTagName('INPUT')[0] as HTMLInputElement;
+			this._$input = <HTMLInputElement>this._$host.getElementsByTagName('INPUT')[0];
 
-		if (!this.$input)
-			throw new Error(`rtTextMask hasn't found the input element among descendents of the ${this.$host.constructor.name}`);
+		if (!this._$input)
+			throw new Error(`rtTextMask hasn't found the input element among descendants of the ${this._$host.constructor.name}`);
 	}
 
 	ngAfterViewInit() {
-		this.isEmptyPlaceholderOnInit = !this.$input.placeholder;
-		this.viewInit$.complete();
+		this._isEmptyPlaceholderOnInit = !this._$input.placeholder;
+		this._viewInit$.complete();
 	}
 
 	// begin of ControlValueAccessor
 	async writeValue(value: string | number | null | undefined) {
-		await this.ready$.toPromise();
+		await this._ready$.toPromise();
 
 		if (this.value === value)
 			return;
 		value = isNil(value) ? '' : value.toString();
 
-		if (this.textMaskInputManager) {
-			value = this.activeConfig instanceof NumberMaskConfig ? this.formatDecimalValue(value) : value;
-			value = this.applyMaskAndConvertToControlValue(value);
-			this.setCaretToValidPosition(this.$input.value.length);
-			this.tryActivatePlaceholder();
+		if (this._textMaskInputManager) {
+			value = this._activeConfig instanceof NumberMaskConfig ? this._formatDecimalValue(value) : value;
+			value = this._applyMaskAndConvertToControlValue(value);
+			this._setCaretToValidPosition(this._$input.value.length);
+			this._tryActivatePlaceholder();
 		} else
-			this.$input.value = value;
+			this._$input.value = value;
 
-		this.value$.next({ value, source: ValueSource.write });
+		this._value$.next({ value, source: ValueSource.Write });
 	}
 
 	registerOnChange(fn: (value: any) => void) {
-		this.onChange = fn;
+		this._onChange = fn;
 	}
 
 	registerOnTouched(fn: () => void) {
-		this.onTouched = fn;
+		this._onTouched = fn;
 	}
 
 	setDisabledState(isDisabled: boolean) {
-		this.renderer.setProperty(this.$host, 'disabled', isDisabled);
+		this._renderer.setProperty(this._$host, 'disabled', isDisabled);
 	}
 	// end of ControlValueAccessor
 
@@ -153,30 +153,30 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	onInput(userInput: string) {
 		let value: string | number | null = userInput;
 
-		if (this.textMaskInputManager) {
-			value = this.applyMaskAndConvertToControlValue(userInput);
+		if (this._textMaskInputManager) {
+			value = this._applyMaskAndConvertToControlValue(userInput);
 
-			if (!this.hasValue
-				&& this.activeConfig
-				&& this.activeConfig.maskOnFocus
-				&& document.activeElement === this.$input
+			if (!this._hasValue
+				&& this._activeConfig
+				&& this._activeConfig.maskOnFocus
+				&& document.activeElement === this._$input
 			)
-				this.$input.value = this.activeConfig.placeholder;
+				this._$input.value = this._activeConfig.placeholder;
 
-			if (this.activeConfig instanceof NumberMaskConfig)
-				this.tryActivatePlaceholder();
+			if (this._activeConfig instanceof NumberMaskConfig)
+				this._tryActivatePlaceholder();
 
 			this.updateCaretPosition();
 		}
 
-		this.emitChange(value);
+		this._emitChange(value);
 	}
 
 	@HostListener('paste', ['$event'])
 	onPaste(e: ClipboardEvent) {
-		if (!this.textMaskInputManager) return;
+		if (!this._textMaskInputManager) return;
 
-		if (isEmpty(this.textMaskInputManager.state.previousConformedValue)) {
+		if (isEmpty(this._textMaskInputManager.state.previousConformedValue)) {
 			e.preventDefault();
 			e.clipboardData && this.onInput(e.clipboardData.getData('text/plain'));
 		}
@@ -184,91 +184,91 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 	@HostListener('blur')
 	onBlur() {
-		this.onTouched && this.onTouched();
+		this._onTouched && this._onTouched();
 
-		if (!this.textMaskInputManager) return;
+		if (!this._textMaskInputManager) return;
 
-		this.activeConfig instanceof NumberMaskConfig && this.applyMaskAndUpdateInput(this.formatDecimalValue(this.$input.value));
-		this.tryActivatePlaceholder();
+		this._activeConfig instanceof NumberMaskConfig && this._applyMaskAndUpdateInput(this._formatDecimalValue(this._$input.value));
+		this._tryActivatePlaceholder();
 	}
 
 	@HostListener('focus')
 	onFocus() {
-		if (!this.textMaskInputManager) return;
+		if (!this._textMaskInputManager) return;
 
-		if (!this.hasValue && this.activeConfig && this.activeConfig.maskOnFocus)
-			this.$input.value = this.activeConfig.placeholder;
+		if (!this._hasValue && this._activeConfig && this._activeConfig.maskOnFocus)
+			this._$input.value = this._activeConfig.placeholder;
 		this.updateCaretPosition();
 	}
 
 	@HostListener('mouseup')
 	@HostListener('mousedown')
 	updateCaretPosition() {
-		if (!this.textMaskInputManager) return;
+		if (!this._textMaskInputManager) return;
 
-		this.setCaretToValidPosition();
-		setTimeout(() => this.setCaretToValidPosition());
+		this._setCaretToValidPosition();
+		setTimeout(() => this._setCaretToValidPosition());
 	}
 
 	@HostListener('keydown', ['$event'])
 	onKeyDown(e: KeyboardEvent) {
-		if (!this.textMaskInputManager) return;
+		if (!this._textMaskInputManager) return;
 
 		if ([BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW].includes(e.keyCode))
-			setTimeout(() => this.setCaretToValidPosition());
+			setTimeout(() => this._setCaretToValidPosition());
 	}
 
-	private emitChange(value: string | number | null) {
-		this.onChange && this.onChange(value);
-		this.value$.next({ value, source: ValueSource.ui });
+	private _emitChange(value: string | number | null) {
+		this._onChange && this._onChange(value);
+		this._value$.next({ value, source: ValueSource.Ui });
 	}
 
-	private updateDirectiveState() {
+	private _updateDirectiveState() {
 		if (!this.config.mask && !this.config.prefix && !this.config.suffix && !(this.config instanceof NumberMaskConfig)) {
-			this.textMaskInputManager = null;
+			this._textMaskInputManager = null;
 
-			if (this.activeConfig) {
-				if (this.isEmptyPlaceholderOnInit && this.activeConfig.placeholderFromMask)
-					this.renderer.setAttribute(this.$input, 'placeholder', '');
+			if (this._activeConfig) {
+				if (this._isEmptyPlaceholderOnInit && this._activeConfig.placeholderFromMask)
+					this._renderer.setAttribute(this._$input, 'placeholder', '');
 
-				this.$input.value = this.$input.value
-					.replace(this.activeConfig.prefixRegExp || '', '')
-					.replace(this.activeConfig.suffixRegExp || '', '');
+				this._$input.value = this._$input.value
+					.replace(this._activeConfig.prefixRegExp || '', '')
+					.replace(this._activeConfig.suffixRegExp || '', '');
 
-				this.activeConfig = null;
+				this._activeConfig = null;
 			}
 			return;
 		}
 
-		this.activeConfig = this.config instanceof NumberMaskConfig
+		this._activeConfig = this.config instanceof NumberMaskConfig
 			? new NumberMaskConfig(this.config)
 			: new TextMaskConfig(this.config);
 
-		this.maskPipe = this.activeConfig instanceof NumberMaskConfig
-			? new NumberMaskPipe(this.activeConfig)
-			: new TextMaskPipe(this.activeConfig);
+		this._maskPipe = this._activeConfig instanceof NumberMaskConfig
+			? new NumberMaskPipe(this._activeConfig)
+			: new TextMaskPipe(this._activeConfig);
 
-		this.activeConfig.inputElement = this.$input;
-		this.activeConfig.placeholder = this.convertMaskToPlaceholder();
+		this._activeConfig.inputElement = this._$input;
+		this._activeConfig.placeholder = this._convertMaskToPlaceholder();
 
-		const renderedMask = this.maskPipe.transform('');
+		const renderedMask = this._maskPipe.transform('');
 		if (isEmpty(renderedMask)) return;
 
-		this.recalculateFirstLastMaskIndexes();
+		this._recalculateFirstLastMaskIndexes();
 
-		if (this.isEmptyPlaceholderOnInit && this.activeConfig.placeholderFromMask)
-			this.renderer.setAttribute(this.$input, 'placeholder', this.activeConfig.placeholder);
+		if (this._isEmptyPlaceholderOnInit && this._activeConfig.placeholderFromMask)
+			this._renderer.setAttribute(this._$input, 'placeholder', this._activeConfig.placeholder);
 
-		this.textMaskInputManager = createTextMaskInputElement({
-			...this.activeConfig,
-			mask: this.maskPipe.transform.bind(this.maskPipe)
+		this._textMaskInputManager = createTextMaskInputElement({
+			...this._activeConfig,
+			mask: this._maskPipe.transform.bind(this._maskPipe)
 		});
 	}
 
-	private setCaretToValidPosition(desiredPosition?: number) {
-		if (!this.textMaskInputManager || !this.isInputSelectable) return;
+	private _setCaretToValidPosition(desiredPosition?: number) {
+		if (!this._textMaskInputManager || !this._isInputSelectable) return;
 		// tslint:disable-next-line:prefer-const
-		let { value, selectionStart, selectionEnd } = this.$input;
+		let { value, selectionStart, selectionEnd } = this._$input;
 		selectionStart = selectionStart || 0;
 		selectionEnd = selectionEnd || 0;
 
@@ -279,86 +279,86 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		}
 
 		if (this.config instanceof NumberMaskConfig && selectionStart === 0 && selectionEnd === value.length)
-			this.setCaret(0, this.lastMaskCharIndex);
+			this._setCaret(0, this._lastMaskCharIndex);
 		else if (selectionStart === selectionEnd) {
-			if (this.activeConfig && this.activeConfig.maskOnFocus && value === this.activeConfig.placeholder)
-				this.setCaret(this.firstMaskCharIndex);
-			else if (this.firstMaskCharIndex > 0 && selectionStart < this.firstMaskCharIndex)
-				this.setCaret(this.firstMaskCharIndex);
-			else if (this.lastMaskCharIndex >= 0 && selectionStart > this.lastMaskCharIndex)
-				this.setCaret(this.lastMaskCharIndex);
+			if (this._activeConfig && this._activeConfig.maskOnFocus && value === this._activeConfig.placeholder)
+				this._setCaret(this._firstMaskCharIndex);
+			else if (this._firstMaskCharIndex > 0 && selectionStart < this._firstMaskCharIndex)
+				this._setCaret(this._firstMaskCharIndex);
+			else if (this._lastMaskCharIndex >= 0 && selectionStart > this._lastMaskCharIndex)
+				this._setCaret(this._lastMaskCharIndex);
 			else if (force)
-				this.setCaret(selectionStart, selectionEnd);
+				this._setCaret(selectionStart, selectionEnd);
 		} else if (force)
-			this.setCaret(selectionStart, selectionEnd);
+			this._setCaret(selectionStart, selectionEnd);
 	}
 
-	private applyMaskAndConvertToControlValue(userInput: string): string | number | null {
-		if (this.isCursorWithinPrefix())
+	private _applyMaskAndConvertToControlValue(userInput: string): string | number | null {
+		if (this._isCursorWithinPrefix())
 			// userInput it's a prefix minus one char (due to backspace);
 			// because of that the textMask lib isn't able to recognize the userInput as prefix
 			// and will just concat prefix + userInput, therefore we are resetting userInput
-			this.$input.value = userInput = '';
+			this._$input.value = userInput = '';
 
-		let maskedValue: string = this.applyMaskAndUpdateInput(userInput);
+		let maskedValue = this._applyMaskAndUpdateInput(userInput);
 
-		if (this.activeConfig && !this.activeConfig.includeMaskInValue)
-			maskedValue = this.cleanValueFromMask(maskedValue);
+		if (this._activeConfig && !this._activeConfig.includeMaskInValue)
+			maskedValue = this._cleanValueFromMask(maskedValue);
 
-		if (this.activeConfig instanceof NumberMaskConfig) {
-			maskedValue = this.formatDecimalValue(maskedValue)
-				.replace(this.activeConfig.decimalSeparatorSymbol, '.')
-				.replace(this.activeConfig.thousandsSeparatorSymbol, '')
+		if (this._activeConfig instanceof NumberMaskConfig) {
+			maskedValue = this._formatDecimalValue(maskedValue)
+				.replace(this._activeConfig.decimalSeparatorSymbol, '.')
+				.replace(this._activeConfig.thousandsSeparatorSymbol, '')
 				.replace(/\s/g, '')
 				.replace(/\.$/, '');
 
-			if (!this.activeConfig.allowLeadingZeroes)
-				return maskedValue !== '' || this.activeConfig.emptyIsZero ? +maskedValue : null;
+			if (!this._activeConfig.allowLeadingZeroes)
+				return maskedValue !== '' || this._activeConfig.emptyIsZero ? +maskedValue : null;
 		}
 
 		return maskedValue;
 	}
 
-	private applyMaskAndUpdateInput(userInput: string) {
-		if (this.activeConfig instanceof NumberMaskConfig && !this.activeConfig.allowLeadingZeroes) {
+	private _applyMaskAndUpdateInput(userInput: string) {
+		if (this._activeConfig instanceof NumberMaskConfig && !this._activeConfig.allowLeadingZeroes) {
 			// trim zeros
-			const match = this.activeConfig.leadingZeroRegExp.exec(userInput);
+			const match = this._activeConfig.leadingZeroRegExp.exec(userInput);
 			if (match)
 				userInput = userInput.substring(match[1].length);
 		}
 
-		this.textMaskInputManager && this.textMaskInputManager.update(userInput);
-		this.recalculateFirstLastMaskIndexes(this.$input.value);
+		this._textMaskInputManager && this._textMaskInputManager.update(userInput);
+		this._recalculateFirstLastMaskIndexes(this._$input.value);
 
-		return this.$input.value;
+		return this._$input.value;
 	}
 
-	private updateInputAndControlOnConfigChange(emitOnChange: boolean) {
-		this.setCaret(0); // reset caret on config change
-		const value = this.applyMaskAndConvertToControlValue(this.value && this.value.toString() || '');
-		emitOnChange && this.emitChange(value);
+	private _updateInputAndControlOnConfigChange(emitOnChange: boolean) {
+		this._setCaret(0); // reset caret on config change
+		const value = this._applyMaskAndConvertToControlValue(this.value && this.value.toString() || '');
+		emitOnChange && this._emitChange(value);
 	}
 
-	private recalculateFirstLastMaskIndexes(value: string = '') {
-		const renderedMask = (this.maskPipe!.transform(value) || [])
-			.filter(char => char !== this.maskPipe.caretTrap); // remove caret traps for proper indexes calculation
+	private _recalculateFirstLastMaskIndexes(value: string = '') {
+		const renderedMask = (this._maskPipe!.transform(value) || [])
+			.filter(char => char !== this._maskPipe.caretTrap); // remove caret traps for proper indexes calculation
 		const maskCharPredicate = (char: any) => char instanceof RegExp || isNull(char);
-		this.firstMaskCharIndex = renderedMask.findIndex(maskCharPredicate);
-		this.lastMaskCharIndex = renderedMask.lastIndexOf(findLast(renderedMask, maskCharPredicate)!)
-			+ (isEmpty(this.cleanValueFromMask(value)) && !this.activeConfig!.suffix ? 0 : 1);
+		this._firstMaskCharIndex = renderedMask.findIndex(maskCharPredicate);
+		this._lastMaskCharIndex = renderedMask.lastIndexOf(findLast(renderedMask, maskCharPredicate)!)
+			+ (isEmpty(this._cleanValueFromMask(value)) && !this._activeConfig!.suffix ? 0 : 1);
 	}
 
-	private formatDecimalValue(value: string): string {
-		if (this.activeConfig instanceof NumberMaskConfig && (<NumberMaskConfig>this.activeConfig).decimalSeparatorRegExp.test(value)) {
+	private _formatDecimalValue(value: string): string {
+		if (this._activeConfig instanceof NumberMaskConfig && (<NumberMaskConfig>this._activeConfig).decimalSeparatorRegExp.test(value)) {
 			const { decimalMinimumLimit } = (<NumberMaskConfig>this.config);
 
 			let fractionDigits = (<string>get(RegExp, '$\''))
 				.split('');
 
 			fractionDigits = fractionDigits
-				.filter(v => (<NumberMaskPipe>this.maskPipe).digitRegExp.test(v));
+				.filter(v => (<NumberMaskPipe>this._maskPipe).digitRegExp.test(v));
 
-			const fractionPart = this.activeConfig.decimalSeparatorSymbol + fractionDigits.join('');
+			const fractionPart = this._activeConfig.decimalSeparatorSymbol + fractionDigits.join('');
 
 			if (fractionDigits.every(v => v === '0'))
 				return value.replace(fractionPart, '');
@@ -369,37 +369,37 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		return value;
 	}
 
-	private cleanValueFromMask(value: string = '') {
+	private _cleanValueFromMask(value: string = '') {
 		return value
-			.replace(this.activeConfig!.prefixRegExp || '', '')
-			.replace(this.activeConfig!.suffixRegExp || '', '')
+			.replace(this._activeConfig!.prefixRegExp || '', '')
+			.replace(this._activeConfig!.suffixRegExp || '', '')
 			.split('')
-			.filter(char => !this.maskPipe.formatChars.includes(char))
+			.filter(char => !this._maskPipe.formatChars.includes(char))
 			.join('');
 	}
 
-	private setCaret(start: number, end = start) {
+	private _setCaret(start: number, end = start) {
 		if (IS_ANDROID)
-			DEFER(() => this.$input.setSelectionRange(start, end, 'none'));
+			DEFER(() => this._$input.setSelectionRange(start, end, 'none'));
 		else
-			this.$input.setSelectionRange(start, end, 'none');
+			this._$input.setSelectionRange(start, end, 'none');
 	}
 
-	private convertMaskToPlaceholder() {
-		const mask = this.maskPipe.transform('');
+	private _convertMaskToPlaceholder() {
+		const mask = this._maskPipe.transform('');
 		if (!mask)
 			return '';
 
-		if (mask.indexOf(this.activeConfig!.placeholderChar) !== -1)
+		if (mask.indexOf(this._activeConfig!.placeholderChar) !== -1)
 			throw new Error(
 				`Placeholder character must not be used as part of the mask. Please specify a character
 				that is not present in your mask as your placeholder character.\n\n
-				The placeholder character that was received is: ${JSON.stringify(this.activeConfig!.placeholderChar)}\n\n
+				The placeholder character that was received is: ${JSON.stringify(this._activeConfig!.placeholderChar)}\n\n
 				The mask that was received is: ${JSON.stringify(mask)}`
 			);
 
-		let { placeholderChar } = this.activeConfig!;
-		if (this.activeConfig instanceof NumberMaskConfig && this.activeConfig.placeholderFromMask)
+		let { placeholderChar } = this._activeConfig!;
+		if (this._activeConfig instanceof NumberMaskConfig && this._activeConfig.placeholderFromMask)
 			placeholderChar = '0';
 
 		return mask.map(char => char instanceof RegExp
@@ -408,25 +408,25 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		).join('');
 	}
 
-	private tryActivatePlaceholder() {
-		if ((this.activeConfig && this.$input.value === this.activeConfig.placeholder)
-			|| (this.activeConfig instanceof NumberMaskConfig
-				&& this.activeConfig.emptyIsZero
-				&& +(this.$input.value) === 0
+	private _tryActivatePlaceholder() {
+		if ((this._activeConfig && this._$input.value === this._activeConfig.placeholder)
+			|| (this._activeConfig instanceof NumberMaskConfig
+				&& this._activeConfig.emptyIsZero
+				&& +(this._$input.value) === 0
 			)
 		)
-			this.$input.value = '';
+			this._$input.value = '';
 	}
 
-	private isCursorWithinPrefix() {
-		return this.isInputSelectable
-			&& this.firstMaskCharIndex > 0
-			&& this.$input.selectionStart! > 1
-			&& this.$input.selectionStart! < this.firstMaskCharIndex;
+	private _isCursorWithinPrefix() {
+		return this._isInputSelectable
+			&& this._firstMaskCharIndex > 0
+			&& this._$input.selectionStart! > 1
+			&& this._$input.selectionStart! < this._firstMaskCharIndex;
 	}
 }
 
 enum ValueSource {
-	ui,
-	write
+	Ui,
+	Write
 }

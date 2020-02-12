@@ -5,15 +5,16 @@ import { BehaviorSubject } from 'rxjs';
 	selector: '[bpHover]'
 })
 export class HoverDirective {
-	@Output() readonly bpHover = new BehaviorSubject(false);
+
+	@Output('bpHover') readonly bpHover$ = new BehaviorSubject(false);
 
 	@HostListener('mouseenter')
 	onEnter() {
-		this.bpHover.next(true);
+		this.bpHover$.next(true);
 	}
 
 	@HostListener('mouseleave')
 	onLeave() {
-		this.bpHover.next(false);
+		this.bpHover$.next(false);
 	}
 }

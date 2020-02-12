@@ -18,8 +18,8 @@ export function mixinPageQueryParams<T extends Constructor<QueryParamsBase<{ pag
 
 		constructor(...args: any[]) {
 			super(...args);
-			this.limit = +(this.routeParams.pageSize || defaultPageSize);
-			this.page = this.routeParams.page;
+			this.limit = +(this._routeParams.pageSize || defaultPageSize);
+			this.page = this._routeParams.page;
 		}
 	};
 }

@@ -4,8 +4,8 @@ import { ZoneService } from '@bp/shared/providers/zone.service';
 
 export class NgZoneBehaviorSubject<T> extends BehaviorSubject<T> {
 
-	constructor(_value?: T) {
-		super(_value as T);
+	constructor(value?: T) {
+		super(<T>value);
 	}
 
 	next(value: T): void {

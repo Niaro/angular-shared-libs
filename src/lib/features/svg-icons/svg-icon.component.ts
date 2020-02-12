@@ -7,14 +7,19 @@ import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2, OnCha
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgIconComponent implements OnChanges {
+
 	@Input() name!: String;
 
-	private get $host() { return this.host.nativeElement; }
+	private get _$host() { return this._host.nativeElement; }
 
-	constructor(private host: ElementRef, private renderer: Renderer2) { }
+	constructor(
+		private _host: ElementRef,
+		private _renderer: Renderer2
+	) { }
 
 	ngOnChanges({ name }: SimpleChanges) {
-		this.renderer.removeClass(this.$host, name.previousValue);
-		this.renderer.addClass(this.$host, name.currentValue);
+		this._renderer.removeClass(this._$host, name.previousValue);
+		this._renderer.addClass(this._$host, name.currentValue);
 	}
+
 }

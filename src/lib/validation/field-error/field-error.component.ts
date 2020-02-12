@@ -24,11 +24,11 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 
 	formControl$ = new OptionalBehaviorSubject<AbstractControl | AbstractControlDirective | null>();
 
-	get form() { return this.formGroupDirective && this.formGroupDirective.form; }
+	get form() { return this._formGroupDirective && this._formGroupDirective.form; }
 
 	constructor(
-		@Optional() private formField?: MatFormField,
-		@Optional() private formGroupDirective?: FormGroupDirective
+		@Optional() private _formField?: MatFormField,
+		@Optional() private _formGroupDirective?: FormGroupDirective
 	) {
 		this.formControl$
 			.pipe(
@@ -49,6 +49,6 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.formField && this.formControl$.next(this.formField._control.ngControl);
+		this._formField && this.formControl$.next(this._formField._control.ngControl);
 	}
 }

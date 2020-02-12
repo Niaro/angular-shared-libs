@@ -1,11 +1,10 @@
 import { Type } from '@angular/core';
 import { ActivatedRouteSnapshot, ActivatedRoute, Params, Router, UrlSegmentGroup } from '@angular/router';
 import { isBoolean, isArray, mapValues, pickBy, isNil, last, toPairs, isObject } from 'lodash-es';
-import { Dictionary } from 'lodash';
 
 export class UrlHelper {
 	static parse(value: string) {
-		const values = this.parseArray(value);
+		const values = UrlHelper.parseArray(value);
 		return values.length === 0
 			? null
 			: values.length > 1 ? values : value.toString();
@@ -21,7 +20,7 @@ export class UrlHelper {
 	}
 
 	static parseNumberArray(value: string): number[] {
-		return this.parseArray(value)
+		return UrlHelper.parseArray(value)
 			.map(id => +id)
 			.filter(id => !isNaN(id));
 	}
@@ -32,12 +31,12 @@ export class UrlHelper {
 		if (isArray(value) && value.length)
 			return value.map(v => valueToString(v)).join(',');
 		if (value === '')
-			return undefined;
+			return;
 		return valueToString(value);
 	}
 
 	static toRouteParams(value: {}) {
-		return mapValues(value, v => this.toRouteString(v));
+		return mapValues(value, v => UrlHelper.toRouteString(v));
 	}
 
 	static getRouteParams(route: ActivatedRoute): Params {
@@ -47,7 +46,7 @@ export class UrlHelper {
 	}
 
 	static mergeRouteParams(route: ActivatedRoute, params: Params) {
-		const routeParams = this.getRouteParams(route);
+		const routeParams = UrlHelper.getRouteParams(route);
 
 		toPairs(params)
 			.map(([k, v]) => [k, isNil(v) ? v : v.toString()])
@@ -70,7 +69,7 @@ export class UrlHelper {
 			return route;
 
 		for (const childRoute of route.children) {
-			const cmptRoute = this.getComponentRoute(childRoute, component);
+			const cmptRoute = UrlHelper.getComponentRoute(childRoute, component);
 			if (cmptRoute)
 				return cmptRoute;
 		}
@@ -79,9 +78,9 @@ export class UrlHelper {
 	}
 
 	static getMainBranchRoutes<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T[] {
-		const results: T[] = [route];
+		const results = [route];
 		while (route.firstChild) {
-			route = route.firstChild as T;
+			route = <T>route.firstChild;
 			results.push(route);
 		}
 		return results;
@@ -89,13 +88,13 @@ export class UrlHelper {
 
 	static getMainBranchLastRoute<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T {
 		while (route.firstChild)
-			route = route.firstChild as T;
+			route = <T>route.firstChild;
 		return route;
 	}
 
 	static getUrlExcludingOutlet(outlet: string, router: Router) {
 		const currentUrlTree = router.parseUrl(router.url);
-		this.deleteOutletRecursivelyFromSegments(outlet, currentUrlTree.root.children);
+		UrlHelper._deleteOutletRecursivelyFromSegments(outlet, currentUrlTree.root.children);
 		return currentUrlTree.toString();
 	}
 
@@ -111,7 +110,7 @@ export class UrlHelper {
 		return `${url}${url.includes('?') ? '&' : '?'}${queryParams}`;
 	}
 
-	private static deleteOutletRecursivelyFromSegments(outlet: string, dictionary: Dictionary<UrlSegmentGroup>) {
+	private static _deleteOutletRecursivelyFromSegments(outlet: string, dictionary: Dictionary<UrlSegmentGroup>) {
 		// tslint:disable-next-line:forin
 		for (const property in dictionary) {
 			if (property === outlet) {
@@ -120,7 +119,7 @@ export class UrlHelper {
 			}
 
 			if (dictionary.hasOwnProperty(property) && isObject(dictionary[property]))
-				this.deleteOutletRecursivelyFromSegments(outlet, dictionary[property].children);
+				UrlHelper._deleteOutletRecursivelyFromSegments(outlet, dictionary[property].children);
 		}
 	}
 }

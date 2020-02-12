@@ -3,9 +3,9 @@ import { tap } from 'rxjs/operators';
 
 import { ZoneService } from '@bp/shared/providers/zone.service';
 
-type callback = (pending: boolean) => any;
+type PendingCb = (pending: boolean) => any;
 
-export function pending<T>(callbackOrSubject$: callback | Subject<boolean>): OperatorFunction<T, T> {
+export function pending<T>(callbackOrSubject$: PendingCb | Subject<boolean>): OperatorFunction<T, T> {
 	return (source$: Observable<T>) => {
 		let currentState: boolean;
 		const emit = (state: boolean) => {

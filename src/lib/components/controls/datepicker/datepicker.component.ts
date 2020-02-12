@@ -23,6 +23,7 @@ import { ControlComponent } from '../control.component';
 	]
 })
 export class DatePickerComponent extends ControlComponent<m.Moment | null> {
+	// tslint:disable-next-line: naming-convention
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 
 	@Input() label!: string;
@@ -35,7 +36,7 @@ export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 	writeValue(value: m.Moment | null): void {
 		lineMicrotask(() => {
 				this.value = value;
-				this.cdr.markForCheck();
+				this._cdr.markForCheck();
 			});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface

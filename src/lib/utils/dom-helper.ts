@@ -1,20 +1,19 @@
 import { isObject, isString, isBoolean, forIn, forOwn } from 'lodash-es';
-import { Dictionary } from 'lodash';
 
 import { Dimensions, Size, Position } from '../models/misc/dimensions';
 
 export class $ {
 
-	private static $canvas: HTMLCanvasElement;
+	private static _$canvas: HTMLCanvasElement;
 
 	static addClass($el: Element, ...classes: string[]) {
 		for (const cls of classes)
-			this.setClass($el, cls, true);
+			$.setClass($el, cls, true);
 	}
 
 	static removeClass($el: Element, ...classes: string[]) {
 		for (const cls of classes)
-			this.setClass($el, cls, false);
+			$.setClass($el, cls, false);
 	}
 
 	static setClass($el: Element, cls: string, isAdd: boolean) {
@@ -37,12 +36,12 @@ export class $ {
 	// Searching methods
 	static siblings(el: Element): Element[] {
 		return el.parentNode
-			? Array.from(el.parentNode.childNodes).filter(child => child !== el) as Element[]
+			? <Element[]>Array.from(el.parentNode.childNodes).filter(child => child !== el)
 			: [];
 	}
 
 	static filter(el: Element, selector: string): Element[] {
-		return Array.from(el.querySelectorAll(selector)) as Element[];
+		return <Element[]>Array.from(el.querySelectorAll(selector));
 	}
 
 	static find(selector: string): Element[];
@@ -50,15 +49,15 @@ export class $ {
 	static find(targetOrSelector: Element | string, selector?: string): Element[] {
 		if (targetOrSelector instanceof Element)
 			return selector
-				? Array.from(targetOrSelector.querySelectorAll(selector)) as Element[]
+				? <Element[]>Array.from(targetOrSelector.querySelectorAll(selector))
 				: [];
-		return Array.from(document.querySelectorAll(targetOrSelector)) as Element[];
+		return <Element[]>Array.from(document.querySelectorAll(targetOrSelector));
 	}
 
 	static findSingle<T = Element>(target: Element | string, selector?: string): T | null {
 		if (target instanceof Element)
-			return selector ? target.querySelector(selector) as any as T : null;
-		return document.querySelector(<string>target) as any as T;
+			return selector ? <T><any>target.querySelector(selector) : null;
+		return <T><any>document.querySelector(<string>target);
 	}
 
 	static closest(target: Element, selector: string): Element | null {
@@ -88,9 +87,9 @@ export class $ {
 	static is(el: Element, selector: ':visible' | ':hidden'): boolean {
 		switch (selector) {
 			case ':visible':
-				return this.isVisible(el);
+				return $.isVisible(el);
 			case ':hidden':
-				return !this.isVisible(el);
+				return !$.isVisible(el);
 			default:
 				throw new Error('Wrong selector has been put in \'IS\' function');
 		}
@@ -110,7 +109,7 @@ export class $ {
 	static css(el: HTMLElement, stylesDictionary: { [styleName: string]: any }): void;
 	static css(el: HTMLElement, ...styles: any[]): void {
 		const dictionary = isObject(styles[0]) ? styles[0] : { [styles[0]]: styles[1] };
-		forIn(dictionary, (value, style) => el.style[style as unknown as number] = value);
+		forIn(dictionary, (value, style) => el.style[<number><unknown>style] = value);
 	}
 
 	static attr(el: HTMLElement, attrName: string, attrValue: any): void;
@@ -135,7 +134,7 @@ export class $ {
 	 */
 	static getTextWidth(text: string, font: string): number | null {
 		// re-use canvas object for better performance
-		const canvas = $.$canvas || ($.$canvas = document.createElement('canvas'));
+		const canvas = $._$canvas || ($._$canvas = document.createElement('canvas'));
 		const context = canvas.getContext('2d');
 		if (context) {
 			context.font = font;
@@ -182,7 +181,7 @@ export class $ {
 	}
 
 	/**
-	 * Get the hidden element coordinats relative to the document
+	 * Get the hidden element coordinates relative to the document
 	 */
 	static offsetHidden(el: HTMLElement): Dimensions {
 		let offset: Dimensions;
@@ -241,13 +240,13 @@ export class $ {
 	 * Gets scroll container for the @prop the target element.
 	 */
 	static getScrollContainer(target: Element): HTMLElement | Window {
-		const ScrollValues = ['scroll', 'auto'];
+		const scrollValues = ['scroll', 'auto'];
 		let parent = target.parentElement;
 		while (parent) {
 			const { overflow, overflowY, overflowX } = getComputedStyle(parent);
-			if (ScrollValues.includes(overflow as string)
-				|| ScrollValues.includes(overflowY as string)
-				|| ScrollValues.includes(overflowX as string))
+			if (scrollValues.includes(<string>overflow)
+				|| scrollValues.includes(<string>overflowY)
+				|| scrollValues.includes(<string>overflowX))
 				return parent;
 			parent = parent.parentElement;
 		}
@@ -273,7 +272,7 @@ export class $ {
 	 * @return {HTMLElement}
 	 */
 	static getTarget(targetId: string): HTMLElement | null {
-		targetId = this.sanitizeTargetId(targetId);
+		targetId = $.sanitizeTargetId(targetId);
 		const target = targetId && (document.getElementById(targetId) || document.getElementsByName(targetId)[0]);
 		if (target && target.getBoundingClientRect)
 			return <HTMLElement>target;
@@ -284,7 +283,7 @@ export class $ {
 	 * Create Image element with specified url string
 	 */
 	static createImage(src: string) {
-		const img: HTMLImageElement = new HTMLImageElement();
+		const img = new HTMLImageElement();
 		img.src = src;
 		return img;
 	}
@@ -293,7 +292,7 @@ export class $ {
 	 * Returns content of the meta-tag in head.
 	 */
 	static getMeta(name: string) {
-		const el = this.findSingle(document.head, `meta[name=${name}]`);
+		const el = $.findSingle(document.head, `meta[name=${name}]`);
 		return el ? el.getAttribute('content') : undefined;
 	}
 
