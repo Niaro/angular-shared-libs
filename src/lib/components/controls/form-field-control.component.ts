@@ -11,6 +11,7 @@ import { lineMicrotask } from '@bp/shared/utils';
 import { ControlComponent } from './control.component';
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class FormFieldControlComponent<T> extends ControlComponent<T> implements OnChanges, OnInit {
 
 	@Input() formControl!: FormControl;

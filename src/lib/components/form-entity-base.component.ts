@@ -12,6 +12,7 @@ import { OptionalBehaviorSubject } from '../rxjs';
 
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	extends FormBaseComponent<T>
 	implements OnChanges {

@@ -8,6 +8,7 @@ import { lineMicrotask } from '@bp/shared/utils';
 import { Destroyable } from '../destroyable';
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class ControlComponent<T = any>
 	extends Destroyable
 	implements ControlValueAccessor, Validator, OnDestroy {

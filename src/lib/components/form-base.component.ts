@@ -10,6 +10,7 @@ import { ResponseError, IApiErrorMessage, FormGroupConfig, ClassMetadata } from 
 import { Destroyable } from './destroyable';
 
 @Directive()
+// tslint:disable-next-line: directive-class-suffix
 export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 	@Input() metadata!: ClassMetadata;
