@@ -49,9 +49,9 @@ export class ResizeSensor {
 		);
 
 		if (isCollectionTyped)
-			(<HTMLResizableElement[]>elements).forEach(v => cb(v));
+			(<HTMLResizableElement[]> elements).forEach(v => cb(v));
 		else
-			cb(<HTMLResizableElement>elements);
+			cb(<HTMLResizableElement> elements);
 	}
 
 	private _elements: HTMLResizableElement | HTMLResizableElement[];
@@ -83,7 +83,7 @@ export class ResizeSensor {
 		$el.resizedAttached = new EventQueue();
 		$el.resizedAttached.add(resized);
 
-		const $resizeSensor = $el.resizeSensor = <HTMLDivResetSensorElement>document.createElement('div');
+		const $resizeSensor = $el.resizeSensor = <HTMLDivResetSensorElement> document.createElement('div');
 		$resizeSensor.dir = 'ltr';
 		$resizeSensor.className = 'resize-sensor';
 
@@ -212,8 +212,8 @@ export class ResizeSensor {
 	private _setStyle(element: HTMLElement, style: Partial<CSSStyleDeclaration>) {
 		return fastdom.mutate(() => Object
 			.keys(style)
-			.map(v => <number><unknown>v)
-			.forEach(k => element.style[k] = (<Required<CSSStyleDeclaration>>style)[k])
+			.map(v => <number> <unknown> v)
+			.forEach(k => element.style[ k ] = (<Required<CSSStyleDeclaration>> style)[ k ])
 		);
 	}
 
@@ -229,9 +229,9 @@ export class ResizeSensor {
 if (typeof MutationObserver !== 'undefined') {
 	const observer = new MutationObserver(mutations => {
 		for (let i = 0; i < mutations.length; i++) {
-			const record = mutations[i];
+			const record = mutations[ i ];
 			for (let j = 0; j < record.addedNodes.length; j++) {
-				const $el = <HTMLResizableElement>record.addedNodes[j];
+				const $el = <HTMLResizableElement> record.addedNodes[ j ];
 				$el.resizeSensor && $el.resizeSensor.resetSensor && $el.resizeSensor.resetSensor();
 			}
 		}

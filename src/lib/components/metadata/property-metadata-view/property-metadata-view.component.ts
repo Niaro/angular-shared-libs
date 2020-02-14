@@ -8,7 +8,7 @@ import { PropertyMetadata, FieldViewType, PropertyMetadataTable } from '@bp/shar
 @Component({
 	selector: 'bp-property-metadata-view',
 	templateUrl: './property-metadata-view.component.html',
-	styleUrls: ['./property-metadata-view.component.scss'],
+	styleUrls: [ './property-metadata-view.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyMetadataViewComponent implements OnChanges {
@@ -50,6 +50,6 @@ export class PropertyMetadataViewComponent implements OnChanges {
 	}
 
 	private _getHostClass(md: PropertyMetadata) {
-		return `view-type-${md.viewType.cssClass}`;
+		return `view-type-${ md.viewType.cssClass }`;
 	}
 }

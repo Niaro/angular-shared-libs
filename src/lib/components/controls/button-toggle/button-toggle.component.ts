@@ -6,16 +6,16 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 @Component({
 	selector: 'bp-button-toggle',
 	templateUrl: './button-toggle.component.html',
-	styleUrls: ['./button-toggle.component.scss'],
+	styleUrls: [ './button-toggle.component.scss' ],
 	host: {
 		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [{
+	providers: [ {
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: ButtonToggleComponent,
 		multi: true
-	}]
+	} ]
 })
 export class ButtonToggleComponent extends FormFieldControlComponent<any> {
 	@Input() items!: any[];

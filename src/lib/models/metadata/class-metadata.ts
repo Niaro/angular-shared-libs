@@ -4,10 +4,10 @@ type MetadataHost = { metadata: ClassMetadata };
 
 export class ClassMetadata {
 
-	private _propertiesMetadataDictionary: { [property: string]: PropertyMetadata } = { };
+	private _propertiesMetadataDictionary: { [ property: string ]: PropertyMetadata } = {};
 
 	private get _prototypeMetadata(): ClassMetadata | undefined {
-		return (<MetadataHost>Object.getPrototypeOf(this._metadataHost))?.metadata;
+		return (<MetadataHost> Object.getPrototypeOf(this._metadataHost))?.metadata;
 	}
 
 	private _values!: PropertyMetadata[];
@@ -17,7 +17,7 @@ export class ClassMetadata {
 	constructor(private readonly _metadataHost: MetadataHost) { }
 
 	add(property: string, metadata: Partial<PropertyMetadata>) {
-		this._propertiesMetadataDictionary[property] = new PropertyMetadata({
+		this._propertiesMetadataDictionary[ property ] = new PropertyMetadata({
 			...(this.get(property) || {}),
 			...metadata,
 			property
@@ -25,11 +25,11 @@ export class ClassMetadata {
 	}
 
 	get<T>(propName: NonFunctionPropertyNames<T>): PropertyMetadata | null {
-		return this._propertiesMetadataDictionary[<string>propName] ?? this._prototypeMetadata?.get(propName);
+		return this._propertiesMetadataDictionary[ <string> propName ] ?? this._prototypeMetadata?.get(propName);
 	}
 
 	has<T>(propName: NonFunctionPropertyNames<T>): boolean {
-		return !!(this._propertiesMetadataDictionary[<string>propName] ?? this._prototypeMetadata?.has(propName));
+		return !!(this._propertiesMetadataDictionary[ <string> propName ] ?? this._prototypeMetadata?.has(propName));
 	}
 
 	keys(): string[] {

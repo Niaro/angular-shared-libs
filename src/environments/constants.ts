@@ -11,7 +11,7 @@ export class Version {
 	readonly prerelease: string;
 
 	constructor({ release, prerelease }: { release: string, prerelease: string }) {
-		const [major, minor, patch] = release.split('.').map(v => +v);
+		const [ major, minor, patch ] = release.split('.').map(v => +v);
 		this.major = major;
 		this.minor = minor;
 		this.patch = patch;

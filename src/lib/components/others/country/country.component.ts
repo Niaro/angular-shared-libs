@@ -5,7 +5,7 @@ import { Country, CountryCode, Countries } from '../../../models';
 @Component({
 	selector: 'bp-country',
 	templateUrl: './country.component.html',
-	styleUrls: ['./country.component.scss'],
+	styleUrls: [ './country.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CountryComponent implements OnChanges {
@@ -25,17 +25,17 @@ export class CountryComponent implements OnChanges {
 		if (src) {
 			this.country = this.src instanceof Country
 				? this.src
-				: Countries.findByCode(<CountryCode>this.src);
+				: Countries.findByCode(<CountryCode> this.src);
 			this.isWorldwide = this.country === Countries.worldwide;
 		}
 
 		if (compact)
-			this.compact = <any>this.compact === '' ? true : this.compact;
+			this.compact = <any> this.compact === '' ? true : this.compact;
 
 		if (hideTooltip)
-			this.hideTooltip = <any>this.hideTooltip === '' ? true : this.hideTooltip;
+			this.hideTooltip = <any> this.hideTooltip === '' ? true : this.hideTooltip;
 
 		if (round)
-			this.round = <any>this.round === '' ? true : this.round;
+			this.round = <any> this.round === '' ? true : this.round;
 	}
 }

@@ -12,8 +12,8 @@ import { IApiErrorMessage } from '@bp/shared/models';
 @Component({
 	selector: 'bp-alert',
 	templateUrl: './alert.component.html',
-	styleUrls: ['./alert.component.scss'],
-	animations: [SLIDE],
+	styleUrls: [ './alert.component.scss' ],
+	animations: [ SLIDE ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnChanges {
@@ -64,7 +64,7 @@ export class AlertComponent implements OnChanges {
 	}
 
 	private _isCountdownComplete() {
-		const shownDatetimeText = <string | null>this._localStorage.get(this._storageKey);
+		const shownDatetimeText = <string | null> this._localStorage.get(this._storageKey);
 
 		if (shownDatetimeText) {
 			const shownDatetime = m(shownDatetimeText);

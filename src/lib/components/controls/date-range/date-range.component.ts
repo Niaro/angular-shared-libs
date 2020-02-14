@@ -13,8 +13,8 @@ import { ControlComponent } from '../control.component';
 @Component({
 	selector: 'bp-date-range',
 	templateUrl: './date-range.component.html',
-	styleUrls: ['./date-range.component.scss'],
-	animations: [SLIDE_RIGHT],
+	styleUrls: [ './date-range.component.scss' ],
+	animations: [ SLIDE_RIGHT ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
 		{
@@ -48,9 +48,9 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue): void {
 		lineMicrotask(() => {
-				this.value = DateRange.parse(value);
-				this._cdr.markForCheck();
-			});
+			this.value = DateRange.parse(value);
+			this._cdr.markForCheck();
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 

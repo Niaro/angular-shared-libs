@@ -22,11 +22,11 @@ export abstract class MetadataEntity {
 		if (!(model instanceof MetadataEntity))
 			throw new Error('The decorator can be set only for the class which extends the MetadataEntity class');
 
-		return (<typeof MetadataEntity>model.constructor).metadata;
+		return (<typeof MetadataEntity> model.constructor).metadata;
 	}
 
 	static getMetaPropertyNames<T>(): NonFunctionPropertyNames<T>[] {
-		return <any>this.metadata.keys();
+		return <any> this.metadata.keys();
 	}
 
 	static getLabel<T>(prop: NonFunctionPropertyNames<T>) {
@@ -63,7 +63,7 @@ export abstract class MetadataEntity {
 				const isFunctionMapper = !isEnumMapper && !isMetadataEntityMapper;
 
 				const make = (v: string | undefined) => isEnumMapper
-					? (<typeof Enumeration>mapper).parse(camelCase(v))
+					? (<typeof Enumeration> mapper).parse(camelCase(v))
 					// if the mapper doesn't have a name we assume that this is a class is used as a mapper so we initiate it
 					: new mapper(v);
 
@@ -92,8 +92,8 @@ export abstract class MetadataEntity {
 	private _setDefaults() {
 		this.getMetadata()
 			.values()
-			.filter(v => v.default !== undefined && isNil((<any>this)[v.property]))
-			.forEach(v => (<any>this)[v.property] = v.default);
+			.filter(v => v.default !== undefined && isNil((<any> this)[ v.property ]))
+			.forEach(v => (<any> this)[ v.property ] = v.default);
 	}
 
 	toJSON(): any {

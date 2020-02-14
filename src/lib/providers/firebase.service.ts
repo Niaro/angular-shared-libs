@@ -114,7 +114,7 @@ export class FirebaseService {
 				query = query.where('searchTerms', 'array-contains-any', searchTerms);
 
 			if (page)
-				query = query.startAfter(this._queryDocumentSnapshotsById[page]);
+				query = query.startAfter(this._queryDocumentSnapshotsById[ page ]);
 
 			const unsubscribe = query.onSnapshot(
 				snapshot => {
@@ -125,12 +125,12 @@ export class FirebaseService {
 						: null;
 
 					if (nextPageCursor)
-						this._queryDocumentSnapshotsById[nextPageCursor] = lastDoc;
+						this._queryDocumentSnapshotsById[ nextPageCursor ] = lastDoc;
 
 					subscriber.next(new PagedResults({
 						nextPageCursor,
 						firstPage: !page,
-						records: docs.map(v => factory(<Partial<T>>v.data()))
+						records: docs.map(v => factory(<Partial<T>> v.data()))
 					}));
 				},
 				e => subscriber.error(e)
@@ -146,7 +146,7 @@ export class FirebaseService {
 	) {
 		return new Observable<T[]>(subscriber => {
 			const unsubscribe = this.collection(collectionPath).onSnapshot(
-				snapshot => subscriber.next(snapshot.docs.map(v => factory(<Partial<T>>v.data()))),
+				snapshot => subscriber.next(snapshot.docs.map(v => factory(<Partial<T>> v.data()))),
 				e => subscriber.error(e)
 			);
 			return () => unsubscribe();
@@ -157,7 +157,7 @@ export class FirebaseService {
 	getCollection<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
 		return from(this.collection(collectionPath).get())
 			.pipe(
-				map(snapshot => snapshot.docs.map(v => factory(<Partial<T>>v.data()))),
+				map(snapshot => snapshot.docs.map(v => factory(<Partial<T>> v.data()))),
 				catchError(this._throwAsResponseError)
 			);
 	}
@@ -168,7 +168,7 @@ export class FirebaseService {
 	) {
 		return new Observable<T>(subscriber => {
 			const unsubscribe = this.doc(documentPath).onSnapshot(
-				snapshot => subscriber.next(factory(<Partial<T>>snapshot.data())),
+				snapshot => subscriber.next(factory(<Partial<T>> snapshot.data())),
 				e => subscriber.error(e)
 			);
 			return () => unsubscribe();
@@ -179,7 +179,7 @@ export class FirebaseService {
 	getDocument<T>(documentPath: string): Observable<Partial<T> | null> {
 		return from(this.doc(documentPath).get())
 			.pipe(
-				map(snapshot => (<Partial<T>>snapshot.data()) || null),
+				map(snapshot => (<Partial<T>> snapshot.data()) || null),
 				catchError(this._throwAsResponseError)
 			);
 	}
@@ -216,7 +216,7 @@ export class FirebaseService {
 			...patch
 		});
 
-		return this.set(`${collectionPath}/${entityId}`, entity)
+		return this.set(`${ collectionPath }/${ entityId }`, entity)
 			.pipe(map(() => entity));
 	}
 
@@ -297,10 +297,10 @@ export class FirebaseService {
 		const fileName = this._getFilenameWithoutExtension(name);
 		const counterRegexp = /_(\d+)$/;
 		const counterMatchInName = fileName.match(counterRegexp);
-		const counter = +(counterMatchInName && counterMatchInName[1] || 0) + 1;
+		const counter = +(counterMatchInName && counterMatchInName[ 1 ] || 0) + 1;
 		return name.replace(
 			fileName,
-			counterMatchInName ? fileName.replace(counterRegexp, `_${counter}`) : `${fileName}_${counter}`
+			counterMatchInName ? fileName.replace(counterRegexp, `_${ counter }`) : `${ fileName }_${ counter }`
 		);
 	}
 
@@ -311,11 +311,11 @@ export class FirebaseService {
 
 	private _getFilenameWithoutExtension(name: string): string {
 		if (!name) return '';
-		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
+		return (<any> /(.+?)(\.[^\.]+$|$)/.exec(name))[ 1 ];
 	}
 
 	private _throwAsResponseError = (v: firebase.FirebaseError) => throwError(this._mapToResponseError(v));
 
 	private _mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
-		new ResponseError({ messages: [{ type: e.code, message: e.message }] })
+		new ResponseError({ messages: [ { type: e.code, message: e.message } ] })
 }

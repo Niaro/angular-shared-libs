@@ -19,14 +19,14 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 	@Input()
 	set routerLinkNoOutlets(commands: any[] | string) {
 		if (commands != null)
-			this._commands = Array.isArray(commands) ? commands : [commands];
+			this._commands = Array.isArray(commands) ? commands : [ commands ];
 		else
 			this._commands = [];
 	}
 
 	@HostBinding('attr.target') @Input() target!: string;
 
-	@Input() queryParams!: { [k: string]: any };
+	@Input() queryParams!: { [ k: string ]: any };
 
 	@Input() fragment!: string;
 
@@ -38,7 +38,7 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 
 	@Input() replaceUrl!: boolean;
 
-	@Input() state?: { [k: string]: any };
+	@Input() state?: { [ k: string ]: any };
 
 	// the url displayed on the anchor element.
 	@HostBinding() href!: string;
@@ -62,7 +62,7 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 
 	ngOnChanges() { this._updateTargetUrlAndHref(); }
 
-	@HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'])
+	@HostListener('click', [ '$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey' ])
 	onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean {
 		if (button !== 0 || ctrlKey || metaKey || shiftKey)
 			return true;
@@ -84,7 +84,7 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 	}
 
 	get urlTree(): UrlTree {
-		let tree = this._router.createUrlTree([{ outlets: { [PRIMARY_OUTLET]: this._commands }}], {
+		let tree = this._router.createUrlTree([ { outlets: { [ PRIMARY_OUTLET ]: this._commands } } ], {
 			relativeTo: this._route.root,
 			queryParams: this.queryParams,
 			fragment: this.fragment,
@@ -107,9 +107,9 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 				continue;
 
 			if (key === PRIMARY_OUTLET)
-				this._removeNonPrimaryOutlets(children[key]);
+				this._removeNonPrimaryOutlets(children[ key ]);
 			else
-				delete children[key];
+				delete children[ key ];
 		}
 	}
 }

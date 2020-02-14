@@ -29,7 +29,7 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 						return e;
 
 					if (e.headers.has(CORRELATION_ID_KEY))
-						this._httpConfig.headers[CORRELATION_ID_KEY] = e.headers.get(CORRELATION_ID_KEY);
+						this._httpConfig.headers[ CORRELATION_ID_KEY ] = e.headers.get(CORRELATION_ID_KEY);
 					return e.body && e.body.result
 						? e.clone({ body: e.body.result })
 						: e;
@@ -49,13 +49,13 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 
 	private _cleanseParams(params: HttpParams) {
 		const keys = params instanceof HttpParams ? params.keys() : Object.keys(params);
-		const getValueByKey = (k: string) => params instanceof HttpParams ? params.get(k) : params[k];
+		const getValueByKey = (k: string) => params instanceof HttpParams ? params.get(k) : params[ k ];
 		return new HttpParams({
 			fromObject: fromPairs(
 				keys
-					.map(k => [k, getValueByKey(k)])
-					.map(([k, v]) => [k, isNil(v) ? v : v.toString()])
-					.filter(([, v]) => v !== '' && v !== 'NaN' && !isNil(v))
+					.map(k => [ k, getValueByKey(k) ])
+					.map(([ k, v ]) => [ k, isNil(v) ? v : v.toString() ])
+					.filter(([ , v ]) => v !== '' && v !== 'NaN' && !isNil(v))
 			)
 		});
 	}

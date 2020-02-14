@@ -16,7 +16,7 @@ class OutsideAngularAsyncAction<T> extends AsyncAction<T> {
 	}
 
 	// tslint:disable-next-line: naming-convention
-	protected requestAsyncId(scheduler: AsyncScheduler, id ?: any, delay: number = 0): any {
+	protected requestAsyncId(scheduler: AsyncScheduler, id?: any, delay: number = 0): any {
 		if (NgZone.isInAngularZone())
 			return ZoneService.runOutside(() => super.requestAsyncId(scheduler, id, delay));
 

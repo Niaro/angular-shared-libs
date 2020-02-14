@@ -26,12 +26,12 @@ export class SortDirective {
 			});
 
 		sort.sortChange
-			.pipe(map(({ active, direction }) => (<ISortQueryParams>{
+			.pipe(map(({ active, direction }) => (<ISortQueryParams> {
 				sortField: direction ? snakeCase(active) : null,
 				sortDir: direction
 			})))
 			.subscribe(params => router.navigate(
-				[UrlHelper.mergeRouteParams(route, params)],
+				[ UrlHelper.mergeRouteParams(route, params) ],
 				{ relativeTo: route })
 			);
 	}

@@ -12,11 +12,11 @@ export class CryptoCurrency extends MetadataEntity {
 		super(isString(dataOrCode) ? { code: dataOrCode } : dataOrCode);
 
 		if (CRYPTOS.has(this.code))
-			return <CryptoCurrency>CRYPTOS.get(this.code);
+			return <CryptoCurrency> CRYPTOS.get(this.code);
 
-		if (Cryptos[this.code]) {
-			this.name = Cryptos[this.code];
-			this.logo = `assets/images/cryptos/${this.code}`;
+		if (Cryptos[ this.code ]) {
+			this.name = Cryptos[ this.code ];
+			this.logo = `assets/images/cryptos/${ this.code }`;
 		}
 
 		CRYPTOS.set(this.code, this);

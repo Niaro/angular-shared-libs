@@ -6,7 +6,7 @@ const DEFAULT_TOOLTIP_MSG = 'Copy';
 @Component({
 	selector: '[bp-copy], bp-copy',
 	templateUrl: './copy.component.html',
-	styleUrls: ['./copy.component.scss'],
+	styleUrls: [ './copy.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CopyComponent {

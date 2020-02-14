@@ -146,7 +146,7 @@ export function BP_SELECT_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay):
 /** @docs-private */
 export const BP_SELECT_SCROLL_STRATEGY_PROVIDER = {
 	provide: BP_SELECT_SCROLL_STRATEGY,
-	deps: [Overlay],
+	deps: [ Overlay ],
 	useFactory: BP_SELECT_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 
@@ -192,8 +192,8 @@ export class BpSelectTrigger { }
 	selector: 'bp-select',
 	exportAs: 'bpSelect',
 	templateUrl: './select.component.html',
-	styleUrls: ['./select.component.scss'],
-	inputs: ['disabled', 'disableRipple', 'tabIndex'],
+	styleUrls: [ './select.component.scss' ],
+	inputs: [ 'disabled', 'disableRipple', 'tabIndex' ],
 	// tslint:disable-next-line: use-component-view-encapsulation
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -253,7 +253,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	private _compareWith = (o1: any, o2: any) => o1 === o2;
 
 	/** Unique id for this input. */
-	private _uid = `mat-select-${nextUniqueId++}`;
+	private _uid = `mat-select-${ nextUniqueId++ }`;
 
 	/** Emits whenever the component is destroyed. */
 	private readonly _destroy$ = new Subject<void>();
@@ -351,7 +351,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	/** Classes to be passed to the select panel. Supports the same syntax as `ngClass`. */
 	@Input()
 	panelClass!: string | string[] | Set<string> | {
-		[key: string]: any;
+		[ key: string ]: any;
 	};
 
 	/** User-supplied override of the trigger element. */
@@ -572,11 +572,11 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	ngOnChanges(changes: SimpleChanges) {
 		// Updating the disabled state is handled by `mixinDisabled`, but we need to additionally let
 		// the parent form field know to run change detection when the disabled state changes.
-		if (changes['disabled']) {
+		if (changes[ 'disabled' ]) {
 			this.stateChanges.next();
 		}
 
-		if (changes['typeaheadDebounceInterval'] && this._keyManager) {
+		if (changes[ 'typeaheadDebounceInterval' ] && this._keyManager) {
 			this._keyManager.withTypeAhead(this._typeaheadDebounceInterval);
 		}
 	}
@@ -614,7 +614,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			if (this._triggerFontSize
 				&& this.overlayDir.overlayRef
 				&& this.overlayDir.overlayRef.overlayElement) {
-				this.overlayDir.overlayRef.overlayElement.style.fontSize = `${this._triggerFontSize}px`;
+				this.overlayDir.overlayRef.overlayElement.style.fontSize = `${ this._triggerFontSize }px`;
 			}
 		});
 	}
@@ -682,7 +682,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 	/** The currently selected option. */
 	get selected(): MatOption | MatOption[] {
-		return this.multiple ? this._selectionModel.selected : this._selectionModel.selected[0];
+		return this.multiple ? this._selectionModel.selected : this._selectionModel.selected[ 0 ];
 	}
 
 	/** The value displayed in the trigger. */
@@ -702,7 +702,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			return selectedOptions.join(', ');
 		}
 
-		return this._selectionModel.selected[0].viewValue;
+		return this._selectionModel.selected[ 0 ].viewValue;
 	}
 
 	/** Whether the element is in RTL mode. */
@@ -824,7 +824,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 	/** Returns the theme to be used on the panel. */
 	_getPanelTheme(): string {
-		return this._parentFormField ? `mat-${this._parentFormField.color}` : '';
+		return this._parentFormField ? `mat-${ this._parentFormField.color }` : '';
 	}
 
 	/** Whether the select has a value. */
@@ -903,7 +903,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			.withTypeAhead(this._typeaheadDebounceInterval)
 			.withVerticalOrientation()
 			.withHorizontalOrientation(this._isRtl() ? 'rtl' : 'ltr')
-			.withAllowedModifierKeys(['shiftKey']);
+			.withAllowedModifierKeys([ 'shiftKey' ]);
 
 		this._keyManager.tabOut.pipe(takeUntil(this._destroy$)).subscribe(() => {
 			// Select the active item when tabbing away. This is consistent with how the native
@@ -1034,7 +1034,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			if (this.empty) {
 				this._keyManager.setFirstItemActive();
 			} else {
-				this._keyManager.setActiveItem(this._selectionModel.selected[0]);
+				this._keyManager.setActiveItem(this._selectionModel.selected[ 0 ]);
 			}
 		}
 	}
@@ -1050,10 +1050,10 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 			this._getItemHeight(),
 			this.panel.nativeElement.scrollTop,
 			SELECT_PANEL_MAX_HEIGHT
-			);
-		}
+		);
+	}
 
-/** Focuses the select element. */
+	/** Focuses the select element. */
 	focus(options?: FocusOptions): void {
 		this._elementRef.nativeElement.focus(options);
 	}
@@ -1077,7 +1077,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 
 		// If no value is selected we open the popup to the first item.
 		let selectedOptionOffset =
-			this.empty ? 0 : this._getOptionIndex(this._selectionModel.selected[0])!;
+			this.empty ? 0 : this._getOptionIndex(this._selectionModel.selected[ 0 ])!;
 
 		selectedOptionOffset += _countGroupLabelsBeforeOption(selectedOptionOffset, this.options,
 			this.optionGroups);
@@ -1131,7 +1131,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		if (this.multiple) {
 			offsetX = SELECT_MULTIPLE_PANEL_PADDING_X;
 		} else {
-			const selected = this._selectionModel.selected[0] || this.options.first;
+			const selected = this._selectionModel.selected[ 0 ] || this.options.first;
 			offsetX = selected && selected.group ? SELECT_PANEL_INDENT_PADDING_X : SELECT_PANEL_PADDING_X;
 		}
 
@@ -1284,7 +1284,7 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 		const itemHeight = this._getItemHeight();
 		const optionHeightAdjustment = (itemHeight - this._triggerRect.height) / 2;
 		const originY = Math.abs(this._offsetY) - optionHeightAdjustment + itemHeight / 2;
-		return `50% ${originY}px 0px`;
+		return `50% ${ originY }px 0px`;
 	}
 
 	/** Calculates the amount of items in the select. This includes options and group labels. */

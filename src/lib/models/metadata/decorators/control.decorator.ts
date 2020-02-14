@@ -4,7 +4,7 @@ import { FieldControlType } from '../enums';
 
 // tslint:disable-next-line: naming-convention
 export function Control(configOrControlType: Partial<PropertyMetadataControl> | FieldControlType) {
-	return function (model: MetadataEntity, property: string) {
+	return function(model: MetadataEntity, property: string) {
 		const propsMd = MetadataEntity
 			.getMetadata(model);
 

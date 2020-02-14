@@ -9,8 +9,8 @@ import { MODAL_OUTLET } from '@bp/shared/models/constants';
 import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 
-const URL_TREE_PRIMARY_MODAL_OUTLET_PATH = `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`;
-const URL_TREE_MODAL_OUTLET_PATH = `root.children.${MODAL_OUTLET}`;
+const URL_TREE_PRIMARY_MODAL_OUTLET_PATH = `root.children.${ PRIMARY_OUTLET }.children.${ MODAL_OUTLET }`;
+const URL_TREE_MODAL_OUTLET_PATH = `root.children.${ MODAL_OUTLET }`;
 
 @Component({
 	selector: 'bp-modal-outlet',
@@ -40,7 +40,7 @@ export class ModalOutletComponent implements OnInit {
 		this.router.events
 			.pipe(
 				filter(e => e instanceof NavigationEnd),
-				map(v => <NavigationEnd>v)
+				map(v => <NavigationEnd> v)
 			)
 			.subscribe(e => this._urlWithOutlet = this._hasUrlModalOutlet(e.url)
 				? this.router.url
@@ -53,7 +53,7 @@ export class ModalOutletComponent implements OnInit {
 		this.router.events
 			.pipe(
 				filter(e => e instanceof RoutesRecognized && !!this._activeDialog),
-				map(v => <RoutesRecognized>v)
+				map(v => <RoutesRecognized> v)
 			)
 			.subscribe(e => {
 				if (!this._urlWithOutlet || this._hasUrlModalOutlet(e.url))
@@ -77,7 +77,7 @@ export class ModalOutletComponent implements OnInit {
 
 		this._navigation = false;
 		this._activeDialog = this._dialogsManager.open(cmpt.modal.template, {
-			panelClass: [...(cmpt.panelClass || []), 'bp-modal-overlay-pane']
+			panelClass: [ ...(cmpt.panelClass || []), 'bp-modal-overlay-pane' ]
 		});
 
 		this._activeDialog

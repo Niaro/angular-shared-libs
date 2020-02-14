@@ -12,7 +12,7 @@ export abstract class Enumeration {
 			const list: T[] = [];
 			forOwn(this, (it, key) => {
 				if (it instanceof Enumeration && isNaN(+key) && this._shouldList(it))
-					list.push(<T>it);
+					list.push(<T> it);
 			});
 			this._list = list;
 		}
@@ -20,7 +20,7 @@ export abstract class Enumeration {
 	}
 
 	static find(value: number | string): Enumeration | null {
-		return (<any>this)[value] || null;
+		return (<any> this)[ value ] || null;
 	}
 
 	static parse(data: any): Enumeration | null {
@@ -28,14 +28,14 @@ export abstract class Enumeration {
 			return null;
 
 		return data instanceof this.prototype.constructor
-			? <Enumeration>data
+			? <Enumeration> data
 			: this.find(this._isValue(data) ? data : camelCase(data));
 	}
 
 	static parseStrict(data: any): Enumeration {
 		const result = this.parse(data);
 		if (!result)
-			throw new Error(`Enum type ${this.name} does not contains value ${data}`);
+			throw new Error(`Enum type ${ this.name } does not contains value ${ data }`);
 		return result;
 	}
 
@@ -61,7 +61,7 @@ export abstract class Enumeration {
 
 	protected _displayName: string;
 
-	private _id = `enum_${Math.random().toString(36).substr(2, 8)}`;
+	private _id = `enum_${ Math.random().toString(36).substr(2, 8) }`;
 
 	constructor(displayName?: string | null);
 	constructor(value: number | boolean, displayName?: string);
@@ -69,10 +69,10 @@ export abstract class Enumeration {
 		// do not access the {name} property in the constructor because it is lazy initialized and required all static properties to be present
 		if (Enumeration._isValue(valueOrDisplayName)) {
 			this._value = valueOrDisplayName!.valueOf();
-			(<any>this.constructor)[this._value.toString()] = this;
-			this._displayName = <string>displayName;
+			(<any> this.constructor)[ this._value.toString() ] = this;
+			this._displayName = <string> displayName;
 		} else
-			this._displayName = <string>valueOrDisplayName;
+			this._displayName = <string> valueOrDisplayName;
 
 		// Schedule a microtask at the end of the current event loop
 		// which means that the constructor will have all the enumerations attached to it by the time
@@ -123,7 +123,7 @@ export abstract class FlagEnumeration<T extends FlagEnumeration<T>> extends Enum
 	}
 
 	private static _findOrCreate(value: number, constructor: any) {
-		return constructor[value] || new constructor(value);
+		return constructor[ value ] || new constructor(value);
 	}
 
 	readonly bunch: boolean;

@@ -11,9 +11,9 @@ import { ValidationErrorStrings } from '../validation-error-strings';
 @Component({
 	selector: 'bp-validation-error',
 	templateUrl: './validation-error.component.html',
-	styleUrls: ['./validation-error.component.scss'],
+	styleUrls: [ './validation-error.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [SLIDE]
+	animations: [ SLIDE ]
 })
 export class ValidationErrorComponent implements OnChanges {
 
@@ -32,9 +32,9 @@ export class ValidationErrorComponent implements OnChanges {
 		if (this.errors)
 			this.error$ = this._translate
 				? this._translate.onLangChange.pipe(
-					map(() => new ValidationErrorStrings(this.errors!, this._translate)[0])
+					map(() => new ValidationErrorStrings(this.errors!, this._translate)[ 0 ])
 				)
-				: of(new ValidationErrorStrings(this.errors)[0]);
+				: of(new ValidationErrorStrings(this.errors)[ 0 ]);
 		else
 			this.error$ = null;
 	}

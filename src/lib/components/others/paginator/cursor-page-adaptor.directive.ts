@@ -13,7 +13,7 @@ export class CursorPageAdaptorDirective implements OnChanges {
 
 	@Input('pagedResults') pagedResults!: PagedResults;
 
-	pageCursors: { [page: number]: string | null } = { 1: '' }; // the first page doesn't have cursor
+	pageCursors: { [ page: number ]: string | null } = { 1: '' }; // the first page doesn't have cursor
 
 	constructor(@Self() private _paginator: PaginatorComponent) {
 		this._paginator.hasBack = () => this._hasCursor(this._paginator.getBackPage());
@@ -22,14 +22,14 @@ export class CursorPageAdaptorDirective implements OnChanges {
 
 		this._paginator.onBack = () => {
 			const backPage = this._paginator.getBackPage();
-			this._paginator.page = this.pageCursors[backPage]!;
+			this._paginator.page = this.pageCursors[ backPage ]!;
 			this._paginator.progressBack = true;
 			this._paginator.currentPage = backPage;
 		};
 
 		this._paginator.onNext = () => {
 			const nextPage = this._paginator.getNextPage();
-			this._paginator.page = this.pageCursors[nextPage]!;
+			this._paginator.page = this.pageCursors[ nextPage ]!;
 			this._paginator.progressNext = true;
 			this._paginator.currentPage = nextPage;
 		};
@@ -41,13 +41,13 @@ export class CursorPageAdaptorDirective implements OnChanges {
 			if (this.pagedResults.firstPage)
 				this._paginator.currentPage = 1;
 
-			this.pageCursors[this._paginator.getNextPage()] = this.pagedResults.nextPageCursor!;
+			this.pageCursors[ this._paginator.getNextPage() ] = this.pagedResults.nextPageCursor!;
 			this._paginator.progressBack = this._paginator.progressNext = false;
 			this._paginator.cdr.detectChanges();
 		}
 	}
 
 	private _hasCursor(page: number) {
-		return !isNil(this.pageCursors[page]);
+		return !isNil(this.pageCursors[ page ]);
 	}
 }

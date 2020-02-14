@@ -45,7 +45,7 @@ export abstract class MaskPipe {
 
 	protected _tryAddPrefixAndSuffix(mask: TextMask): TextMask {
 		if (this.prefixLength > 0)
-			mask = this.prefix.split('').concat(<any>mask);
+			mask = this.prefix.split('').concat(<any> mask);
 
 		if (this.suffixLength > 0)
 			mask = mask.concat(this.suffix.split(''));

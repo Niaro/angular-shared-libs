@@ -8,7 +8,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 @Component({
 	selector: 'bp-ip-input',
 	templateUrl: './ip-input.component.html',
-	styleUrls: ['./ip-input.component.scss'],
+	styleUrls: [ './ip-input.component.scss' ],
 	host: {
 		'(focusin)': 'onTouched()'
 	},

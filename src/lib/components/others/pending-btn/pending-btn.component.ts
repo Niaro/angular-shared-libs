@@ -6,9 +6,9 @@ import { FADE } from '@bp/shared/animations';
 @Component({
 	selector: 'bp-pending-btn',
 	templateUrl: './pending-btn.component.html',
-	styleUrls: ['./pending-btn.component.scss'],
+	styleUrls: [ './pending-btn.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [FADE]
+	animations: [ FADE ]
 })
 export class PendingBtnComponent {
 

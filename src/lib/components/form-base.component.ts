@@ -37,7 +37,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 		if (value.messages && this.form) {
 			value.messages
 				.filter(it => !!it.field)
-				.forEach(it => this.form!.controls[it.field!].setErrors({ server: it.message }));
+				.forEach(it => this.form!.controls[ it.field! ].setErrors({ server: it.message }));
 
 			this.errors = value.messages.filter(it => !it.field);
 		}
@@ -176,7 +176,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			);
 
 		combineLatest(validForm$, dirtyForm$)
-			.pipe(map(([valid, dirty]) => valid && dirty))
+			.pipe(map(([ valid, dirty ]) => valid && dirty))
 			.subscribe(this.canSave$);
 	}
 }

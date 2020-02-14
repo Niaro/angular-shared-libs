@@ -9,7 +9,7 @@ export type ToastConfig = IndividualConfig & { undoBtn: boolean };
 @Component({
 	selector: 'bp-toast',
 	templateUrl: './toast.component.html',
-	styleUrls: ['./toast.component.scss'],
+	styleUrls: [ './toast.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [
 		FADE,

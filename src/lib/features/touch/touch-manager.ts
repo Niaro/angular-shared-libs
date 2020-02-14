@@ -60,7 +60,7 @@ export class TouchManager {
 
 	private _timeouts = new Map<TimeoutType, number>();
 
-	private _subjects: { [event: string]: Subject<TouchEvent>; } = {};
+	private _subjects: { [ event: string ]: Subject<TouchEvent>; } = {};
 
 	private _subscriptions: Subscription[] = [];
 
@@ -74,21 +74,21 @@ export class TouchManager {
 		]));
 
 		TouchManager.events.forEach(event => {
-			this._subjects[event] = new Subject();
-			set(this, `${event}$`, this._subjects[event].pipe(observeOn(BpScheduler.inside)));
+			this._subjects[ event ] = new Subject();
+			set(this, `${ event }$`, this._subjects[ event ].pipe(observeOn(BpScheduler.inside)));
 		});
 	}
 
 	destroy() {
 		this._cancel();
 		this._subscriptions.forEach(s => s.unsubscribe());
-		TouchManager.events.forEach(event => this._subjects[event].complete());
+		TouchManager.events.forEach(event => this._subjects[ event ].complete());
 	}
 
 	private _onStart(e: TouchEvent) {
 		this._subjects.touchStart.next(e);
 
-		const pos = new Point(e.touches[0].pageX, e.touches[0].pageY);
+		const pos = new Point(e.touches[ 0 ].pageX, e.touches[ 0 ].pageY);
 		const now = new Date();
 		if (e.touches.length === 1) {
 			// reset values
@@ -105,7 +105,7 @@ export class TouchManager {
 			this._timeouts.set(TimeoutType.LongTap, +setTimeout(() => this._subjects.longTap.next(e), LONG_TAP_TIME));
 		} else {
 			!this._startPosition && (this._startPosition = pos);
-			const second = new Point(e.touches[1].pageX, e.touches[1].pageY);
+			const second = new Point(e.touches[ 1 ].pageX, e.touches[ 1 ].pageY);
 			this._lastVector = second.diff(pos);
 		}
 
@@ -116,7 +116,7 @@ export class TouchManager {
 	private _onMove(e: TouchEvent) {
 		this._subjects.touchMove.next(e);
 
-		const pos = new Point(e.touches[0].pageX, e.touches[0].pageY);
+		const pos = new Point(e.touches[ 0 ].pageX, e.touches[ 0 ].pageY);
 		const move = this._startPosition.diff(pos);
 		if (move.length() >= MOVE_MIN_LENGTH) {
 			this._isMoved = true;
@@ -126,22 +126,22 @@ export class TouchManager {
 
 		if (this._isMoved) {
 			if (e.touches.length > 1) {
-				const second = new Point(e.touches[1].pageX, e.touches[1].pageY);
+				const second = new Point(e.touches[ 1 ].pageX, e.touches[ 1 ].pageY);
 				const vector = second.diff(pos);
 
 				if (this._lastVector) {
 					const prevLength = this._lastVector.length();
 					if (prevLength > 0) {
-						(<IPinchEvent>e).bpScale = vector.length() / prevLength;
+						(<IPinchEvent> e).bpScale = vector.length() / prevLength;
 						this._subjects.pinch.next(e);
 					}
-					(<IRotateEvent>e).bpAngle = vector.getAngleDegree(this._lastVector);
+					(<IRotateEvent> e).bpAngle = vector.getAngleDegree(this._lastVector);
 					this._subjects.rotate.next(e);
 				}
 
 				this._lastVector = vector;
 			} else {
-				const pe = <IPanEvent>e;
+				const pe = <IPanEvent> e;
 				pe.bpDeltaX = pos.x - this._startPosition.x;
 				pe.bpDeltaY = pos.y - this._startPosition.y;
 				this._subjects.pan.next(pe);
@@ -166,7 +166,7 @@ export class TouchManager {
 		// swipe
 		if (move.length() > SWIPE_MIN_LENGTH) {
 			this._cancel(TimeoutType.SingleTap);
-			(<ISwipeEvent>e).bpDirection = move.direction();
+			(<ISwipeEvent> e).bpDirection = move.direction();
 			this._subjects.swipe.next(e);
 			// tap
 		} else if (!this._isMoved) {

@@ -60,7 +60,7 @@ export class FileLoaderService {
 	}
 
 	private _addToProcessingFiles(file: ProcessingFile) {
-		this._processingFiles$.next([...(this._processingFiles$.value || []), file]);
+		this._processingFiles$.next([ ...(this._processingFiles$.value || []), file ]);
 	}
 
 	private _removeFromProcessingFiles(file: ProcessingFile) {

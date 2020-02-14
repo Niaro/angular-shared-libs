@@ -15,20 +15,20 @@ export class TextMaskPipe extends MaskPipe {
 			return;
 
 		this.formatChars = resolvedMask
-			? <string[]>resolvedMask
+			? <string[]> resolvedMask
 				.filter(char => !(char instanceof RegExp))
 				.concat(this.config.placeholderChar)
 			: [];
 
-		if (this.prefixLength === 0 && this.suffixLength === 0 || rawValue === '' || (rawValue[0] === this.prefix[0] && rawValue.length === 1))
-			return resolvedMask || [null];
+		if (this.prefixLength === 0 && this.suffixLength === 0 || rawValue === '' || (rawValue[ 0 ] === this.prefix[ 0 ] && rawValue.length === 1))
+			return resolvedMask || [ null ];
 
 		const refinedValue = resolvedMask
 			? undefined
 			: this._removePrefixAndSuffix(rawValue);
 
 		const maskFromRefinedValue = isEmpty(refinedValue)
-			? [null]
+			? [ null ]
 			: refinedValue!.split('').map(char => /./);
 
 		return resolvedMask || maskFromRefinedValue;

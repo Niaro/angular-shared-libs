@@ -27,7 +27,7 @@ export class ProgressBarDirective implements OnChanges {
 		}
 
 		if (inProgress) {
-			$.css(this.$progressBar, { width: `${this.bpProgressBar}%` });
+			$.css(this.$progressBar, { width: `${ this.bpProgressBar }%` });
 			!this.$progressBar.parentElement && this.$host.prepend(this.$progressBar);
 		}
 

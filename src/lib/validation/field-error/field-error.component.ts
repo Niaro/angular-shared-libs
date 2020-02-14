@@ -11,7 +11,7 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 	// tslint:disable-next-line:component-selector
 	selector: '[bpFieldError]',
 	templateUrl: './field-error.component.html',
-	styleUrls: ['./field-error.component.scss'],
+	styleUrls: [ './field-error.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldErrorComponent implements OnChanges, AfterViewInit {
@@ -44,7 +44,7 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 	ngOnChanges({ formControlOrName }: SimpleChanges) {
 		formControlOrName && this.formControl$.next(this.formControlOrName instanceof AbstractControl
 			? this.formControlOrName
-			: this.form && this.form.controls[this.formControlOrName] || null
+			: this.form && this.form.controls[ this.formControlOrName ] || null
 		);
 	}
 

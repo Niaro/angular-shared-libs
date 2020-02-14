@@ -3,7 +3,7 @@ import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2, OnCha
 @Component({
 	selector: 'bp-svg-icon',
 	templateUrl: './svg-icon.component.html',
-	styleUrls: ['./svg-icon.component.scss'],
+	styleUrls: [ './svg-icon.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SvgIconComponent implements OnChanges {

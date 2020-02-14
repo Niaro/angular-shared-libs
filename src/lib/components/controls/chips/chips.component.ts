@@ -17,9 +17,9 @@ export interface IChipControlItem {
 @Component({
 	selector: 'bp-chips',
 	templateUrl: './chips.component.html',
-	styleUrls: ['./chips.component.scss'],
+	styleUrls: [ './chips.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [FADE],
+	animations: [ FADE ],
 	host: {
 		'(focusin)': 'onTouched()'
 	},
@@ -48,7 +48,7 @@ export class ChipsControlComponent
 
 	get $input(): HTMLInputElement { return this.inputRef.nativeElement; }
 
-	separatorKeysCodes: number[] = [ENTER, COMMA];
+	separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
 	lowercasedItems!: { lowered: string, item: IChipControlItem }[];
 
@@ -73,10 +73,10 @@ export class ChipsControlComponent
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: IChipControlItem[] | null): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.internalControl.setValue(value);
-				this._updateFilteredAccordingSelected();
-			});
+			this.value = value;
+			this.internalControl.setValue(value);
+			this._updateFilteredAccordingSelected();
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
@@ -129,7 +129,7 @@ export class ChipsControlComponent
 	}
 
 	select(...value: IChipControlItem[]) {
-		this.setValue(uniq([...(this.value || []), ...value]));
+		this.setValue(uniq([ ...(this.value || []), ...value ]));
 		this._updateFilteredAccordingSelected();
 	}
 

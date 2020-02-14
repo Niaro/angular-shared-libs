@@ -13,7 +13,7 @@ export class DisabledDirective implements OnChanges {
 	private get _$veil() { return this._$cachedVeil ?? (this._$cachedVeil = this._createVeil()); }
 	private _$cachedVeil!: HTMLElement;
 
-	private get _$host() { return <HTMLElement>this._host.nativeElement; }
+	private get _$host() { return <HTMLElement> this._host.nativeElement; }
 
 	private _storedPointerEventsStyle!: string | null;
 

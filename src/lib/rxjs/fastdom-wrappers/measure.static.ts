@@ -10,7 +10,7 @@ export function fromMeasure<T>(measure: () => T) {
 			subscriber.next(measure());
 			subscriber.complete();
 		});
-		(<any>fastdom)['catch'] = (error: any) => subscriber.error(error);
+		(<any> fastdom)[ 'catch' ] = (error: any) => subscriber.error(error);
 		return () => fastdom.clear(id);
 	})
 		.pipe(subscribeOn(BpScheduler.outside));

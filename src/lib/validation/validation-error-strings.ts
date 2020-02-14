@@ -15,7 +15,7 @@ export class ValidationErrorStrings extends Array<string> {
 			if (isString(error))
 				return error;
 
-			const value = errorStrings[validatorName];
+			const value = errorStrings[ validatorName ];
 
 			if (isObject(error)) {
 				const masks = value.match(/{{(\w+)}}/g);
@@ -23,7 +23,7 @@ export class ValidationErrorStrings extends Array<string> {
 					? masks
 						.map(v => ({
 							mask: v,
-							maskValue: error[<keyof ValidationErrorTemplateVariables>v.replace(/({{|}})/g, '')]
+							maskValue: error[ <keyof ValidationErrorTemplateVariables> v.replace(/({{|}})/g, '') ]
 						}))
 						.reduce(
 							(txt, { mask, maskValue }) => maskValue ? txt.replace(mask, maskValue.toString()) : txt,

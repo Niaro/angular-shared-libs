@@ -26,27 +26,27 @@ export class ResponseError {
 
 	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string) {
 		if (isString(e))
-			this.messages = [{ message: e }];
+			this.messages = [ { message: e } ];
 		else if (e instanceof HttpErrorResponse) {
 			this.url = e.url;
-			this.status = e.status! >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
+			this.status = e.status! >= 500 || e.status === 0 || e[ 'statusText' ] === 'Unknown Error'
 				? StatusCode.InternalServerError
 				: e.status!;
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 
 			if (this.status === StatusCode.NotFound)
-				this.messages = [{
+				this.messages = [ {
 					message: 'The resource has not been found',
-				}];
+				} ];
 			else if (this.status === StatusCode.InternalServerError)
-				this.messages = [{
+				this.messages = [ {
 					message: 'The request to the server has failed.',
 					type: 'Please check your connection and try again later or contact the support if the problem persists',
-				}];
+				} ];
 			else if (e.error)
 				this._extractMessagesFromApiErrorResponse(e.error);
 		} else if (has(e, 'response')) {
-			e = <IApiErrorResponse>e;
+			e = <IApiErrorResponse> e;
 			this.status = e.response.code;
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 			this._extractMessagesFromApiErrorResponse(e);
@@ -58,8 +58,8 @@ export class ResponseError {
 
 	private _extractMessagesFromApiErrorResponse(e: IApiErrorResponse) {
 		this.messages = e.result
-			? isArray(e.result) ? e.result : [e.result]
-			: e.response && e.response.message && [{ message: lowerCase(e.response.message) }] || [];
+			? isArray(e.result) ? e.result : [ e.result ]
+			: e.response && e.response.message && [ { message: lowerCase(e.response.message) } ] || [];
 	}
 }
 

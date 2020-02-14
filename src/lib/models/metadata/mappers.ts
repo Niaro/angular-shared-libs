@@ -4,11 +4,11 @@ import * as m from 'moment';
 import { Country, Countries, CountryCode } from '../business-domain/countries';
 import { CashierLanguage, CashierLanguages } from '../business-domain/cashier-languages';
 
-export function booleanMapper(v: any)  {
+export function booleanMapper(v: any) {
 	return v === 'true' || v === true;
 }
 
-export function numberMapper(v: any)  {
+export function numberMapper(v: any) {
 	return isNumber(v) && !isNaN(v) ? v : 0;
 }
 

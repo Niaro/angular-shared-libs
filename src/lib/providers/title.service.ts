@@ -45,11 +45,11 @@ export class TitleService {
 		this._ignited = true;
 	}
 
-	setMaskValue(maskValue: { [maskName: string]: string }) {
+	setMaskValue(maskValue: { [ maskName: string ]: string }) {
 		this._substitutionsReducers = {
 			...this._substitutionsReducers,
 			// tslint:disable-next-line: no-unnecessary-type-annotation
-			...mapValues(maskValue, (v, k) => (rawTitle: string) => rawTitle.replace(`\{${k}\}`, v))
+			...mapValues(maskValue, (v, k) => (rawTitle: string) => rawTitle.replace(`\{${ k }\}`, v))
 		};
 
 		this._substituteMasksAndSetTitle(this._rawTitle);
@@ -63,8 +63,8 @@ export class TitleService {
 
 	private _updateTitle() {
 		const outletsTitles = mapValues(this._harvestTitles(), v => v.reverse().join(TITLES_DELIMITER));
-		const primaryTitle = outletsTitles[PRIMARY_OUTLET];
-		const modalTitle = outletsTitles[MODAL_OUTLET];
+		const primaryTitle = outletsTitles[ PRIMARY_OUTLET ];
+		const modalTitle = outletsTitles[ MODAL_OUTLET ];
 		const rightDrawersTitle = values(omit(outletsTitles, PRIMARY_OUTLET, MODAL_OUTLET)).reverse().join(OUTLETS_DELIMITER);
 
 		this._rawTitle = (modalTitle
@@ -90,7 +90,7 @@ export class TitleService {
 			const hasWalked = walkedMap.has(curr);
 
 			if (!hasWalked && curr.data?.title)
-				outletsTitles[currentOutlet] = [...(outletsTitles[currentOutlet] || []), curr.data?.title];
+				outletsTitles[ currentOutlet ] = [ ...(outletsTitles[ currentOutlet ] || []), curr.data?.title ];
 
 			// tslint:disable-next-line: no-unnecessary-type-annotation
 			const toCheckChildIndex: number = (walkedMap.get(curr) || 0) + 1;
@@ -98,7 +98,7 @@ export class TitleService {
 			if (curr.children.length && (!hasWalked || toCheckChildIndex < curr.children.length)) {
 				const next = hasWalked ? toCheckChildIndex : 0;
 				walkedMap.set(curr, next);
-				curr = curr.children[next];
+				curr = curr.children[ next ];
 			} else if (curr.parent)
 				curr = curr.parent;
 			else
@@ -111,6 +111,6 @@ export class TitleService {
 	}
 
 	private _keysToObject(val: string[] = []) {
-		return val.reduce((acc, v) => ({ ...acc, [v]: [] }), {});
+		return val.reduce((acc, v) => ({ ...acc, [ v ]: [] }), {});
 	}
 }

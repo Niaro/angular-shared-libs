@@ -16,7 +16,7 @@ export class DateRange {
 	 * Parse string 'unix:unix' to DateRange
 	 */
 	static parseString(value: string, format?: string) {
-		const [from, to] = chunk(value.split(RANGE_DELIMITER), 2)
+		const [ from, to ] = chunk(value.split(RANGE_DELIMITER), 2)
 			.map(dates => dates.map(d => d && m.unix(+d).utc()))
 			.map(dates => dates.map(d => d && d.isValid() ? d : undefined))
 			.flat();
@@ -65,7 +65,7 @@ export class DateRange {
 		if (isString(config))
 			return DateRange.parseString(config, format);
 
-		assign(this, omit(config, ['empty', 'fullRange', 'format']));
+		assign(this, omit(config, [ 'empty', 'fullRange', 'format' ]));
 		Object.freeze(this);
 	}
 
@@ -104,7 +104,7 @@ export class DateRange {
 	private _setUnixText() {
 		const from = this._getUnixString(this._from);
 		const to = this._getUnixString(this._to);
-		this._unixText = from || to ? `${from}${RANGE_DELIMITER}${to}` : undefined;
+		this._unixText = from || to ? `${ from }${ RANGE_DELIMITER }${ to }` : undefined;
 	}
 
 	private _getUnixString(moment?: m.Moment) {

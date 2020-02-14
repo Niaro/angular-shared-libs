@@ -10,14 +10,14 @@ export class TextMaskConfig {
 	get prefix(): string { return this._prefix; }
 	set prefix(value: string) {
 		this._prefix = value;
-		this._prefixRegExp = value && value.length && new RegExp(`^${escapeRegExp(value)}`) || undefined;
+		this._prefixRegExp = value && value.length && new RegExp(`^${ escapeRegExp(value) }`) || undefined;
 	}
 	private _prefix!: string;
 
 	get suffix(): string { return this._suffix; }
 	set suffix(value: string) {
 		this._suffix = value;
-		this._suffixRegExp = value && value.length && new RegExp(`${escapeRegExp(value)}$`) || undefined;
+		this._suffixRegExp = value && value.length && new RegExp(`${ escapeRegExp(value) }$`) || undefined;
 	}
 	private _suffix!: string;
 
@@ -191,7 +191,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 
 	get leadingZeroRegExp() {
 		return this._leadingZeroRegExp
-			|| (this._leadingZeroRegExp = new RegExp(`^([0${escapeRegExp(this.thousandsSeparatorSymbol)}]+)[1-9]`));
+			|| (this._leadingZeroRegExp = new RegExp(`^([0${ escapeRegExp(this.thousandsSeparatorSymbol) }]+)[1-9]`));
 	}
 	private _leadingZeroRegExp!: RegExp;
 

@@ -19,7 +19,7 @@ export class OutletLinkRelativeToTargetBaseDirective {
 		this._relativeTo = this._route.root;
 	}
 
-	@Input() queryParams!: { [k: string]: any; };
+	@Input() queryParams!: { [ k: string ]: any; };
 
 	@Input() fragment!: string;
 
@@ -54,6 +54,6 @@ export class OutletLinkRelativeToTargetBaseDirective {
 	private _setCommands(outlets: Dictionary<any[]>) {
 		if (!isObject(outlets))
 			throw new Error('OutletLinkRelativeToTarget accepts only a dictionary where the keys are the outlet names and the values are the route commands');
-		this._commands = [{ outlets }];
+		this._commands = [ { outlets } ];
 	}
 }

@@ -3,7 +3,7 @@ import { Property } from './property-metadata.decorator';
 
 // tslint:disable-next-line: naming-convention
 export function Default(value: any) {
-	return function (model: MetadataEntity, property: string) {
+	return function(model: MetadataEntity, property: string) {
 		Property({ default: value })(model, property);
 	};
 }

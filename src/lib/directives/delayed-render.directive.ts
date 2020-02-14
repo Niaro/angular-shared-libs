@@ -41,7 +41,7 @@ export class DelayedRenderDirective extends Destroyable implements AfterViewChec
 
 	ngAfterViewChecked() {
 		if (!this._parentElement$.value)
-			this._parentElement$.next((<Comment>this._host.nativeElement).parentElement);
+			this._parentElement$.next((<Comment> this._host.nativeElement).parentElement);
 	}
 
 	private _scheduleCmptRendering() {

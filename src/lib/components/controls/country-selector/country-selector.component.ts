@@ -11,7 +11,7 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 @Component({
 	selector: 'bp-country-selector',
 	templateUrl: './country-selector.component.html',
-	styleUrls: ['./country-selector.component.scss'],
+	styleUrls: [ './country-selector.component.scss' ],
 	host: {
 		'(focusin)': 'onTouched()'
 	},
@@ -83,13 +83,13 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: Country | CountryCode | null): void {
 		lineMicrotask(() => {
-				this.setValue(
-					value instanceof Country
-						? value
-						: value && Countries.findByCode(value),
+			this.setValue(
+				value instanceof Country
+					? value
+					: value && Countries.findByCode(value),
 				{ emitChange: false });
-				this.internalControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
-			});
+			this.internalControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
@@ -113,7 +113,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	private _getCountriesAccordingToHasWorldwideFlag(list: Country[]) {
 		return this.hasWorldwide
-			? [Countries.worldwide, ...list]
+			? [ Countries.worldwide, ...list ]
 			: list.filter(v => v !== Countries.worldwide);
 	}
 

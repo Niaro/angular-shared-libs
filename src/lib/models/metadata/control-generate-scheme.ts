@@ -16,7 +16,7 @@ export class GenerateSchemeControl {
 	constructor({ key, value }: { key: string, value: number | boolean | string }) {
 		this.key = key;
 		this._defaultValue = value;
-		this.isRender = ['payment_method_type', 'is_live', 'is3d_secure'].includes(key) ? false : true;
+		this.isRender = [ 'payment_method_type', 'is_live', 'is3d_secure' ].includes(key) ? false : true;
 		this.label = startCase(key);
 		this.type = this._getType();
 		this.withinMatFormField = this.type !== 'switch';
@@ -27,7 +27,7 @@ export class GenerateSchemeControl {
 			return 'number';
 		if (isBoolean(this._defaultValue))
 			return 'switch';
-		if (['public_key'].includes(this.key))
+		if ([ 'public_key' ].includes(this.key))
 			return 'textarea';
 		return 'input';
 	}
@@ -40,7 +40,7 @@ export class GenerateSchemeGroup {
 
 	value!: GenerateSchemeControl | GenerateSchemeControl[];
 
-	get isRender() { return this.isArray || (<GenerateSchemeControl>this.value).isRender; }
+	get isRender() { return this.isArray || (<GenerateSchemeControl> this.value).isRender; }
 
 	constructor(data: DeepPartial<GenerateSchemeGroup>) {
 		assign(this, data);

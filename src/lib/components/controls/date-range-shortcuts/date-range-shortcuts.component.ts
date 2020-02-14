@@ -10,7 +10,7 @@ import { ControlComponent } from '../control.component';
 @Component({
 	selector: 'bp-date-range-shortcuts',
 	templateUrl: './date-range-shortcuts.component.html',
-	styleUrls: ['./date-range-shortcuts.component.scss'],
+	styleUrls: [ './date-range-shortcuts.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
 		{

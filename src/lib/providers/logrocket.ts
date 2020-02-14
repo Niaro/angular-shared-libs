@@ -19,7 +19,7 @@ export function whenOnRemoteServerInitLogrocket() {
 					// scrub out the body
 					req.body = undefined;
 
-				req.headers['Authorization'] = undefined;
+				req.headers[ 'Authorization' ] = undefined;
 				return req;
 			}
 		},
@@ -41,6 +41,6 @@ function assignAssetsUrlIfPrivateApp(): { baseHref: string; } | undefined {
 	return {
 		baseHref: isDemostand
 			? 'https://cashier-demostand.web.app/'
-			: `https://storage.googleapis.com/${merchantPrefixOrEmpty}admin-logrocket-assets/${env.name}/${env.version.prerelease}/`
+			: `https://storage.googleapis.com/${ merchantPrefixOrEmpty }admin-logrocket-assets/${ env.name }/${ env.version.prerelease }/`
 	};
 }

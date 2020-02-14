@@ -38,17 +38,17 @@ export class InputPrefixDirective { }
 @Component({
 	selector: 'bp-input',
 	templateUrl: './input.component.html',
-	styleUrls: ['./input.component.scss'],
-	animations: [STATEFUL_SLIDE_RIGHT],
+	styleUrls: [ './input.component.scss' ],
+	animations: [ STATEFUL_SLIDE_RIGHT ],
 	host: {
 		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [{
+	providers: [ {
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: InputComponent,
 		multi: true
-	}]
+	} ]
 })
 export class InputComponent extends FormFieldControlComponent<string | number> {
 

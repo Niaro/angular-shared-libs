@@ -15,10 +15,10 @@ const { url: API_URL, version: API_VERSION } = environment.api || { url: '', ver
 
 })
 export class HttpConfigService {
-	readonly baseUrl = `${API_URL ? (API_URL.includes('api') ? API_URL : `${API_URL}/api`) : '/api'}${API_VERSION ? `/${API_VERSION}` : ''}`;
+	readonly baseUrl = `${ API_URL ? (API_URL.includes('api') ? API_URL : `${ API_URL }/api`) : '/api' }${ API_VERSION ? `/${ API_VERSION }` : '' }`;
 
 	headers: Dictionary<string | null> = {
-		[CONTENT_TYPE]: 'application/json',
+		[ CONTENT_TYPE ]: 'application/json',
 		'json-naming-strategy': 'camelcase',
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302
 		// response code which if handled by the browser redirects the page, but with the service worker used as proxy for the api calls
@@ -42,7 +42,7 @@ export class HttpConfigService {
 	}
 
 	authorize(token: string): void {
-		this.headers.Authorization = `Bearer ${token}`;
+		this.headers.Authorization = `Bearer ${ token }`;
 		this._authorized$.next(true);
 	}
 

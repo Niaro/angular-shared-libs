@@ -11,9 +11,9 @@ import { ControlComponent } from '../control.component';
 @Component({
 	selector: 'bp-img-upload-btn',
 	templateUrl: './img-upload-btn.component.html',
-	styleUrls: ['./img-upload-btn.component.scss'],
+	styleUrls: [ './img-upload-btn.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [SLIDE, FADE],
+	animations: [ SLIDE, FADE ],
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
@@ -37,7 +37,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 
 	get filePicker() { return this.filePickerRef.nativeElement; }
 
-	get file() { return this.filePicker.files && this.filePicker.files[0]; }
+	get file() { return this.filePicker.files && this.filePicker.files[ 0 ]; }
 
 	isExceededAllowedSize = false;
 

@@ -27,11 +27,11 @@ export class ApiRequestInterceptorService implements HttpInterceptor {
 	private _enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next.handle(request.clone({
 			url: this._shouldIncludeBaseHrefIntoXHRUrl(request)
-				? `${this._httpConfig.baseUrl}/${request.url}`
+				? `${ this._httpConfig.baseUrl }/${ request.url }`
 				: request.url,
 			setHeaders: {
 				...(request.url.startsWith('http') ? {} : this._httpConfig.headers),
-				[CONTENT_TYPE]: request.headers.get(CONTENT_TYPE) || this._httpConfig.headers[CONTENT_TYPE] || '',
+				[ CONTENT_TYPE ]: request.headers.get(CONTENT_TYPE) || this._httpConfig.headers[ CONTENT_TYPE ] || '',
 			},
 		}));
 	}

@@ -6,7 +6,7 @@ import { PropertyMetadataTable } from '../property-metadata-table';
  */
 // tslint:disable-next-line: naming-convention
 export function Table(config: Partial<PropertyMetadataTable> = {}) {
-	return function (model: MetadataEntity, property: string) {
+	return function(model: MetadataEntity, property: string) {
 		const propsMd = MetadataEntity
 			.getMetadata(model);
 

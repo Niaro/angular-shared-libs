@@ -24,9 +24,9 @@ export enum CarouselArrowType {
 
 @Component({
 	selector: 'bp-carousel',
-	styleUrls: ['./carousel.component.scss'],
+	styleUrls: [ './carousel.component.scss' ],
 	templateUrl: './carousel.component.html',
-	animations: [FADE_IN_LIST],
+	animations: [ FADE_IN_LIST ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselComponent
@@ -115,7 +115,7 @@ export class CarouselComponent
 		this.slidesVisibility$,
 		this.items$
 	).pipe(
-		map(([{ lastFullyVisible }, items]) =>
+		map(([ { lastFullyVisible }, items ]) =>
 			(lastFullyVisible === undefined || lastFullyVisible === (items && items.length - 1)) && !this.looped
 		),
 		distinctUntilChanged()
@@ -125,7 +125,7 @@ export class CarouselComponent
 		this.prevButtonDisabled$,
 		this.nextButtonDisabled$
 	).pipe(
-		map(([prevDisabled, nextDisabled]) => this.arrowType
+		map(([ prevDisabled, nextDisabled ]) => this.arrowType
 			&& this.showArrows
 			&& this.arrowType !== CarouselArrowType.None
 			&& !(prevDisabled && nextDisabled))
@@ -166,7 +166,7 @@ export class CarouselComponent
 	) {
 		super();
 
-		this._touch = <TouchManager>this._touchBuilder.build(this.$host);
+		this._touch = <TouchManager> this._touchBuilder.build(this.$host);
 		this._touch.swipe$
 			.pipe(this.takeUntilDestroyed)
 			.subscribe(e => this._onSwipe(e));
@@ -174,7 +174,7 @@ export class CarouselComponent
 
 	ngOnChanges({ items, activeItem, itemsPerViewport }: SimpleChanges) {
 		if (items && (items.firstChange || this.resetActiveOnItemsChange))
-			this.activateItem(this.items[0], false);
+			this.activateItem(this.items[ 0 ], false);
 
 		lineMicrotask(() => {
 			if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
@@ -202,7 +202,7 @@ export class CarouselComponent
 			this._$slides$,
 			this._slideStyle$
 		)
-			.pipe(mutate(([$slides, style]) => $slides
+			.pipe(mutate(([ $slides, style ]) => $slides
 				.forEach($slide => forOwn(style, (v, k) => this._renderer.setStyle($slide, k, v))))
 			)
 			.subscribe();
@@ -253,7 +253,7 @@ export class CarouselComponent
 	}
 
 	activateIndex(index: number) {
-		const item = index >= 0 ? this.items[index] : undefined;
+		const item = index >= 0 ? this.items[ index ] : undefined;
 		this.activateItem(item);
 	}
 
@@ -275,7 +275,7 @@ export class CarouselComponent
 		if (previousIndex === currentIndex)
 			return;
 
-		if (this.sortableItem && !this.sortableItem(this.items[currentIndex]))
+		if (this.sortableItem && !this.sortableItem(this.items[ currentIndex ]))
 			currentIndex = previousIndex;
 
 		const copy = this.items.slice();
@@ -312,9 +312,9 @@ export class CarouselComponent
 					: null
 				)),
 				filter(v => !!v),
-				map(v => <[number, Dimensions[]]>v)
+				map(v => <[ number, Dimensions[] ]> v)
 			)
-			.subscribe(([slideMaxWidth, offsets]) => {
+			.subscribe(([ slideMaxWidth, offsets ]) => {
 				let maxOffset: number;
 				if (this.currentItemsPerView === 'unlimited')
 					maxOffset = sum(offsets.map(({ width }) => width)) - slideMaxWidth;
@@ -322,7 +322,7 @@ export class CarouselComponent
 					maxOffset = slideMaxWidth / this.currentItemsPerView * this.items.length - slideMaxWidth;
 				if (maxOffset < 0)
 					maxOffset = 0;
-				const slideOffset = offsets[this.activeIndex];
+				const slideOffset = offsets[ this.activeIndex ];
 				const offset = Math.min(slideOffset.left, maxOffset);
 
 				// calculate visibility indexes
@@ -333,26 +333,26 @@ export class CarouselComponent
 				const visibilityIndexes: ICarouselViewportItemsVisibility = {};
 
 				let i = this.activeIndex - 1;
-				while (i >= 0 && offsetLeft <= offsets[i].left)
+				while (i >= 0 && offsetLeft <= offsets[ i ].left)
 					i--;
 				visibilityIndexes.firstFullyVisible = i + 1;
 
 				i = this.activeIndex + 1;
-				while (i <= lastIndex && offsets[i].right <= offsetRight)
+				while (i <= lastIndex && offsets[ i ].right <= offsetRight)
 					i++;
 				visibilityIndexes.lastFullyVisible = i - 1;
 
 				i = this.activeIndex - 1;
-				while (i >= 0 && offsetLeft < offsets[i].right)
+				while (i >= 0 && offsetLeft < offsets[ i ].right)
 					i--;
 				visibilityIndexes.firstPartiallyVisible = i + 1;
 
 				i = this.activeIndex + 1;
-				while (i <= lastIndex && offsets[i].left < offsetRight)
+				while (i <= lastIndex && offsets[ i ].left < offsetRight)
 					i++;
 				visibilityIndexes.lastPartiallyVisible = i - 1;
 
-				this._renderer.setStyle(this._$slidesContainer, 'transform', `translateX(${-offset}px)`);
+				this._renderer.setStyle(this._$slidesContainer, 'transform', `translateX(${ -offset }px)`);
 
 				if (!distinctVisibility || !isEqual(visibilityIndexes, this.slidesVisibility$.value)) {
 					this.slidesVisibility$.next(visibilityIndexes);
@@ -374,11 +374,11 @@ export class CarouselComponent
 			.subscribe((slideMaxWidth) => {
 				let css: Dictionary<any>;
 				if (this.currentItemsPerView === 'unlimited')
-				css = {
-					'-ms-flex': null, '-webkit-flex': null, flex: null,
-					'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
-					width: 'initial'
-				};
+					css = {
+						'-ms-flex': null, '-webkit-flex': null, flex: null,
+						'-ms-flex-shrink': 0, '-webkit-flex-shrink': 0, 'flex-shrink': 0,
+						width: 'initial'
+					};
 				else {
 					// use width instead of flex-basis because IE 11 doesn't respect padding on flex-item
 					// @link https://github.com/philipwalton/flexbugs#7-flex-basis-doesnt-account-for-box-sizingborder-box
@@ -387,17 +387,17 @@ export class CarouselComponent
 						flex,
 						'-ms-flex': flex,
 						'-webkit-flex': flex,
-						width: `${Math.trunc(100 / this.currentItemsPerView)}%`
+						width: `${ Math.trunc(100 / this.currentItemsPerView) }%`
 					};
 				}
 
 				if (slideMaxWidth)
-				css['max-width'] = `${slideMaxWidth}px`;
+					css[ 'max-width' ] = `${ slideMaxWidth }px`;
 
-					this._slideStyle$.next(css);
-					this._slideMaxWidth$.next(slideMaxWidth);
-				});
-			}
+				this._slideStyle$.next(css);
+				this._slideMaxWidth$.next(slideMaxWidth);
+			});
+	}
 
 	private _onResize() {
 		this._updateItemsPerView();

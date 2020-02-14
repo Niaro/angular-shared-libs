@@ -132,7 +132,7 @@ const EXPOSED = [
 
 @NgModule({
 	imports: MODULES,
-	exports: [...EXPOSED, ...MODULES],
+	exports: [ ...EXPOSED, ...MODULES ],
 	declarations: EXPOSED
 })
 export class SharedModule {

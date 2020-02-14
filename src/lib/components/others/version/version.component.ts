@@ -5,7 +5,7 @@ import { EnvironmentService } from '@bp/shared/providers';
 @Component({
 	selector: 'bp-version',
 	templateUrl: './version.component.html',
-	styleUrls: ['./version.component.scss'],
+	styleUrls: [ './version.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VersionComponent {

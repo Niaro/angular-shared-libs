@@ -7,7 +7,7 @@ import { pending } from '@bp/shared/rxjs';
 @Component({
 	selector: 'bp-img',
 	templateUrl: './img.component.html',
-	styleUrls: ['./img.component.scss'],
+	styleUrls: [ './img.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImgComponent implements OnChanges {

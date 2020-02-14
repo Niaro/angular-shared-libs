@@ -48,7 +48,7 @@ export class CashierLanguages {
 	];
 
 	private static _langByIsoCode = new Map<string, CashierLanguage>(CashierLanguages.list
-		.map(it => <[string, CashierLanguage]>[it.iso, it])
+		.map(it => <[ string, CashierLanguage ]>[ it.iso, it ])
 	);
 
 	private static _langNames = CashierLanguages.list.map(v => v.lowerCaseName);

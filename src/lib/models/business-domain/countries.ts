@@ -12,7 +12,7 @@ export type CountryCode = ActualCountryCode | 'AQ' | 'BV' | 'GS' | 'HM' | 'PN' |
 // @ts-ignore
 const initiation = intlTelInput;
 
-export const COUNTRY_STATES = <{ [countryIso: string]: State[] }><unknown>mapValues(
+export const COUNTRY_STATES = <{ [ countryIso: string ]: State[] }> <unknown> mapValues(
 	require('./states.json'),
 	(v: Partial<State>[]) => v.map((it: Partial<State>) => new State(it))
 );
@@ -38,7 +38,7 @@ export class Country extends MetadataEntity {
 		this.displayName = this.displayName || this.name;
 		this.lowerCaseName = this.name.toLowerCase();
 		this.lowerCaseCode = this.code.toLowerCase();
-		this.states = COUNTRY_STATES[this.code];
+		this.states = COUNTRY_STATES[ this.code ];
 		Object.freeze(this);
 	}
 
@@ -58,9 +58,9 @@ export class Countries {
 			.map(c => {
 				const match = c.name.match(/^.+(?=\()/); // take only actual name of country, like from `Iraq (‫العراق‬‎)` will take `Iraq `;
 				return new Country({
-					name: match ? match[0].trim() : c.name,
+					name: match ? match[ 0 ].trim() : c.name,
 					displayName: c.name,
-					code: <CountryCode>c.iso2.toUpperCase(),
+					code: <CountryCode> c.iso2.toUpperCase(),
 					dialCode: c.dialCode
 				});
 			}),
@@ -103,7 +103,7 @@ export class Countries {
 	static worldwide = new Country({ name: 'Worldwide', displayName: 'Worldwide', code: 'ALL' });
 
 	private static _countryByCountryCode = new Map<CountryCode, Country>(Countries.list
-		.map(it => <[CountryCode, Country]>[it.code, it])
+		.map(it => <[ CountryCode, Country ]>[ it.code, it ])
 	);
 	private static _countryNames = Countries.list.map(v => v.lowerCaseName);
 
@@ -114,7 +114,7 @@ export class Countries {
 	}
 
 	static findByCode(code: CountryCode | string) {
-		return Countries._countryByCountryCode.get(<CountryCode>code)
+		return Countries._countryByCountryCode.get(<CountryCode> code)
 			|| (Countries.worldwide.code === code ? Countries.worldwide : null);
 	}
 

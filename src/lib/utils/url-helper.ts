@@ -49,10 +49,10 @@ export class UrlHelper {
 		const routeParams = UrlHelper.getRouteParams(route);
 
 		toPairs(params)
-			.map(([k, v]) => [k, isNil(v) ? v : v.toString()])
-			.forEach(([k, v]) => isNil(v) || v === ''
-				? delete routeParams[k]
-				: routeParams[k] = v.toString()
+			.map(([ k, v ]) => [ k, isNil(v) ? v : v.toString() ])
+			.forEach(([ k, v ]) => isNil(v) || v === ''
+				? delete routeParams[ k ]
+				: routeParams[ k ] = v.toString()
 			);
 
 		return routeParams;
@@ -78,9 +78,9 @@ export class UrlHelper {
 	}
 
 	static getMainBranchRoutes<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T[] {
-		const results = [route];
+		const results = [ route ];
 		while (route.firstChild) {
-			route = <T>route.firstChild;
+			route = <T> route.firstChild;
 			results.push(route);
 		}
 		return results;
@@ -88,7 +88,7 @@ export class UrlHelper {
 
 	static getMainBranchLastRoute<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T {
 		while (route.firstChild)
-			route = <T>route.firstChild;
+			route = <T> route.firstChild;
 		return route;
 	}
 
@@ -103,23 +103,23 @@ export class UrlHelper {
 			return url;
 
 		const queryParams = Object.keys(params)
-			.filter(k => !isNil(params[k]) && !isNaN(<number>params[k]))
-			.map(k => `${encodeURIComponent(k)}=${encodeURIComponent(params[k].toString())}`)
+			.filter(k => !isNil(params[ k ]) && !isNaN(<number> params[ k ]))
+			.map(k => `${ encodeURIComponent(k) }=${ encodeURIComponent(params[ k ].toString()) }`)
 			.join('&');
 
-		return `${url}${url.includes('?') ? '&' : '?'}${queryParams}`;
+		return `${ url }${ url.includes('?') ? '&' : '?' }${ queryParams }`;
 	}
 
 	private static _deleteOutletRecursivelyFromSegments(outlet: string, dictionary: Dictionary<UrlSegmentGroup>) {
 		// tslint:disable-next-line:forin
 		for (const property in dictionary) {
 			if (property === outlet) {
-				delete dictionary[property];
+				delete dictionary[ property ];
 				return;
 			}
 
-			if (dictionary.hasOwnProperty(property) && isObject(dictionary[property]))
-				UrlHelper._deleteOutletRecursivelyFromSegments(outlet, dictionary[property].children);
+			if (dictionary.hasOwnProperty(property) && isObject(dictionary[ property ]))
+				UrlHelper._deleteOutletRecursivelyFromSegments(outlet, dictionary[ property ].children);
 		}
 	}
 }

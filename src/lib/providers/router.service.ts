@@ -12,13 +12,13 @@ export class RouterService {
 
 	navigationStart$ = this.ngRouter.events.pipe(
 		filter(it => it instanceof NavigationStart),
-		map(v => <NavigationStart>v),
+		map(v => <NavigationStart> v),
 		share()
 	);
 
 	navigationEnd$ = this.ngRouter.events.pipe(
 		filter(it => it instanceof NavigationEnd),
-		map(v => <NavigationEnd>v),
+		map(v => <NavigationEnd> v),
 		share()
 	);
 
@@ -36,7 +36,7 @@ export class RouterService {
 	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt: any })) {
 		this.ngRouter.navigate(commands, {
 			...extras,
-			relativeTo: <ActivatedRoute>UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt)
+			relativeTo: <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt)
 		});
 	}
 
@@ -56,7 +56,7 @@ export class RouterService {
 	onNavigationEnd(cmptType: Type<any>) {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
-			map(() => <ActivatedRoute>UrlHelper.getComponentRoute(this.route, cmptType)),
+			map(() => <ActivatedRoute> UrlHelper.getComponentRoute(this.route, cmptType)),
 			distinctUntilChanged((x, y) => (x && x.component) === (y && y.component)),
 			filter(v => v && v.component === cmptType)
 		);
@@ -70,6 +70,6 @@ export class RouterService {
 	}
 
 	private _navigateToErrorPage() {
-		this.ngRouter.navigate(['/error'], { replaceUrl: false, skipLocationChange: true });
+		this.ngRouter.navigate([ '/error' ], { replaceUrl: false, skipLocationChange: true });
 	}
 }

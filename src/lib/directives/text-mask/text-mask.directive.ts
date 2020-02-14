@@ -20,11 +20,11 @@ const DEFER = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFra
 
 @Directive({
 	selector: '[bpTextMask]',
-	providers: [{
+	providers: [ {
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: TextMaskDirective,
 		multi: true
-	}]
+	} ]
 })
 export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, ControlValueAccessor {
 
@@ -58,7 +58,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			&& this._activeConfig
 			&& this._$input.value !== this._activeConfig.placeholder;
 	}
-	private get _isInputSelectable() { return ['text', 'search', 'url', 'tel', 'password'].includes(this._$input.type); }
+	private get _isInputSelectable() { return [ 'text', 'search', 'url', 'tel', 'password' ].includes(this._$input.type); }
 	private _textMaskInputManager!: {
 		state: {
 			previousConformedValue: string,
@@ -103,13 +103,13 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	ngOnInit() {
 		if (this._$host.tagName === 'INPUT')
 			// `textMask` directive is used directly on an input element
-			this._$input = <HTMLInputElement>this._$host;
+			this._$input = <HTMLInputElement> this._$host;
 		else
 			// `textMask` directive is used on an abstracted input element, `ion-input`, `md-input`, etc
-			this._$input = <HTMLInputElement>this._$host.getElementsByTagName('INPUT')[0];
+			this._$input = <HTMLInputElement> this._$host.getElementsByTagName('INPUT')[ 0 ];
 
 		if (!this._$input)
-			throw new Error(`rtTextMask hasn't found the input element among descendants of the ${this._$host.constructor.name}`);
+			throw new Error(`rtTextMask hasn't found the input element among descendants of the ${ this._$host.constructor.name }`);
 	}
 
 	ngAfterViewInit() {
@@ -149,7 +149,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 	// end of ControlValueAccessor
 
-	@HostListener('input', ['$event.target.value'])
+	@HostListener('input', [ '$event.target.value' ])
 	onInput(userInput: string) {
 		let value: string | number | null = userInput;
 
@@ -172,7 +172,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		this._emitChange(value);
 	}
 
-	@HostListener('paste', ['$event'])
+	@HostListener('paste', [ '$event' ])
 	onPaste(e: ClipboardEvent) {
 		if (!this._textMaskInputManager) return;
 
@@ -210,11 +210,11 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		setTimeout(() => this._setCaretToValidPosition());
 	}
 
-	@HostListener('keydown', ['$event'])
+	@HostListener('keydown', [ '$event' ])
 	onKeyDown(e: KeyboardEvent) {
 		if (!this._textMaskInputManager) return;
 
-		if ([BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW].includes(e.keyCode))
+		if ([ BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW ].includes(e.keyCode))
 			setTimeout(() => this._setCaretToValidPosition());
 	}
 
@@ -324,7 +324,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			// trim zeros
 			const match = this._activeConfig.leadingZeroRegExp.exec(userInput);
 			if (match)
-				userInput = userInput.substring(match[1].length);
+				userInput = userInput.substring(match[ 1 ].length);
 		}
 
 		this._textMaskInputManager && this._textMaskInputManager.update(userInput);
@@ -349,14 +349,14 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	private _formatDecimalValue(value: string): string {
-		if (this._activeConfig instanceof NumberMaskConfig && (<NumberMaskConfig>this._activeConfig).decimalSeparatorRegExp.test(value)) {
-			const { decimalMinimumLimit } = (<NumberMaskConfig>this.config);
+		if (this._activeConfig instanceof NumberMaskConfig && (<NumberMaskConfig> this._activeConfig).decimalSeparatorRegExp.test(value)) {
+			const { decimalMinimumLimit } = (<NumberMaskConfig> this.config);
 
-			let fractionDigits = (<string>get(RegExp, '$\''))
+			let fractionDigits = (<string> get(RegExp, '$\''))
 				.split('');
 
 			fractionDigits = fractionDigits
-				.filter(v => (<NumberMaskPipe>this._maskPipe).digitRegExp.test(v));
+				.filter(v => (<NumberMaskPipe> this._maskPipe).digitRegExp.test(v));
 
 			const fractionPart = this._activeConfig.decimalSeparatorSymbol + fractionDigits.join('');
 
@@ -394,8 +394,8 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			throw new Error(
 				`Placeholder character must not be used as part of the mask. Please specify a character
 				that is not present in your mask as your placeholder character.\n\n
-				The placeholder character that was received is: ${JSON.stringify(this._activeConfig!.placeholderChar)}\n\n
-				The mask that was received is: ${JSON.stringify(mask)}`
+				The placeholder character that was received is: ${JSON.stringify(this._activeConfig!.placeholderChar) }\n\n
+				The mask that was received is: ${JSON.stringify(mask) }`
 			);
 
 		let { placeholderChar } = this._activeConfig!;

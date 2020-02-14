@@ -36,7 +36,7 @@ export class PaymentMethodType extends Enumeration {
 
 		lineMicrotask(() => {
 			this.routeName = kebabCase(this.name);
-			this.logo = `assets/images/payment-methods/${this.routeName}`;
+			this.logo = `assets/images/payment-methods/${ this.routeName }`;
 		});
 	}
 }

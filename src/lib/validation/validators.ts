@@ -31,7 +31,7 @@ export class Validators {
 	 */
 	static customRequired(name: string): ValidatorFn {
 		return (c): IValidationErrors | null => Validators.required(c)
-			? { [`required-${name}`]: true }
+			? { [ `required-${ name }` ]: true }
 			: null;
 	}
 
@@ -48,7 +48,7 @@ export class Validators {
 		const minLengthValidator = Validators.minLength(minLength);
 		return (c): IValidationErrors | null => {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
-			const value = <string>c.value;
+			const value = <string> c.value;
 
 			const minLengthValidation = minLengthValidator(c);
 			if (minLengthValidation)
@@ -73,7 +73,7 @@ export class Validators {
 			if (c.parent instanceof FormArray)
 				throw new Error('The confirm Password validator expects the control\'s parent to be a formGroup');
 
-			return c.parent.controls[propName].value !== c.value
+			return c.parent.controls[ propName ].value !== c.value
 				? { passwordConfirm: true }
 				: null;
 		};
@@ -206,7 +206,7 @@ export class Validators {
 		if (!validators)
 			return null;
 
-		const presentValidators = <ValidatorFn[]>validators.filter(v => !isNil(v));
+		const presentValidators = <ValidatorFn[]> validators.filter(v => !isNil(v));
 		if (isEmpty(presentValidators))
 			return null;
 
@@ -219,7 +219,7 @@ export class Validators {
 		if (!validators)
 			return null;
 
-		const presentValidators = <AsyncValidatorFn[]>validators.filter(v => !isNil(v));
+		const presentValidators = <AsyncValidatorFn[]> validators.filter(v => !isNil(v));
 
 		if (isEmpty(presentValidators))
 			return null;

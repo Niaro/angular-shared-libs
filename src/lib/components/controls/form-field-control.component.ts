@@ -39,14 +39,14 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	internalControl = new FormControl();
 
 	get externalControl(): FormControl | null {
-		return this.formControl || this.form && <FormControl>this.form.controls[this.formControlName] || null;
+		return this.formControl || this.form && <FormControl> this.form.controls[ this.formControlName ] || null;
 	}
 
 	get form() { return this._formGroupDirective && this._formGroupDirective.form; }
 
 	externalControl$ = new OptionalBehaviorSubject<FormControl | null>();
 
-	get $host() { return <HTMLElement>this._host.nativeElement; }
+	get $host() { return <HTMLElement> this._host.nativeElement; }
 
 	get isFocused() {
 		return this.$host === document.activeElement || this.$host.contains(document.activeElement);

@@ -19,7 +19,7 @@ export abstract class ControlComponent<T = any>
 
 	@HostBinding('class.control') isControl = true;
 
-	@HostBinding('class.empty') get empty() { return isNil(this.value) || (<any>this.value) === ''; }
+	@HostBinding('class.empty') get empty() { return isNil(this.value) || (<any> this.value) === ''; }
 
 	protected _validator!: ValidatorFn | null;
 
@@ -46,7 +46,7 @@ export abstract class ControlComponent<T = any>
 	}
 
 	registerOnChange(fn: (value: any) => void): void {
-		this._onChangeCallbacks = uniq([...this._onChangeCallbacks, fn]);
+		this._onChangeCallbacks = uniq([ ...this._onChangeCallbacks, fn ]);
 		this.onChange = v => this._onChangeCallbacks.forEach(cb => cb(v));
 	}
 
@@ -71,10 +71,10 @@ export abstract class ControlComponent<T = any>
 			return;
 		}
 
-		this.value = <T>value;
+		this.value = <T> value;
 
 		if (emitChange) {
-			this.valueChange$.next(<T>value);
+			this.valueChange$.next(<T> value);
 			this.onChange(value);
 		}
 

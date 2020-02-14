@@ -16,12 +16,12 @@ export enum StatusCode {
 }
 
 export const STATUS_CODE_MESSAGES = {
-	[StatusCode.BadRequest]: 'Bad request',
-	[StatusCode.Unauthorized]: 'Unauthorized',
-	[StatusCode.TransactionDeclined]: 'Transaction declined',
-	[StatusCode.Forbidden]: 'Access forbidden',
-	[StatusCode.NotFound]: 'Not found',
-	[StatusCode.Timeout]: 'The operation has timed out',
-	get [StatusCode.GatewayTimeout]() { return this[StatusCode.Timeout]; },
-	[StatusCode.InternalServerError]: 'Something is wrong!',
+	[ StatusCode.BadRequest ]: 'Bad request',
+	[ StatusCode.Unauthorized ]: 'Unauthorized',
+	[ StatusCode.TransactionDeclined ]: 'Transaction declined',
+	[ StatusCode.Forbidden ]: 'Access forbidden',
+	[ StatusCode.NotFound ]: 'Not found',
+	[ StatusCode.Timeout ]: 'The operation has timed out',
+	get [ StatusCode.GatewayTimeout ]() { return this[ StatusCode.Timeout ]; },
+	[ StatusCode.InternalServerError ]: 'Something is wrong!',
 };

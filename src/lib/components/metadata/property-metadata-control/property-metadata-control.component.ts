@@ -9,7 +9,7 @@ import { Validators } from '@bp/shared/validation';
 @Component({
 	selector: 'bp-property-metadata-control',
 	templateUrl: './property-metadata-control.component.html',
-	styleUrls: ['./property-metadata-control.component.scss'],
+	styleUrls: [ './property-metadata-control.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyMetadataControlComponent implements OnChanges {
@@ -41,7 +41,7 @@ export class PropertyMetadataControlComponent implements OnChanges {
 
 	private _setMetadataValidators() {
 		this.control.setValidators(Validators.compose(
-			[this.control.validator, this.metadata.control.validator]
+			[ this.control.validator, this.metadata.control.validator ]
 		));
 	}
 
@@ -51,6 +51,6 @@ export class PropertyMetadataControlComponent implements OnChanges {
 	}
 
 	private _getHostClass(md: PropertyMetadata) {
-		return `control-type-${md.control.type.cssClass}`;
+		return `control-type-${ md.control.type.cssClass }`;
 	}
 }

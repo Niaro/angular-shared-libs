@@ -47,7 +47,7 @@ export class TelemetryService {
 	}
 
 	getUserLogrocketUrl(userId: string) {
-		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
+		return `https://app.logrocket.com/${ env.logrocket }/sessions?u=${ userId }`;
 	}
 
 	getSessionUrl(): Promise<string> {
@@ -55,7 +55,7 @@ export class TelemetryService {
 	}
 
 	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
-		LogRocket.identify(uid, <any>userTraits);
+		LogRocket.identify(uid, <any> userTraits);
 	}
 
 	captureError(error: any) {

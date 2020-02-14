@@ -27,8 +27,8 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 
 	get isAdding() { return this.entity && isNil(this.entity.id); }
 
-	get controls(): { [K in NonFunctionPropertyNames<T>]: AbstractControl } | null {
-		return this.form && <any>this.form.controls;
+	get controls(): { [ K in NonFunctionPropertyNames<T> ]: AbstractControl } | null {
+		return this.form && <any> this.form.controls;
 	}
 
 	private _formScheme?: FormScheme<T>;
@@ -70,8 +70,8 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 			throw new Error('The default behavior of the form entity base class requires the form scheme to be set on the constructor');
 
 		return this._fb.group(mapValues(formScheme, (v, k) => isPlainObject(v)
-			? this._generateFormByScheme(<FormScheme<any>>v, get(entity, k))
-			: [get(entity, k), v]
+			? this._generateFormByScheme(<FormScheme<any>> v, get(entity, k))
+			: [ get(entity, k), v ]
 		));
 	}
 
@@ -81,8 +81,8 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 		entity = this.entity
 	) {
 		form && forEach(formScheme, (v, k) => isPlainObject(v)
-			? this._repopulateFormByScheme(<FormGroup>form.controls[k], <FormScheme<any>>v, get(entity, k))
-			: (<FormControl>form.controls[k])
+			? this._repopulateFormByScheme(<FormGroup> form.controls[ k ], <FormScheme<any>> v, get(entity, k))
+			: (<FormControl> form.controls[ k ])
 				.setValue(get(entity, k), { emitEvent: false, emitModelToViewChange: true })
 		);
 	}

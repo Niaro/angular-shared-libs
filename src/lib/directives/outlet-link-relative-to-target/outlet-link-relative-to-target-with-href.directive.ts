@@ -18,7 +18,7 @@ export class OutletLinkRelativeToTargetWithHrefDirective
 
 	@HostBinding('attr.target') @Input() target!: string;
 
-	@Input() state?: { [k: string]: any; };
+	@Input() state?: { [ k: string ]: any; };
 
 	// the url displayed on the anchor element.
 	@HostBinding() href!: string;
@@ -39,7 +39,7 @@ export class OutletLinkRelativeToTargetWithHrefDirective
 
 	ngOnDestroy() { this._subscription.unsubscribe(); }
 
-	@HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'])
+	@HostListener('click', [ '$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey' ])
 	onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean {
 		if (button !== 0 || ctrlKey || metaKey || shiftKey)
 			return true;

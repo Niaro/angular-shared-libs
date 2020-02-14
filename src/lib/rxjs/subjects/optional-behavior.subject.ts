@@ -19,7 +19,7 @@ export class OptionalBehaviorSubject<T> extends Subject<T> {
 	// tslint:disable-next-line: naming-convention
 	_subscribe(subscriber: Subscriber<T>): Subscription {
 		const subscription = super._subscribe(subscriber);
-		if (subscription && !(<SubscriptionLike>subscription).closed && (this._hasNextValue || this._hasInitValue))
+		if (subscription && !(<SubscriptionLike> subscription).closed && (this._hasNextValue || this._hasInitValue))
 			subscriber.next(this._value);
 
 		return subscription;

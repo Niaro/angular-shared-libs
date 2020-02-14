@@ -12,13 +12,13 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 @Component({
 	selector: 'bp-paginator',
 	templateUrl: './paginator.component.html',
-	styleUrls: ['./paginator.component.scss'],
+	styleUrls: [ './paginator.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [FADE]
+	animations: [ FADE ]
 })
 export class PaginatorComponent {
 
-	@Input() pageSizeOptions = [10, 24, 50, 100, 250];
+	@Input() pageSizeOptions = [ 10, 24, 50, 100, 250 ];
 
 	@Input() totalLength!: number;
 
@@ -51,7 +51,7 @@ export class PaginatorComponent {
 	set progressNext(value: boolean) { this.progressNext$.next(value); }
 
 	readonly progress$ = combineLatest(this.progressBack$, this.progressNext$)
-		.pipe(map(([back, next]) => back || next));
+		.pipe(map(([ back, next ]) => back || next));
 
 	constructor(
 		private _router: Router,
@@ -104,6 +104,6 @@ export class PaginatorComponent {
 	hasNext = () => this.offset + this.pageLength < this.totalLength;
 
 	private _navigate(params: Params) {
-		this._router.navigate([UrlHelper.mergeRouteParams(this._route, params)], { relativeTo: this._route });
+		this._router.navigate([ UrlHelper.mergeRouteParams(this._route, params) ], { relativeTo: this._route });
 	}
 }

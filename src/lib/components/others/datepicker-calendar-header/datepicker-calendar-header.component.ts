@@ -6,7 +6,7 @@ import { MatCalendarHeader, MatDatepicker, MatCalendar, MatDatepickerIntl } from
 @Component({
 	selector: 'bp-datepicker-calendar-header',
 	templateUrl: './datepicker-calendar-header.component.html',
-	styleUrls: ['./datepicker-calendar-header.component.scss'],
+	styleUrls: [ './datepicker-calendar-header.component.scss' ],
 	exportAs: 'matCalendarHeader',
 	// tslint:disable-next-line:use-component-view-encapsulation
 	encapsulation: ViewEncapsulation.None,
@@ -22,7 +22,7 @@ export class DatepickerCalendarHeaderComponent extends MatCalendarHeader<m.Momen
 		intl: MatDatepickerIntl,
 		@Inject(MatCalendar) calendar: MatCalendar<m.Moment>,
 		@Optional() dateAdapter: DateAdapter<m.Moment>,
-		 // TODO: Check on the upcoming versions of material the bug with exporting of the type
+		// TODO: Check on the upcoming versions of material the bug with exporting of the type
 		@Optional() @Inject(MAT_DATE_FORMATS) dateFormats: any,
 		changeDetectorRef: ChangeDetectorRef
 	) {

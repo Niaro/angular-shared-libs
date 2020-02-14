@@ -7,7 +7,7 @@ type StatusPosition = 'top' | 'left';
 @Component({
 	selector: 'bp-status-bar',
 	templateUrl: './status-bar.component.html',
-	styleUrls: ['./status-bar.component.scss'],
+	styleUrls: [ './status-bar.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusBarComponent implements OnChanges {
@@ -34,10 +34,10 @@ export class StatusBarComponent implements OnChanges {
 	}
 
 	private _getStatusClass(status: Enumeration) {
-		return `status-${status}`;
+		return `status-${ status }`;
 	}
 
 	private _getStatusBarClass(position: StatusPosition) {
-		return `status-bar-${position}`;
+		return `status-bar-${ position }`;
 	}
 }

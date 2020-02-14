@@ -18,7 +18,7 @@ export class FilterControlDirective {
 
 	get select() { return this._matSelect || this._bpSelect; }
 
-	get control(): ControlValueAccessor { return this._controlValueAccessor && this._controlValueAccessor[0] || this.select; }
+	get control(): ControlValueAccessor { return this._controlValueAccessor && this._controlValueAccessor[ 0 ] || this.select; }
 
 	constructor(
 		@Optional() @Inject(NG_VALUE_ACCESSOR) @Self() private _controlValueAccessor: ControlValueAccessor[],

@@ -8,17 +8,17 @@ import { InputComponent } from '../input';
 @Component({
 	selector: 'bp-round-input',
 	templateUrl: './round-input.component.html',
-	styleUrls: ['./round-input.component.scss'],
-	animations: [SLIDE_RIGHT],
+	styleUrls: [ './round-input.component.scss' ],
+	animations: [ SLIDE_RIGHT ],
 	host: {
 		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [{
+	providers: [ {
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: RoundInputComponent,
 		multi: true
-	}]
+	} ]
 })
 export class RoundInputComponent extends InputComponent {
 

@@ -14,7 +14,7 @@ import { CarouselComponent } from './carousel.component';
 		TouchModule,
 		DragDropModule
 	],
-	declarations: [CarouselComponent],
-	exports: [CarouselComponent]
+	declarations: [ CarouselComponent ],
+	exports: [ CarouselComponent ]
 })
 export class CarouselModule { }

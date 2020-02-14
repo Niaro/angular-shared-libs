@@ -14,9 +14,9 @@ import { BpScheduler } from '../schedulers';
  */
 export function fromMutation(target: Node, options: MutationObserverInit = { attributes: true }) {
 	return new Observable<MutationRecord[]>(subscriber => {
-			const mo = new MutationObserver(mutations => subscriber.next(mutations));
-			mo.observe(target, options);
-			return () => mo.disconnect();
-		})
+		const mo = new MutationObserver(mutations => subscriber.next(mutations));
+		mo.observe(target, options);
+		return () => mo.disconnect();
+	})
 		.pipe(subscribeOn(BpScheduler.outside));
 }

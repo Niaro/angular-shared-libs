@@ -17,7 +17,7 @@ import { RoundInputComponent } from '../round-input';
 @Component({
 	selector: 'bp-autocomplete',
 	templateUrl: './autocomplete.component.html',
-	styleUrls: ['./autocomplete.component.scss'],
+	styleUrls: [ './autocomplete.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
 		'(focusin)': 'onTouched()'
@@ -34,7 +34,7 @@ import { RoundInputComponent } from '../round-input';
 			multi: true
 		}
 	],
-	animations: [FADE_IN_LIST]
+	animations: [ FADE_IN_LIST ]
 })
 export class AutocompleteComponent extends FormFieldControlComponent<any | null> implements OnChanges {
 
@@ -84,7 +84,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		// tslint:disable-next-line: early-exit
 		if (items || itemDisplayPropertyName) {
 			this.lowercasedItems = this.items && this.items!.map(v => ({
-				lowered: (v[this.itemDisplayPropertyName!] || v)?.toString().toLowerCase(),
+				lowered: (v[ this.itemDisplayPropertyName! ] || v)?.toString().toLowerCase(),
 				item: v
 			}));
 			this.filtered$.next(this.items || []);
@@ -143,6 +143,6 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	}
 
 	private _getItemCompareString(item: any) {
-		return (item[this.itemDisplayPropertyName!] || item)?.toString();
+		return (item[ this.itemDisplayPropertyName! ] || item)?.toString();
 	}
 }
