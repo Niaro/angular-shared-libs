@@ -58,7 +58,6 @@
 }
 
 .mat-form-field-appearance-outline {
-
 	.mat-form-field-prefix,
 	.mat-form-field-suffix {
 		top: unset !important;
@@ -86,7 +85,7 @@
 $icon-size-xs: 14px;
 $icon-size-sm: 18px;
 $icon-size-md: 24px;
-$icon-size-big:31px;
+$icon-size-big: 31px;
 $icon-size-lg: 35px;
 $icon-size-xl: 48px;
 
@@ -96,21 +95,18 @@ $material-icons-sizes: (
 	md: $icon-size-md,
 	big: $icon-size-big,
 	lg: $icon-size-lg,
-	xl: $icon-size-xl
+	xl: $icon-size-xl,
 );
 
 bp-svg-icon,
 .material-icons {
-
-	@each $type,
-	$size in $material-icons-sizes {
+	@each $type, $size in $material-icons-sizes {
 		&.#{$type},
 		.mat-icon-button.#{$type} & {
 			@include size($size);
 			@include fontsize($size);
 		}
 	}
-
 }
 
 .mat-icon-button {
@@ -146,7 +142,6 @@ bp-svg-icon,
 		@include size($icon-size-xl);
 	}
 }
-
 
 .mat-chip.mat-standard-chip {
 	min-height: 28px;

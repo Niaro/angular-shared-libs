@@ -10,9 +10,7 @@ $link-color: $color-primary;
 	padding: 0;
 	position: relative;
 
-	@include afterBottomBorder(transparent, 1px)
-
-	&:after {
+	@include afterBottomBorder(transparent, 1px) &: after {
 		opacity: 0.4;
 		transition: $animation-duration $animation-function;
 		transition-property: background, opacity;
@@ -28,11 +26,13 @@ $link-color: $color-primary;
 
 	&.interactive {
 		&:after {
-			background: repeating-linear-gradient(to right,
-					currentColor,
-					currentColor 1px,
-					transparent 1px,
-					transparent 3px);
+			background: repeating-linear-gradient(
+				to right,
+				currentColor,
+				currentColor 1px,
+				transparent 1px,
+				transparent 3px
+			);
 		}
 
 		&.active {

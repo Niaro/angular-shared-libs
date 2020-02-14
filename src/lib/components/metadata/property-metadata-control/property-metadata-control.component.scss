@@ -1,11 +1,12 @@
-:host { }
+:host {
+}
 
 :host(.w-100) {
 	::ng-deep .control {
 		&,
 		> .mat-form-field,
 		> .mat-form-field > .mat-form-field-wrapper {
-			width: 100%
+			width: 100%;
 		}
 	}
 }
@@ -15,7 +16,7 @@
 		&,
 		> .mat-form-field,
 		> .mat-form-field > .mat-form-field-wrapper {
-			width: 50%
+			width: 50%;
 		}
 	}
 }

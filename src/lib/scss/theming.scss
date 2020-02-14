@@ -14,7 +14,7 @@ $typography: mat-typography-config(
 $card-typography: mat-typography-config(
 	$font-family: $font-family,
 	$title: mat-typography-level($card-title-font-size, $card-title-line-height, $card-title-font-weight),
-	$headline: mat-typography-level($card-headline-font-size, $card-headline-line-height, $card-headline-font-weight)
+	$headline: mat-typography-level($card-headline-font-size, $card-headline-line-height, $card-headline-font-weight),
 );
 
 @include mat-card-typography($card-typography);

@@ -1,5 +1,4 @@
 :host {
-
 }
 
 ::ng-deep .chip-autocomplete-option {
@@ -10,6 +9,7 @@
 	> .mat-option-text > div {
 		line-height: 1.3;
 
-		&.description {}
+		&.description {
+		}
 	}
 }

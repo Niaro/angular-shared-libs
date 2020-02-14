@@ -2,9 +2,9 @@
 
 $toaster-palette: (
 	success: mat-color($success, 600),
-	error : mat-color($danger),
+	error: mat-color($danger),
 	warning: mat-color($warning),
-	info : mat-color($primary)
+	info: mat-color($primary),
 );
 
 $border-radius: 5px;
@@ -31,8 +31,7 @@ $border-radius: 5px;
 		cursor: pointer;
 	}
 
-	@each $type,
-	$scheme in $toaster-palette {
+	@each $type, $scheme in $toaster-palette {
 		&.toast-#{$type} {
 			border-left-color: $scheme;
 

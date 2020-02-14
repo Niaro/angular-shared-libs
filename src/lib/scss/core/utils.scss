@@ -4,7 +4,7 @@
 	animation: pulsingBlur 1.5s infinite ease-in-out;
 }
 
-@keyframes pulsingBlur{
+@keyframes pulsingBlur {
 	0% {
 		filter: blur(3px);
 	}
