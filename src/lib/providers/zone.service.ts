@@ -1,6 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class ZoneService {
 
 	static zone: NgZone;
@@ -13,8 +15,12 @@ export class ZoneService {
 		return ZoneService.zone.runOutsideAngular(fn);
 	}
 
-	constructor(zone: NgZone) {
-		ZoneService.zone = zone;
+	constructor(private _zone: NgZone) {
+
+	}
+
+	ignite() {
+		ZoneService.zone = this._zone;
 	}
 
 }

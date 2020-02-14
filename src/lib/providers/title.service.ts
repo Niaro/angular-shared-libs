@@ -11,7 +11,9 @@ import { MODAL_OUTLET } from '../models';
 const TITLES_DELIMITER = ' – ';
 const OUTLETS_DELIMITER = ' / ';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class TitleService {
 
 	private _default = $.getMeta('title') ?? '';

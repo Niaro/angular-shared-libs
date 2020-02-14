@@ -69,6 +69,7 @@ export class IntercomService {
 	) { }
 
 	boot(config?: IntercomBootConfig) {
+		console.warn('Intercom boot', config);
 		if (!this._isFirstBoot || !this.enabled)
 			return;
 
@@ -81,6 +82,10 @@ export class IntercomService {
 	}
 
 	update(config?: IntercomConfig) {
+		console.warn('Intercom update', config);
+		if (!this.enabled)
+			return;
+
 		this._userId = config?.user_id;
 		this._whenTelemetryEnabledSaveSessionOnIntercom();
 		Intercom('update', config);
