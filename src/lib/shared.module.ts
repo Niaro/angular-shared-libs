@@ -30,8 +30,8 @@ import {
 
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
-	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective, ProgressBarDirective, DisabledDirective, HoverDirective
+	DelayedRenderDirective, DynamicOutletDirective, ProgressBarDirective, DisabledDirective,
+	HoverDirective, OutletLinkRelativeToTargetDirective, OutletLinkRelativeToTargetWithHrefDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
@@ -82,8 +82,8 @@ const EXPOSED = [
 	CursorPageAdaptorDirective,
 	TextMaskDirective,
 	RouterLinkNoOutletsWithHrefDirective,
-	RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective,
+	OutletLinkRelativeToTargetDirective,
+	OutletLinkRelativeToTargetWithHrefDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
