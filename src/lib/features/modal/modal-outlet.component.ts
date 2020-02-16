@@ -67,13 +67,15 @@ export class ModalOutletComponent implements OnInit {
 				this.router.navigateByUrl(this._urlWithOutlet);
 				this._destinationUrl = e.url;
 				this._navigation = true;
-				this._activeDialog && this._activeDialog.close(); // the handler on the close event will actually navigate to the destination url
+
+				// the handler on the close event will actually navigate to the destination url
+				this._activeDialog && this._activeDialog.close();
 			});
 	}
 
 	private _outletActivate(cmpt: IModalHostComponent) {
 		if (!(cmpt.modal instanceof ModalComponent))
-			throw new Error('The component attached to the modal router outlet must implement the IHostModalComponent interface');
+			throw new Error('The component attached to the modal router outlet must implement \ the IHostModalComponent interface');
 
 		this._navigation = false;
 		this._activeDialog = this._dialogsManager.open(cmpt.modal.template, {

@@ -1,4 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ElementRef, HostListener, Output, ChangeDetectorRef, Input } from '@angular/core';
+import {
+	Component, OnInit, ChangeDetectionStrategy, ViewChild, ElementRef, HostListener, Output,
+	ChangeDetectorRef, Input
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { isNumber } from 'lodash-es';

@@ -69,7 +69,9 @@
 	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-._mat-animation-noopable.mat-form-field-appearance-standard .mat-select.mat-select-empty .mat-select-arrow-wrapper {
+._mat-animation-noopable.mat-form-field-appearance-standard
+	.mat-select.mat-select-empty
+	.mat-select-arrow-wrapper {
 	transition: none;
 }
 

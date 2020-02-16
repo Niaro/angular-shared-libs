@@ -20,7 +20,10 @@ export class TextMaskPipe extends MaskPipe {
 				.concat(this.config.placeholderChar)
 			: [];
 
-		if (this.prefixLength === 0 && this.suffixLength === 0 || rawValue === '' || (rawValue[ 0 ] === this.prefix[ 0 ] && rawValue.length === 1))
+		if (this.prefixLength === 0
+			&& this.suffixLength === 0
+			|| rawValue === ''
+			|| (rawValue[ 0 ] === this.prefix[ 0 ] && rawValue.length === 1))
 			return resolvedMask || [ null ];
 
 		const refinedValue = resolvedMask

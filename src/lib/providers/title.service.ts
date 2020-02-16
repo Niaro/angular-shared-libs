@@ -69,7 +69,8 @@ export class TitleService {
 
 		this._rawTitle = (modalTitle
 			? modalTitle + TITLES_DELIMITER
-			: (rightDrawersTitle ? rightDrawersTitle + OUTLETS_DELIMITER : '') + (primaryTitle ? primaryTitle + TITLES_DELIMITER : ''))
+			: (rightDrawersTitle ? rightDrawersTitle + OUTLETS_DELIMITER : '')
+			+ (primaryTitle ? primaryTitle + TITLES_DELIMITER : ''))
 			+ this._default;
 
 		this._substituteMasksAndSetTitle(this._rawTitle);

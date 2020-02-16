@@ -66,7 +66,8 @@ export abstract class Enumeration {
 	constructor(displayName?: string | null);
 	constructor(value: number | boolean, displayName?: string);
 	constructor(valueOrDisplayName?: number | boolean | string | null, displayName?: string) {
-		// do not access the {name} property in the constructor because it is lazy initialized and required all static properties to be present
+		// do not access the {name} property in the constructor because it is lazy initialized
+		// and required all static properties to be present
 		if (Enumeration._isValue(valueOrDisplayName)) {
 			this._value = valueOrDisplayName!.valueOf();
 			(<any> this.constructor)[ this._value.toString() ] = this;
@@ -100,7 +101,8 @@ export abstract class Enumeration {
 	}
 
 	private _getCssClass() {
-		// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
+		// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check
+		// somewhere later
 		// return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
 		return kebabCase(this.name);
 	}

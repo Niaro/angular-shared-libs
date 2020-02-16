@@ -44,7 +44,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 	private _value$ = new BehaviorSubject<{
 		value: string | number | null,
-		source: ValueSource | undefined
+		source: ValueSource | undefined;
 	}>
 		({ value: null, source: undefined });
 
@@ -62,9 +62,9 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	private _textMaskInputManager!: {
 		state: {
 			previousConformedValue: string,
-			previousOnRejectRawValue: string
+			previousOnRejectRawValue: string;
 		},
-		update: (val: string) => void
+		update: (val: string) => void;
 	} | null;
 	private _firstMaskCharIndex = -1;
 	private _lastMaskCharIndex = -1;
@@ -95,7 +95,9 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 		this._updateDirectiveState();
 
 		if (this._textMaskInputManager && this._$input.value)
-			this._updateInputAndControlOnConfigChange(!rtTextMask.firstChange && !isEqual(rtTextMask.previousValue, rtTextMask.currentValue));
+			this._updateInputAndControlOnConfigChange(
+				!rtTextMask.firstChange && !isEqual(rtTextMask.previousValue, rtTextMask.currentValue)
+			);
 
 		this._ready$.complete();
 	}
@@ -188,7 +190,9 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 		if (!this._textMaskInputManager) return;
 
-		this._activeConfig instanceof NumberMaskConfig && this._applyMaskAndUpdateInput(this._formatDecimalValue(this._$input.value));
+		this._activeConfig instanceof NumberMaskConfig && this._applyMaskAndUpdateInput(
+			this._formatDecimalValue(this._$input.value)
+		);
 		this._tryActivatePlaceholder();
 	}
 
@@ -349,7 +353,9 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	private _formatDecimalValue(value: string): string {
-		if (this._activeConfig instanceof NumberMaskConfig && (<NumberMaskConfig> this._activeConfig).decimalSeparatorRegExp.test(value)) {
+		if (this._activeConfig instanceof NumberMaskConfig
+			&& (<NumberMaskConfig> this._activeConfig).decimalSeparatorRegExp.test(value)
+		) {
 			const { decimalMinimumLimit } = (<NumberMaskConfig> this.config);
 
 			let fractionDigits = (<string> get(RegExp, '$\''))

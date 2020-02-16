@@ -143,7 +143,9 @@ export class CarouselComponent
 	@ViewChildren('slide') private _slidesQuery!: QueryList<ElementRef>;
 
 	@ViewChild('slidesContainer', { static: true }) private _slidesContainerRef!: ElementRef;
-	private get _$slidesContainer(): HTMLElement { return this._slidesContainerRef && this._slidesContainerRef.nativeElement; }
+	private get _$slidesContainer(): HTMLElement {
+		return this._slidesContainerRef && this._slidesContainerRef.nativeElement;
+	}
 
 	private _slideMaxWidth$ = new BehaviorSubject<number | null>(null);
 	get slideMaxWidth() { return this._slideMaxWidth$.value; }
@@ -177,7 +179,11 @@ export class CarouselComponent
 			this.activateItem(this.items[ 0 ], false);
 
 		lineMicrotask(() => {
-			if (itemsPerViewport || ((items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)))
+			if (itemsPerViewport
+				|| (
+					(items.previousValue && items.previousValue.length) !== (items.currentValue && items.currentValue.length)
+				)
+			)
 				this._updateItemsPerView();
 			if (items && !items.firstChange)
 				this._updateScroll({ animate: false, distinctVisibility: false });

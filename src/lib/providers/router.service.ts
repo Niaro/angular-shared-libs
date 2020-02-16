@@ -29,11 +29,12 @@ export class RouterService {
 		public route: ActivatedRoute
 	) {
 		this.ngRouter.events
-			// the request prop means that an error has occurred on loading a lazy module, so we just generalize and send to the error page
+			// the request prop means that an error has occurred on loading a lazy module,
+			// so we just generalize and send to the error page
 			.subscribe((e) => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
 	}
 
-	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt: any })) {
+	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt: any; })) {
 		this.ngRouter.navigate(commands, {
 			...extras,
 			relativeTo: <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt)
@@ -63,7 +64,8 @@ export class RouterService {
 	}
 
 	tryNavigateOnResponseError(e: ResponseError) {
-		// fullscreen pages handle errors on its own like the login page and all the non 500+ errors should be handled manually
+		// fullscreen pages handle errors on its own like the login page and all the non 500+ errors should be handled
+		// manually
 		if (!this.isNavigateToErrorPage || !e.isInternalServerError)
 			return;
 		this._navigateToErrorPage();

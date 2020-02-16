@@ -150,7 +150,10 @@ export class TouchManager {
 			this._lastPosition = pos;
 		}
 
-		if (this._subjects.pinch.observers.length || this._subjects.rotate.observers.length || this._subjects.pan.observers.length)
+		if (this._subjects.pinch.observers.length
+			|| this._subjects.rotate.observers.length
+			|| this._subjects.pan.observers.length
+		)
 			e.preventDefault();
 	}
 

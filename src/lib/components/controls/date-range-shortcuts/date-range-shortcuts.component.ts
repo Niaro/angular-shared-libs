@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Input, HostBinding } from '@angular/core';
+import {
+	Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Input, HostBinding
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as m from 'moment';
 

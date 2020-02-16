@@ -19,7 +19,8 @@ export const environment: IEnvironment = {
 	widgetUrl: 'http://localhost:4201',
 	widgetLoaderUrl: 'http://localhost:4201/embed/embed_cashier.js',
 
-	// by putting this always as the last property in the object we allow overriding of any environment specific property by the apps
+	// by putting this always as the last property in the object we allow overriding
+	// of any environment specific property by the apps
 	...appEnvironment,
 	...constants
 };

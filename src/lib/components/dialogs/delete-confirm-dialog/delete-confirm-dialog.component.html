@@ -1,21 +1,16 @@
-<h2 mat-dialog-title>
-	Delete {{ data.type }}
-</h2>
+<h2 mat-dialog-title>Delete {{ data.type }}</h2>
 
 <mat-dialog-content>
-	Are you sure you want to delete the {{ data.type.toLowerCase() }} <b>{{ data.name }}</b>?
+	Are you sure you want to delete the {{ data.type.toLowerCase() }} <b>{{ data.name }}</b
+	>?
 </mat-dialog-content>
 
 <mat-dialog-actions>
-	<button class="cancel mr-auto"
-			mat-stroked-button
-			[mat-dialog-close]="false">
+	<button class="cancel mr-auto" mat-stroked-button [mat-dialog-close]="false">
 		Cancel
 	</button>
 
-	<button mat-stroked-button
-			color="warn"
-			[mat-dialog-close]="true">
+	<button mat-stroked-button color="warn" [mat-dialog-close]="true">
 		Delete
 	</button>
 </mat-dialog-actions>

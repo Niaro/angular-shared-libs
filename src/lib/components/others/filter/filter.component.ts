@@ -173,7 +173,9 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 				filter(v => v.length > 0)
 			)
 			.subscribe(deleted => {
-				const routeParams = this.type === 'matrix' ? UrlHelper.getRouteParams(this._route) : UrlHelper.getQueryParams(this._route);
+				const routeParams = this.type === 'matrix'
+					? UrlHelper.getRouteParams(this._route)
+					: UrlHelper.getQueryParams(this._route);
 				deleted.forEach(v => delete routeParams[ v.name ]);
 				this._updateUrl(routeParams);
 			});

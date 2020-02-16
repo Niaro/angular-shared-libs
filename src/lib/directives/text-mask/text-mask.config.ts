@@ -57,17 +57,22 @@ export class TextMaskConfig {
 	/**
 	 * Changes the general behavior of the Text Mask component.
 	 * When true, adding or deleting characters will not affect the positions of existing characters.
-	 * When false, adding characters causes existing characters to advance. And deleting characters causes existing characters to move back.
+	 * When false, adding characters causes existing characters to advance.
+	 * And deleting characters causes existing characters to move back.
 	 * @default false
 	 * @link https://git.io/v1pT4
 	 */
 	keepCharPositions = false;
 
 	/**
-	 * You can provide a pipe function that will give you the opportunity to modify the conformed value before it is displayed on the screen.
+	 * You can provide a pipe function that will give you the opportunity to modify the conformed
+	 * value before it is displayed on the screen.
 	 * @link https://git.io/v1pk1
 	 */
-	pipe!: (conformedValue: string, config: TextMaskConfig) => boolean | string | { value: string, indexesOfPipedChars: number[] };
+	pipe!: (conformedValue: string, config: TextMaskConfig) => boolean | string | {
+		value: string,
+		indexesOfPipedChars: number[];
+	};
 
 	/**
 	 * You can provide an onAccept callback function which will be called when the user enters a character that is accepted

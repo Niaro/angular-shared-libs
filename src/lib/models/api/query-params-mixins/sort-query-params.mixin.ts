@@ -9,7 +9,9 @@ export interface ISortQueryParams {
 
 export type SortQueryParamsCtor = Constructor<ISortQueryParams>;
 
-export function mixinSortQueryParams<T extends Constructor<QueryParamsBase<ISortQueryParams>>>(base: T): SortQueryParamsCtor & T {
+type BaseSortQueryParams = Constructor<QueryParamsBase<ISortQueryParams>>;
+
+export function mixinSortQueryParams<T extends BaseSortQueryParams>(base: T): SortQueryParamsCtor & T {
 	return class extends base {
 		sortField!: string;
 		sortDir!: SortDirection;

@@ -1,15 +1,19 @@
-<button [attr.type]="type"
-		mat-button
-		class="bp-button primary"
-		[ngClass]="btnClass"
-		[class.pending]="inProgress"
-		[disabled]="disabled || inProgress"
-		color="primary">
+<button
+	[attr.type]="type"
+	mat-button
+	class="bp-button primary"
+	[ngClass]="btnClass"
+	[class.pending]="inProgress"
+	[disabled]="disabled || inProgress"
+	color="primary"
+>
 	<ng-content></ng-content>
 </button>
 
-<mat-progress-spinner *ngIf="inProgress"
-					  @fade
-					  [value]="progress"
-					  [mode]="isNumber(progress) ? 'determinate' : 'indeterminate'">
+<mat-progress-spinner
+	*ngIf="inProgress"
+	@fade
+	[value]="progress"
+	[mode]="isNumber(progress) ? 'determinate' : 'indeterminate'"
+>
 </mat-progress-spinner>

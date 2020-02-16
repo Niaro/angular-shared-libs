@@ -40,7 +40,10 @@ export class ResizeSensor {
 		});
 	}
 
-	private static _forEachElement(elements: HTMLResizableElement | HTMLResizableElement[], cb: ($el: HTMLResizableElement) => void) {
+	private static _forEachElement(
+		elements: HTMLResizableElement | HTMLResizableElement[],
+		cb: ($el: HTMLResizableElement) => void
+	) {
 		const elementsType = Object.prototype.toString.call(elements);
 		const isCollectionTyped = ('[object Array]' === elementsType
 			|| ('[object NodeList]' === elementsType)

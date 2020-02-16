@@ -18,7 +18,9 @@ export class FilterControlDirective {
 
 	get select() { return this._matSelect || this._bpSelect; }
 
-	get control(): ControlValueAccessor { return this._controlValueAccessor && this._controlValueAccessor[ 0 ] || this.select; }
+	get control(): ControlValueAccessor {
+		return this._controlValueAccessor && this._controlValueAccessor[ 0 ] || this.select;
+	}
 
 	constructor(
 		@Optional() @Inject(NG_VALUE_ACCESSOR) @Self() private _controlValueAccessor: ControlValueAccessor[],
@@ -26,7 +28,7 @@ export class FilterControlDirective {
 		@Optional() @Self() private _bpSelect: BpSelectComponent,
 	) {
 		if (!this.control)
-			throw new Error('FilterControlDirective must be used on a component which implements ControlValuesAccessor interface');
+			throw new Error('FilterControlDirective must be used on a component \ which implements ControlValuesAccessor interface');
 
 		if (this.select)
 			this.select.selectionChange

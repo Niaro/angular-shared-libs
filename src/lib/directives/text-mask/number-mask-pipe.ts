@@ -46,7 +46,10 @@ export class NumberMaskPipe extends MaskPipe {
 			const thousandsSeparatorRegex = this.config.thousandsSeparatorSymbol === '.' ? '[.]' : `${ this.config.thousandsSeparatorSymbol }`;
 			const numberOfThousandSeparators = (integer.match(new RegExp(thousandsSeparatorRegex, 'g')) || []).length;
 
-			integer = integer.slice(0, this.config.integerLimit + (numberOfThousandSeparators * this.thousandsSeparatorSymbolLength));
+			integer = integer.slice(
+				0,
+				this.config.integerLimit + (numberOfThousandSeparators * this.thousandsSeparatorSymbolLength)
+			);
 		}
 
 		integer = integer.replace(NON_DIGITS_REGEXP, '');
@@ -73,7 +76,9 @@ export class NumberMaskPipe extends MaskPipe {
 				mask = mask.concat(fraction);
 			}
 
-			if (this.config.requireDecimal === true && refinedValue[ indexOfLastDecimal - 1 ] === this.config.decimalSeparatorSymbol)
+			if (this.config.requireDecimal === true
+				&& refinedValue[ indexOfLastDecimal - 1 ] === this.config.decimalSeparatorSymbol
+			)
 				mask.push(DIGIT_REGEXP);
 		}
 
