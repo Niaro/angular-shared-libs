@@ -5,14 +5,14 @@ import { FADE_IN_LIST } from '@bp/shared/animations';
 import { ClassMetadata, Entity } from '../../../models';
 import { get } from 'lodash-es';
 
-export type ViewsSectionScheme<T> = [NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
+export type ViewsSectionScheme<T> = [ NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
 
 @Component({
 	selector: 'bp-property-metadata-views-section',
 	templateUrl: './property-metadata-views-section.component.html',
-	styleUrls: ['./property-metadata-views-section.component.scss'],
+	styleUrls: [ './property-metadata-views-section.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [FADE_IN_LIST]
+	animations: [ FADE_IN_LIST ]
 })
 export class PropertyMetadataViewsSectionComponent {
 
@@ -29,6 +29,9 @@ export class PropertyMetadataViewsSectionComponent {
 	get = get;
 
 	meta(prop: string) {
-		return this.metadata.get<any>(prop);
+		const md = this.metadata.get<any>(prop);
+		if (!md)
+			console.warn(`${ prop } doesn't have metadata on ${ this.entity?.constructor.name }`);
+		return md;
 	}
 }

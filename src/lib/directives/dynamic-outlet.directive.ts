@@ -7,20 +7,22 @@ import { RouterOutlet, ChildrenOutletContexts } from '@angular/router';
 	exportAs: 'outlet'
 })
 export class DynamicOutletDirective implements OnInit, OnDestroy {
+
 	@Input() name!: string;
+
 	outlet!: RouterOutlet;
 
 	get isActivated() { return this.outlet && this.outlet.isActivated; }
 
 	constructor(
-		private parentContexts: ChildrenOutletContexts,
-		private location: ViewContainerRef,
-		private resolver: ComponentFactoryResolver,
-		private changeDetector: ChangeDetectorRef,
+		private _parentContexts: ChildrenOutletContexts,
+		private _location: ViewContainerRef,
+		private _resolver: ComponentFactoryResolver,
+		private _changeDetector: ChangeDetectorRef,
 	) { }
 
 	ngOnInit() {
-		this.outlet = new RouterOutlet(this.parentContexts, this.location, this.resolver, this.name, this.changeDetector);
+		this.outlet = new RouterOutlet(this._parentContexts, this._location, this._resolver, this.name, this._changeDetector);
 		// tslint:disable-next-line:no-lifecycle-call
 		this.outlet.ngOnInit();
 	}

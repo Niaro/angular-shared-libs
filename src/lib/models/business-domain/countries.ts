@@ -12,10 +12,10 @@ export type CountryCode = ActualCountryCode | 'AQ' | 'BV' | 'GS' | 'HM' | 'PN' |
 // @ts-ignore
 const initiation = intlTelInput;
 
-export const COUNTRY_STATES = mapValues(
+export const COUNTRY_STATES = <{ [ countryIso: string ]: State[] }> <unknown> mapValues(
 	require('./states.json'),
 	(v: Partial<State>[]) => v.map((it: Partial<State>) => new State(it))
-) as unknown as { [countryIso: string]: State[] };
+);
 
 export class Country extends MetadataEntity {
 
@@ -38,7 +38,7 @@ export class Country extends MetadataEntity {
 		this.displayName = this.displayName || this.name;
 		this.lowerCaseName = this.name.toLowerCase();
 		this.lowerCaseCode = this.code.toLowerCase();
-		this.states = COUNTRY_STATES[this.code];
+		this.states = COUNTRY_STATES[ this.code ];
 		Object.freeze(this);
 	}
 
@@ -56,11 +56,12 @@ export class Countries {
 		...intlTelInputGlobals
 			.getCountryData()
 			.map(c => {
-				const match = c.name.match(/^.+(?=\()/); // take only actual name of country, like from `Iraq (‫العراق‬‎)` will take `Iraq `;
+				// take only actual name of country, like from `Iraq (‫العراق‬‎)` will take `Iraq `;
+				const match = c.name.match(/^.+(?=\()/);
 				return new Country({
-					name: match ? match[0].trim() : c.name,
+					name: match ? match[ 0 ].trim() : c.name,
 					displayName: c.name,
-					code: c.iso2.toUpperCase() as CountryCode,
+					code: <CountryCode> c.iso2.toUpperCase(),
 					dialCode: c.dialCode
 				});
 			}),
@@ -102,31 +103,31 @@ export class Countries {
 
 	static worldwide = new Country({ name: 'Worldwide', displayName: 'Worldwide', code: 'ALL' });
 
-	private static countryByCountryCode = new Map<CountryCode, Country>(Countries.list
-		.map(it => [it.code, it] as [CountryCode, Country])
+	private static _countryByCountryCode = new Map<CountryCode, Country>(Countries.list
+		.map(it => <[ CountryCode, Country ]>[ it.code, it ])
 	);
-	private static countryNames = Countries.list.map(v => v.lowerCaseName);
+	private static _countryNames = Countries.list.map(v => v.lowerCaseName);
 
 	static find(countryName: string) {
 		countryName = countryName.toLowerCase();
-		return this.list.find(v => v.lowerCaseName === countryName)
-			|| (Countries.worldwide.lowerCaseName === countryName ? this.worldwide : null);
+		return Countries.list.find(v => v.lowerCaseName === countryName)
+			|| (Countries.worldwide.lowerCaseName === countryName ? Countries.worldwide : null);
 	}
 
 	static findByCode(code: CountryCode | string) {
-		return this.countryByCountryCode.get(<CountryCode>code)
-			|| (Countries.worldwide.code === code ? this.worldwide : null);
+		return Countries._countryByCountryCode.get(<CountryCode> code)
+			|| (Countries.worldwide.code === code ? Countries.worldwide : null);
 	}
 
 	static findByDialCode(dialCode: string) {
-		return this.list.find(v => v.dialCode === dialCode);
+		return Countries.list.find(v => v.dialCode === dialCode);
 	}
 
 	static includes(countryName: string) {
-		return this.countryNames.includes(countryName.toLowerCase());
+		return Countries._countryNames.includes(countryName.toLowerCase());
 	}
 
 	static includesCode(countryCode: CountryCode) {
-		return this.list.some(v => v.code === countryCode);
+		return Countries.list.some(v => v.code === countryCode);
 	}
 }

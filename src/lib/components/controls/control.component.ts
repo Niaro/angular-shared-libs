@@ -1,30 +1,32 @@
-import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef, Directive } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { isNil, isEqual, uniq } from 'lodash-es';
 
 import { lineMicrotask } from '@bp/shared/utils';
 
-export abstract class ControlComponent<T = any> implements ControlValueAccessor, Validator, OnDestroy {
+import { Destroyable } from '../destroyable';
+
+@Directive()
+// tslint:disable-next-line: directive-class-suffix
+export abstract class ControlComponent<T = any>
+	extends Destroyable
+	implements ControlValueAccessor, Validator, OnDestroy {
 
 	@Input() value: T | null = null;
 
-	@Output() readonly valueChange = new Subject<T>();
+	@Output('valueChange') readonly valueChange$ = new Subject<T>();
 
 	@HostBinding('class.control') isControl = true;
 
-	@HostBinding('class.empty') get empty() { return isNil(this.value) || (<any>this.value) === ''; }
+	@HostBinding('class.empty') get empty() { return isNil(this.value) || (<any> this.value) === ''; }
 
-	protected validator!: ValidatorFn | null;
+	protected _validator!: ValidatorFn | null;
 
-	protected destroyed$ = new Subject();
+	private _onChangeCallbacks: ((value: any) => void)[] = [];
 
-	private onChangeCallbacks: ((value: any) => void )[] = [];
-
-	constructor(protected cdr: ChangeDetectorRef) { }
-
-	ngOnDestroy() {
-		this.destroyed$.next();
+	constructor(protected _cdr: ChangeDetectorRef) {
+		super();
 	}
 
 	validatorOnChange = () => { };
@@ -38,14 +40,14 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.cdr.markForCheck();
-			});
+			this.value = value;
+			this._cdr.markForCheck();
+		});
 	}
 
 	registerOnChange(fn: (value: any) => void): void {
-		this.onChangeCallbacks = uniq([...this.onChangeCallbacks, fn]);
-		this.onChange = v => this.onChangeCallbacks.forEach(cb => cb(v));
+		this._onChangeCallbacks = uniq([ ...this._onChangeCallbacks, fn ]);
+		this.onChange = v => this._onChangeCallbacks.forEach(cb => cb(v));
 	}
 
 	registerOnTouched(fn: () => void): void {
@@ -59,25 +61,25 @@ export abstract class ControlComponent<T = any> implements ControlValueAccessor,
 	}
 
 	validate(c: AbstractControl): ValidationErrors | null {
-		return this.validator ? this.validator(c) : null;
+		return this._validator ? this._validator(c) : null;
 	}
 	// #endregion Implementation of the Validator interface
 
-	setValue(value: T, { emitChange }: { emitChange: boolean } = { emitChange: true }) {
+	setValue(value: T, { emitChange }: { emitChange: boolean; } = { emitChange: true }) {
 		if (isEqual(value, this.value)) {
 			this.validatorOnChange();
 			return;
 		}
 
-		this.value = value as T;
+		this.value = <T> value;
 
 		if (emitChange) {
-			this.valueChange.next(value as T);
+			this.valueChange$.next(<T> value);
 			this.onChange(value);
 		}
 
 		this.validatorOnChange();
-		this.cdr.markForCheck();
+		this._cdr.markForCheck();
 	}
 
 }

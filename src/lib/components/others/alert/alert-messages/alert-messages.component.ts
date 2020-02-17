@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy, Input, ContentChild, TemplateRef } 
 @Component({
 	selector: 'bp-alert-messages',
 	templateUrl: './alert-messages.component.html',
-	styleUrls: ['./alert-messages.component.scss'],
+	styleUrls: [ './alert-messages.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlertMessagesComponent {

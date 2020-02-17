@@ -12,7 +12,17 @@ export function whenOnRemoteServerInitLogrocket() {
 		console: {
 			shouldAggregateConsoleErrors: true,
 		},
-		network: sanitizeNetwork(),
+		network: {
+			requestSanitizer(req) {
+				// if the url contains 'ignore'
+				if (req.url.toLowerCase().includes('deposit'))
+					// scrub out the body
+					req.body = undefined;
+
+				req.headers[ 'Authorization' ] = undefined;
+				return req;
+			}
+		},
 	});
 
 	return true;
@@ -31,20 +41,6 @@ function assignAssetsUrlIfPrivateApp(): { baseHref: string; } | undefined {
 	return {
 		baseHref: isDemostand
 			? 'https://cashier-demostand.web.app/'
-			: `https://storage.googleapis.com/${merchantPrefixOrEmpty}admin-logrocket-assets/${env.name}/${env.version.prerelease}/`
-	};
-}
-
-function sanitizeNetwork() {
-	return {
-		requestSanitizer: (request: { url: string, body: any, headers: Dictionary<string | undefined>; }) => {
-			// if the url contains 'ignore'
-			if (request.url.toLowerCase().includes('deposit'))
-				// scrub out the body
-				request.body = undefined;
-
-			request.headers['Authorization'] = undefined;
-			return request;
-		}
+			: `https://storage.googleapis.com/${ merchantPrefixOrEmpty }admin-logrocket-assets/${ env.name }/${ env.version.prerelease }/`
 	};
 }

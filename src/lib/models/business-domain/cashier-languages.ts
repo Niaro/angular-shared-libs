@@ -47,26 +47,26 @@ export class CashierLanguages {
 		new CashierLanguage({ iso: 'ar', name: 'Arabic (العَرَبِيَّة)', country: Countries.findByCode('AE')! }),
 	];
 
-	private static langByIsoCode = new Map<string, CashierLanguage>(CashierLanguages.list
-		.map(it => [it.iso, it] as [string, CashierLanguage])
+	private static _langByIsoCode = new Map<string, CashierLanguage>(CashierLanguages.list
+		.map(it => <[ string, CashierLanguage ]>[ it.iso, it ])
 	);
 
-	private static langNames = CashierLanguages.list.map(v => v.lowerCaseName);
+	private static _langNames = CashierLanguages.list.map(v => v.lowerCaseName);
 
 	static find(langName: string) {
 		langName = langName.toLowerCase();
-		return this.list.find(v => v.lowerCaseName === langName);
+		return CashierLanguages.list.find(v => v.lowerCaseName === langName);
 	}
 
 	static findByIso(iso: string) {
-		return this.langByIsoCode.get(iso);
+		return CashierLanguages._langByIsoCode.get(iso);
 	}
 
 	static includes(langName: string) {
-		return this.langNames.includes(langName.toLowerCase());
+		return CashierLanguages._langNames.includes(langName.toLowerCase());
 	}
 
 	static includesIso(iso: string) {
-		return this.list.some(v => v.iso === iso);
+		return CashierLanguages.list.some(v => v.iso === iso);
 	}
 }

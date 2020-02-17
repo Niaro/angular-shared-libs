@@ -26,6 +26,6 @@ import { BpSelectComponent, BpSelectTrigger, BP_SELECT_SCROLL_STRATEGY_PROVIDER 
 		BpSelectComponent,
 		BpSelectTrigger
 	],
-	providers: [BP_SELECT_SCROLL_STRATEGY_PROVIDER]
+	providers: [ BP_SELECT_SCROLL_STRATEGY_PROVIDER ]
 })
 export class BpSelectModule { }

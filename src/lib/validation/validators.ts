@@ -30,8 +30,8 @@ export class Validators {
 	 * @param name name of the custom required message key
 	 */
 	static customRequired(name: string): ValidatorFn {
-		return (c: AbstractControl): IValidationErrors | null => Validators.required(c)
-			? { [`required-${name}`]: true }
+		return (c): IValidationErrors | null => Validators.required(c)
+			? { [ `required-${ name }` ]: true }
 			: null;
 	}
 
@@ -46,9 +46,9 @@ export class Validators {
 	static password(): ValidatorFn {
 		const minLength = 8;
 		const minLengthValidator = Validators.minLength(minLength);
-		return (c: AbstractControl): IValidationErrors | null => {
+		return (c): IValidationErrors | null => {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
-			const value = c.value as string;
+			const value = <string> c.value;
 
 			const minLengthValidation = minLengthValidator(c);
 			if (minLengthValidation)
@@ -67,13 +67,13 @@ export class Validators {
 	}
 
 	static confirmPassword(propName: string = 'password'): ValidatorFn {
-		return (c: AbstractControl): IValidationErrors | null => {
+		return (c): IValidationErrors | null => {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 			if (c.parent instanceof FormArray)
 				throw new Error('The confirm Password validator expects the control\'s parent to be a formGroup');
 
-			return c.parent.controls[propName].value !== c.value
+			return c.parent.controls[ propName ].value !== c.value
 				? { passwordConfirm: true }
 				: null;
 		};
@@ -99,7 +99,7 @@ export class Validators {
 	 * Validator that requires controls to have a value of a minimum possible value.
 	 */
 	static minimum(required: number): ValidatorFn {
-		return (c: AbstractControl): IValidationErrors | null => {
+		return (c): IValidationErrors | null => {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +c.value ? +c.value : 0;
@@ -113,7 +113,7 @@ export class Validators {
 	 * Validator that requires controls to have a value of a maximum possible value.
 	 */
 	static maximum(required: number): ValidatorFn {
-		return ({ value }: AbstractControl): IValidationErrors | null => {
+		return ({ value }): IValidationErrors | null => {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +value ? +value : 0;
@@ -127,7 +127,7 @@ export class Validators {
 	 * Validator that requires controls to have a value of a minimum length.
 	 */
 	static minLength(required: number): ValidatorFn {
-		return ({ value }: AbstractControl): IValidationErrors | null => {
+		return ({ value }): IValidationErrors | null => {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
@@ -141,7 +141,7 @@ export class Validators {
 	 * Validator that requires controls to have a value of a maximum length.
 	 */
 	static maxLength(required: number): ValidatorFn {
-		return ({ value }: AbstractControl): IValidationErrors | null => {
+		return ({ value }): IValidationErrors | null => {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
@@ -152,10 +152,10 @@ export class Validators {
 	}
 
 	static excessSafeNumber(enabled: boolean): ValidatorFn {
-		const MAX_SAFE_NUMBER_VALUE = 999999999999.99;
+		const maxSafeNumberValue = 999999999999.99;
 
-		return ({ value }: AbstractControl): IValidationErrors | null =>
-			enabled && value > MAX_SAFE_NUMBER_VALUE
+		return ({ value }): IValidationErrors | null =>
+			enabled && value > maxSafeNumberValue
 				? { excessSafeNumber: true }
 				: null;
 	}
@@ -182,7 +182,7 @@ export class Validators {
 	static pattern(pattern: string | RegExp): ValidatorFn {
 		const regex = isRegExp(pattern) ? pattern : new RegExp(pattern);
 
-		return ({ value }: AbstractControl): IValidationErrors | null => {
+		return ({ value }): IValidationErrors | null => {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			return regex.test(value)
@@ -206,12 +206,12 @@ export class Validators {
 		if (!validators)
 			return null;
 
-		const presentValidators = validators.filter(v => !isNil(v)) as ValidatorFn[];
+		const presentValidators = <ValidatorFn[]> validators.filter(v => !isNil(v));
 		if (isEmpty(presentValidators))
 			return null;
 
-		return (control: AbstractControl) => Validators.mergeErrors(
-			Validators.executeValidators(control, presentValidators)
+		return (control) => Validators._mergeErrors(
+			Validators._executeValidators(control, presentValidators)
 		);
 	}
 
@@ -219,17 +219,17 @@ export class Validators {
 		if (!validators)
 			return null;
 
-		const presentValidators = validators.filter(v => !isNil(v)) as AsyncValidatorFn[];
+		const presentValidators = <AsyncValidatorFn[]> validators.filter(v => !isNil(v));
 
 		if (isEmpty(presentValidators))
 			return null;
 
-		return (control: AbstractControl) => {
+		return control => {
 			const promises = Validators
-				.executeAsyncValidators(control, presentValidators)
-				.map(Validators.convertToPromise);
+				._executeAsyncValidators(control, presentValidators)
+				.map(Validators._convertToPromise);
 
-			return Promise.all(promises).then(Validators.mergeErrors);
+			return Promise.all(promises).then(Validators._mergeErrors);
 		};
 	}
 
@@ -237,22 +237,22 @@ export class Validators {
 		return isNil(value) || value === '';
 	}
 
-	private static convertToPromise(obj: any): Promise<any> {
+	private static _convertToPromise(obj: any): Promise<any> {
 		return !!obj && typeof obj.then === 'function' ? obj : obj(obj);
 	}
 
-	private static executeValidators(control: AbstractControl, validators: ValidatorFn[]): any[] {
+	private static _executeValidators(control: AbstractControl, validators: ValidatorFn[]): any[] {
 		return validators.map(v => v(control));
 	}
 
-	private static executeAsyncValidators(
+	private static _executeAsyncValidators(
 		control: AbstractControl,
 		validators: AsyncValidatorFn[]
 	): any[] {
 		return validators.map(v => v(control));
 	}
 
-	private static mergeErrors(arrayOfErrors: any[]): IValidationErrors | null {
+	private static _mergeErrors(arrayOfErrors: any[]): IValidationErrors | null {
 		const result = arrayOfErrors.reduce(
 			(accumulator: IValidationErrors | null, errors: IValidationErrors | null) =>
 				errors === null ? accumulator : merge(accumulator, errors),

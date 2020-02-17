@@ -1,26 +1,34 @@
-<div [matTooltip]="table?.ellipsis ? value : null"
-	 matTooltipPosition="above">
+<div [matTooltip]="table?.ellipsis ? value : null" matTooltipPosition="above">
 	<ng-container *ngIf="metadata.viewType !== FieldViewType.boolean; else booleanViewTypeTpl">
-		<caption *ngIf="label && !table">
-			{{ metadata.label }}
+		<caption *ngIf="label && !table" class="property-metadata-view-caption">
+			{{
+				metadata.label
+			}}
 
-			<mat-icon *ngIf="metadata.longHint"
-					  class="sm"
-					  [matTooltip]="metadata.longHint">
+			<mat-icon *ngIf="metadata.longHint" class="sm" [matTooltip]="metadata.longHint">
 				help_outline
 			</mat-icon>
 
-			<bp-copy *ngIf="metadata.copyable"
-					 class="ml-1"
-					 size="sm"
-					 [outlined]="true"
-					 [value]="value">
+			<bp-copy
+				*ngIf="metadata.copyable"
+				class="ml-1"
+				size="sm"
+				[outlined]="true"
+				[value]="value"
+			>
 			</bp-copy>
 		</caption>
 
-		<div *ngIf="value === '' || value === undefined || value === null || value.length === 0; else valueTpl">
-			<div *ngIf="metadata.viewType === FieldViewType.thumbnail; else emptyValueTpl"
-				 class="thumbnail empty">
+		<div
+			*ngIf="
+				value === '' || value === undefined || value === null || value.length === 0;
+				else valueTpl
+			"
+		>
+			<div
+				*ngIf="metadata.viewType === FieldViewType.thumbnail; else emptyValueTpl"
+				class="thumbnail empty"
+			>
 				<mat-icon>image</mat-icon>
 			</div>
 
@@ -30,8 +38,7 @@
 		</div>
 
 		<ng-template #valueTpl>
-			<div [ngSwitch]="metadata.viewType"
-				 [class.text-ellipsis]="table?.ellipsis">
+			<div [ngSwitch]="metadata.viewType" [class.text-ellipsis]="table?.ellipsis">
 				<ng-container *ngSwitchCase="FieldViewType.text">
 					{{ value.displayName || value.name || value }}
 				</ng-container>
@@ -41,20 +48,21 @@
 						{{ value }}
 					</ng-container>
 					<ng-template #textareaTpl>
-						<textarea readonly
-								  rows="2"
-								  [value]="value">
-						</textarea>
+						<textarea readonly rows="2" [value]="value"> </textarea>
 					</ng-template>
 				</ng-container>
 
-				<bp-country *ngSwitchCase="FieldViewType.country"
-							[src]="value"
-							[compact]="isCompact">
+				<bp-country
+					*ngSwitchCase="FieldViewType.country"
+					[src]="value"
+					[compact]="isCompact"
+				>
 				</bp-country>
 
-				<bp-payment-method-brand *ngSwitchCase="FieldViewType.paymentMethodBrand"
-										 [src]="value">
+				<bp-payment-method-brand
+					*ngSwitchCase="FieldViewType.paymentMethodBrand"
+					[src]="value"
+				>
 				</bp-payment-method-brand>
 
 				<ng-container *ngSwitchCase="FieldViewType.currency">
@@ -62,11 +70,17 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.percent">
-					{{ value | percent:'0.0-2' }}
+					{{ value | percent: '0.0-2' }}
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.moment">
-					{{ value | moment: metadata.viewFormatter ? metadata.viewFormatter(value) : 'LL LTS'}}
+					{{
+						value
+							| moment
+								: (metadata.viewFormatter
+										? metadata.viewFormatter(value)
+										: 'LL LTS')
+					}}
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.currencyCode">
@@ -74,12 +88,14 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.status">
-					<span [ngClass]="'status-' + value.cssClass"
-						  [class.mr-1]="!isCompact"
-						  [class.circle-sm]="!isCompact"
-						  [class.circle]="isCompact"
-						  [matTooltip]="isCompact ? value.displayName : null"
-						  [matTooltipPosition]="isCompact ? 'above' : 'below'">
+					<span
+						[ngClass]="'status-' + value.cssClass"
+						[class.mr-1]="!isCompact"
+						[class.circle-sm]="!isCompact"
+						[class.circle]="isCompact"
+						[matTooltip]="isCompact ? value.displayName : null"
+						[matTooltipPosition]="isCompact ? 'above' : 'below'"
+					>
 					</span>
 					<ng-container *ngIf="!isCompact">
 						{{ value.displayName }}
@@ -87,70 +103,68 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.email">
-					<a class="link"
-					   bpTargetBlank
-					   href="mailto:{{ value }}"
-					   (click)="$event.stopPropagation()">
+					<a
+						class="link"
+						bpTargetBlank
+						href="mailto:{{ value }}"
+						(click)="$event.stopPropagation()"
+					>
 						{{ value }}
 					</a>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.link">
-					<a class="link"
-					   bpTargetBlank
-					   [href]="value"
-					   (click)="$event.stopPropagation()">
+					<a class="link" bpTargetBlank [href]="value" (click)="$event.stopPropagation()">
 						{{ value }}
 					</a>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
-					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status">
-						<span [ngClass]="'status-' + status.cssClass"
-							  [class.mr-1]="!isCompact"
-							  [class.circle-sm]="!isCompact"
-							  [class.circle]="isCompact"
-							  [matTooltip]="isCompact ? status.displayName : null"
-							  [matTooltipPosition]="isCompact ? 'above' : 'below'">
+					<ng-container
+						*ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status"
+					>
+						<span
+							[ngClass]="'status-' + status.cssClass"
+							[class.mr-1]="!isCompact"
+							[class.circle-sm]="!isCompact"
+							[class.circle]="isCompact"
+							[matTooltip]="isCompact ? status.displayName : null"
+							[matTooltipPosition]="isCompact ? 'above' : 'below'"
+						>
 						</span>
 						<ng-container *ngIf="!isCompact">
 							{{ status.displayName }}
 						</ng-container>
 					</ng-container>
-					<span *ngIf="!metadata.viewFormatter"
-						  class="circle status-{{value}}">
-					</span>
+					<span *ngIf="!metadata.viewFormatter" class="circle status-{{ value }}"> </span>
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.chip">
-					<mat-chip-list *ngIf="value?.length"
-								   [selectable]="false">
-						<mat-chip *ngFor="let chip of value"
-								  selected
-								  [matTooltip]="chip.description"
-								  [matTooltipPosition]="isCompact ? 'above' : 'below'">
+					<mat-chip-list *ngIf="value?.length" [selectable]="false">
+						<mat-chip
+							*ngFor="let chip of value"
+							selected
+							[matTooltip]="chip.description"
+							[matTooltipPosition]="isCompact ? 'above' : 'below'"
+						>
 							{{ chip.displayName || chip.name || chip }}
 						</mat-chip>
 					</mat-chip-list>
 				</ng-container>
 
-				<bp-img *ngSwitchCase="FieldViewType.thumbnail"
-						[size]="40"
-						[url]="value">
-				</bp-img>
+				<bp-img *ngSwitchCase="FieldViewType.thumbnail" [size]="40" [url]="value"> </bp-img>
 			</div>
 		</ng-template>
 	</ng-container>
 
 	<ng-template #booleanViewTypeTpl>
-		<ng-container *ngIf="table; else defaultBooleanViewTypeTpl">
-			<mat-icon>
-				{{ value ? 'check' : 'remove' }}
-			</mat-icon>
-		</ng-container>
+		<mat-icon *ngIf="table; else defaultBooleanViewTypeTpl" [ngClass]="booleanIcon">
+			{{ booleanIcon }}
+		</mat-icon>
+
 		<ng-template #defaultBooleanViewTypeTpl>
-			<span>
-				<mat-icon class="mr-1">{{ value ? 'check' : 'close' }}</mat-icon>
+			<span [ngClass]="booleanIcon">
+				<mat-icon class="mr-1">{{ booleanIcon }}</mat-icon>
 				{{ metadata.label }}
 			</span>
 		</ng-template>

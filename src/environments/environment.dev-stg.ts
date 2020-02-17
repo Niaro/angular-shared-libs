@@ -10,7 +10,8 @@ export const environment: IEnvironment = {
 	hmr: IS_HMR_MODE,
 	widgetLoaderUrl: 'https://embed-stg.bridgerpay.com/cashier',
 
-	// by putting it always as the last property in the object we allow override any environment specific property by the apps
+	// by putting it always as the last property in the object we allow override
+	// any environment specific property by the apps
 	...appEnvironment,
 	...constants
 };

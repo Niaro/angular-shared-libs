@@ -30,18 +30,15 @@ import {
 
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
-	DelayedRenderDirective, DynamicOutletDirective, RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective, ProgressBarDirective, DisabledDirective
+	DelayedRenderDirective, DynamicOutletDirective, ProgressBarDirective, DisabledDirective,
+	HoverDirective, OutletLinkRelativeToTargetDirective, OutletLinkRelativeToTargetWithHrefDirective
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';
 
 import { TouchModule, CarouselModule, SvgIconsModule, ModalModule, BpSelectModule } from './features';
 
-import {
-	RouterService, TelemetryService, ZoneService, EnvironmentService, FirebaseService, FileLoaderService,
-	ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler, TitleService, IntercomService
-} from './providers';
+import { ZoneService, ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler } from './providers';
 
 const MODULES = [
 	CommonModule,
@@ -85,8 +82,8 @@ const EXPOSED = [
 	CursorPageAdaptorDirective,
 	TextMaskDirective,
 	RouterLinkNoOutletsWithHrefDirective,
-	RouterLinkRootOutletsWithHrefDirective,
-	RouterLinkRootOutletsDirective,
+	OutletLinkRelativeToTargetDirective,
+	OutletLinkRelativeToTargetWithHrefDirective,
 	StatusBarContainerDirective,
 	TargetBlankDirective,
 	SortDirective,
@@ -94,6 +91,7 @@ const EXPOSED = [
 	DynamicOutletDirective,
 	ProgressBarDirective,
 	DisabledDirective,
+	HoverDirective,
 
 	// controls
 	DateRangeComponent,
@@ -134,27 +132,20 @@ const EXPOSED = [
 
 @NgModule({
 	imports: MODULES,
-	exports: [...EXPOSED, ...MODULES],
-	declarations: EXPOSED,
-	entryComponents: [
-		ToastComponent,
-		DatepickerCalendarHeaderComponent,
-		DeleteConfirmDialogComponent,
-		LogoutConfirmDialogComponent
-	]
+	exports: [ ...EXPOSED, ...MODULES ],
+	declarations: EXPOSED
 })
 export class SharedModule {
-	static forRoot(): ModuleWithProviders {
+	static forRoot(): ModuleWithProviders<SharedModule> {
 		return {
 			ngModule: SharedModule,
 			providers: [
-				...(LocalStorageModule.forRoot({
+				MaterialModule.forRoot().providers!,
+				LocalStorageModule.forRoot({
 					prefix: APP_LOCAL_STORAGE_PREFIX,
 					storageType: 'localStorage'
-				}).providers || []),
-				...(ModalModule.forRoot().providers || []),
-				...(MaterialModule.forRoot().providers || []),
-				...(ToastrModule.forRoot({
+				}).providers!,
+				ToastrModule.forRoot({
 					toastComponent: ToastComponent,
 					timeOut: 5000,
 					preventDuplicates: true,
@@ -162,16 +153,8 @@ export class SharedModule {
 					resetTimeoutOnDuplicate: true,
 					maxOpened: 5,
 					progressBar: true
-				}).providers || []),
+				}).providers!,
 				BpCurrencyPipe,
-				RouterService,
-				TelemetryService,
-				ZoneService,
-				EnvironmentService,
-				FirebaseService,
-				FileLoaderService,
-				TitleService,
-				IntercomService,
 				{ provide: HTTP_INTERCEPTORS, useClass: ApiResponseInterceptorService, multi: true },
 				{ provide: HTTP_INTERCEPTORS, useClass: ApiRequestInterceptorService, multi: true },
 				{ provide: ErrorHandler, useClass: AppErrorHandler },
@@ -179,6 +162,7 @@ export class SharedModule {
 		};
 	}
 
-	// we inject the service here in order to init the underlying services logic from the the very start
-	constructor(rxjsExtender: ZoneService) { }
+	constructor(rxjsExtender: ZoneService) {
+		rxjsExtender.ignite();
+	}
 }

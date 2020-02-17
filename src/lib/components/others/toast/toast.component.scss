@@ -1,10 +1,10 @@
 @import 'imports';
 
 $toaster-palette: (
-	success: $success,
-	error : $danger,
-	warning: $warning,
-	info : $primary
+	success: mat-color($success, 600),
+	error: mat-color($danger),
+	warning: mat-color($warning),
+	info: mat-color($primary),
 );
 
 $border-radius: 5px;
@@ -31,13 +31,12 @@ $border-radius: 5px;
 		cursor: pointer;
 	}
 
-	@each $type,
-	$scheme in $toaster-palette {
+	@each $type, $scheme in $toaster-palette {
 		&.toast-#{$type} {
-			border-left-color: mat-color($scheme);
+			border-left-color: $scheme;
 
 			.toast-progress {
-				background: mat-color($scheme);
+				background: $scheme;
 			}
 		}
 	}
@@ -56,6 +55,7 @@ $border-radius: 5px;
 
 	.toast-message {
 		word-wrap: break-word;
+		white-space: pre-line;
 	}
 
 	.btn-icon-close {
@@ -68,5 +68,9 @@ $border-radius: 5px;
 		&:hover {
 			background: #0000000d;
 		}
+	}
+
+	.btn-undo {
+		float: right;
 	}
 }

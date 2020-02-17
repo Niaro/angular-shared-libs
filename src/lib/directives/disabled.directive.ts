@@ -10,40 +10,40 @@ export class DisabledDirective implements OnChanges {
 
 	@Input() disabled!: boolean;
 
-	private get $veil() { return this._$veil ?? (this._$veil = this.createVeil()); }
-	private _$veil!: HTMLElement;
+	private get _$veil() { return this._$cachedVeil ?? (this._$cachedVeil = this._createVeil()); }
+	private _$cachedVeil!: HTMLElement;
 
-	private get $host() { return this.host.nativeElement as HTMLElement; }
+	private get _$host() { return <HTMLElement> this._host.nativeElement; }
 
-	private storedPointerEventsStyle!: string | null;
+	private _storedPointerEventsStyle!: string | null;
 
-	private storedTabIndex!: string | null;
+	private _storedTabIndex!: string | null;
 
-	constructor(private host: ElementRef) { }
+	constructor(private _host: ElementRef) { }
 
 	ngOnChanges() {
 		if (this.disabled)
-			this.setVeil();
+			this._setVeil();
 		else
-			this.removeVeil();
+			this._removeVeil();
 	}
 
-	private setVeil() {
-		this.storedPointerEventsStyle = this.$host.style.pointerEvents;
-		this.storedTabIndex = this.$host.getAttribute('tabindex');
-		this.$host.setAttribute('tabindex', '-1');
-		this.$host.style.pointerEvents = 'none';
-		this.$host.appendChild(this.$veil);
+	private _setVeil() {
+		this._storedPointerEventsStyle = this._$host.style.pointerEvents;
+		this._storedTabIndex = this._$host.getAttribute('tabindex');
+		this._$host.setAttribute('tabindex', '-1');
+		this._$host.style.pointerEvents = 'none';
+		this._$host.appendChild(this._$veil);
 	}
 
-	private removeVeil() {
-		this.$host.style.pointerEvents = this.storedPointerEventsStyle;
-		if (this.storedTabIndex !== null)
-			this.$host.setAttribute('tabindex', this.storedTabIndex);
-		this.$veil.remove();
+	private _removeVeil() {
+		this._$host.style.pointerEvents = this._storedPointerEventsStyle;
+		if (this._storedTabIndex !== null)
+			this._$host.setAttribute('tabindex', this._storedTabIndex);
+		this._$veil.remove();
 	}
 
-	private createVeil() {
+	private _createVeil() {
 		const $veil = document.createElement('span');
 
 		$.css($veil, {
@@ -56,7 +56,7 @@ export class DisabledDirective implements OnChanges {
 			cursor: 'not-allowed'
 		});
 
-		$veil.addEventListener('click', (e: MouseEvent) => {
+		$veil.addEventListener('click', e => {
 			e.stopPropagation();
 			e.preventDefault();
 		});

@@ -15,5 +15,5 @@ export type ValidationError = ValidationErrorTemplateVariables
 	| true; // true means to use predefined error
 
 export interface IValidationErrors {
-	[validator: string]: ValidationError;
+	[ validator: string ]: ValidationError;
 }

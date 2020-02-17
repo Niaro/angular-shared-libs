@@ -3,6 +3,11 @@
 	fill: currentColor;
 	justify-content: center;
 
+	&.logo {
+		height: 26px;
+		width: 26px;
+	}
+
 	&.logo-short-text {
 		height: 26px;
 		width: 180px;

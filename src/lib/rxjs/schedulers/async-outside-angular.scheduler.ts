@@ -7,13 +7,16 @@ import { ZoneService } from '@bp/shared/providers/zone.service';
 
 class OutsideAngularAsyncAction<T> extends AsyncAction<T> {
 	constructor(
+		// tslint:disable-next-line: naming-convention
 		protected scheduler: AsyncScheduler,
+		// tslint:disable-next-line: naming-convention
 		protected work: (this: SchedulerAction<T>, state?: T) => void
 	) {
 		super(scheduler, work);
 	}
 
-	protected requestAsyncId(scheduler: AsyncScheduler, id ?: any, delay: number = 0): any {
+	// tslint:disable-next-line: naming-convention
+	protected requestAsyncId(scheduler: AsyncScheduler, id?: any, delay: number = 0): any {
 		if (NgZone.isInAngularZone())
 			return ZoneService.runOutside(() => super.requestAsyncId(scheduler, id, delay));
 

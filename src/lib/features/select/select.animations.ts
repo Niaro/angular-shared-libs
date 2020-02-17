@@ -26,7 +26,7 @@ export const bpSelectAnimations: {
 	 * This is needed due to https://github.com/angular/angular/issues/23302
 	 */
 	transformPanelWrap: trigger('transformPanelWrap', [
-		transition('* => void', query('@transformPanel', [animateChild()],
+		transition('* => void', query('@transformPanel', [ animateChild() ],
 			{ optional: true }))
 	]),
 

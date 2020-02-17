@@ -25,13 +25,13 @@ export function mixinDaterangeQueryParams<T extends Constructor<QueryParamsBase<
 		constructor(...args: any[]) {
 			super(...args);
 
-			if (this.routeParams.from)
-				this.from = +this.routeParams.from;
+			if (this._routeParams.from)
+				this.from = +this._routeParams.from;
 
-			if (this.routeParams.to)
-				this.to = +this.routeParams.to;
+			if (this._routeParams.to)
+				this.to = +this._routeParams.to;
 
-			const dateRange = this.routeParams.range || this.routeParams.period || this.routeParams.dateRange;
+			const dateRange = this._routeParams.range || this._routeParams.period || this._routeParams.dateRange;
 			if (dateRange)
 				assign(this, DateRange.parse(dateRange).unix());
 		}

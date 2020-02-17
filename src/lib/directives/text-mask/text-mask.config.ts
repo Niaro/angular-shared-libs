@@ -10,14 +10,14 @@ export class TextMaskConfig {
 	get prefix(): string { return this._prefix; }
 	set prefix(value: string) {
 		this._prefix = value;
-		this._prefixRegExp = value && value.length && new RegExp(`^${escapeRegExp(value)}`) || undefined;
+		this._prefixRegExp = value && value.length && new RegExp(`^${ escapeRegExp(value) }`) || undefined;
 	}
 	private _prefix!: string;
 
 	get suffix(): string { return this._suffix; }
 	set suffix(value: string) {
 		this._suffix = value;
-		this._suffixRegExp = value && value.length && new RegExp(`${escapeRegExp(value)}$`) || undefined;
+		this._suffixRegExp = value && value.length && new RegExp(`${ escapeRegExp(value) }$`) || undefined;
 	}
 	private _suffix!: string;
 
@@ -57,17 +57,22 @@ export class TextMaskConfig {
 	/**
 	 * Changes the general behavior of the Text Mask component.
 	 * When true, adding or deleting characters will not affect the positions of existing characters.
-	 * When false, adding characters causes existing characters to advance. And deleting characters causes existing characters to move back.
+	 * When false, adding characters causes existing characters to advance.
+	 * And deleting characters causes existing characters to move back.
 	 * @default false
 	 * @link https://git.io/v1pT4
 	 */
 	keepCharPositions = false;
 
 	/**
-	 * You can provide a pipe function that will give you the opportunity to modify the conformed value before it is displayed on the screen.
+	 * You can provide a pipe function that will give you the opportunity to modify the conformed
+	 * value before it is displayed on the screen.
 	 * @link https://git.io/v1pk1
 	 */
-	pipe!: (conformedValue: string, config: TextMaskConfig) => boolean | string | { value: string, indexesOfPipedChars: number[] };
+	pipe!: (conformedValue: string, config: TextMaskConfig) => boolean | string | {
+		value: string,
+		indexesOfPipedChars: number[];
+	};
 
 	/**
 	 * You can provide an onAccept callback function which will be called when the user enters a character that is accepted
@@ -137,7 +142,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	 * Character that acts as a decimal point
 	 * @default separator of current culture
 	 */
-	decimalSeparatorSymbol = this.getLocaleDecimalSeparatorSymbol();
+	decimalSeparatorSymbol = this._getLocaleDecimalSeparatorSymbol();
 
 	/**
 	 * How many digits to allow after the decimal
@@ -191,7 +196,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 
 	get leadingZeroRegExp() {
 		return this._leadingZeroRegExp
-			|| (this._leadingZeroRegExp = new RegExp(`^([0${escapeRegExp(this.thousandsSeparatorSymbol)}]+)[1-9]`));
+			|| (this._leadingZeroRegExp = new RegExp(`^([0${ escapeRegExp(this.thousandsSeparatorSymbol) }]+)[1-9]`));
 	}
 	private _leadingZeroRegExp!: RegExp;
 
@@ -204,7 +209,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	// 	return super.assign(config);
 	// }
 
-	private getLocaleDecimalSeparatorSymbol(): string {
+	private _getLocaleDecimalSeparatorSymbol(): string {
 		return 1.1.toLocaleString().substring(1, 2);
 	}
 }

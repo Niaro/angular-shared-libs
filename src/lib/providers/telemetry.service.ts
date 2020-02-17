@@ -15,7 +15,7 @@ export class TelemetryService {
 
 	static enabled = whenOnRemoteServerInitLogrocket();
 
-	private static instance: TelemetryService;
+	private static _instance: TelemetryService;
 
 	static routerErrorHandler(error: any) {
 		TelemetryService.captureError(error, 'router');
@@ -26,26 +26,28 @@ export class TelemetryService {
 	}
 
 	static captureError(error: Error | any, source: string) {
-		if (env.remoteServer)
-			LogRocket.captureException(
-				error instanceof Error ? error : new Error(JSON.stringify(error)),
-				{ tags: { source } }
-			);
-		else
+		if (env.localServer) {
 			console.error(error);
+			return;
+		}
+
+		LogRocket.captureException(
+			error instanceof Error ? error : new Error(JSON.stringify(error)),
+			{ tags: { source } }
+		);
 	}
 
 	get enabled() { return TelemetryService.enabled; }
 
 	constructor() {
-		if (TelemetryService.instance)
-			return TelemetryService.instance;
+		if (TelemetryService._instance)
+			return TelemetryService._instance;
 
-		return TelemetryService.instance = this;
+		return TelemetryService._instance = this;
 	}
 
 	getUserLogrocketUrl(userId: string) {
-		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
+		return `https://app.logrocket.com/${ env.logrocket }/sessions?u=${ userId }`;
 	}
 
 	getSessionUrl(): Promise<string> {
@@ -53,7 +55,7 @@ export class TelemetryService {
 	}
 
 	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
-		LogRocket.identify(uid, userTraits as any);
+		LogRocket.identify(uid, <any> userTraits);
 	}
 
 	captureError(error: any) {

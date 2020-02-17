@@ -1,20 +1,26 @@
 import { Injectable, NgZone } from '@angular/core';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class ZoneService {
 
 	static zone: NgZone;
 
 	static run<T>(fn: (...args: any[]) => T): T {
-		return this.zone.run(fn);
+		return ZoneService.zone.run(fn);
 	}
 
 	static runOutside<T>(fn: (...args: any[]) => T): T {
-		return this.zone.runOutsideAngular(fn);
+		return ZoneService.zone.runOutsideAngular(fn);
 	}
 
-	constructor(zone: NgZone) {
-		ZoneService.zone = zone;
+	constructor(private _zone: NgZone) {
+
+	}
+
+	ignite() {
+		ZoneService.zone = this._zone;
 	}
 
 }

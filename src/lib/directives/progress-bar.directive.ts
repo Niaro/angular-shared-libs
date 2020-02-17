@@ -11,11 +11,11 @@ export class ProgressBarDirective implements OnChanges {
 
 	inProgress = false;
 
-	get $host(): HTMLButtonElement { return this.host.nativeElement; }
+	get $host(): HTMLButtonElement { return this._host.nativeElement; }
 
 	$progressBar = document.createElement('bp-progress-bar');
 
-	constructor(private host: ElementRef) { }
+	constructor(private _host: ElementRef) { }
 
 	ngOnChanges() {
 		const inProgress = 0 < this.bpProgressBar && this.bpProgressBar <= 100;
@@ -27,7 +27,7 @@ export class ProgressBarDirective implements OnChanges {
 		}
 
 		if (inProgress) {
-			$.css(this.$progressBar, { width: `${this.bpProgressBar}%` });
+			$.css(this.$progressBar, { width: `${ this.bpProgressBar }%` });
 			!this.$progressBar.parentElement && this.$host.prepend(this.$progressBar);
 		}
 

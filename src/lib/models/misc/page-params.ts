@@ -1,8 +1,14 @@
 import { PageType } from './enums';
-import { MetadataEntity, Mapper } from '../metadata';
+import { MetadataEntity, Mapper, Default } from '../metadata';
 
 export class PageParams extends MetadataEntity {
+
 	@Mapper(PageType)
-	type!: PageType | null;
+	@Default(PageType.view)
+	pageType!: PageType;
+
 	id!: string;
+
+	formId?: string;
+
 }

@@ -12,8 +12,8 @@ import { IApiErrorMessage } from '@bp/shared/models';
 @Component({
 	selector: 'bp-alert',
 	templateUrl: './alert.component.html',
-	styleUrls: ['./alert.component.scss'],
-	animations: [SLIDE],
+	styleUrls: [ './alert.component.scss' ],
+	animations: [ SLIDE ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnChanges {
@@ -22,12 +22,12 @@ export class AlertComponent implements OnChanges {
 	@Input()
 	get errors() { return this._errors; }
 	set errors(value: IApiErrorMessage[] | null) { this._errors = value; }
-	_errors!: IApiErrorMessage[] | null;
+	private _errors!: IApiErrorMessage[] | null;
 
 	@Input()
 	get messages() { return this._messages; }
 	set messages(value: string[] | null) { this._messages = value; }
-	_messages!: string[] | null;
+	private _messages!: string[] | null;
 
 	@Input() showType = true;
 
@@ -38,15 +38,16 @@ export class AlertComponent implements OnChanges {
 
 	@HostBinding('class.hidden') get hidden() { return isEmpty(this._errors) && isEmpty(this._messages); }
 
-	private get storageKey() { return JSON.stringify(this.errors || this.messages); }
+	private get _storageKey() { return JSON.stringify(this.errors || this.messages); }
 
-	constructor(private localStorage: LocalStorageService) { }
+	constructor(private _localStorage: LocalStorageService) { }
 
 	ngOnChanges({ errors, messages }: SimpleChanges) {
+		// tslint:disable-next-line: early-exit
 		if (errors || messages) {
 			const hasContent = !!this.errors || !!this.messages;
 			this.show = hasContent
-				? this.frequency === 'always' || this.isCountdownComplete()
+				? this.frequency === 'always' || this._isCountdownComplete()
 				: false;
 			this.clearContentIfHidden();
 		}
@@ -59,11 +60,11 @@ export class AlertComponent implements OnChanges {
 
 	onClose() {
 		this.show = false;
-		this.localStorage.set(this.storageKey, m().toISOString());
+		this._localStorage.set(this._storageKey, m().toISOString());
 	}
 
-	private isCountdownComplete() {
-		const shownDatetimeText: string | null = this.localStorage.get(this.storageKey);
+	private _isCountdownComplete() {
+		const shownDatetimeText = <string | null> this._localStorage.get(this._storageKey);
 
 		if (shownDatetimeText) {
 			const shownDatetime = m(shownDatetimeText);

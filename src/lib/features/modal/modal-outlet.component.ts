@@ -9,8 +9,8 @@ import { MODAL_OUTLET } from '@bp/shared/models/constants';
 import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 
-const URL_TREE_PRIMARY_MODAL_OUTLET_PATH = `root.children.${PRIMARY_OUTLET}.children.${MODAL_OUTLET}`;
-const URL_TREE_MODAL_OUTLET_PATH = `root.children.${MODAL_OUTLET}`;
+const URL_TREE_PRIMARY_MODAL_OUTLET_PATH = `root.children.${ PRIMARY_OUTLET }.children.${ MODAL_OUTLET }`;
+const URL_TREE_MODAL_OUTLET_PATH = `root.children.${ MODAL_OUTLET }`;
 
 @Component({
 	selector: 'bp-modal-outlet',
@@ -21,28 +21,28 @@ export class ModalOutletComponent implements OnInit {
 
 	@ContentChild(RouterOutlet, { static: true }) outlet!: RouterOutlet;
 
-	private activeDialog!: MatDialogRef<any, any> | null;
+	private _activeDialog!: MatDialogRef<any, any> | null;
 
-	private urlWithOutlet!: string | null;
+	private _urlWithOutlet!: string | null;
 
-	private destinationUrl!: string;
+	private _destinationUrl!: string;
 
-	private navigation!: boolean;
+	private _navigation!: boolean;
 
 	constructor(
 		public router: Router,
-		private dialogsManager: MatDialog
+		private _dialogsManager: MatDialog
 	) { }
 
 	ngOnInit() {
-		this.outlet.activateEvents.subscribe((cmpt: IModalHostComponent) => this.outletActivate(cmpt));
+		this.outlet.activateEvents.subscribe((cmpt: IModalHostComponent) => this._outletActivate(cmpt));
 
 		this.router.events
 			.pipe(
 				filter(e => e instanceof NavigationEnd),
-				map(v => v as NavigationEnd)
+				map(v => <NavigationEnd> v)
 			)
-			.subscribe(e => this.urlWithOutlet = this.hasUrlModalOutlet(e.url)
+			.subscribe(e => this._urlWithOutlet = this._hasUrlModalOutlet(e.url)
 				? this.router.url
 				: null
 			);
@@ -52,11 +52,11 @@ export class ModalOutletComponent implements OnInit {
 		// which create a nasty visual glitch
 		this.router.events
 			.pipe(
-				filter(e => e instanceof RoutesRecognized && !!this.activeDialog),
-				map(v => v as RoutesRecognized)
+				filter(e => e instanceof RoutesRecognized && !!this._activeDialog),
+				map(v => <RoutesRecognized> v)
 			)
 			.subscribe(e => {
-				if (!this.urlWithOutlet || this.hasUrlModalOutlet(e.url))
+				if (!this._urlWithOutlet || this._hasUrlModalOutlet(e.url))
 					return;
 
 				// If the destination url doesn't have the modal outlet that means the user
@@ -64,38 +64,40 @@ export class ModalOutletComponent implements OnInit {
 				// this.urlWithModal contains the current url from which the navigation was initiated
 				// since it's updated only on NavigationEnd, but we are still processing RoutesRecognized.
 				// We interrupt navigating to the destination url by renavigating back to the current url.
-				this.router.navigateByUrl(this.urlWithOutlet);
-				this.destinationUrl = e.url;
-				this.navigation = true;
-				this.activeDialog && this.activeDialog.close(); // the handler on the close event will actually navigate to the destination url
+				this.router.navigateByUrl(this._urlWithOutlet);
+				this._destinationUrl = e.url;
+				this._navigation = true;
+
+				// the handler on the close event will actually navigate to the destination url
+				this._activeDialog && this._activeDialog.close();
 			});
 	}
 
-	private outletActivate(cmpt: IModalHostComponent) {
+	private _outletActivate(cmpt: IModalHostComponent) {
 		if (!(cmpt.modal instanceof ModalComponent))
-			throw new Error('The component attached to the modal router outlet must implement the IHostModalComponent interface');
+			throw new Error('The component attached to the modal router outlet must implement \ the IHostModalComponent interface');
 
-		this.navigation = false;
-		this.activeDialog = this.dialogsManager.open(cmpt.modal.template, {
-			panelClass: [...(cmpt.panelClass || []), 'bp-modal-overlay-pane']
+		this._navigation = false;
+		this._activeDialog = this._dialogsManager.open(cmpt.modal.template, {
+			panelClass: [ ...(cmpt.panelClass || []), 'bp-modal-overlay-pane' ]
 		});
 
-		this.activeDialog
+		this._activeDialog
 			.beforeClosed()
 			.subscribe(() => {
-				this.activeDialog = null;
-				this.router.navigateByUrl(this.navigation ? this.destinationUrl : this.getUrlWithoutModalOutlet());
+				this._activeDialog = null;
+				this.router.navigateByUrl(this._navigation ? this._destinationUrl : this._getUrlWithoutModalOutlet());
 			});
 	}
 
-	private getUrlWithoutModalOutlet() {
+	private _getUrlWithoutModalOutlet() {
 		const urlTree = this.router.parseUrl(this.router.url);
 		unset(urlTree, URL_TREE_PRIMARY_MODAL_OUTLET_PATH);
 		unset(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 		return urlTree.toString();
 	}
 
-	private hasUrlModalOutlet(url: string): boolean {
+	private _hasUrlModalOutlet(url: string): boolean {
 		const urlTree = this.router.parseUrl(url);
 		return has(urlTree, URL_TREE_PRIMARY_MODAL_OUTLET_PATH) || has(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 	}

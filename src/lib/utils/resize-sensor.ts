@@ -9,40 +9,41 @@ type SizeInfo = {
 
 type OnResize = (sizeInfo: SizeInfo) => void;
 
-type HTMLDivResetSensorElement = HTMLDivElement & { resetSensor?: Function };
+type HTMLDivResetSensorElement = HTMLDivElement & { resetSensor?: Function; };
 
 type HTMLResizableElement = HTMLElement & {
 	resizedAttached?: EventQueue,
-	resizeSensor?: HTMLDivResetSensorElement
+	resizeSensor?: HTMLDivResetSensorElement;
 };
 
 export class ResizeSensor {
 	static reset(element: HTMLResizableElement | HTMLResizableElement[]) {
-		this.forEachElement(element, $el => $el.resizeSensor
+		ResizeSensor._forEachElement(element, $el => $el.resizeSensor
 			&& $el.resizeSensor.resetSensor
 			&& $el.resizeSensor.resetSensor()
 		);
 	}
 
 	static detach(element: HTMLResizableElement | HTMLResizableElement[], cb: OnResize) {
-		this.forEachElement(element, $el => {
-			if (!$el) return;
-
-			if (!$el.resizedAttached)
-				return;
+		ResizeSensor._forEachElement(element, $el => {
+			if (!$el || !$el.resizedAttached) return;
 
 			if ($el.resizedAttached && isFunction(cb))
 				$el.resizedAttached.remove(cb);
 
-			if ($el.resizeSensor && !$el.resizedAttached.length) {
-				$el.contains($el.resizeSensor) && $el.removeChild($el.resizeSensor);
-				delete $el.resizeSensor;
-				delete $el.resizedAttached;
-			}
+			if (!$el.resizeSensor || !!$el.resizedAttached.length)
+				return;
+
+			$el.contains($el.resizeSensor) && $el.removeChild($el.resizeSensor);
+			delete $el.resizeSensor;
+			delete $el.resizedAttached;
 		});
 	}
 
-	private static forEachElement(elements: HTMLResizableElement | HTMLResizableElement[], cb: ($el: HTMLResizableElement) => void) {
+	private static _forEachElement(
+		elements: HTMLResizableElement | HTMLResizableElement[],
+		cb: ($el: HTMLResizableElement) => void
+	) {
 		const elementsType = Object.prototype.toString.call(elements);
 		const isCollectionTyped = ('[object Array]' === elementsType
 			|| ('[object NodeList]' === elementsType)
@@ -51,27 +52,27 @@ export class ResizeSensor {
 		);
 
 		if (isCollectionTyped)
-			(<HTMLResizableElement[]>elements).forEach(v => cb(v));
+			(<HTMLResizableElement[]> elements).forEach(v => cb(v));
 		else
-			cb(elements as HTMLResizableElement);
+			cb(<HTMLResizableElement> elements);
 	}
 
-	private elements: HTMLResizableElement | HTMLResizableElement[];
+	private _elements: HTMLResizableElement | HTMLResizableElement[];
 
 	constructor(element: HTMLElement | HTMLElement[], cb: OnResize) {
-		this.elements = element;
-		ResizeSensor.forEachElement(element, $el => this.attachResizeEvent($el, cb));
+		this._elements = element;
+		ResizeSensor._forEachElement(element, $el => this._attachResizeEvent($el, cb));
 	}
 
 	detach(cb: OnResize) {
-		ResizeSensor.detach(this.elements, cb);
+		ResizeSensor.detach(this._elements, cb);
 	}
 
 	reset() {
-		ResizeSensor.reset(this.elements);
+		ResizeSensor.reset(this._elements);
 	}
 
-	private async attachResizeEvent(
+	private async _attachResizeEvent(
 		$el: HTMLResizableElement,
 		resized: OnResize
 	) {
@@ -85,7 +86,7 @@ export class ResizeSensor {
 		$el.resizedAttached = new EventQueue();
 		$el.resizedAttached.add(resized);
 
-		const $resizeSensor = $el.resizeSensor = document.createElement('div') as HTMLDivResetSensorElement;
+		const $resizeSensor = $el.resizeSensor = <HTMLDivResetSensorElement> document.createElement('div');
 		$resizeSensor.dir = 'ltr';
 		$resizeSensor.className = 'resize-sensor';
 
@@ -109,22 +110,22 @@ export class ResizeSensor {
 			transition: '0s',
 		};
 
-		this.setStyle($resizeSensor, style);
+		this._setStyle($resizeSensor, style);
 
 		const $expand = document.createElement('div');
 		$expand.className = 'resize-sensor-expand';
-		this.setStyle($expand, style);
+		this._setStyle($expand, style);
 
 		const $expandChild = document.createElement('div');
-		this.setStyle($expandChild, styleChild);
+		this._setStyle($expandChild, styleChild);
 		$expand.appendChild($expandChild);
 
 		const $shrink = document.createElement('div');
 		$shrink.className = 'resize-sensor-shrink';
-		this.setStyle($shrink, style);
+		this._setStyle($shrink, style);
 
 		const $shrinkChild = document.createElement('div');
-		this.setStyle($shrinkChild, { ...styleChild, width: '200%', height: '200%' });
+		this._setStyle($shrinkChild, { ...styleChild, width: '200%', height: '200%' });
 		$shrink.appendChild($shrinkChild);
 
 		$resizeSensor.appendChild($expand);
@@ -139,7 +140,7 @@ export class ResizeSensor {
 			await fastdom.mutate(() => $el.style.position = 'relative');
 
 		let dirty: boolean, rafId: number;
-		let size: SizeInfo = await this.getElementSize($el);
+		let size: SizeInfo = await this._getElementSize($el);
 		let lastWidth = 0;
 		let lastHeight = 0;
 		let initialHiddenCheck = true;
@@ -173,9 +174,9 @@ export class ResizeSensor {
 						});
 
 					return;
-				} else
-					// Stop checking
-					initialHiddenCheck = false;
+				}
+				// Stop checking
+				initialHiddenCheck = false;
 			}
 
 			resetExpandShrink();
@@ -195,7 +196,7 @@ export class ResizeSensor {
 		};
 
 		const onScroll = async () => {
-			size = await this.getElementSize($el);
+			size = await this._getElementSize($el);
 			dirty = size.width !== lastWidth || size.height !== lastHeight;
 
 			if (dirty && !rafId)
@@ -211,15 +212,15 @@ export class ResizeSensor {
 		requestAnimationFrame(reset);
 	}
 
-	private setStyle(element: HTMLElement, style: Partial<CSSStyleDeclaration>) {
+	private _setStyle(element: HTMLElement, style: Partial<CSSStyleDeclaration>) {
 		return fastdom.mutate(() => Object
 			.keys(style)
-			.map(v => v as unknown as number)
-			.forEach(k => element.style[k] = (<Required<CSSStyleDeclaration>>style)[k])
+			.map(v => <number> <unknown> v)
+			.forEach(k => element.style[ k ] = (<Required<CSSStyleDeclaration>> style)[ k ])
 		);
 	}
 
-	private async getElementSize(element: HTMLElement) {
+	private async _getElementSize(element: HTMLElement) {
 		const rect = await fastdom.measure(() => element.getBoundingClientRect());
 		return {
 			width: Math.round(rect.width),
@@ -231,9 +232,9 @@ export class ResizeSensor {
 if (typeof MutationObserver !== 'undefined') {
 	const observer = new MutationObserver(mutations => {
 		for (let i = 0; i < mutations.length; i++) {
-			const record = mutations[i];
+			const record = mutations[ i ];
 			for (let j = 0; j < record.addedNodes.length; j++) {
-				const $el = record.addedNodes[j] as HTMLResizableElement;
+				const $el = <HTMLResizableElement> record.addedNodes[ j ];
 				$el.resizeSensor && $el.resizeSensor.resetSensor && $el.resizeSensor.resetSensor();
 			}
 		}
@@ -246,19 +247,19 @@ if (typeof MutationObserver !== 'undefined') {
 }
 
 class EventQueue {
-	private q: OnResize[] = [];
+	private _q: OnResize[] = [];
 
-	get length() { return this.q.length; }
+	get length() { return this._q.length; }
 
 	add(ev: OnResize) {
-		this.q.push(ev);
+		this._q.push(ev);
 	}
 
 	call(sizeInfo: SizeInfo) {
-		this.q.forEach(ev => ev.call(this, sizeInfo));
+		this._q.forEach(ev => ev.call(this, sizeInfo));
 	}
 
 	remove(ev: OnResize) {
-		this.q = this.q.filter(v => v !== ev);
+		this._q = this._q.filter(v => v !== ev);
 	}
 }

@@ -1,4 +1,7 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, ElementRef, HostListener, Output, ChangeDetectorRef, Input } from '@angular/core';
+import {
+	Component, OnInit, ChangeDetectionStrategy, ViewChild, ElementRef, HostListener, Output,
+	ChangeDetectorRef, Input
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { isNumber } from 'lodash-es';
@@ -11,9 +14,9 @@ import { ControlComponent } from '../control.component';
 @Component({
 	selector: 'bp-img-upload-btn',
 	templateUrl: './img-upload-btn.component.html',
-	styleUrls: ['./img-upload-btn.component.scss'],
+	styleUrls: [ './img-upload-btn.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [SLIDE, FADE],
+	animations: [ SLIDE, FADE ],
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
@@ -33,11 +36,11 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 
 	@ViewChild('filePicker', { static: true }) filePickerRef!: ElementRef<HTMLInputElement>;
 
-	@Output() readonly busy = new Subject();
+	@Output('busy') readonly busy$ = new Subject();
 
 	get filePicker() { return this.filePickerRef.nativeElement; }
 
-	get file() { return this.filePicker.files && this.filePicker.files[0]; }
+	get file() { return this.filePicker.files && this.filePicker.files[ 0 ]; }
 
 	isExceededAllowedSize = false;
 
@@ -45,7 +48,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 		super(cdr);
 
 		this.firebase.uploadProgress$
-			.subscribe(v => this.busy.next(isNumber(v)));
+			.subscribe(v => this.busy$.next(isNumber(v)));
 
 		this.firebase.uploadedDownloadUrl$
 			.subscribe(v => this.setValue(v));
@@ -57,7 +60,7 @@ export class ImgUploadBtnComponent extends ControlComponent<string> implements O
 				this.isExceededAllowedSize = !!(this.file && (this.file.size > (15 * 1024 * 1024)));
 				if (!this.isExceededAllowedSize && this.file)
 					this.firebase.upload(this.file, this.bucketPath);
-				this.cdr.detectChanges();
+				this._cdr.detectChanges();
 			});
 	}
 

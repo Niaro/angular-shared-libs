@@ -12,22 +12,26 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 @Component({
 	selector: 'bp-paginator',
 	templateUrl: './paginator.component.html',
-	styleUrls: ['./paginator.component.scss'],
+	styleUrls: [ './paginator.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [FADE]
+	animations: [ FADE ]
 })
 export class PaginatorComponent {
-	Math = Math;
 
-	@Input() pageSizeOptions = [10, 24, 50, 100, 250];
+	@Input() pageSizeOptions = [ 10, 24, 50, 100, 250 ];
 
 	@Input() totalLength!: number;
 
 	@Input() pageLength!: number;
 
+	@Input() scrollTarget?: HTMLElement;
+
 	@Output('page') readonly page$ = new OptionalBehaviorSubject<string | undefined>();
 	get page() { return this.page$.value; }
-	set page(value: string | undefined) { this.page$.next(value); }
+	set page(value: string | undefined) {
+		this.scrollTarget?.scrollIntoView();
+		this.page$.next(value);
+	}
 
 	readonly pageSize$ = new BehaviorSubject(PAGE_SIZE);
 	get pageSize() { return this.pageSize$.value; }
@@ -47,21 +51,21 @@ export class PaginatorComponent {
 	set progressNext(value: boolean) { this.progressNext$.next(value); }
 
 	readonly progress$ = combineLatest(this.progressBack$, this.progressNext$)
-		.pipe(map(([back, next]) => back || next));
+		.pipe(map(([ back, next ]) => back || next));
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
+		private _router: Router,
+		private _route: ActivatedRoute,
 		public cdr: ChangeDetectorRef
 	) {
-		this.route.params
+		this._route.params
 			.pipe(
 				map(({ pageSize }) => +pageSize),
 				filter(v => !isNaN(v) && v !== this.pageSize)
 			)
 			.subscribe(this.pageSize$);
 
-		this.route.params
+		this._route.params
 			.pipe(
 				map(params => omit(params, 'page')),
 				distinctUntilChanged((a, b) => isEqual(a, b))
@@ -74,7 +78,7 @@ export class PaginatorComponent {
 
 		this.pageSize$
 			.pipe(skip(1))
-			.subscribe(v => this.navigate({ pageSize: v === PAGE_SIZE ? null : v }));
+			.subscribe(v => this._navigate({ pageSize: v === PAGE_SIZE ? null : v }));
 	}
 
 	getBackPage() {
@@ -99,7 +103,7 @@ export class PaginatorComponent {
 
 	hasNext = () => this.offset + this.pageLength < this.totalLength;
 
-	private navigate(params: Params) {
-		this.router.navigate([UrlHelper.mergeRouteParams(this.route, params)], { relativeTo: this.route });
+	private _navigate(params: Params) {
+		this._router.navigate([ UrlHelper.mergeRouteParams(this._route, params) ], { relativeTo: this._route });
 	}
 }
