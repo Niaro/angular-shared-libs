@@ -10,7 +10,9 @@ $link-color: $color-primary;
 	padding: 0;
 	position: relative;
 
-	@include afterBottomBorder(transparent, 1px) &: after {
+	@include afterBottomBorder(transparent, 1px);
+
+	&:after {
 		opacity: 0.4;
 		transition: $animation-duration $animation-function;
 		transition-property: background, opacity;
