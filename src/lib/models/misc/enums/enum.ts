@@ -1,25 +1,32 @@
-import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst, kebabCase, isBoolean } from 'lodash-es';
+import {
+	camelCase, lowerCase, forOwn, forIn, isNil, isNumber, isArray,
+	upperFirst, kebabCase, isBoolean
+} from 'lodash-es';
+
 import { lineMicrotask } from '@bp/shared/utils';
 
 // tslint:disable: no-static-this
 export abstract class Enumeration {
+
 	private static _list: any[];
+
 	private static _isValue(v: any) { return isNumber(v) || isBoolean(v); }
 
 	static list<T extends Enumeration>(): T[] {
 
 		if (!this._list) {
 			const list: T[] = [];
-			forOwn(this, (it, key) => {
+			forIn(this, (it, key) => {
 				if (it instanceof Enumeration && isNaN(+key) && this._shouldList(it))
 					list.push(<T> it);
 			});
 			this._list = list;
 		}
+
 		return this._list;
 	}
 
-	static find(value: number | string): Enumeration | null {
+	static find<T extends Enumeration>(value: number | string): T | null {
 		return (<any> this)[ value ] || null;
 	}
 
@@ -114,13 +121,15 @@ export abstract class Enumeration {
 				res = key;
 				return false;
 			}
+			return true;
 		});
 		return res;
 	}
 }
 
 export abstract class FlagEnumeration<T extends FlagEnumeration<T>> extends Enumeration {
-	static find(value: number): Enumeration {
+
+	static find<T>(value: number): T {
 		return FlagEnumeration._findOrCreate(value, FlagEnumeration);
 	}
 

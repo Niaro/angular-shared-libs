@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>The form contains unsaved changes</h2>
+
+<mat-dialog-content>
+	Are you sure you want to discard the changes?
+</mat-dialog-content>
+
+<mat-dialog-actions>
+	<button class="cancel mr-auto" mat-stroked-button [mat-dialog-close]="false">
+		Cancel
+	</button>
+
+	<button mat-stroked-button color="warn" [mat-dialog-close]="true">
+		Discard
+	</button>
+</mat-dialog-actions>

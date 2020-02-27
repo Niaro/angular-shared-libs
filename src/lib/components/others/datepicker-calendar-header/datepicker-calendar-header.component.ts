@@ -30,7 +30,7 @@ export class DatepickerCalendarHeaderComponent extends MatCalendarHeader<m.Momen
 		this.dateAdapter = dateAdapter;
 		// Dirty workaround of the mat pickers inability to set a panel class on
 		// the overlay
-		this.picker._popupRef.addPanelClass(this.picker.panelClass);
+		// this.picker._popupRef.addPanelClass(this.picker.panelClass);
 	}
 
 	clear() {

@@ -1,6 +1,6 @@
 import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges, Directive } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-es';
 import { Subject, of } from 'rxjs';
 import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
@@ -9,7 +9,6 @@ import { Entity, FormScheme, MetadataEntity } from '../models';
 
 import { FormBaseComponent } from './form-base.component';
 import { OptionalBehaviorSubject } from '../rxjs';
-
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -34,11 +33,11 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	private _formScheme?: FormScheme<T>;
 
 	constructor(
-		protected _fb: FormBuilder,
-		protected _cdr: ChangeDetectorRef,
-		protected _snackBar: MatSnackBar
+		fb: FormBuilder,
+		cdr: ChangeDetectorRef,
+		toaster: ToastrService,
 	) {
-		super(_fb, _cdr, _snackBar);
+		super(fb, cdr, toaster);
 		this._onFormGroupChangeEmitEntityChange();
 	}
 

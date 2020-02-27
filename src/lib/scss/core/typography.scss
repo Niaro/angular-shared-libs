@@ -83,3 +83,8 @@ b,
 strong {
 	font-weight: $font-weight-bold;
 }
+
+.no-link-decoration {
+	color: inherit;
+	text-decoration: none;
+}

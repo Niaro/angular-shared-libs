@@ -1,20 +1,8 @@
-import { kebabCase } from 'lodash-es';
+import { PspPaymentMethodType } from './psp-payment-method-type';
 
-import { lineMicrotask } from '@bp/shared/utils';
-
-import { Enumeration } from '../../misc';
-
-export class PaymentMethodType extends Enumeration {
-
-	static creditCard = new PaymentMethodType('Credit Card');
-
-	static apm = new PaymentMethodType('APM');
-
-	static crypto = new PaymentMethodType();
+export class PaymentMethodType extends PspPaymentMethodType {
 
 	static wireTransfer = new PaymentMethodType('Wire Transfer');
-
-	static voucher = new PaymentMethodType();
 
 	static externalLink = new PaymentMethodType();
 
@@ -27,16 +15,4 @@ export class PaymentMethodType extends Enumeration {
 		PaymentMethodType.cryptoWallet
 	];
 
-	logo!: string;
-
-	routeName!: string;
-
-	constructor(displayName?: string) {
-		super(displayName);
-
-		lineMicrotask(() => {
-			this.routeName = kebabCase(this.name);
-			this.logo = `assets/images/payment-methods/${ this.routeName }`;
-		});
-	}
 }

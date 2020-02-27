@@ -1,14 +1,18 @@
 import { isString } from 'lodash-es';
 
+import { MapIncomingValue } from '../metadata/decorators';
 import { MetadataEntity } from '../metadata/metadata-entity';
 import { Country, Countries } from './countries';
 
 export class CashierLanguage extends MetadataEntity {
 
+	@MapIncomingValue()
 	readonly iso!: string;
 
+	@MapIncomingValue()
 	readonly country!: Country;
 
+	@MapIncomingValue()
 	readonly name!: string;
 
 	readonly lowerCaseName?: string;

@@ -1,11 +1,20 @@
-import { MetadataEntity } from '../metadata';
+
 import { isString } from 'lodash-es';
+
+import { MetadataEntity } from '../metadata/metadata-entity';
+import { MapIncomingValue } from '../metadata/decorators';
 
 const CRYPTOS = new Map<CryptoCurrencyCode, CryptoCurrency>();
 
 export class CryptoCurrency extends MetadataEntity {
+
+	@MapIncomingValue()
 	readonly logo!: string;
+
+	@MapIncomingValue()
 	readonly name!: string;
+
+	@MapIncomingValue()
 	readonly code!: CryptoCurrencyCode;
 
 	constructor(dataOrCode: Partial<CryptoCurrency> | CryptoCurrencyCode) {

@@ -66,10 +66,10 @@ export abstract class ControlComponent<T = any>
 	// #endregion Implementation of the Validator interface
 
 	setValue(value: T, { emitChange }: { emitChange: boolean; } = { emitChange: true }) {
-		if (isEqual(value, this.value)) {
-			this.validatorOnChange();
+		if (isEqual(value, this.value))
+			// this.validatorOnChange();
 			return;
-		}
+
 
 		this.value = <T> value;
 
@@ -78,7 +78,7 @@ export abstract class ControlComponent<T = any>
 			this.onChange(value);
 		}
 
-		this.validatorOnChange();
+		// this.validatorOnChange();
 		this._cdr.markForCheck();
 	}
 

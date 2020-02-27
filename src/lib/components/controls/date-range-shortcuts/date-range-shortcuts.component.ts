@@ -82,9 +82,13 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 }
 
 export class DateRangeShortcut extends Enumeration {
+
 	static week = new DateRangeShortcut();
+
 	static month = new DateRangeShortcut();
+
 	static quarter = new DateRangeShortcut();
+
 	static year = new DateRangeShortcut();
 
 	dateRange!: DateRange;
@@ -111,5 +115,7 @@ export class DateRangeShortcut extends Enumeration {
 			case DateRangeShortcut.year:
 				return new DateRange({ to, from: m().utc().startOf('year') });
 		}
+
+		throw new Error('DateRange for the DateRangeShortcut is not implemented');
 	}
 }

@@ -96,11 +96,8 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
 		lineMicrotask(() => {
-			this.value = value;
-			this.internalControl.setValue(this.value && this.value.toString() || '', {
-				emitViewToModelChange: false,
-				emitEvent: false
-			});
+			this._setIncomingValue(value);
+			this._setIncomingValueToInternalControl(this.value?.toString());
 		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
@@ -111,7 +108,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		return !value && this.internalControl.value
 			? { 'autocompleteNotFound': true }
 			: null;
-	}
+	};
 	// #endregion Implementation of the Validator interface
 
 	/**

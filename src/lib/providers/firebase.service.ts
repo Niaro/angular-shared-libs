@@ -64,7 +64,7 @@ export class FirebaseService {
 		this._functions = firebase.app().functions(FB_FUNCTIONS_REGION);
 	}
 
-	signIn(credentials: { userName: string, password: string }) {
+	signIn(credentials: { userName: string, password: string; }) {
 		return from(firebase.auth().signInWithEmailAndPassword(credentials.userName, credentials.password))
 			.pipe(catchError(this._throwAsResponseError));
 	}
@@ -317,5 +317,5 @@ export class FirebaseService {
 	private _throwAsResponseError = (v: firebase.FirebaseError) => throwError(this._mapToResponseError(v));
 
 	private _mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
-		new ResponseError({ messages: [ { type: e.code, message: e.message } ] })
+		new ResponseError({ messages: [ { type: e.code, message: e.message } ] });
 }

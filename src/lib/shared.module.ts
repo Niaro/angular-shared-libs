@@ -20,7 +20,7 @@ import {
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
 	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent,
-	InputPrefixDirective, ToastComponent
+	InputPrefixDirective, ToastComponent, DiscardChangesConfirmDialogComponent
 } from './components';
 
 import {
@@ -73,6 +73,7 @@ const EXPOSED = [
 	IconBtnComponent,
 	DeleteConfirmDialogComponent,
 	LogoutConfirmDialogComponent,
+	DiscardChangesConfirmDialogComponent,
 	PaymentMethodBrandComponent,
 	ImgComponent,
 	VersionComponent,

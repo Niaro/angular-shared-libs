@@ -17,7 +17,7 @@ const { url: API_URL, version: API_VERSION } = environment.api || { url: '', ver
 export class HttpConfigService {
 	readonly baseUrl = `${ API_URL ? (API_URL.includes('api') ? API_URL : `${ API_URL }/api`) : '/api' }${ API_VERSION ? `/${ API_VERSION }` : '' }`;
 
-	headers: Dictionary<string | null> = {
+	headers: { [ key: string ]: string | null; } = {
 		[ CONTENT_TYPE ]: 'application/json',
 		'json-naming-strategy': 'camelcase',
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302

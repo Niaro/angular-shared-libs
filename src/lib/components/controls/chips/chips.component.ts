@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import {
+	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, ViewChild, ElementRef
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -50,7 +52,7 @@ export class ChipsControlComponent
 
 	separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
-	lowercasedItems!: { lowered: string, item: IChipControlItem }[];
+	lowercasedItems!: { lowered: string, item: IChipControlItem; }[];
 
 	throttle = 0;
 
@@ -73,8 +75,8 @@ export class ChipsControlComponent
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: IChipControlItem[] | null): void {
 		lineMicrotask(() => {
-			this.value = value;
-			this.internalControl.setValue(value);
+			this._setIncomingValue(value);
+			this._setIncomingValueToInternalControl(value);
 			this._updateFilteredAccordingSelected();
 		});
 	}

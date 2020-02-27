@@ -41,6 +41,8 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() panelClass!: string;
 
+	name = 'country';
+
 	filtered = Countries.list;
 
 	throttle = 0;
@@ -71,24 +73,23 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 		// tslint:disable-next-line: early-exit
 		if (value) {
-			const countryName = !this.value || !this.hasWorldwide && this.value === Countries.worldwide
-				? ''
-				: this.value.name;
+			const country = !this.value || !this.hasWorldwide && this.value === Countries.worldwide
+				? null
+				: this.value;
 
-			this._filterCountries(countryName);
-			this.internalControl.setValue(countryName, { emitEvent: false });
+			this._filterCountries(country?.name);
+			this.writeValue(country);
 		}
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: Country | CountryCode | null): void {
+	writeValue(value?: Country | CountryCode | null): void {
 		lineMicrotask(() => {
-			this.setValue(
-				value instanceof Country
-					? value
-					: value && Countries.findByCode(value),
-				{ emitChange: false });
-			this.internalControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
+			this._setIncomingValue(value instanceof Country
+				? value
+				: (value && Countries.findByCode(value)) ?? null
+			);
+			this._setIncomingValueToInternalControl(this.value?.name ?? '');
 		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
@@ -99,7 +100,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 		return !value && this.internalControl.value
 			? { 'countryNotFound': true }
 			: null;
-	}
+	};
 	// #endregion Implementation of the Validator interface
 
 	protected _onInternalControlValueChange(input: string) {
@@ -117,8 +118,8 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 			: list.filter(v => v !== Countries.worldwide);
 	}
 
-	private _filterCountries(input: string) {
-		const loweredCountryName = input && input.toLowerCase();
+	private _filterCountries(input: string = '') {
+		const loweredCountryName = input.toLowerCase();
 		this.filtered = loweredCountryName
 			? this.countries.filter(it => it.lowerCaseName && it.lowerCaseName.includes(loweredCountryName))
 			: this.countries;

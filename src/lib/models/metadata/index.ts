@@ -1,5 +1,6 @@
 export * from './decorators';
 export * from './enums';
+export * from './api-metadata-entity-type';
 export * from './class-metadata';
 export * from './control-generate-scheme';
 export * from './entity';

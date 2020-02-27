@@ -1,7 +1,13 @@
 import { MetadataEntity } from '../metadata/metadata-entity';
+import { MapIncomingValue } from '../metadata/decorators';
+
 
 export class State extends MetadataEntity {
+
+	@MapIncomingValue()
 	code!: string;
+
+	@MapIncomingValue()
 	name!: string;
 
 	constructor(data: Partial<State>) {

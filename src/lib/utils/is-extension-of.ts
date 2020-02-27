@@ -1,8 +1,8 @@
 import { isFunction } from 'lodash-es';
 
-export function isExtensionOf<T>(targetType: any, ancestorType: T): boolean {
-	if (!isFunction(targetType))
-		return false;
+export function isExtensionOf<T extends Function>(targetType: T, ancestorType: T): boolean {
+	if (!isFunction(targetType) || !isFunction(targetType))
+		throw new Error('isExtensionOf accepts only functions');
 
 	do {
 		targetType = Object.getPrototypeOf(targetType);

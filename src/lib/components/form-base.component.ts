@@ -1,6 +1,6 @@
 import { Input, Output, ChangeDetectorRef, Directive } from '@angular/core';
-import { FormGroup, AbstractControl, FormArray, FormControl, FormBuilder } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, AbstractControl, FormArray, FormBuilder } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { isEmpty, forOwn } from 'lodash-es';
 import { Subject, BehaviorSubject, of, combineLatest, EMPTY } from 'rxjs';
 import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
@@ -61,19 +61,20 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 	readonly valid$ = this.invalid$.pipe(map(v => !v));
 
-	readonly form$ = new BehaviorSubject<FormGroup | null>(null);
-	get form() { return this.form$.value; }
+	private readonly _form$ = new BehaviorSubject<FormGroup | null>(null);
+	readonly form$ = this._form$.asObservable();
+	get form() { return this._form$.value; }
 	set form(value: FormGroup | null) {
-		this.form$.next(value);
+		this._form$.next(value);
 		this._disableOnPending();
 	}
 
-	showInvalidInputsSnack = true;
+	showInvalidInputsToast = true;
 
 	constructor(
 		protected _fb: FormBuilder,
 		protected _cdr: ChangeDetectorRef,
-		protected _snackBar: MatSnackBar
+		protected _toaster: ToastrService,
 	) {
 		super();
 		this._setupInvalidObservable();
@@ -92,38 +93,47 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 		if (!this.form)
 			return;
 
-		this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(this.form);
+		this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(this._getRootForm(this.form));
 
 		if (this.form.valid)
 			this.submitted$.next(this.form.value);
-		else if (this.showInvalidInputsSnack)
-			this._snackBar.open(
-				'Some inputs are invalid!',
-				undefined,
-				{
-					panelClass: 'error'
-				});
+		else if (this.showInvalidInputsToast)
+			this._toaster.error('Some inputs are invalid!');
 
 		this._cdr.detectChanges();
+		this._cdr.markForCheck();
+	}
+
+	addChildForm(formName: string, form: FormGroup) {
+		this.form?.setControl(formName, form);
+	}
+
+	resetFormState() {
+		this.form?.markAsPristine();
+		this.form?.markAsUntouched();
+		this.form?.updateValueAndValidity(); // to invoke changes
 	}
 
 	protected _group<U = T>(config: FormGroupConfig<U>): FormGroup {
 		return this._fb.group(config);
 	}
 
+	private _getRootForm(form: FormGroup | FormArray) {
+		while (form.parent)
+			form = form.parent;
+		return form;
+	}
+
 	private _revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(control: AbstractControl) {
+		control.updateValueAndValidity({ onlySelf: true });
+
+		control.markAsTouched({ onlySelf: true });
+		control.markAsDirty({ onlySelf: true });
+
 		if (control instanceof FormGroup)
 			forOwn(control.controls, c => this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
 		else if (control instanceof FormArray)
 			control.controls.forEach(c => this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(c));
-		else if (control instanceof FormControl) {
-			control.updateValueAndValidity();
-
-			if (control.invalid) {
-				control.markAsTouched();
-				control.markAsDirty();
-			}
-		}
 	}
 
 	private _disableOnPending() {

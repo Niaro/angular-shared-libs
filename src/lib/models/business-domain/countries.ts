@@ -3,6 +3,7 @@ import * as intlTelInput from 'intl-tel-input';
 import { mapValues } from 'lodash-es';
 
 import { MetadataEntity } from '../metadata/metadata-entity';
+import { MapIncomingValue } from '../metadata/decorators';
 import { State } from './state';
 
 export type CountryCode = ActualCountryCode | 'AQ' | 'BV' | 'GS' | 'HM' | 'PN' | 'TF' | 'UM';
@@ -12,19 +13,23 @@ export type CountryCode = ActualCountryCode | 'AQ' | 'BV' | 'GS' | 'HM' | 'PN' |
 // @ts-ignore
 const initiation = intlTelInput;
 
-export const COUNTRY_STATES = <{ [ countryIso: string ]: State[] }> <unknown> mapValues(
+export const COUNTRY_STATES = <{ [ countryIso: string ]: State[]; }> <unknown> mapValues(
 	require('./states.json'),
 	(v: Partial<State>[]) => v.map((it: Partial<State>) => new State(it))
 );
 
 export class Country extends MetadataEntity {
 
+	@MapIncomingValue()
 	readonly name!: string;
 
+	@MapIncomingValue()
 	readonly displayName!: string;
 
+	@MapIncomingValue()
 	readonly code!: CountryCode | 'ALL';
 
+	@MapIncomingValue()
 	readonly dialCode!: string;
 
 	readonly lowerCaseName?: string;

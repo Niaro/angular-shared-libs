@@ -81,9 +81,17 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: T | null): void {
 		lineMicrotask(() => {
-			this.value = value;
-			this.internalControl.setValue(value, { emitViewToModelChange: false });
+			this._setIncomingValue(value);
+			this._setIncomingValueToInternalControl(value);
 		});
+	}
+
+	protected _setIncomingValue(value: T | null) {
+		this.setValue(value!, { emitChange: false });
+	}
+
+	protected _setIncomingValueToInternalControl<U = T>(value: U | null) {
+		this.internalControl.setValue(value, { emitEvent: false });
 	}
 
 	setDisabledState?(isDisabled: boolean) {
@@ -98,7 +106,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 		return this.internalControl.invalid
 			? { 'invalid': true }
 			: null;
-	}
+	};
 
 	protected _onInternalControlValueChange(v: any) {
 		this.setValue(v);
@@ -112,14 +120,14 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			this.internalControl.valueChanges
 		)
 			.subscribe(v => {
-				this.externalControl && this.externalControl.markAsDirty();
+				this.externalControl?.markAsDirty();
 				this._onInternalControlValueChange(v);
 			});
 	}
 
 	protected _reflectExternalControlOnInternal() {
 		this.externalControl$
-			.subscribe(external => this.internalControl.setValidators(external && external.validator));
+			.subscribe(external => this.internalControl.setValidators(external?.validator ?? null));
 
 		this.externalControl$
 			.pipe(
