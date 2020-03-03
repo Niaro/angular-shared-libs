@@ -13,7 +13,7 @@ export class Currency extends MetadataEntity {
 
 	static list: Currency[];
 
-	private static _created: Map<CurrencyCode, Currency>;
+	private static _cache = new Map<CurrencyCode, Currency>();
 
 	@MapIncomingValue()
 	readonly symbol!: string;
@@ -26,24 +26,21 @@ export class Currency extends MetadataEntity {
 	 */
 	readonly displayName!: string;
 
-	constructor(dataOrCode: Partial<Currency> | CurrencyCode) {
+	constructor(dataOrCode: (Partial<Currency> & { code: CurrencyCode; }) | CurrencyCode) {
 		super(isString(dataOrCode)
 			? <any> { code: <CurrencyCode> dataOrCode.toUpperCase() }
 			: dataOrCode
 		);
 
-		if (!Currency._created)
-			Currency._created = new Map<CurrencyCode, Currency>();
-
-		if (Currency._created.has(this.code))
-			return <Currency> Currency._created.get(this.code);
+		if (Currency._cache.has(this.code))
+			return <Currency> Currency._cache.get(this.code);
 
 		if (!CURRENCIES_CODES.includes(this.code))
 			throw new Error(`Such currency doesn't exist - ${ this.code }`);
 
 		this.symbol = getCurrencySymbol(this.code, 'narrow');
 
-		Currency._created.set(this.code, this);
+		Currency._cache.set(this.code, this);
 
 		this.displayName = this.code === this.symbol
 			? this.code

@@ -62,3 +62,10 @@ a.bp-button.mat-button {
 	align-items: center;
 	justify-content: center;
 }
+
+button.no-btn-decoration {
+	padding: 0;
+	background: transparent;
+	border: none;
+	text-align: left;
+}

@@ -1,6 +1,5 @@
-import { MetadataEntity } from '../metadata/metadata-entity';
-import { MapIncomingValue } from '../metadata/decorators';
-
+import { MetadataEntity } from '../../metadata/metadata-entity';
+import { MapIncomingValue } from '../../metadata/decorators';
 
 export class State extends MetadataEntity {
 

@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { isArray } from 'lodash-es';
 
+import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { lineMicrotask } from '@bp/shared/utils';
+import { FADE_IN_LIST } from '@bp/shared/animations';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
-
 
 @Component({
 	selector: 'bp-country-selector',
@@ -27,7 +27,8 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 			useExisting: CountrySelectorComponent,
 			multi: true
 		}
-	]
+	],
+	animations: [ FADE_IN_LIST ]
 })
 export class CountrySelectorComponent extends FormFieldControlComponent<Country | null> implements OnChanges {
 
@@ -109,7 +110,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 		if (this.value && this.value.name === input)
 			return;
 
-		this.setValue(input ? Countries.find(input) : null);
+		this.setValue(Countries.find(input));
 	}
 
 	private _getCountriesAccordingToHasWorldwideFlag(list: Country[]) {

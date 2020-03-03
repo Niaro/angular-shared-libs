@@ -1,6 +1,6 @@
 @import 'imports';
 
-$close-btn-size: 34px;
+$close-btn-size: 34px; // the height of the input
 $close-btn-margin: 5px;
 $control-radius: 30px;
 
@@ -29,9 +29,7 @@ $control-radius: 30px;
 			}
 
 			.mat-icon-button {
-				width: $close-btn-size;
-				height: $close-btn-size;
-				line-height: $close-btn-size;
+				@include matIconSize($close-btn-size !important); // the height of the input
 
 				&:hover .mat-button-focus-overlay {
 					opacity: 0.1;

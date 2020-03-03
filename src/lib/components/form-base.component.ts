@@ -50,7 +50,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	errors!: IApiErrorMessage[] | null;
 
 	@Output('submitted')
-	readonly submitted$ = new Subject<T>();
+	readonly submittedValidFormValue$ = new Subject<T>();
 
 	@Output('canSave')
 	readonly canSave$ = new BehaviorSubject(false);
@@ -90,13 +90,14 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	}
 
 	submit() {
+		console.warn('submit');
 		if (!this.form)
 			return;
 
 		this._revalidatedAndMarkInvalidAsDirtyAndTouchedRecursively(this._getRootForm(this.form));
 
 		if (this.form.valid)
-			this.submitted$.next(this.form.value);
+			this.submittedValidFormValue$.next(this.form.value);
 		else if (this.showInvalidInputsToast)
 			this._toaster.error('Some inputs are invalid!');
 

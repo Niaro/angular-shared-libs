@@ -59,7 +59,10 @@ export abstract class MetadataEntity {
 		const parsedJson = jsonPropertiesMetadata.reduce(
 			(parsed, metadata) => ({
 				...parsed,
-				...JSON.parse(<string> instanceData[ metadata.property ])
+				...(instanceData[ metadata.property ]
+					? JSON.parse(<string> instanceData[ metadata.property ])
+					: {}
+				)
 			}),
 			{}
 		);

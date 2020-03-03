@@ -8,7 +8,17 @@ export class PaymentMethodType extends PspPaymentMethodType {
 
 	static cryptoWallet = new PaymentMethodType('Crypto Wallets');
 
-	static staticPages = new PaymentMethodType();
+	static assignable = [
+		PaymentMethodType.creditCard,
+		PaymentMethodType.apm,
+		PaymentMethodType.crypto,
+		PaymentMethodType.voucher,
+		PaymentMethodType.externalLink,
+		PaymentMethodType.cryptoWallet,
+		PaymentMethodType.wireTransfer,
+	];
+
+	static staticPages = new PaymentMethodType('Pages');
 
 	static staticPagesMethods = [
 		PaymentMethodType.wireTransfer,

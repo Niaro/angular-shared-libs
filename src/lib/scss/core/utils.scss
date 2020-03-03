@@ -54,6 +54,10 @@
 	text-transform: lowercase;
 }
 
+.uppercase {
+	text-transform: uppercase;
+}
+
 .text-ellipsis {
 	@include text-ellipsis();
 }

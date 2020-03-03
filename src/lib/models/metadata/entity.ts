@@ -5,15 +5,15 @@ import { unixMomentMapper } from './mappers';
 import { FieldViewType } from './enums';
 import { Mapper } from './decorators/mapper.decorator';
 import { View } from './decorators/view.decorator';
-import { Default, MapIncomingValue, Label } from './decorators';
+import { Default, Label } from './decorators';
 
 export abstract class Entity extends MetadataEntity {
 
-	@MapIncomingValue()
-	id!: string;
+	@Default(null)
+	id!: string | null;
 
-	@MapIncomingValue()
-	name!: string;
+	@Default(null)
+	name!: string | null;
 
 	@Label('Author')
 	@Default(null)

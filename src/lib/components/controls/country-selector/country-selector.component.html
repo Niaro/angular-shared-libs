@@ -37,13 +37,17 @@
 </ng-template>
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete" [class]="panelClass">
-	<ng-container *ngFor="let country of filtered">
-		<mat-option
-			*bpDelayedRender
-			[value]="country.name"
-			[matTooltip]="country === unitedStatesMinorOutlyingIslands ? country.displayName : ''"
-		>
-			<bp-country class="ml-1" [src]="country"></bp-country>
-		</mat-option>
-	</ng-container>
+	<div [@fadeInList]="(filtered$ | async)?.length">
+		<ng-container *ngFor="let country of filtered">
+			<mat-option
+				*bpDelayedRender
+				[value]="country.name"
+				[matTooltip]="
+					country === unitedStatesMinorOutlyingIslands ? country.displayName : ''
+				"
+			>
+				<bp-country class="ml-1" [src]="country"></bp-country>
+			</mat-option>
+		</ng-container>
+	</div>
 </mat-autocomplete>

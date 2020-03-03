@@ -63,13 +63,13 @@ export class UrlHelper {
 		return pickBy(snapshot.queryParams, v => !isNil(v));
 	}
 
-	static getComponentRoute(route: ActivatedRouteSnapshot | ActivatedRoute, component: Type<any>)
+	static getComponentRoute(route: ActivatedRouteSnapshot | ActivatedRoute, targetRouteCmpt: Type<any>)
 		: ActivatedRouteSnapshot | ActivatedRoute | null {
-		if (route.routeConfig && route.routeConfig.component === component)
+		if (route.routeConfig?.component === targetRouteCmpt)
 			return route;
 
 		for (const childRoute of route.children) {
-			const cmptRoute = UrlHelper.getComponentRoute(childRoute, component);
+			const cmptRoute = UrlHelper.getComponentRoute(childRoute, targetRouteCmpt);
 			if (cmptRoute)
 				return cmptRoute;
 		}
@@ -92,7 +92,7 @@ export class UrlHelper {
 		return route;
 	}
 
-	static getUrlExcludingOutlet(outlet: string, router: Router) {
+	static buildUrlExcludingOutlet(outlet: string, router: Router) {
 		const currentUrlTree = router.parseUrl(router.url);
 		UrlHelper._deleteOutletRecursivelyFromSegments(outlet, currentUrlTree.root.children);
 		return currentUrlTree.toString();

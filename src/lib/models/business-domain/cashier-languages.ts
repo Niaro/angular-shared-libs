@@ -2,7 +2,7 @@ import { isString } from 'lodash-es';
 
 import { MapIncomingValue } from '../metadata/decorators';
 import { MetadataEntity } from '../metadata/metadata-entity';
-import { Country, Countries } from './countries';
+import { Country, Countries, CountryCode } from './countries';
 
 export class CashierLanguage extends MetadataEntity {
 
@@ -23,7 +23,7 @@ export class CashierLanguage extends MetadataEntity {
 		this.lowerCaseName = this.name.toLowerCase();
 
 		if (!this.country)
-			this.country = Countries.findByCode(this.iso.toUpperCase())!;
+			this.country = Countries.findByCode(<CountryCode> this.iso.toUpperCase())!;
 	}
 
 	toString(): any {

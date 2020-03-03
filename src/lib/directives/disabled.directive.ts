@@ -4,7 +4,10 @@ import { $ } from '../utils';
 
 @Directive({
 	// tslint:disable-next-line: directive-selector
-	selector: 'a[disabled], button[disabled]'
+	selector: 'a[disabled], button[disabled]',
+	host: {
+		style: 'position: relative'
+	}
 })
 export class DisabledDirective implements OnChanges {
 

@@ -34,15 +34,14 @@ export class RouterService {
 			.subscribe((e) => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
 	}
 
-	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt: any; })) {
-		this.ngRouter.navigate(commands, {
-			...extras,
-			relativeTo: <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt)
-		});
+	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; })) {
+		const relativeTo = extras.relativeTo
+			?? (extras.relativeToCmpt && <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt));
+		this.ngRouter.navigate(commands, { ...extras, relativeTo });
 	}
 
 	closeOutlet(outlet: string) {
-		this.ngRouter.navigateByUrl(UrlHelper.getUrlExcludingOutlet(outlet, this.ngRouter));
+		this.ngRouter.navigateByUrl(UrlHelper.buildUrlExcludingOutlet(outlet, this.ngRouter));
 	}
 
 	onPrimaryComponentNavigationEnd(component: any) {
@@ -54,12 +53,20 @@ export class RouterService {
 		);
 	}
 
-	onNavigationEnd(cmptType: Type<any>) {
+	onNavigationEndToRouteComponent(cmptType: Type<any>) {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
 			map(() => <ActivatedRoute> UrlHelper.getComponentRoute(this.route, cmptType)),
-			distinctUntilChanged((x, y) => (x && x.component) === (y && y.component)),
-			filter(v => v && v.component === cmptType)
+			distinctUntilChanged((p, q) => p?.component === q?.component),
+			filter(v => v?.component === cmptType)
+		);
+	}
+
+	onLeaveFromRouteComponent(cmptType: Type<any>) {
+		return this.ngRouter.events.pipe(
+			filter(e => e instanceof NavigationEnd),
+			map(() => !!UrlHelper.getComponentRoute(this.route, cmptType)?.component),
+			filter(v => v)
 		);
 	}
 

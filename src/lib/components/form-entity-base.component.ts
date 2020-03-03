@@ -2,13 +2,12 @@ import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges, Directive }
 import { FormBuilder, FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-es';
-import { Subject, of } from 'rxjs';
+import { of, BehaviorSubject } from 'rxjs';
 import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
 
 import { Entity, FormScheme, MetadataEntity } from '../models';
 
 import { FormBaseComponent } from './form-base.component';
-import { OptionalBehaviorSubject } from '../rxjs';
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -16,13 +15,15 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	extends FormBaseComponent<T>
 	implements OnChanges {
 
-	@Input() entity!: T | null;
+	private readonly _entity$ = new BehaviorSubject<T | null>(null);
 
-	@Output('entityChange') readonly entityChange$ = new Subject<T>();
+	@Output('entityChange') readonly entity$ = this._entity$.asObservable();
+
+	@Input()
+	get entity() { return this._entity$.value!; }
+	set entity(value: T | null) { this._entity$.next(value); }
 
 	@Input() factory!: (v?: Partial<T>) => T;
-
-	entity$ = new OptionalBehaviorSubject<T | null>();
 
 	get isAdding() { return this.entity && isNil(this.entity.id); }
 
@@ -47,7 +48,6 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	}
 
 	private _updateFormScheme() {
-		this.entity$.next(this.entity);
 		this.entity && this.form && this._formScheme
 			? this._repopulateFormByScheme()
 			: this._setForm();
@@ -97,11 +97,10 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 						)
 					: of(null)
 				),
-				filter(() => !!this.entityChange$.observers.length),
-				auditTime(250),
+				auditTime(50),
 				map(v => v && this.factory({ ...this.entity, ...v })),
 				filter(v => !isEqual(v, this.entity))
 			)
-			.subscribe(this.entityChange$);
+			.subscribe(v => this.entity = v);
 	}
 }

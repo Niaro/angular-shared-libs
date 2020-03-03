@@ -109,6 +109,10 @@ bp-svg-icon,
 	}
 }
 
+.mat-icon {
+	transition: color $transition-props;
+}
+
 .mat-icon-button {
 	display: inline-flex !important;
 	align-items: center;

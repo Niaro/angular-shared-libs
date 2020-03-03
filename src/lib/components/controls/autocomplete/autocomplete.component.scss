@@ -1,9 +1,34 @@
 @import 'imports';
 
+:host {
+	bp-round-input,
+	bp-input {
+		.search-icon {
+			color: $color-semi-dark;
+			margin: 0 0.25rem;
+			position: relative;
+			bottom: -5px;
+		}
+
+		::ng-deep .mat-focused bp-input-prefix .search-icon {
+			color: $color-primary !important;
+		}
+
+		&:hover {
+			.search-icon {
+				color: $color-dark;
+			}
+		}
+	}
+}
 ::ng-deep .mat-autocomplete-panel .mat-option {
-	&.mat-selected,
 	&.selected {
 		background: $color-primary !important;
 		color: white !important;
+	}
+
+	.sub-option {
+		margin-left: 1rem;
+		font-size: $font-size-lg - 1px;
 	}
 }

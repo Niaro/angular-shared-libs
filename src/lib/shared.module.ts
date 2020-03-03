@@ -20,7 +20,7 @@ import {
 	DeleteConfirmDialogComponent, LogoutConfirmDialogComponent, PropertyMetadataViewsSectionComponent,
 	PaymentMethodBrandComponent, PropertyMetadataControlsSectionComponent, ChipsControlComponent,
 	ImgUploadBtnComponent, ImgComponent, InputHintDirective, InputLabelDirective, VersionComponent,
-	InputPrefixDirective, ToastComponent, DiscardChangesConfirmDialogComponent
+	InputPrefixDirective, ToastComponent, DiscardChangesConfirmDialogComponent,
 } from './components';
 
 import {
@@ -40,7 +40,7 @@ import { TouchModule, CarouselModule, SvgIconsModule, ModalModule, BpSelectModul
 
 import { ZoneService, ApiResponseInterceptorService, ApiRequestInterceptorService, AppErrorHandler } from './providers';
 
-const MODULES = [
+const EXPOSED_MODULES = [
 	CommonModule,
 	MaterialModule,
 	RouterModule,
@@ -132,8 +132,8 @@ const EXPOSED = [
 ];
 
 @NgModule({
-	imports: MODULES,
-	exports: [ ...EXPOSED, ...MODULES ],
+	imports: EXPOSED_MODULES,
+	exports: [ EXPOSED, EXPOSED_MODULES ],
 	declarations: EXPOSED
 })
 export class SharedModule {
