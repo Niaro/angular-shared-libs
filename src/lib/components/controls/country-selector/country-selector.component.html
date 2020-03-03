@@ -37,7 +37,7 @@
 </ng-template>
 
 <mat-autocomplete #countryAutocomplete="matAutocomplete" [class]="panelClass">
-	<div [@fadeInList]="(filtered$ | async)?.length">
+	<div [@fadeInList]="filtered.length">
 		<ng-container *ngFor="let country of filtered">
 			<mat-option
 				*bpDelayedRender
