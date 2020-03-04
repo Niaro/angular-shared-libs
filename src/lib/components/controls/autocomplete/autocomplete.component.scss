@@ -21,14 +21,3 @@
 		}
 	}
 }
-::ng-deep .mat-autocomplete-panel .mat-option {
-	&.selected {
-		background: $color-primary !important;
-		color: white !important;
-	}
-
-	.sub-option {
-		margin-left: 1rem;
-		font-size: $font-size-lg - 1px;
-	}
-}

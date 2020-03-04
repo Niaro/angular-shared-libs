@@ -21,6 +21,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 const MODULES = [
 	MatCardModule,
 	MatInputModule,
@@ -42,7 +44,8 @@ const MODULES = [
 	MatAutocompleteModule,
 	MatSlideToggleModule,
 	MatButtonToggleModule,
-	MatChipsModule
+	MatChipsModule,
+	ScrollingModule
 ];
 
 @NgModule({

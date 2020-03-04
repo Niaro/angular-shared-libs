@@ -67,6 +67,28 @@
 .mat-select-panel,
 .mat-autocomplete-panel {
 	font-size: $body-font-size;
+
+	> .cdk-virtual-scroll-viewport {
+		height: 240px; // the item height is 48px, we want the list to be 5 items long
+
+		.cdk-virtual-scroll-content-wrapper {
+			width: 100%;
+		}
+	}
+}
+
+.mat-autocomplete-panel {
+	.mat-option {
+		&.selected {
+			background: $color-primary !important;
+			color: white !important;
+		}
+
+		.sub-option {
+			margin-left: 1rem;
+			font-size: $font-size-lg - 1px;
+		}
+	}
 }
 
 .mat-button,

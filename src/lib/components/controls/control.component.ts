@@ -72,7 +72,7 @@ export abstract class ControlComponent<T = any>
 
 
 		this.value = <T> value;
-
+		console.warn(value, this.constructor.name);
 		if (emitChange) {
 			this.valueChange$.next(<T> value);
 			this.onChange(value);

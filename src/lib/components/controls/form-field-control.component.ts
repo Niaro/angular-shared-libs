@@ -134,6 +134,9 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 				filter(v => !!v),
 				switchMap(v => v!.statusChanges),
 			)
-			.subscribe(() => this._cdr.markForCheck());
+			.subscribe(() => {
+				this.internalControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+				this._cdr.markForCheck();
+			});
 	}
 }
