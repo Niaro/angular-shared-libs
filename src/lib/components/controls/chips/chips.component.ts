@@ -1,7 +1,9 @@
 import {
-	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, ViewChild, ElementRef
+	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, ViewChild,
+	ElementRef, ContentChild
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { CdkPortal } from '@angular/cdk/portal';
+import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -9,11 +11,12 @@ import { isEmpty, uniq, get, isString } from 'lodash-es';
 
 import { FADE } from '@bp/shared/animations';
 import { lineMicrotask } from '@bp/shared/utils';
+import { IDescribable } from '@bp/shared/models';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
 
-export interface IChipControlItem {
-	description?: string;
+export interface IChipControlItem extends IDescribable {
+	[ prop: string ]: any;
 }
 
 @Component({
@@ -48,6 +51,8 @@ export class ChipsControlComponent
 
 	@ViewChild('input', { static: true }) inputRef!: ElementRef;
 
+	@ContentChild(CdkPortal) portal?: CdkPortal;
+
 	get $input(): HTMLInputElement { return this.inputRef.nativeElement; }
 
 	separatorKeysCodes: number[] = [ ENTER, COMMA ];
@@ -63,12 +68,14 @@ export class ChipsControlComponent
 
 		// tslint:disable-next-line: early-exit
 		if (changes.items) {
-			this.lowercasedItems = this.items && this.items.map(item => ({
+			this.items = this.items ?? [];
+
+			this.lowercasedItems = this.items.map(item => ({
 				item,
 				lowered: this.getDisplayName(item).toLowerCase(),
 			}));
 
-			this.filtered = this.items || [];
+			this.filtered = this.items;
 		}
 	}
 
@@ -76,11 +83,14 @@ export class ChipsControlComponent
 	writeValue(value: IChipControlItem[] | null): void {
 		lineMicrotask(() => {
 			this._setIncomingValue(value);
-			this._setIncomingValueToInternalControl(value);
 			this._updateFilteredAccordingSelected();
 		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
+
+	protected _validator: ValidatorFn | null = (): ValidationErrors | null => {
+		return null;
+	};
 
 	getDisplayName(v: Object) {
 		return get(v, 'displayName') || get(v, 'name') || v.toString();
@@ -95,12 +105,11 @@ export class ChipsControlComponent
 			? this.lowercasedItems.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
 			: this.items;
 
-		const value = this.value || [];
-		this.filtered = this.filtered.filter(v => !value.includes(v));
+		this.filtered = this.filtered.filter(v => !this._getCurrentArrayValue().includes(v));
 		this._cdr.markForCheck();
 	}
 
-	add({ input, value }: MatChipInputEvent): void {
+	add({ value }: MatChipInputEvent): void {
 		if (!value)
 			return;
 
@@ -110,29 +119,39 @@ export class ChipsControlComponent
 			.map(v => this.lowercasedItems.find(it => it.lowered.includes(v)))
 			.filter(v => !!v)
 			.map(v => v!.item)
-			.filter(v => !(this.value || []).includes(v));
+			.filter(v => !this._getCurrentArrayValue().includes(v));
 
-		if (foundChips.length)
-			this.select(...foundChips);
+		this.select(...foundChips);
 
-		// Reset the input value
-		if (input)
-			input.value = '';
+		this._resetInput();
 	}
 
 	remove(item: IChipControlItem): void {
-		this.setValue((this.value || []).filter(v => v !== item));
+		this.setValue(this._getCurrentArrayValue().filter(v => v !== item));
 		this._updateFilteredAccordingSelected();
 	}
 
 	selected({ option: { value } }: MatAutocompleteSelectedEvent): void {
 		this.select(value);
-		this.$input.value = '';
 	}
 
 	select(...value: IChipControlItem[]) {
-		this.setValue(uniq([ ...(this.value || []), ...value ]));
+		this.setValue(uniq([ ...this._getCurrentArrayValue(), ...value ]));
 		this._updateFilteredAccordingSelected();
+	}
+
+	setValue(value: IChipControlItem[] | null) {
+		this._resetInput();
+		super.setValue(isEmpty(value) ? null : value);
+	}
+
+	private _resetInput() {
+		this.$input.value = '';
+		this.internalControl.setValue(null, { emitEvent: false });
+	}
+
+	private _getCurrentArrayValue() {
+		return this.value || [];
 	}
 
 	private _updateFilteredAccordingSelected() {

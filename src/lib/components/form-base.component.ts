@@ -52,14 +52,14 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	@Output('submitted')
 	readonly submittedValidFormValue$ = new Subject<T>();
 
-	@Output('canSave')
-	readonly canSave$ = new BehaviorSubject(false);
+	@Output('formDirtyAndValid')
+	readonly formDirtyAndValid$ = new BehaviorSubject(false);
 
 	// tslint:disable-next-line: no-output-native
-	@Output('invalid')
-	readonly invalid$ = new BehaviorSubject(false);
+	@Output('formInvalid')
+	readonly formInvalid$ = new BehaviorSubject(false);
 
-	readonly valid$ = this.invalid$.pipe(map(v => !v));
+	readonly formValid$ = this.formInvalid$.pipe(map(v => !v));
 
 	private readonly _form$ = new BehaviorSubject<FormGroup | null>(null);
 	readonly form$ = this._form$.asObservable();
@@ -77,8 +77,8 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 		protected _toaster: ToastrService,
 	) {
 		super();
-		this._setupInvalidObservable();
-		this._setupCanSaveObservable();
+		this._setupFormInvalidObservable();
+		this._setupFormDirtyAndValidObservable();
 	}
 
 	label(prop: NonFunctionPropertyNames<T>) {
@@ -147,7 +147,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			this.form.enable({ emitEvent: false });
 	}
 
-	private _setupInvalidObservable() {
+	private _setupFormInvalidObservable() {
 		this.form$
 			.pipe(
 				switchMap(v => v
@@ -159,21 +159,10 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 				),
 				distinctUntilChanged()
 			)
-			.subscribe(this.invalid$);
+			.subscribe(this.formInvalid$);
 	}
 
-	private _setupCanSaveObservable() {
-		const validForm$ = this.form$.pipe(
-			switchMap(v => v
-				? v.statusChanges.pipe(
-					startWith(v.status),
-					map(status => status === 'VALID')
-				)
-				: of(false)
-			),
-			distinctUntilChanged()
-		);
-
+	private _setupFormDirtyAndValidObservable() {
 		const dirtyForm$ = this.form$
 			.pipe(
 				switchMap(v => v
@@ -186,8 +175,8 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 				distinctUntilChanged()
 			);
 
-		combineLatest(validForm$, dirtyForm$)
+		combineLatest(this.formValid$, dirtyForm$)
 			.pipe(map(([ valid, dirty ]) => valid && dirty))
-			.subscribe(this.canSave$);
+			.subscribe(this.formDirtyAndValid$);
 	}
 }

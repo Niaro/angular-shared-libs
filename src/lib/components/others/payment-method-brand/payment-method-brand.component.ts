@@ -9,6 +9,7 @@ import { PaymentMethodBrand } from '@bp/shared/models/business-domain/enums';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentMethodBrandComponent implements OnChanges {
+
 	@Input() src!: PaymentMethodBrand | string;
 
 	brand!: PaymentMethodBrand | null;
@@ -18,4 +19,5 @@ export class PaymentMethodBrandComponent implements OnChanges {
 			? this.src
 			: PaymentMethodBrand.parse(this.src);
 	}
+
 }

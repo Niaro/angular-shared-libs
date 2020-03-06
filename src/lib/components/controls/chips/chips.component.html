@@ -1,4 +1,4 @@
-<mat-form-field [appearance]="appearance">
+<mat-form-field [appearance]="appearance" [color]="color">
 	<mat-label *ngIf="label">
 		{{ label }}
 		<span *ngIf="required" class="mat-placeholder-required mat-form-field-required-marker">
@@ -6,7 +6,7 @@
 		</span>
 	</mat-label>
 
-	<mat-chip-list #chipList>
+	<mat-chip-list #chipList [formControl]="externalControl">
 		<mat-chip
 			*ngFor="let v of value"
 			#chip
@@ -16,7 +16,16 @@
 			[removable]="true"
 			(removed)="remove(v)"
 		>
-			{{ getDisplayName(v) }}
+			<ng-template
+				*ngIf="portal; else defaultTpl"
+				[ngTemplateOutlet]="portal!.templateRef"
+				[ngTemplateOutletContext]="{ $implicit: v }"
+			>
+			</ng-template>
+
+			<ng-template #defaultTpl>
+				{{ getDisplayName(v) }}
+			</ng-template>
 			<mat-icon matChipRemove>cancel</mat-icon>
 		</mat-chip>
 
@@ -41,7 +50,18 @@
 			[class.has-description]="v.description"
 			[value]="v"
 		>
-			<div>{{ getDisplayName(v) }}</div>
+			<div>
+				<ng-template
+					*ngIf="portal; else defaultTpl"
+					[ngTemplateOutlet]="portal!.templateRef"
+					[ngTemplateOutletContext]="{ $implicit: v, isMatOption: true }"
+				>
+				</ng-template>
+
+				<ng-template #defaultTpl>
+					{{ getDisplayName(v) }}
+				</ng-template>
+			</div>
 			<div *ngIf="v.description" class="description mat-caption">
 				{{ v.description }}
 			</div>

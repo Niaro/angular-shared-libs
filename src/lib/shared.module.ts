@@ -31,7 +31,7 @@ import {
 import {
 	TextMaskDirective, TargetBlankDirective, SortDirective, RouterLinkNoOutletsWithHrefDirective,
 	DelayedRenderDirective, DynamicOutletDirective, ProgressBarDirective, DisabledDirective,
-	HoverDirective, OutletLinkRelativeToTargetDirective, OutletLinkRelativeToTargetWithHrefDirective
+	HoverDirective, OutletLinkRelativeToTargetDirective, OutletLinkRelativeToTargetWithHrefDirective,
 } from './directives';
 
 import { APP_LOCAL_STORAGE_PREFIX } from './models';

@@ -25,6 +25,12 @@ export class Validators {
 			: null;
 	}
 
+	static requiredArray(c: AbstractControl): IValidationErrors | null {
+		return isEmpty(c.value)
+			? { required: true }
+			: null;
+	}
+
 	/**
 	* Validator that requires controls to have a non-empty and without whitespaces value.
 	 * @param name name of the custom required message key

@@ -28,7 +28,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 	get isAdding() { return this.entity && isNil(this.entity.id); }
 
 	get controls(): { [ K in NonFunctionPropertyNames<T> ]: AbstractControl } | null {
-		return this.form && <any> this.form.controls;
+		return <any> this.form?.controls ?? null;
 	}
 
 	private _formScheme?: FormScheme<T>;
