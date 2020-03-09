@@ -9,10 +9,10 @@
 	}
 }
 
-@mixin row-wrap($gutter) {
+@mixin flex-flow-row-wrap($gutter) {
 	$half-gutter: $gutter / 2;
 	display: flex;
-	flex-wrap: wrap;
+	flex-flow: row wrap;
 	margin: -$half-gutter;
 
 	&:first-child {
@@ -33,8 +33,8 @@
 	}
 }
 
-@mixin three-mat-cards-in-row-wrap() {
-	@include row-wrap($mat-card-grid-aisle);
+@mixin three-mat-cards-in-flex-flow-row-wrap() {
+	@include flex-flow-row-wrap($mat-card-grid-aisle);
 
 	> mat-card {
 		flex: 1;
@@ -43,8 +43,8 @@
 	}
 }
 
-@mixin four-mat-cards-in-row-wrap() {
-	@include row-wrap($mat-card-grid-aisle);
+@mixin four-mat-cards-in-flex-flow-row-wrap() {
+	@include flex-flow-row-wrap($mat-card-grid-aisle);
 
 	> mat-card {
 		flex: 1;
