@@ -29,7 +29,7 @@ type IntercomConfig = {
 	name?: string;
 	created_at?: string;
 	company?: IntercomCompany;
-	[key: string]: string | Object | undefined;
+	[ key: string ]: string | Object | undefined;
 };
 
 type Intercom = {
@@ -50,6 +50,8 @@ export class IntercomService {
 
 	private _isFirstBoot = true;
 
+	private _isLinkedLogrocketSessionsToIntercomUser = false;
+
 	private _user_id?: string;
 
 	private _userId$ = this.enabled
@@ -57,7 +59,7 @@ export class IntercomService {
 			? of(this._user_id)
 			: timer(0, 50)
 				.pipe(
-					map(() => <string><unknown>((<any>window).Intercom && Intercom('getVisitorId'))),
+					map(() => <string> <unknown>((<any> window).Intercom && Intercom('getVisitorId'))),
 					first(v => !!v)
 				)
 		)
@@ -107,15 +109,21 @@ export class IntercomService {
 			return;
 
 		this._trackLogrocketSessionOnIntercom();
-		this._linkLogrocketSessionsToIntercomUser();
+		this._tryLinkLogrocketSessionsToIntercomUser();
 	}
 
-	private async _linkLogrocketSessionsToIntercomUser() {
+	private async _tryLinkLogrocketSessionsToIntercomUser() {
+		if (this._isLinkedLogrocketSessionsToIntercomUser)
+			return;
+
 		const userId = await this.getUserId();
-		if (userId)
+		if (userId) {
+			this._isLinkedLogrocketSessionsToIntercomUser = true;
+
 			this.update({
 				logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
 			});
+		}
 	}
 
 	private async _trackLogrocketSessionOnIntercom() {
@@ -136,7 +144,7 @@ export class IntercomService {
 
 	private _injectScript() {
 		$.addScriptCodeToBody({
-			code: `(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/${env.intercom}'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();`
+			code: `(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/${ env.intercom }'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();`
 		});
 	}
 }
