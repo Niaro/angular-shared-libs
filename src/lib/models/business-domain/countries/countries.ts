@@ -42,9 +42,9 @@ export class Countries {
 		];
 	}
 
-	static find(countryName: string) {
-		countryName = countryName.toLowerCase();
-		return Countries.list.find(v => v.lowerCaseName === countryName) ?? null;
+	static find(countryName: string | null) {
+		const lowerCaseCountryName = countryName?.toLowerCase();
+		return Countries.list.find(v => v.lowerCaseName === lowerCaseCountryName) ?? null;
 	}
 
 	static findByCode(code: CountryCode) {

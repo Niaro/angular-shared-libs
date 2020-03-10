@@ -104,10 +104,10 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 	};
 	// #endregion Implementation of the Validator interface
 
-	protected _onInternalControlValueChange(input: string) {
+	protected _onInternalControlValueChange(input: string | null) {
 		this._filterCountries(input);
 
-		if (this.value && this.value.name === input)
+		if (this.value?.name === input)
 			return;
 
 		this.setValue(Countries.find(input));
@@ -119,10 +119,10 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 			: list.filter(v => v !== Countries.worldwide);
 	}
 
-	private _filterCountries(input: string = '') {
-		const loweredCountryName = input.toLowerCase();
+	private _filterCountries(input?: string | null) {
+		const loweredCountryName = input?.toLowerCase();
 		this.filtered = loweredCountryName
-			? this.countries.filter(it => it.lowerCaseName && it.lowerCaseName.includes(loweredCountryName))
+			? this.countries.filter(it => it.lowerCaseName?.includes(loweredCountryName))
 			: this.countries;
 	}
 }
