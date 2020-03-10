@@ -1,7 +1,7 @@
 import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges, Directive } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { isNil, isEqual, mapValues, forEach, get, isPlainObject } from 'lodash-es';
+import { isNil, isEqual, mapValues, forEach, get, isPlainObject, isEmpty } from 'lodash-es';
 import { of, BehaviorSubject } from 'rxjs';
 import { switchMap, auditTime, map, filter, startWith } from 'rxjs/operators';
 
@@ -95,10 +95,11 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 							startWith(v.value),
 							filter(() => v.enabled)
 						)
-					: of(null)
+					: of()
 				),
 				auditTime(50),
-				map(v => v && this.factory({ ...this.entity, ...v })),
+				filter(v => !isEmpty(v)),
+				map(v => this.factory({ ...this.entity, ...v })),
 				filter(v => !isEqual(v, this.entity))
 			)
 			.subscribe(v => this.entity = v);

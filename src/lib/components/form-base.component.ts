@@ -153,7 +153,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 				switchMap(v => v
 					? v.statusChanges.pipe(
 						startWith(v.status),
-						map(status => status === 'INVALID')
+						map(status => status === 'INVALID' || isEmpty(v.value))
 					)
 					: of(false)
 				),

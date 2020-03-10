@@ -2,7 +2,7 @@ import { PspPaymentMethodType } from './psp-payment-method-type';
 
 export class PaymentMethodType extends PspPaymentMethodType {
 
-	static wireTransfer = new PaymentMethodType(undefined, 'A set of bank account requisites per currency');
+	static wireTransfer = new PaymentMethodType('Bank Wire Details', 'A set of bank account requisites per currency');
 
 	static externalLink = new PaymentMethodType(undefined, 'A custom link to any internet resource');
 
