@@ -14,13 +14,13 @@ export class PspPaymentMethodType extends Describable {
 
 	static voucher = new PspPaymentMethodType();
 
-	static isPspBased(type: PspPaymentMethodType) {
+	static isPspBased(type?: PspPaymentMethodType | null) {
 		return [
 			PspPaymentMethodType.creditCard,
 			PspPaymentMethodType.apm,
 			PspPaymentMethodType.crypto,
 			PspPaymentMethodType.voucher
-		].includes(type);
+		].includes(type!);
 	}
 
 	logo!: string;
