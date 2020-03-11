@@ -99,7 +99,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	writeValue(value: any): void {
 		lineMicrotask(() => {
 			this._setIncomingValue(value);
-			this._setIncomingValueToInternalControl(this.value?.toString());
+			this._setIncomingValueToInternalControl(this.value?.toString() ?? '');
 		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface

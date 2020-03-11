@@ -41,7 +41,7 @@
 	</ng-template>
 
 	<div class="close-btn-wrapper">
-		<div [@slideRight]="(internalControl.valueChanges | async) ? 'on' : 'off'">
+		<div [@slideRight]="internalControl.value ? 'on' : 'off'">
 			<button
 				type="button"
 				mat-icon-button

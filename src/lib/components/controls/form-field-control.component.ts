@@ -3,7 +3,7 @@ import { ThemePalette } from '@angular/material/core';
 import { Input, ElementRef, Optional, SimpleChanges, OnChanges, ChangeDetectorRef, OnInit, Directive } from '@angular/core';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { auditTime, switchMap, filter } from 'rxjs/operators';
-import { Subscription, iif } from 'rxjs';
+import { Subscription, iif, Subject } from 'rxjs';
 
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { lineMicrotask } from '@bp/shared/utils';
@@ -52,6 +52,8 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 		return this.$host === document.activeElement || this.$host.contains(document.activeElement);
 	}
 
+	protected _onWriteValue$ = new Subject<void>();
+
 	private _updateSubscription = Subscription.EMPTY;
 
 	constructor(
@@ -83,6 +85,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 		lineMicrotask(() => {
 			this._setIncomingValue(value);
 			this._setIncomingValueToInternalControl(value);
+			this._onWriteValue$.next();
 		});
 	}
 

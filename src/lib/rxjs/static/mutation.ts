@@ -12,7 +12,7 @@ import { BpScheduler } from '../schedulers';
  * @link https://developer.mozilla.org/en/docs/Web/API/MutationObserver#MutationObserverInit
  * @returns {Observable<MutationRecord[]>}
  */
-export function fromMutation(target: Node, options: MutationObserverInit = { attributes: true }) {
+export function fromMutation(target: Node, options: MutationObserverInit = { attributes: false }) {
 	return new Observable<MutationRecord[]>(subscriber => {
 		const mo = new MutationObserver(mutations => subscriber.next(mutations));
 		mo.observe(target, options);

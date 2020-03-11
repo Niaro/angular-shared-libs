@@ -1,10 +1,10 @@
 import { Directive, TemplateRef, ViewContainerRef, Input, ElementRef, AfterViewChecked } from '@angular/core';
-import { timer } from 'rxjs';
-import { filter, first } from 'rxjs/operators';
+import { timer, Observable } from 'rxjs';
+import { first, flatMap, map, shareReplay } from 'rxjs/operators';
 
 import { lineMicrotask } from '@bp/shared/utils';
 
-import { OptionalBehaviorSubject } from '../rxjs';
+import { OptionalBehaviorSubject, fromMutation } from '../rxjs';
 import { Destroyable } from '../components/destroyable';
 
 /**
@@ -15,11 +15,18 @@ import { Destroyable } from '../components/destroyable';
 @Directive({ selector: '[bpDelayedRender]' })
 export class DelayedRenderDirective extends Destroyable implements AfterViewChecked {
 
-	@Input('bpDelayedRender') id!: string;
+
+	private static readonly _isAttachedToDomStreamMapByHTMLElement = new WeakMap<HTMLElement, Observable<boolean>>();
+
+	private static readonly _bodyMutations$ = fromMutation(document.body, { subtree: true, childList: true })
+		.pipe(shareReplay({ refCount: false, bufferSize: 1 }));
+
+	private static readonly _maxInstantRenderedViews = 7;
 
 	private static _instantViewsRenderingCounter = 0;
 
-	private static readonly _maxInstantRenderedViews = 7;
+
+	@Input('bpDelayedRender') id!: string;
 
 	private _parentElement$ = new OptionalBehaviorSubject<HTMLElement | null>();
 
@@ -31,11 +38,8 @@ export class DelayedRenderDirective extends Destroyable implements AfterViewChec
 	) {
 		super();
 
-		this._parentElement$
-			.pipe(
-				filter(v => !!v),
-				first()
-			)
+		this._whenParentElementAppears$()
+			.pipe(flatMap(v => this._waitTillAttachedToDom$(v)))
 			.subscribe(() => this._scheduleCmptRendering());
 	}
 
@@ -44,11 +48,29 @@ export class DelayedRenderDirective extends Destroyable implements AfterViewChec
 			this._parentElement$.next((<Comment> this._host.nativeElement).parentElement);
 	}
 
+	private _whenParentElementAppears$() {
+		return <Observable<HTMLElement>> this._parentElement$
+			.pipe(first(v => !!v));
+	}
+
+	private _waitTillAttachedToDom$($el: HTMLElement) {
+		if (DelayedRenderDirective._isAttachedToDomStreamMapByHTMLElement.has($el))
+			return DelayedRenderDirective._isAttachedToDomStreamMapByHTMLElement.get($el)!;
+
+		const attached$ = DelayedRenderDirective._bodyMutations$.pipe(
+			map(() => $el.isConnected),
+			first(v => !!v),
+		);
+
+		DelayedRenderDirective._isAttachedToDomStreamMapByHTMLElement.set($el, attached$);
+
+		return attached$;
+	}
+
 	private _scheduleCmptRendering() {
 		if (DelayedRenderDirective._instantViewsRenderingCounter <= DelayedRenderDirective._maxInstantRenderedViews)
 			this._renderCmpt(); // to render in the current event loop a set number of views
 		else
-			// if the rendered views counter exceeds the max we schedule rendering to the next event loops
 			timer((DelayedRenderDirective._instantViewsRenderingCounter - DelayedRenderDirective._maxInstantRenderedViews) * 2)
 				.pipe(this.takeUntilDestroyed)
 				.subscribe(() => this._renderCmpt());

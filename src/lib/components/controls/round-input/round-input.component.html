@@ -24,7 +24,7 @@
 	/>
 </ng-template>
 
-<ng-container *ngIf="internalControl.valueChanges | async">
+<ng-container *ngIf="internalControl.value">
 	<div *bpDelayedRender class="close-btn-wrapper" @slideRight>
 		<button type="button" mat-icon-button (click)="internalControl.setValue(null)">
 			<mat-icon>close</mat-icon>
