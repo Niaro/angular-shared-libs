@@ -11,14 +11,22 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"importHelpers": true,
-		"types": ["node"],
-		"lib": ["dom", "es2018"]
+		"types": [
+			"node"
+		],
+		"lib": [
+			"dom",
+			"es2018"
+		]
 	},
 	"angularCompilerOptions": {
 		"disableTypeScriptVersionCheck": true,
-		"fullTemplateTypeCheck": true,
+		"strictTemplates": true,
 		"strictInjectionParameters": true,
 		"annotationsAs": "decorators"
 	},
-	"exclude": ["src/test.ts", "**/*.spec.ts"]
+	"exclude": [
+		"src/test.ts",
+		"**/*.spec.ts"
+	]
 }
