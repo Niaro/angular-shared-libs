@@ -62,7 +62,7 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 
 	@Input()
 	@HostBinding('class.pending')
-	pending?: boolean;
+	pending?: boolean | null;
 
 	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger?: MatAutocompleteTrigger;
 

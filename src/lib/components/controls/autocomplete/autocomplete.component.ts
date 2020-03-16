@@ -46,7 +46,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@Input() filterListFn?: (item: any, search: string) => boolean;
 
-	@Input() pending?: boolean;
+	@Input() pending?: boolean | null;
 
 	@Input() hasSearchIcon?: boolean;
 

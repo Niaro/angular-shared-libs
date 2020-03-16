@@ -78,7 +78,7 @@
 						value
 							| moment
 								: (metadata.viewFormatter
-										? metadata.viewFormatter(value)
+										? metadata.viewFormatter!(value)
 										: 'LL LTS')
 					}}
 				</ng-container>
@@ -121,7 +121,7 @@
 
 				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
 					<ng-container
-						*ngIf="metadata.viewFormatter && metadata.viewFormatter(value) as status"
+						*ngIf="metadata.viewFormatter && metadata.viewFormatter!(value) as status"
 					>
 						<span
 							[ngClass]="'status-' + status.cssClass"

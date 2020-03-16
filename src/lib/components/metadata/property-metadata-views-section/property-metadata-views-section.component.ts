@@ -16,7 +16,7 @@ export type ViewsSectionScheme<T> = [ NonFunctionPropertyNames<T>, NonFunctionPr
 })
 export class PropertyMetadataViewsSectionComponent {
 
-	@Input() entity!: Entity;
+	@Input() entity!: Entity | null;
 
 	@Input() metadata!: ClassMetadata;
 

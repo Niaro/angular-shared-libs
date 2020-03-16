@@ -6,7 +6,7 @@ import { Entity, ClassMetadata } from '../models';
 // tslint:disable-next-line: directive-class-suffix
 export abstract class ViewEntityBaseComponent<T extends Entity> {
 
-	@Input() entity!: T;
+	@Input() entity!: T | null;
 
 	@Input() metadata!: ClassMetadata;
 

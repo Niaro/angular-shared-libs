@@ -17,8 +17,8 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 	@Input()
 	get pending() { return this._pending; }
-	set pending(value: boolean) {
-		this._pending = value;
+	set pending(value: boolean | null) {
+		this._pending = !!value;
 		this.errors = null;
 		this._disableOnPending();
 	}

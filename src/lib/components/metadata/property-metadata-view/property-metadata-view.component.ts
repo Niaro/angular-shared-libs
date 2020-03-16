@@ -21,7 +21,7 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	@Input() metadata!: PropertyMetadata;
 
-	@Input() table?: PropertyMetadataTable;
+	@Input() table?: PropertyMetadataTable | null;
 
 	@Input() value: any;
 
