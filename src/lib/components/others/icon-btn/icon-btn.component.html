@@ -1,9 +1,9 @@
 <button
-	[class.progress]="inProgress"
-	[class.disabled]="disabledOrPending"
 	type="button"
 	matRipple
-	matRippleCentered="centered"
+	[class.progress]="inProgress"
+	[class.disabled]="disabledOrPending"
+	[matRippleCentered]="true"
 	[matRippleDisabled]="disabledOrPending"
 	(click)="disabledOrPending && $event.stopPropagation()"
 >

@@ -12,17 +12,17 @@ import { FADE } from '@bp/shared/animations';
 })
 export class PendingBtnComponent {
 
-	@Input() pending!: boolean;
+	@Input() pending!: boolean | null;
 
 	@Input() type = 'button';
 
 	@Input() disabled!: boolean;
 
-	@Input() progress!: number;
+	@Input() progress!: number | null;
 
 	@Input() btnClass!: string;
 
-	get inProgress() { return this.pending || isNumber(this.progress); }
+	get inProgress() { return !!this.pending || isNumber(this.progress); }
 
 	isNumber = isNumber;
 }

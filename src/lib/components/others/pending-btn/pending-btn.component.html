@@ -13,7 +13,7 @@
 <mat-progress-spinner
 	*ngIf="inProgress"
 	@fade
-	[value]="progress"
+	[value]="progress || 0"
 	[mode]="isNumber(progress) ? 'determinate' : 'indeterminate'"
 >
 </mat-progress-spinner>

@@ -11,11 +11,11 @@ import { Country, CountryCode, Countries } from '../../../models';
 export class CountryComponent implements OnChanges {
 	@Input() src!: CountryCode | Country;
 
-	@Input() compact!: boolean;
+	@Input() compact!: boolean | string;
 
-	@Input() hideTooltip!: boolean;
+	@Input() hideTooltip!: boolean | string;
 
-	@Input() round!: boolean;
+	@Input() round!: boolean | string;
 
 	country!: Country | null;
 
@@ -30,12 +30,12 @@ export class CountryComponent implements OnChanges {
 		}
 
 		if (compact)
-			this.compact = <any> this.compact === '' ? true : this.compact;
+			this.compact = this.compact === '' ? true : this.compact;
 
 		if (hideTooltip)
-			this.hideTooltip = <any> this.hideTooltip === '' ? true : this.hideTooltip;
+			this.hideTooltip = this.hideTooltip === '' ? true : this.hideTooltip;
 
 		if (round)
-			this.round = <any> this.round === '' ? true : this.round;
+			this.round = this.round === '' ? true : this.round;
 	}
 }

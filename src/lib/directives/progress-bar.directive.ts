@@ -7,7 +7,7 @@ import { $ } from '../utils';
 })
 export class ProgressBarDirective implements OnChanges {
 
-	@Input() bpProgressBar!: number;
+	@Input() bpProgressBar!: number | null;
 
 	inProgress = false;
 
@@ -18,7 +18,8 @@ export class ProgressBarDirective implements OnChanges {
 	constructor(private _host: ElementRef) { }
 
 	ngOnChanges() {
-		const inProgress = 0 < this.bpProgressBar && this.bpProgressBar <= 100;
+		const progress = this.bpProgressBar || 0;
+		const inProgress = 0 < progress && progress <= 100;
 
 		if (inProgress !== this.inProgress) {
 			$.setClass(this.$host, 'progress-bar', inProgress);

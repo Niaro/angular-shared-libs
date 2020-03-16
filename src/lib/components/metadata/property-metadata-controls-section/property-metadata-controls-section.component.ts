@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { FADE_IN_LIST, FADE_IN } from '@bp/shared/animations';
 
 import { ClassMetadata } from '../../../models';
@@ -26,7 +26,12 @@ export class PropertyMetadataControlsSectionComponent {
 
 	@Input() hasSeparator!: boolean;
 
-	meta(prop: string) {
+	get controls() { return <Dictionary<FormControl>> this.form.controls; }
+
+	meta(prop?: string) {
+		if (!prop)
+			throw new Error('The property name must be provided');
+
 		return this.metadata.get<any>(prop);
 	}
 

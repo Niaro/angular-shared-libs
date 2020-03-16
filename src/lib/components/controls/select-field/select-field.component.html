@@ -1,4 +1,4 @@
-<mat-form-field [appearance]="appearance">
+<mat-form-field [appearance]="$any(appearance)">
 	<mat-label *ngIf="label">{{ label }}</mat-label>
 
 	<mat-select [formControl]="internalControl" [placeholder]="placeholder" [required]="required">

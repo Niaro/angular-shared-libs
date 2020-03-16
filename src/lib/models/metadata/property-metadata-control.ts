@@ -7,7 +7,7 @@ export class PropertyMetadataControl {
 
 	type = FieldControlType.input;
 
-	list?: any[];
+	list: any[] = [];
 
 	validator?: ValidatorFn;
 

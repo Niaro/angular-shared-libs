@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 import { FADE_IN_LIST } from '@bp/shared/animations';
 
-import { ClassMetadata, Entity } from '../../../models';
+import { ClassMetadata, Entity, PropertyMetadata } from '../../../models';
 import { get } from 'lodash-es';
 
 export type ViewsSectionScheme<T> = [ NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
@@ -28,10 +28,14 @@ export class PropertyMetadataViewsSectionComponent {
 
 	get = get;
 
-	meta(prop: string) {
+	meta(prop: string | undefined): PropertyMetadata {
+		if (!prop)
+			throw new Error('The property name must be provided');
+
 		const md = this.metadata.get<any>(prop);
 		if (!md)
-			console.warn(`${ prop } doesn't have metadata on ${ this.entity?.constructor.name }`);
+			throw new Error(`${ prop } doesn't have metadata on ${ this.entity?.constructor.name }`);
+
 		return md;
 	}
 }

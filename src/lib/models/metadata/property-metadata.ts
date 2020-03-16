@@ -19,11 +19,11 @@ export class PropertyMetadata {
 
 	label!: string;
 
-	hint: string | null = null;
+	hint = '';
 
-	longHint: string | null = null;
+	longHint = '';
 
-	placeholder: string | null = null;
+	placeholder = '';
 
 	mapper: PropertyMapper | null = null;
 

@@ -19,9 +19,9 @@
 				*ngFor="let item of items$ | async; let i = index; trackBy: trackBy"
 				#slide
 				class="carousel-slide"
-				[ngClass]="slideClass"
 				cdkDrag
-				[cdkDragDisabled]="sortableItem && !sortableItem(item)"
+				[ngClass]="slideClass || ''"
+				[cdkDragDisabled]="sortableItem && !sortableItem!(item)"
 			>
 				<ng-container
 					*ngTemplateOutlet="template; context: { $implicit: item, index: i }"
@@ -34,14 +34,14 @@
 		*ngIf="showArrowButtons$ | async"
 		type="button"
 		class="btn-arrow prev"
-		[class.disabled]="prevButtonDisabled$ | async"
+		[class.disabled]="(prevButtonDisabled$ | async) || false"
 		[ngClass]="['arrow-type-' + arrowType, 'arrow-size-' + arrowSize]"
 		(click)="activatePrev()"
 	>
 		<span
 			matRipple
-			matRippleCentered="centered"
-			[matRippleDisabled]="prevButtonDisabled$ | async"
+			[matRippleCentered]="true"
+			[matRippleDisabled]="(prevButtonDisabled$ | async) || false"
 		>
 			<ng-container *ngTemplateOutlet="arrowsTpl"></ng-container>
 		</span>
@@ -51,14 +51,14 @@
 		*ngIf="showArrowButtons$ | async"
 		type="button"
 		class="btn-arrow next"
-		[class.disabled]="nextButtonDisabled$ | async"
+		[class.disabled]="(nextButtonDisabled$ | async) || false"
 		[ngClass]="['arrow-type-' + arrowType, 'arrow-size-' + arrowSize]"
 		(click)="activateNext()"
 	>
 		<span
 			matRipple
-			matRippleCentered="centered"
-			[matRippleDisabled]="nextButtonDisabled$ | async"
+			[matRippleCentered]="true"
+			[matRippleDisabled]="(nextButtonDisabled$ | async) || false"
 		>
 			<ng-container *ngTemplateOutlet="arrowsTpl"></ng-container>
 		</span>
@@ -69,7 +69,7 @@
 	*ngIf="isShowBullets"
 	class="bullets"
 	[style.visibility]="
-		(items$ | async)?.length > (currentItemsPerView$ | async)! || 0 ? null : 'hidden'
+		((items$ | async)?.length || 0) > ((currentItemsPerView$ | async) || 0) ? null : 'hidden'
 	"
 >
 	<button
@@ -77,8 +77,8 @@
 		class="bullet"
 		*ngFor="let item of items$ | async; let i = index"
 		[class.active]="
-			(slidesVisibility$ | async)?.firstFullyVisible <= i &&
-			i <= (slidesVisibility$ | async)?.lastFullyVisible
+			((slidesVisibility$ | async)?.firstFullyVisible || 0) <= i &&
+			i <= ((slidesVisibility$ | async)?.lastFullyVisible || 0)
 		"
 		(click)="activateIndex(i)"
 	></button>

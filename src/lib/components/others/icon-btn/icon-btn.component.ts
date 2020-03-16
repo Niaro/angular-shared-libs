@@ -12,15 +12,15 @@ import { FADE } from '@bp/shared/animations';
 })
 export class IconBtnComponent {
 
-	@Input() pending!: boolean;
+	@Input() pending!: boolean | null;
 
-	@Input() progress!: number;
+	@Input() progress!: number | null;
 
-	@Input() disabled!: boolean;
+	@Input() disabled!: boolean | null;
 
-	get disabledOrPending() { return this.disabled || this.pending; }
+	get disabledOrPending() { return !!this.disabled || !!this.pending; }
 
-	get inProgress() { return this.pending || isNumber(this.progress); }
+	get inProgress() { return !!this.pending || isNumber(this.progress); }
 
 	isNumber = isNumber;
 

@@ -1,4 +1,4 @@
-<mat-form-field [appearance]="appearance" [color]="color">
+<mat-form-field [appearance]="$any(appearance)" [color]="color">
 	<mat-label *ngIf="label">
 		{{ label }}
 		<span *ngIf="required" class="mat-placeholder-required mat-form-field-required-marker">
@@ -6,7 +6,7 @@
 		</span>
 	</mat-label>
 
-	<mat-chip-list #chipList [formControl]="externalControl">
+	<mat-chip-list #chipList [formControl]="externalControl!">
 		<mat-chip
 			*ngFor="let v of value"
 			#chip
