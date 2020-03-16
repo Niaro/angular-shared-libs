@@ -11,9 +11,9 @@ import { isNil } from 'lodash-es';
 })
 export class CursorPageAdaptorDirective implements OnChanges {
 
-	@Input('pagedResults') pagedResults!: PagedResults;
+	@Input('pagedResults') pagedResults!: PagedResults | null;
 
-	pageCursors: { [ page: number ]: string | null } = { 1: '' }; // the first page doesn't have cursor
+	pageCursors: { [ page: number ]: string | null; } = { 1: '' }; // the first page doesn't have cursor
 
 	constructor(@Self() private _paginator: PaginatorComponent) {
 		this._paginator.hasBack = () => this._hasCursor(this._paginator.getBackPage());

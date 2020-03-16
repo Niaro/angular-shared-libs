@@ -12,7 +12,7 @@ import { pending } from '@bp/shared/rxjs';
 })
 export class ImgComponent implements OnChanges {
 
-	@Input() url!: string;
+	@Input() url?: string | null;
 
 	@Input() size = 50;
 

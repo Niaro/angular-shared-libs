@@ -22,7 +22,7 @@ export class PaginatorComponent {
 
 	@Input() totalLength!: number;
 
-	@Input() pageLength!: number;
+	@Input() pageLength?: number | null;
 
 	@Input() scrollTarget?: HTMLElement;
 
@@ -92,16 +92,16 @@ export class PaginatorComponent {
 	onBack = () => {
 		this.page = this.getBackPage().toString();
 		this.currentPage = this.getBackPage();
-	}
+	};
 
 	onNext = () => {
 		this.page = this.getNextPage().toString();
 		this.currentPage = this.getNextPage();
-	}
+	};
 
 	hasBack = () => this.offset >= this.pageSize;
 
-	hasNext = () => this.offset + this.pageLength < this.totalLength;
+	hasNext = () => this.offset + (this.pageLength || 0) < this.totalLength;
 
 	private _navigate(params: Params) {
 		this._router.navigate([ UrlHelper.mergeRouteParams(this._route, params) ], { relativeTo: this._route });
