@@ -121,7 +121,8 @@ $material-icons-sizes: (
 );
 
 bp-svg-icon,
-.material-icons {
+.material-icons,
+.material-icons-round {
 	@each $type, $size in $material-icons-sizes {
 		&.#{$type},
 		.mat-icon-button.#{$type} & {

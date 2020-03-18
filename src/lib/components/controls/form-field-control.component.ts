@@ -18,7 +18,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	@Input() formControlName!: string;
 
-	@Input() appearance: MatFormFieldAppearance | 'round' = 'outline';
+	@Input() appearance: MatFormFieldAppearance | 'round' | 'none' = 'outline';
 
 	@Input() color: ThemePalette = 'primary';
 
