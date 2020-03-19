@@ -30,7 +30,9 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	@Input() hint!: string;
 
-	@Input() required!: boolean;
+	@Input() required!: boolean | null;
+
+	@Input() disabled!: boolean | null;
 
 	@Input() throttle = 200;
 

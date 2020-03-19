@@ -1,5 +1,5 @@
 import { Input, Output, ChangeDetectorRef, OnChanges, SimpleChanges, Directive } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { isNil, isEqual, mapValues, forEach, get, isPlainObject, isEmpty } from 'lodash-es';
 import { of, BehaviorSubject } from 'rxjs';
@@ -27,7 +27,7 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 
 	get isAdding() { return this.entity && isNil(this.entity.id); }
 
-	get controls(): { [ K in NonFunctionPropertyNames<T> ]: AbstractControl } | null {
+	get controls(): { [ K in NonFunctionPropertyNames<T> ]: FormControl } | null {
 		return <any> this.form?.controls ?? null;
 	}
 

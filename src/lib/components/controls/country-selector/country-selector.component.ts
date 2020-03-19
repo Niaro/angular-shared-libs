@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { isArray } from 'lodash-es';
+import { isArray, isEmpty } from 'lodash-es';
 
 import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { lineMicrotask } from '@bp/shared/utils';
@@ -63,7 +63,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 				: Countries.list;
 
 		if (countries) {
-			this.countries = this.countries ?? Countries.list;
+			this.countries = isEmpty(this.countries) ? Countries.list : this.countries;
 			this.filtered = this.countries;
 		}
 

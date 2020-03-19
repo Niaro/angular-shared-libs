@@ -1,6 +1,6 @@
 import { BehaviorSubject, AsyncSubject } from 'rxjs';
 
-import { AsyncVoidSubject } from '../../rxjs';
+import { AsyncVoidSubject } from '../../rxjs/subjects';
 import { Enumeration } from '../misc';
 import { ResponseError } from './response-error';
 

@@ -1,11 +1,11 @@
 import { Input, Output, ChangeDetectorRef, Directive } from '@angular/core';
-import { FormGroup, AbstractControl, FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, AbstractControl, FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { isEmpty, forOwn } from 'lodash-es';
 import { Subject, BehaviorSubject, of, combineLatest, EMPTY } from 'rxjs';
 import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
 
-import { ResponseError, IApiErrorMessage, FormGroupConfig, ClassMetadata } from '../models';
+import { ResponseError, IApiErrorMessage, FormGroupConfig, ClassMetadata, PropertyMetadata } from '../models';
 
 import { Destroyable } from './destroyable';
 
@@ -87,6 +87,10 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 	meta(prop: NonFunctionPropertyNames<T>) {
 		return this.metadata.get(prop);
+	}
+
+	getMetaControl(md: PropertyMetadata): FormControl | null {
+		return <FormControl> this.form?.controls[ md.property ] ?? null;
 	}
 
 	submit() {
