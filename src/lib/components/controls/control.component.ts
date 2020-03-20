@@ -79,6 +79,7 @@ export abstract class ControlComponent<T = any>
 		}
 
 		this.validatorOnChange();
+		this._cdr.detectChanges();
 		this._cdr.markForCheck();
 	}
 

@@ -1,10 +1,10 @@
-import { Directive, TemplateRef, ViewContainerRef, Input, ElementRef, AfterViewChecked } from '@angular/core';
-import { timer, Observable } from 'rxjs';
-import { first, flatMap, map, shareReplay } from 'rxjs/operators';
+import { Directive, TemplateRef, ViewContainerRef, Input, ElementRef } from '@angular/core';
+import { timer } from 'rxjs';
+import { first, map, startWith, share } from 'rxjs/operators';
 
 import { lineMicrotask } from '@bp/shared/utils';
 
-import { OptionalBehaviorSubject, fromMutation } from '../rxjs';
+import { fromMutation } from '../rxjs';
 import { Destroyable } from '../components/destroyable';
 
 /**
@@ -13,22 +13,19 @@ import { Destroyable } from '../components/destroyable';
  * a manageable amount of work
  */
 @Directive({ selector: '[bpDelayedRender]' })
-export class DelayedRenderDirective extends Destroyable implements AfterViewChecked {
+export class DelayedRenderDirective extends Destroyable {
 
-
-	private static readonly _isAttachedToDomStreamMapByHTMLElement = new WeakMap<HTMLElement, Observable<boolean>>();
 
 	private static readonly _bodyMutations$ = fromMutation(document.body, { subtree: true, childList: true })
-		.pipe(shareReplay({ refCount: false, bufferSize: 1 }));
+		.pipe(share());
 
 	private static readonly _maxInstantRenderedViews = 7;
 
 	private static _instantViewsRenderingCounter = 0;
 
-
 	@Input('bpDelayedRender') id!: string;
 
-	private _parentElement$ = new OptionalBehaviorSubject<HTMLElement | null>();
+	private get _$host() { return <Comment> this._host.nativeElement; }
 
 	// tslint:disable-next-line: member-ordering
 	constructor(
@@ -38,33 +35,16 @@ export class DelayedRenderDirective extends Destroyable implements AfterViewChec
 	) {
 		super();
 
-		this._whenParentElementAppears$()
-			.pipe(flatMap(v => this._waitTillAttachedToDom$(v)))
+		this._waitTillParentElementAttachedToDom$()
 			.subscribe(() => this._scheduleCmptRendering());
 	}
 
-	ngAfterViewChecked() {
-		if (!this._parentElement$.value)
-			this._parentElement$.next((<Comment> this._host.nativeElement).parentElement);
-	}
-
-	private _whenParentElementAppears$() {
-		return <Observable<HTMLElement>> this._parentElement$
-			.pipe(first(v => !!v));
-	}
-
-	private _waitTillAttachedToDom$($el: HTMLElement) {
-		if (DelayedRenderDirective._isAttachedToDomStreamMapByHTMLElement.has($el))
-			return DelayedRenderDirective._isAttachedToDomStreamMapByHTMLElement.get($el)!;
-
-		const attached$ = DelayedRenderDirective._bodyMutations$.pipe(
-			map(() => $el.isConnected),
+	private _waitTillParentElementAttachedToDom$() {
+		return DelayedRenderDirective._bodyMutations$.pipe(
+			map(() => this._$host.parentElement?.isConnected),
+			startWith(this._$host.parentElement?.isConnected),
 			first(v => !!v),
 		);
-
-		DelayedRenderDirective._isAttachedToDomStreamMapByHTMLElement.set($el, attached$);
-
-		return attached$;
 	}
 
 	private _scheduleCmptRendering() {

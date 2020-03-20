@@ -1,10 +1,10 @@
-import { Directive, Input, OnChanges, ElementRef } from '@angular/core';
+import { Directive, Input, OnChanges, ElementRef, HostBinding } from '@angular/core';
 
 import { $ } from '../utils';
 
 @Directive({
 	// tslint:disable-next-line: directive-selector
-	selector: 'a[disabled], button[disabled]',
+	selector: 'a[disabled], button[disabled], [bpDisabled]',
 	host: {
 		style: 'position: relative'
 	}
@@ -12,6 +12,10 @@ import { $ } from '../utils';
 export class DisabledDirective implements OnChanges {
 
 	@Input() disabled!: boolean;
+
+	@HostBinding('class.disabled')
+	@Input()
+	bpDisabled!: boolean;
 
 	private get _$veil() { return this._$cachedVeil ?? (this._$cachedVeil = this._createVeil()); }
 	private _$cachedVeil!: HTMLElement;
@@ -22,28 +26,38 @@ export class DisabledDirective implements OnChanges {
 
 	private _storedTabIndex!: string | null;
 
+	private _veiled = false;
+
 	constructor(private _host: ElementRef) { }
 
 	ngOnChanges() {
-		if (this.disabled)
+		if (this.disabled || this.bpDisabled)
 			this._setVeil();
 		else
 			this._removeVeil();
 	}
 
 	private _setVeil() {
+		if (this._veiled)
+			return;
+
 		this._storedPointerEventsStyle = this._$host.style.pointerEvents;
 		this._storedTabIndex = this._$host.getAttribute('tabindex');
 		this._$host.setAttribute('tabindex', '-1');
 		this._$host.style.pointerEvents = 'none';
 		this._$host.appendChild(this._$veil);
+		this._veiled = true;
 	}
 
 	private _removeVeil() {
-		this._$host.style.pointerEvents = this._storedPointerEventsStyle;
+		if (!this._veiled)
+			return;
+
+		this._$host.style.pointerEvents = this._storedPointerEventsStyle!;
 		if (this._storedTabIndex !== null)
 			this._$host.setAttribute('tabindex', this._storedTabIndex);
 		this._$veil.remove();
+		this._veiled = false;
 	}
 
 	private _createVeil() {

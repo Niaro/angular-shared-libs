@@ -104,6 +104,8 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			this.internalControl.disable({ emitEvent: false });
 		else
 			this.internalControl.enable({ emitEvent: false });
+
+		this._cdr.detectChanges();
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
