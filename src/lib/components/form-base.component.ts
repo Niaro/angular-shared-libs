@@ -167,19 +167,19 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	}
 
 	private _setupFormDirtyAndValidObservable() {
-		const dirtyForm$ = this.form$
+		const formDirty$ = this.form$
 			.pipe(
 				switchMap(v => v
 					? v.statusChanges.pipe(
 						startWith(null),
-						map(() => !!v.dirty && !!v.touched)
+						map(() => !!v.dirty),
 					)
 					: EMPTY
 				),
 				distinctUntilChanged()
 			);
 
-		combineLatest(this.formValid$, dirtyForm$)
+		combineLatest(this.formValid$, formDirty$)
 			.pipe(map(([ valid, dirty ]) => valid && dirty))
 			.subscribe(this.formDirtyAndValid$);
 	}
