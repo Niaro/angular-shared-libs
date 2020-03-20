@@ -26,6 +26,20 @@ $link-color: $color-primary;
 		color: $color-semi-dark;
 	}
 
+	&.current-color {
+		color: currentColor;
+
+		&.bottom-bordered {
+			&:after {
+				background: currentColor;
+			}
+
+			&:hover:after {
+				opacity: 0.7;
+			}
+		}
+	}
+
 	&.interactive {
 		&:after {
 			background: repeating-linear-gradient(

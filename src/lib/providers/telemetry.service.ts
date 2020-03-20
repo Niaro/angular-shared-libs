@@ -1,6 +1,8 @@
 import { Injectable, ErrorHandler } from '@angular/core';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
+import { from } from 'rxjs';
+import { shareReplay, first } from 'rxjs/operators';
 
 import { environment as env } from '@bp/environment';
 
@@ -39,6 +41,12 @@ export class TelemetryService {
 
 	get enabled() { return TelemetryService.enabled; }
 
+	sessionUrl$ = from(new Promise<string>(r => LogRocket.getSessionURL(v => r(v))))
+		.pipe(
+			first(),
+			shareReplay({ bufferSize: 1, refCount: false })
+		);
+
 	constructor() {
 		if (TelemetryService._instance)
 			return TelemetryService._instance;
@@ -48,10 +56,6 @@ export class TelemetryService {
 
 	getUserLogrocketUrl(userId: string) {
 		return `https://app.logrocket.com/${ env.logrocket }/sessions?u=${ userId }`;
-	}
-
-	getSessionUrl(): Promise<string> {
-		return new Promise(resolve => LogRocket.getSessionURL(v => resolve(v)));
 	}
 
 	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {

@@ -14,7 +14,7 @@ export class CopyComponent {
 
 	@Input() outlined = false;
 
-	@Input() size: 'sm' | 'md' | 'lg' | 'xl' = 'md';
+	@Input() size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'md';
 
 	@ViewChild(MatTooltip, { static: true })
 	mtTooltip!: MatTooltip;
