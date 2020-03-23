@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash-es';
+import { isNumber, camelCase, upperFirst, startCase } from 'lodash-es';
 import * as m from 'moment';
 
 import { Country, Countries, CountryCode, State } from '../business-domain/countries';
@@ -6,6 +6,14 @@ import { CashierLanguage, CashierLanguages } from '../business-domain/cashier-la
 
 export function booleanMapper(v: any) {
 	return v === 'true' || v === true;
+}
+
+export function pascalCase(v: any) {
+	return upperFirst(camelCase(v));
+}
+
+export function titleCase(v: any) {
+	return startCase(v);
 }
 
 export function numberMapper(v: any) {

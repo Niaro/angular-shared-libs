@@ -17,29 +17,29 @@ export type PropertyMapper = PropertyMapperFunction
 
 export class PropertyMetadata {
 
-	label!: string;
+	readonly label!: string;
 
-	hint = '';
+	readonly hint: string = '';
 
-	longHint = '';
+	readonly longHint: string = '';
 
-	placeholder = '';
+	readonly placeholder: string = '';
 
-	mapper: PropertyMapper | null = null;
+	readonly mapper: PropertyMapper | null = null;
 
-	default?: any;
+	readonly defaultPropertyValue?: any;
 
-	control = new PropertyMetadataControl();
+	readonly control = new PropertyMetadataControl();
 
-	viewType = FieldViewType.text;
+	readonly viewType = FieldViewType.text;
 
-	viewFormatter: ((propValue: any) => any) | null = null;
+	readonly viewFormatter: ((propValue: any) => any) | null = null;
 
-	table: PropertyMetadataTable | null = null;
+	readonly table: PropertyMetadataTable | null = null;
 
-	unserializable = false;
+	readonly unserializable: boolean = false;
 
-	copyable = false;
+	readonly copyable: boolean = false;
 
 	/**
 	 * the name of the property to which this metadata belongs

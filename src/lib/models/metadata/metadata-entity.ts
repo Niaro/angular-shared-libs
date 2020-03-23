@@ -139,8 +139,8 @@ export abstract class MetadataEntity {
 	private _setDefaultPropertyValues() {
 		this.getMetadata()
 			.values()
-			.filter(v => v.default !== undefined && isNil((<any> this)[ v.property ]))
-			.forEach(v => (<any> this)[ v.property ] = v.default);
+			.filter(v => v.defaultPropertyValue !== undefined && isNil((<any> this)[ v.property ]))
+			.forEach(v => (<any> this)[ v.property ] = v.defaultPropertyValue);
 	}
 
 }

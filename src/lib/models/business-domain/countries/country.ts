@@ -75,4 +75,8 @@ export class Country extends MetadataEntity {
 	toJSON() {
 		return this.code;
 	}
+
+	toString(): any {
+		return this.code;
+	}
 }

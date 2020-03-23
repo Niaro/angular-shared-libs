@@ -6,6 +6,8 @@ export class FieldControlType extends Enumeration {
 
 	static number = new FieldControlType();
 
+	static email = new FieldControlType();
+
 	static textarea = new FieldControlType();
 
 	static switch = new FieldControlType();
@@ -23,8 +25,6 @@ export class FieldControlType extends Enumeration {
 	static buttonToggle = new FieldControlType();
 
 	static chip = new FieldControlType();
-
-	static email = new FieldControlType();
 
 	// special
 	static currency = new FieldControlType();

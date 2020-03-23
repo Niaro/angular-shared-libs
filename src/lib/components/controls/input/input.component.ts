@@ -4,7 +4,7 @@ import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
 import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
-import { TextMaskConfig, TextMaskDirective, NumberMaskConfig } from '@bp/shared/directives';
+import { TextMaskDirective, NumberMaskConfig, InputTextMaskConfig } from '@bp/shared/directives';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
 
@@ -56,7 +56,7 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 
 	@Input() number!: boolean;
 
-	@Input() mask!: TextMaskConfig;
+	@Input() mask!: InputTextMaskConfig;
 
 	@Input() autocomplete!: MatAutocomplete;
 

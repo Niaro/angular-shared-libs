@@ -18,6 +18,8 @@ import { TextMaskPipe } from './text-mask-pipe';
 const IS_ANDROID = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
 const DEFER = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : setTimeout;
 
+export type InputTextMaskConfig = TextMask | TextMaskFn | Partial<TextMaskConfig | NumberMaskConfig>;
+
 @Directive({
 	selector: '[bpTextMask]',
 	providers: [ {
@@ -29,7 +31,7 @@ const DEFER = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFra
 export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, ControlValueAccessor {
 
 	@Input()
-	set bpTextMask(value: TextMask | TextMaskFn | Partial<TextMaskConfig | NumberMaskConfig>) {
+	set bpTextMask(value: InputTextMaskConfig) {
 		if (isFunction(value) || isArray(value))
 			this.config.mask = value;
 		else if (value instanceof TextMaskConfig)

@@ -1,8 +1,11 @@
 <bp-input
 	*ngIf="
-		[FieldControlType.input, FieldControlType.textarea, FieldControlType.number].includes(
-			mdControl.type
-		)
+		[
+			FieldControlType.input,
+			FieldControlType.textarea,
+			FieldControlType.number,
+			FieldControlType.email
+		].includes(mdControl.type)
 	"
 	[textarea]="mdControl.type === FieldControlType.textarea"
 	[number]="mdControl.type === FieldControlType.number"
