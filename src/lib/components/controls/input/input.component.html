@@ -12,7 +12,7 @@
 		[attr.name]="name"
 		[formControl]="internalControl"
 		[placeholder]="placeholder"
-		[required]="required"
+		[required]="!!required"
 	>
 	</textarea>
 
@@ -23,7 +23,7 @@
 			[attr.name]="name"
 			[formControl]="internalControl"
 			[placeholder]="placeholder"
-			[required]="required"
+			[required]="!!required"
 			[value]="value"
 			[matAutocomplete]="autocomplete"
 		/>
@@ -34,7 +34,7 @@
 				[attr.name]="name"
 				[formControl]="internalControl"
 				[placeholder]="placeholder"
-				[required]="required"
+				[required]="!!required"
 				[bpTextMask]="number ? numberMask : mask"
 			/>
 		</ng-template>

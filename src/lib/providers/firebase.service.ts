@@ -12,6 +12,7 @@ import 'firebase/storage';
 import 'firebase/functions';
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/performance';
 
 import { FB_FUNCTIONS_REGION } from 'bp-firebase';
 
@@ -24,6 +25,7 @@ export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 	providedIn: 'root'
 })
 export class FirebaseService {
+
 
 	get currentUser() { return firebase.auth().currentUser; }
 
@@ -45,6 +47,8 @@ export class FirebaseService {
 
 	protected _uploadTask!: firebase.storage.UploadTask;
 
+	protected _perf: firebase.performance.Performance;
+
 	constructor(
 		protected _telemetry: TelemetryService,
 		@Inject(FIREBASE_APP_ID) protected _firebaseAppId: string
@@ -61,6 +65,7 @@ export class FirebaseService {
 			});
 
 		this._storage = firebase.storage();
+		this._perf = firebase.performance();
 		this._functions = firebase.app().functions(FB_FUNCTIONS_REGION);
 	}
 
@@ -262,8 +267,9 @@ export class FirebaseService {
 			);
 	}
 
-	async postFnCall<T>(firebaseFunctionName: string, body: T): Promise<void> {
-		await this._functions.httpsCallable(firebaseFunctionName)(body);
+	async postFnCall<T, U = void>(firebaseFunctionName: string, body: T): Promise<U> {
+		const result = await this._functions.httpsCallable(firebaseFunctionName)(body);
+		return result.data;
 	}
 
 	onAuthStateChange(): Observable<firebase.User | null> {
