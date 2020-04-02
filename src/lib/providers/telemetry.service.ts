@@ -35,6 +35,18 @@ export class TelemetryService {
 			console.error(error);
 	}
 
+	static captureMessage(msg: string, dataToLog?: any) {
+		dataToLog && console.log(dataToLog);
+
+		if (env.remoteServer)
+			LogRocket.captureMessage(
+				msg,
+				{ tags: { source: 'code' } }
+			);
+		else
+			console.warn(msg);
+	}
+
 	constructor() {
 		if (TelemetryService.instance)
 			return TelemetryService.instance;
@@ -43,7 +55,7 @@ export class TelemetryService {
 	}
 
 	getUserLogrocketUrl(userId: string) {
-		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
+		return `https://app.logrocket.com/${ env.logrocket }/sessions?u=${ userId }`;
 	}
 
 	getSessionUrl(): Promise<string> {
@@ -54,8 +66,12 @@ export class TelemetryService {
 		LogRocket.identify(uid, userTraits as any);
 	}
 
+	captureMessage(msg: string, dataToLog?: any) {
+		TelemetryService.captureMessage(msg, dataToLog);
+	}
+
 	captureError(error: any) {
-		TelemetryService.captureError(error, 'manual');
+		TelemetryService.captureError(error, 'code');
 	}
 }
 
