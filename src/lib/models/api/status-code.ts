@@ -11,6 +11,7 @@ export enum StatusCode {
 	NotFound = 404,
 	Timeout = 408,
 	Conflict = 409,
+	RateLimited = 429,
 	InternalServerError = 500,
 	GatewayTimeout = 504,
 }
@@ -22,6 +23,7 @@ export const STATUS_CODE_MESSAGES = {
 	[ StatusCode.Forbidden ]: 'Access forbidden',
 	[ StatusCode.NotFound ]: 'Not found',
 	[ StatusCode.Timeout ]: 'The operation has timed out',
+	[ StatusCode.RateLimited ]: 'You are being rate limited',
 	get [ StatusCode.GatewayTimeout ]() { return this[ StatusCode.Timeout ]; },
 	[ StatusCode.InternalServerError ]: 'Something is wrong!',
 };

@@ -43,6 +43,11 @@ export class ResponseError {
 					message: 'The request to the server has failed.',
 					type: 'Please check your connection and try again later or contact the support if the problem persists',
 				} ];
+			else if (this.status === StatusCode.RateLimited)
+				this.messages = [ {
+					message: this.statusText,
+					type: 'Please repeat again a bit later',
+				} ];
 			else if (e.error)
 				this._extractMessagesFromApiErrorResponse(e.error);
 		} else if (has(e, 'response')) {
@@ -68,7 +73,7 @@ export interface IApiErrorResponse {
 	response: {
 		status: string,
 		code: number,
-		message: string
+		message: string;
 	};
 
 	result?: IApiErrorMessage | IApiErrorMessage[];
