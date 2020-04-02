@@ -39,6 +39,15 @@ export class TelemetryService {
 		);
 	}
 
+	static captureMessage(msg: string, dataToLog?: any) {
+		dataToLog && console.log(dataToLog);
+
+		if (env.remoteServer)
+			LogRocket.captureMessage(msg, { tags: { source: 'code' } });
+		else
+			console.warn(msg);
+	}
+
 	get enabled() { return TelemetryService.enabled; }
 
 	sessionUrl$ = from(new Promise<string>(r => LogRocket.getSessionURL(v => r(v))))
@@ -64,6 +73,10 @@ export class TelemetryService {
 
 	captureError(error: any) {
 		TelemetryService.captureError(error, 'manual');
+	}
+
+	captureMessage(msg: string, dataToLog?: any) {
+		TelemetryService.captureMessage(msg, dataToLog);
 	}
 }
 

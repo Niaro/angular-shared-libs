@@ -4,9 +4,10 @@ import { Observable, throwError, iif, from, of } from 'rxjs';
 import { catchError, map, flatMap } from 'rxjs/operators';
 import { isNil, fromPairs } from 'lodash-es';
 
-import { ResponseError, IApiResponse } from '../../models';
+import { ResponseError, IApiResponse, StatusCode } from '../../models';
 import { RouterService } from '../router.service';
 import { HttpConfigService, CORRELATION_ID_KEY } from './http-config.service';
+import { TelemetryService } from '../telemetry.service';
 
 export const DO_NOT_REDIRECT_ON_500X = 'do-not-redirect-on-500x';
 
@@ -15,7 +16,8 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 
 	constructor(
 		private _router: RouterService,
-		private _httpConfig: HttpConfigService
+		private _httpConfig: HttpConfigService,
+		private _telemetry: TelemetryService
 	) { }
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
@@ -40,8 +42,8 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 						.pipe(map(v => new ResponseError(JSON.parse(v)))),
 					of(new ResponseError(e))
 				).pipe(flatMap(error => {
-					if (!error.url || !error.url.includes(DO_NOT_REDIRECT_ON_500X))
-						this._router.tryNavigateOnResponseError(error);
+					this._whenRateLimitedLogIt(error);
+					this._whenNotHandledNavigateToApiErrorPage(error);
 					return throwError(error);
 				}))
 				));
@@ -58,5 +60,15 @@ export class ApiResponseInterceptorService implements HttpInterceptor {
 					.filter(([ , v ]) => v !== '' && v !== 'NaN' && !isNil(v))
 			)
 		});
+	}
+
+	private _whenNotHandledNavigateToApiErrorPage(error: ResponseError) {
+		if (!error.url || !error.url.includes(DO_NOT_REDIRECT_ON_500X))
+			this._router.tryNavigateOnResponseError(error);
+	}
+
+	private _whenRateLimitedLogIt(error: ResponseError) {
+		if (error.status === StatusCode.RateLimited)
+			this._telemetry.captureMessage(error.statusText!);
 	}
 }
