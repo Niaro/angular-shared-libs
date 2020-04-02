@@ -11,17 +11,19 @@ export enum StatusCode {
 	notFound = 404,
 	timeout = 408,
 	conflict = 409,
+	rateLimited = 429,
 	internalServerError = 500,
 	gatewayTimeout = 504,
 }
 
 export const STATUS_CODE_MESSAGES = {
-	[StatusCode.badRequest]: 'Bad request',
-	[StatusCode.unauthorized]: 'Unauthorized',
-	[StatusCode.transactionDeclined]: 'Transaction declined',
-	[StatusCode.forbidden]: 'Access forbidden',
-	[StatusCode.notFound]: 'Not found',
-	[StatusCode.timeout]: 'The operation has timed out',
-	get [StatusCode.gatewayTimeout]() { return this[StatusCode.timeout]; },
-	[StatusCode.internalServerError]: 'Something is wrong!',
+	[ StatusCode.badRequest ]: 'Bad request',
+	[ StatusCode.unauthorized ]: 'Unauthorized',
+	[ StatusCode.transactionDeclined ]: 'Transaction declined',
+	[ StatusCode.forbidden ]: 'Access forbidden',
+	[ StatusCode.notFound ]: 'Not found',
+	[ StatusCode.timeout ]: 'The operation has timed out',
+	[ StatusCode.rateLimited ]: 'You are being rate limited',
+	get [ StatusCode.gatewayTimeout ]() { return this[ StatusCode.timeout ]; },
+	[ StatusCode.internalServerError ]: 'Something is wrong!',
 };
