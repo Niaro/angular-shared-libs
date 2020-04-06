@@ -13,6 +13,7 @@ import 'firebase/storage';
 import 'firebase/functions';
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/performance';
 
 import { FB_FUNCTIONS_REGION } from 'bp-firebase';
 
@@ -46,6 +47,8 @@ export class FirebaseService {
 
 	protected uploadTask!: firebase.storage.UploadTask;
 
+	protected _perf: firebase.performance.Performance;
+
 	constructor(
 		protected telemetry: TelemetryService,
 		@Inject(FIREBASE_APP_ID) protected firebaseAppId: string
@@ -62,10 +65,11 @@ export class FirebaseService {
 			});
 
 		this.storage = firebase.storage();
+		this._perf = firebase.performance();
 		this.functions = firebase.app().functions(FB_FUNCTIONS_REGION);
 	}
 
-	signIn(credentials: { userName: string, password: string }) {
+	signIn(credentials: { userName: string, password: string; }) {
 		return from(firebase.auth().signInWithEmailAndPassword(credentials.userName, credentials.password))
 			.pipe(catchError(this.throwAsResponseError));
 	}
@@ -96,7 +100,7 @@ export class FirebaseService {
 
 	onQuerySnapshot<T extends Entity>(
 		path: string,
-		{ page, limit, authorUid }: IPageQueryParams & { authorUid?: string },
+		{ page, limit, authorUid }: IPageQueryParams & { authorUid?: string; },
 		factory: (data: Partial<T>) => T
 	) {
 		return new Observable<PagedResults<T>>(subscriber => {
@@ -108,7 +112,7 @@ export class FirebaseService {
 				query = query.where('authorUid', '==', authorUid);
 
 			if (page)
-				query = query.startAfter(this.queryDocumentSnapshotsById[page]);
+				query = query.startAfter(this.queryDocumentSnapshotsById[ page ]);
 
 			const unsubscribe = query.onSnapshot(
 				snapshot => {
@@ -119,7 +123,7 @@ export class FirebaseService {
 						: null;
 
 					if (nextPageCursor)
-						this.queryDocumentSnapshotsById[nextPageCursor] = lastDoc;
+						this.queryDocumentSnapshotsById[ nextPageCursor ] = lastDoc;
 
 					subscriber.next(new PagedResults({
 						nextPageCursor,
@@ -196,7 +200,7 @@ export class FirebaseService {
 			...patch
 		});
 
-		return this.set(`${collectionPath}/${entityId}`, entity)
+		return this.set(`${ collectionPath }/${ entityId }`, entity)
 			.pipe(map(() => entity));
 	}
 
@@ -277,10 +281,10 @@ export class FirebaseService {
 		const fileName = this.getFilenameWithoutExtension(name);
 		const counterRegexp = /_(\d+)$/;
 		const counterMatchInName = fileName.match(counterRegexp);
-		const counter = +(counterMatchInName && counterMatchInName[1] || 0) + 1;
+		const counter = +(counterMatchInName && counterMatchInName[ 1 ] || 0) + 1;
 		return name.replace(
 			fileName,
-			counterMatchInName ? fileName.replace(counterRegexp, `_${counter}`) : `${fileName}_${counter}`
+			counterMatchInName ? fileName.replace(counterRegexp, `_${ counter }`) : `${ fileName }_${ counter }`
 		);
 	}
 
@@ -291,11 +295,11 @@ export class FirebaseService {
 
 	private getFilenameWithoutExtension(name: string): string {
 		if (!name) return '';
-		return (<any>/(.+?)(\.[^\.]+$|$)/.exec(name))[1];
+		return (<any> /(.+?)(\.[^\.]+$|$)/.exec(name))[ 1 ];
 	}
 
 	private throwAsResponseError = (v: firebase.FirebaseError) => throwError(this.mapToResponseError(v));
 
 	private mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
-		new ResponseError({ messages: [{ type: e.code, message: e.message }] })
+		new ResponseError({ messages: [ { type: e.code, message: e.message } ] });
 }
