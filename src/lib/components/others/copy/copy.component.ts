@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, ChangeDetectionStrategy, Input, HostListener } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ThemePalette } from '@angular/material/core';
 
 const DEFAULT_TOOLTIP_MSG = 'Copy';
 
@@ -16,6 +17,16 @@ export class CopyComponent {
 
 	@Input() size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'md';
 
+	@Input() color?: ThemePalette;
+
+	@Input()
+	get tooltipMsg() { return this._tooltipMsg; }
+	set tooltipMsg(value: string) {
+		this._tooltipMsg = value;
+		this.tooltip = value;
+	}
+	private _tooltipMsg!: string;
+
 	@ViewChild(MatTooltip, { static: true })
 	mtTooltip!: MatTooltip;
 
@@ -27,7 +38,7 @@ export class CopyComponent {
 	/** @private */
 	contentRef!: ElementRef;
 
-	tooltipMsg = DEFAULT_TOOLTIP_MSG;
+	tooltip = DEFAULT_TOOLTIP_MSG;
 
 	private get _$clipboardTextarea(): HTMLInputElement { return this.clipboardTextareaRef.nativeElement; }
 
@@ -47,12 +58,12 @@ export class CopyComponent {
 		this._$clipboardTextarea.value = (this.value || this._$content.innerText).trim();
 		this._$clipboardTextarea.select();
 		document.execCommand('copy');
-		this.tooltipMsg = 'Copied!';
+		this.tooltip = 'Copied!';
 		this.mtTooltip.show();
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		setTimeout(() => this.tooltipMsg = DEFAULT_TOOLTIP_MSG, this.mtTooltip.hideDelay);
+		setTimeout(() => this.tooltip = this.tooltipMsg || DEFAULT_TOOLTIP_MSG, this.mtTooltip.hideDelay);
 	}
 }

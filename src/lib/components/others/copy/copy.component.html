@@ -1,6 +1,13 @@
 <textarea #clipboardTextarea></textarea>
 
-<button #copyBtn mat-icon-button [ngClass]="size" [matTooltip]="tooltipMsg" (click)="copy($event)">
+<button
+	#copyBtn
+	mat-icon-button
+	[ngClass]="size"
+	[matTooltip]="tooltip"
+	[color]="color"
+	(click)="copy($event)"
+>
 	<mat-icon [class.material-icons-outlined]="outlined">file_copy</mat-icon>
 </button>
 
