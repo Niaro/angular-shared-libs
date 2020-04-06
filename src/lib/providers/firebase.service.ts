@@ -301,5 +301,6 @@ export class FirebaseService {
 	private throwAsResponseError = (v: firebase.FirebaseError) => throwError(this.mapToResponseError(v));
 
 	private mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
+		// tslint:disable-next-line: semicolon
 		new ResponseError({ messages: [ { type: e.code, message: e.message } ] });
 }
