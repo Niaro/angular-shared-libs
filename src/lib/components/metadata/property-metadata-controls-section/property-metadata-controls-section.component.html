@@ -6,14 +6,24 @@
 
 <div *ngIf="form" @fadeInList>
 	<div *ngFor="let group of sectionScheme">
-		<div *bpDelayedRender class="row" @fadeInList>
+		<div
+			*bpDelayedRender
+			class="row"
+			@fadeInList
+			(@fadeInList.done)="isFadeInAnimationComplete = true"
+		>
 			<ng-container *ngFor="let name of group">
 				<div *ngIf="name === 'stub'; else controlTpl"></div>
 				<ng-template #controlTpl>
 					<ng-container *ngIf="meta(name) as md">
 						<bp-property-metadata-control
-							*bpDelayedRender
 							class="w-100"
+							[@.disabled]="!isFadeInAnimationComplete"
+							[floatLabel]="
+								!isFadeInAnimationComplete && !isNil(controls[name!].value )
+									? 'always'
+									: 'auto'
+							"
 							[metadata]="md"
 							[control]="controls[name!]"
 						>

@@ -1,7 +1,7 @@
 import { FormControl, ValidatorFn, ValidationErrors, FormGroupDirective } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { Input, ElementRef, Optional, SimpleChanges, OnChanges, ChangeDetectorRef, OnInit, Directive } from '@angular/core';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatFormFieldAppearance, FloatLabelType } from '@angular/material/form-field';
 import { auditTime, switchMap, filter } from 'rxjs/operators';
 import { Subscription, iif, Subject } from 'rxjs';
 
@@ -19,6 +19,8 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 	@Input() formControlName!: string;
 
 	@Input() appearance: MatFormFieldAppearance | 'round' | 'none' = 'outline';
+
+	@Input() floatLabel?: FloatLabelType;
 
 	@Input() color: ThemePalette = 'primary';
 

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { isNil } from 'lodash-es';
 
 import { FormGroup, FormControl } from '@angular/forms';
 import { FADE_IN_LIST, FADE_IN } from '@bp/shared/animations';
@@ -15,6 +16,8 @@ export type ControlsSectionScheme<T> = [ NonFunctionPropertyNames<T>, (NonFuncti
 	animations: [ FADE_IN_LIST, FADE_IN ]
 })
 export class PropertyMetadataControlsSectionComponent {
+
+	isNil = isNil;
 
 	@Input() form!: FormGroup;
 
@@ -34,5 +37,7 @@ export class PropertyMetadataControlsSectionComponent {
 
 		return this.metadata.get<any>(prop);
 	}
+
+	isFadeInAnimationComplete = false;
 
 }

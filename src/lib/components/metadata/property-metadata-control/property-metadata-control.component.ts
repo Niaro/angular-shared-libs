@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2, ElementRef, SimpleChange } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MatFormFieldAppearance, FloatLabelType } from '@angular/material/form-field';
 import { ThemePalette } from '@angular/material/core';
 
 import { PropertyMetadata, FieldControlType } from '@bp/shared/models';
@@ -22,6 +22,8 @@ export class PropertyMetadataControlComponent implements OnChanges {
 	@Input() control!: FormControl;
 
 	@Input() appearance: MatFormFieldAppearance = 'outline';
+
+	@Input() floatLabel?: FloatLabelType;
 
 	@Input() color: ThemePalette = 'primary';
 

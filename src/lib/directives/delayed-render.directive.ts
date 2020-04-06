@@ -51,7 +51,7 @@ export class DelayedRenderDirective extends Destroyable {
 		if (DelayedRenderDirective._instantViewsRenderingCounter <= DelayedRenderDirective._maxInstantRenderedViews)
 			this._renderCmpt(); // to render in the current event loop a set number of views
 		else
-			timer((DelayedRenderDirective._instantViewsRenderingCounter - DelayedRenderDirective._maxInstantRenderedViews) * 2)
+			timer(this._calcNextRenderDueTime())
 				.pipe(this.takeUntilDestroyed)
 				.subscribe(() => this._renderCmpt());
 
@@ -62,5 +62,15 @@ export class DelayedRenderDirective extends Destroyable {
 
 	private _renderCmpt() {
 		this._viewContainer.createEmbeddedView(this._tplRef).detectChanges();
+	}
+
+	private _calcNextRenderDueTime() {
+		return DelayedRenderDirective._instantViewsRenderingCounter - DelayedRenderDirective._maxInstantRenderedViews * 2;
+
+		// const remainder = (DelayedRenderDirective._instantViewsRenderingCounter -
+		// 	DelayedRenderDirective._maxInstantRenderedViews) % DelayedRenderDirective._maxInstantRenderedViews;
+
+		// return DelayedRenderDirective._instantViewsRenderingCounter - remainder
+		// 	/ DelayedRenderDirective._maxInstantRenderedViews;
 	}
 }

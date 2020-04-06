@@ -1,4 +1,4 @@
-<mat-form-field [appearance]="$any(appearance)" [color]="color">
+<mat-form-field [appearance]="$any(appearance)" [color]="color" [floatLabel]="floatLabel">
 	<mat-label *ngIf="label || customLabel">
 		<span [ngSwitch]="!!customLabel">
 			<span *ngSwitchDefault>{{ label }}</span>
