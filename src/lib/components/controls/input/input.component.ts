@@ -1,10 +1,10 @@
-import { Component, Input, ChangeDetectionStrategy, ViewChild, Directive, ContentChild } from '@angular/core';
-import { MatAutocomplete } from '@angular/material/autocomplete';
+import { Component, Input, ChangeDetectionStrategy, ViewChild, Directive, ContentChild, HostBinding } from '@angular/core';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { isEmpty } from 'lodash-es';
 
 import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
-import { TextMaskConfig, TextMaskDirective, NumberMaskConfig } from '@bp/shared/directives';
+import { TextMaskDirective, NumberMaskConfig, InputTextMaskConfig } from '@bp/shared/directives';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
 
@@ -38,17 +38,17 @@ export class InputPrefixDirective { }
 @Component({
 	selector: 'bp-input',
 	templateUrl: './input.component.html',
-	styleUrls: ['./input.component.scss'],
-	animations: [STATEFUL_SLIDE_RIGHT],
+	styleUrls: [ './input.component.scss' ],
+	animations: [ STATEFUL_SLIDE_RIGHT ],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [{
+	providers: [ {
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: InputComponent,
 		multi: true
-	}]
+	} ]
 })
 export class InputComponent extends FormFieldControlComponent<string | number> {
 
@@ -56,18 +56,24 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 
 	@Input() number!: boolean;
 
-	@Input() mask!: TextMaskConfig;
+	@Input() mask!: InputTextMaskConfig;
 
 	@Input() autocomplete!: MatAutocomplete;
 
-	@ViewChild(TextMaskDirective, { static: false }) maskDirective?: TextMaskDirective;
+	@Input()
+	@HostBinding('class.pending')
+	pending?: boolean | null;
+
+	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger?: MatAutocompleteTrigger;
+
+	@ViewChild(TextMaskDirective) maskDirective?: TextMaskDirective;
 
 	/** User-supplied override of the label element. */
-	@ContentChild(InputLabelDirective, { static: false }) customLabel?: InputLabelDirective;
+	@ContentChild(InputLabelDirective) customLabel?: InputLabelDirective;
 
-	@ContentChild(InputHintDirective, { static: false }) customHint?: InputHintDirective;
+	@ContentChild(InputHintDirective) customHint?: InputHintDirective;
 
-	@ContentChild(InputPrefixDirective, { static: false }) prefix?: InputPrefixDirective;
+	@ContentChild(InputPrefixDirective) prefix?: InputPrefixDirective;
 
 	numberMask = new NumberMaskConfig({
 		placeholderChar: '\u2000', // whitespace
@@ -77,7 +83,11 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 		maskOnFocus: true
 	});
 
-	onInternalControlValueChange(value: string) {
+	/**
+	 * If the autocomplete is present, the value of the internal control could
+	 * be as string as an item of the autocomplete list which is any
+	 */
+	protected _onInternalControlValueChange(value: string | any) {
 		this.setValue(this.maskDirective
 			&& this.maskDirective.config instanceof NumberMaskConfig
 			&& !this.maskDirective.config.allowLeadingZeroes

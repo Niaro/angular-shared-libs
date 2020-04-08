@@ -4,17 +4,19 @@ import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class ModalService {
+
 	hasOpenedDialogs$ = merge(
-		this.dialog.afterOpen.pipe(map(() => true)),
-		this.dialog.afterAllClosed.pipe(map(() => false)),
+		this._dialog.afterOpened.pipe(map(() => true)),
+		this._dialog.afterAllClosed.pipe(map(() => false)),
 	);
 
-	constructor(private dialog: MatDialog) { }
+	constructor(private _dialog: MatDialog) { }
 
 	closeAll() {
-		this.dialog.closeAll();
+		this._dialog.closeAll();
 	}
+
 }

@@ -1,24 +1,21 @@
-
 <mat-form-field appearance="outline">
 	<mat-label>{{ label }}</mat-label>
-	<input [matDatepicker]="picker"
-		   readonly
-		   matInput
-		   [value]="value"
-		   (click)="picker.open()"
-		   (dateChange)="set($event.value)">
-		   <!-- TODO: Solve this -->
-	<!-- <mat-error [bpFieldError]="formControlName?.name || formControlDirective?.name"></!--> -->
+	<input
+		[matDatepicker]="picker"
+		readonly
+		matInput
+		[value]="value"
+		(click)="picker.open()"
+		(dateChange)="set($event.value)"
+	/>
+	<!-- TODO: Solve this -->
+	<!-- <mat-error [bpFieldError]="formControlName?.name || formControlDirective?.name"></!-->
+	-->
 </mat-form-field>
 
-<mat-datepicker #picker
-				[calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+<mat-datepicker #picker [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
 </mat-datepicker>
 
-<button *ngIf="!empty"
-		@slideRight
-		matSuffix
-		mat-icon-button
-		(click)="set(null)">
+<button *ngIf="!empty" @slideRight matSuffix mat-icon-button (click)="set(null)">
 	<mat-icon>close</mat-icon>
 </button>

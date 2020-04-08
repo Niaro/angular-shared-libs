@@ -7,14 +7,16 @@ import { RouterLinkWithHref } from '@angular/router';
 export class TargetBlankDirective implements OnChanges {
 	// tslint:disable-next-line: no-input-prefix
 	@Input('rtTargetBlank') shouldSet: boolean | '' = true;
+
 	@HostBinding('attr.target') get target() { return this.shouldSet ? '_blank' : '_self'; }
+
 	@HostBinding('attr.rel') get rel() { return this.shouldSet ? 'noopener' : null; }
 
-	constructor(@Optional() @Self() private routerLink?: RouterLinkWithHref) { }
+	constructor(@Optional() @Self() private _routerLink?: RouterLinkWithHref) { }
 
 	ngOnChanges() {
 		this.shouldSet = this.shouldSet === '' || !!this.shouldSet;
-		if (this.routerLink)
-			this.routerLink.target = this.target;
+		if (this._routerLink)
+			this._routerLink.target = this.target;
 	}
 }

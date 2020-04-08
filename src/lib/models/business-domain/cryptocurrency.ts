@@ -1,22 +1,31 @@
-import { MetadataEntity } from '../metadata';
+
 import { isString } from 'lodash-es';
+
+import { MetadataEntity } from '../metadata/metadata-entity';
+import { MapIncomingValue } from '../metadata/decorators';
 
 const CRYPTOS = new Map<CryptoCurrencyCode, CryptoCurrency>();
 
 export class CryptoCurrency extends MetadataEntity {
+
+	@MapIncomingValue()
 	readonly logo!: string;
+
+	@MapIncomingValue()
 	readonly name!: string;
+
+	@MapIncomingValue()
 	readonly code!: CryptoCurrencyCode;
 
 	constructor(dataOrCode: Partial<CryptoCurrency> | CryptoCurrencyCode) {
 		super(isString(dataOrCode) ? { code: dataOrCode } : dataOrCode);
 
 		if (CRYPTOS.has(this.code))
-			return CRYPTOS.get(this.code) as CryptoCurrency;
+			return <CryptoCurrency> CRYPTOS.get(this.code);
 
-		if (Cryptos[this.code]) {
-			this.name = Cryptos[this.code];
-			this.logo = `assets/images/cryptos/${this.code}`;
+		if (Cryptos[ this.code ]) {
+			this.name = Cryptos[ this.code ];
+			this.logo = `assets/images/cryptos/${ this.code }`;
 		}
 
 		CRYPTOS.set(this.code, this);
@@ -39,6 +48,7 @@ export class CryptoCurrency extends MetadataEntity {
 
 export type CryptoCurrencyCode = Exclude<keyof typeof Cryptos, 'prototype'>;
 
+// tslint:disable: naming-convention
 class Cryptos {
 	static ADA = 'Cardano';
 	static B2BX = 'B2BX';

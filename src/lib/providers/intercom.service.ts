@@ -52,11 +52,11 @@ export class IntercomService {
 
 	private _isLinkedLogrocketSessionsToIntercomUser = false;
 
-	private _user_id?: string;
+	private _userId?: string;
 
 	private _userId$ = this.enabled
-		? defer(() => this._user_id
-			? of(this._user_id)
+		? defer(() => this._userId
+			? of(this._userId)
 			: timer(0, 50)
 				.pipe(
 					map(() => <string> <unknown>((<any> window).Intercom && Intercom('getVisitorId'))),
@@ -71,6 +71,7 @@ export class IntercomService {
 	) { }
 
 	boot(config?: IntercomBootConfig) {
+		console.warn('Intercom boot', config);
 		if (!this._isFirstBoot || !this.enabled)
 			return;
 
@@ -83,12 +84,22 @@ export class IntercomService {
 	}
 
 	update(config?: IntercomConfig) {
-		this._user_id = config?.user_id;
+		console.warn('Intercom update', config);
+		if (!this.enabled)
+			return;
+
+
+		if (config?.user_id !== undefined)
+			this._userId = config?.user_id;
+
 		this._whenTelemetryEnabledSaveSessionOnIntercom();
 		Intercom('update', config);
 	}
 
 	company(company: IntercomCompany) {
+		if (!this.enabled)
+			return;
+
 		this.update({ company });
 	}
 
@@ -97,10 +108,16 @@ export class IntercomService {
 	}
 
 	trackEvent(event: string, data?: Dictionary<string>) {
+		if (!this.enabled)
+			return;
+
 		Intercom('trackEvent', event, data);
 	}
 
 	shutdown() {
+		if (!this.enabled)
+			return;
+
 		Intercom('shutdown');
 	}
 
@@ -117,17 +134,19 @@ export class IntercomService {
 			return;
 
 		const userId = await this.getUserId();
-		if (userId) {
-			this._isLinkedLogrocketSessionsToIntercomUser = true;
 
-			this.update({
-				logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
-			});
-		}
+		if (!userId)
+			return;
+
+		this._isLinkedLogrocketSessionsToIntercomUser = true;
+
+		this.update({
+			logrocket_URL: this._telemetry.getUserLogrocketUrl(userId)
+		});
 	}
 
 	private async _trackLogrocketSessionOnIntercom() {
-		const sessionURL = await this._telemetry.getSessionUrl();
+		const sessionURL = await this._telemetry.sessionUrl$.toPromise();
 		this.trackEvent('LogRocket', { sessionURL });
 	}
 

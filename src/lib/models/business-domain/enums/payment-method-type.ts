@@ -1,28 +1,36 @@
-import { kebabCase } from 'lodash-es';
+import { PspPaymentMethodType } from './psp-payment-method-type';
 
-import { lineMicrotask } from '@bp/shared/utils';
+export class PaymentMethodType extends PspPaymentMethodType {
 
-import { Enumeration } from '../../misc';
+	static wireTransfer = new PaymentMethodType('Bank Wire Details', 'A set of bank account requisites per currency');
 
-export class PaymentMethodType extends Enumeration {
-	static creditCard = new PaymentMethodType('Credit Card');
-	static apm = new PaymentMethodType('APM');
-	static crypto = new PaymentMethodType();
-	static wireTransfer = new PaymentMethodType('Wire Transfer');
-	static voucher = new PaymentMethodType();
-	static externalLink = new PaymentMethodType();
-	static cryptoWallet = new PaymentMethodType('Crypto Wallets');
+	static externalLink = new PaymentMethodType(undefined, 'A custom link to any internet resource');
 
-	logo!: string;
+	static cryptoWallet = new PaymentMethodType('Crypto Wallets', 'A set of crypto currency addresses');
 
-	routeName!: string;
+	static staticMethods = [
+		PaymentMethodType.externalLink,
+		PaymentMethodType.wireTransfer,
+		PaymentMethodType.cryptoWallet
+	];
 
-	constructor(displayName?: string) {
-		super(displayName);
+	static assignable = [
+		PaymentMethodType.creditCard,
+		PaymentMethodType.apm,
+		PaymentMethodType.crypto,
+		PaymentMethodType.voucher,
+		...PaymentMethodType.staticMethods
+	];
 
-		lineMicrotask(() => {
-				this.routeName = kebabCase(this.name);
-				this.logo = `assets/images/payment-methods/${this.routeName}`;
-			});
+	static staticPages = new PaymentMethodType('Pages');
+
+	static staticPagesMethods = [
+		PaymentMethodType.wireTransfer,
+		PaymentMethodType.cryptoWallet
+	];
+
+	static isStatic(type: PaymentMethodType) {
+		return PaymentMethodType.staticMethods.includes(type);
 	}
+
 }

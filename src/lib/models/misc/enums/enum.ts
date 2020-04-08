@@ -1,24 +1,33 @@
-import { camelCase, lowerCase, forOwn, isNil, isNumber, isArray, upperFirst, kebabCase, isBoolean } from 'lodash-es';
+import {
+	camelCase, lowerCase, forOwn, forIn, isNil, isNumber, isArray,
+	upperFirst, kebabCase, isBoolean
+} from 'lodash-es';
+
 import { lineMicrotask } from '@bp/shared/utils';
 
+// tslint:disable: no-static-this
 export abstract class Enumeration {
+
 	private static _list: any[];
-	private static isValue(v: any) { return isNumber(v) || isBoolean(v); }
+
+	private static _isValue(v: any) { return isNumber(v) || isBoolean(v); }
 
 	static list<T extends Enumeration>(): T[] {
+
 		if (!this._list) {
 			const list: T[] = [];
-			forOwn(this, (it, key) => {
-				if (it instanceof Enumeration && isNaN(+key) && this.shouldList(it))
-					list.push(it as T);
+			forIn(this, (it, key) => {
+				if (it instanceof Enumeration && isNaN(+key) && this._shouldList(it))
+					list.push(<T> it);
 			});
 			this._list = list;
 		}
+
 		return this._list;
 	}
 
-	static find(value: number | string): Enumeration | null {
-		return (<any>this)[value] || null;
+	static find<T extends Enumeration>(value: number | string): T | null {
+		return (<any> this)[ value ] || null;
 	}
 
 	static parse(data: any): Enumeration | null {
@@ -26,20 +35,20 @@ export abstract class Enumeration {
 			return null;
 
 		return data instanceof this.prototype.constructor
-			? data as Enumeration
-			: this.find(this.isValue(data) ? data : camelCase(data));
+			? <Enumeration> data
+			: this.find(this._isValue(data) ? data : camelCase(data));
 	}
 
 	static parseStrict(data: any): Enumeration {
 		const result = this.parse(data);
 		if (!result)
-			throw new Error(`Enum type ${this.name} does not contains value ${data}`);
+			throw new Error(`Enum type ${ this.name } does not contains value ${ data }`);
 		return result;
 	}
 
 	static isInstance(value: any) { return value instanceof this; }
 
-	protected static shouldList(value: Enumeration) {
+	protected static _shouldList(value: Enumeration) {
 		return true;
 	}
 
@@ -52,32 +61,33 @@ export abstract class Enumeration {
 	protected _value!: number | boolean | string;
 
 	get value() {
-		return this._value ?? (this._value = this.getValueName());
+		return this._value ?? (this._value = this._getValueName());
 	}
 
 	cssClass!: string;
 
 	protected _displayName: string;
 
-	private id = `enum_${Math.random().toString(36).substr(2, 8)}`;
+	private _id = `enum_${ Math.random().toString(36).substr(2, 8) }`;
 
 	constructor(displayName?: string | null);
 	constructor(value: number | boolean, displayName?: string);
 	constructor(valueOrDisplayName?: number | boolean | string | null, displayName?: string) {
-		// do not access the {name} property in the constructor because it is lazy initialized and required all static properties to be present
-		if (Enumeration.isValue(valueOrDisplayName)) {
+		// do not access the {name} property in the constructor because it is lazy initialized
+		// and required all static properties to be present
+		if (Enumeration._isValue(valueOrDisplayName)) {
 			this._value = valueOrDisplayName!.valueOf();
-			(<any>this.constructor)[this._value.toString()] = this;
-			this._displayName = displayName as string;
+			(<any> this.constructor)[ this._value.toString() ] = this;
+			this._displayName = <string> displayName;
 		} else
-			this._displayName = valueOrDisplayName as string;
+			this._displayName = <string> valueOrDisplayName;
 
 		// Schedule a microtask at the end of the current event loop
 		// which means that the constructor will have all the enumerations attached to it by the time
 		// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
 		// PS we can't use queryMicrotask since it fires the microtask after the dom is rendered.
 		// and we need the enums to be inited before any components are rendered
-		lineMicrotask(() => this.init());
+		lineMicrotask(() => this._init());
 	}
 
 	valueOf() {
@@ -92,36 +102,39 @@ export abstract class Enumeration {
 		return this.value;
 	}
 
-	private init() {
-		this.cssClass = this.getCssClass();
+	private _init() {
+		this.cssClass = this._getCssClass();
 		this._displayName = this._displayName ?? upperFirst(lowerCase(this.name));
 	}
 
-	private getCssClass() {
-		// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check somewhere later
+	private _getCssClass() {
+		// TODO Angular CLI mangles the names of class constructors which is used for generating cssClass, check
+		// somewhere later
 		// return `${kebabCase(this.constructor.name)}-${kebabCase(this.name)}`;
 		return kebabCase(this.name);
 	}
 
-	private getValueName() {
+	private _getValueName() {
 		let res = '';
 		forOwn(this.constructor, (it, key) => {
-			if (it instanceof Enumeration && it.id === this.id && isNaN(+key)) {
+			if (it instanceof Enumeration && it._id === this._id && isNaN(+key)) {
 				res = key;
 				return false;
 			}
+			return true;
 		});
 		return res;
 	}
 }
 
 export abstract class FlagEnumeration<T extends FlagEnumeration<T>> extends Enumeration {
-	static find(value: number): Enumeration {
-		return this.findOrCreate(value, this);
+
+	static find<T>(value: number): T {
+		return FlagEnumeration._findOrCreate(value, FlagEnumeration);
 	}
 
-	private static findOrCreate(value: number, constructor: any) {
-		return constructor[value] || new constructor(value);
+	private static _findOrCreate(value: number, constructor: any) {
+		return constructor[ value ] || new constructor(value);
 	}
 
 	readonly bunch: boolean;
@@ -143,11 +156,11 @@ export abstract class FlagEnumeration<T extends FlagEnumeration<T>> extends Enum
 
 	combine(...other: T[]): T {
 		const val = other.reduce((acc, it) => acc |= +it.valueOf(), +this._value);
-		return FlagEnumeration.findOrCreate(val, this.constructor);
+		return FlagEnumeration._findOrCreate(val, this.constructor);
 	}
 
 	remove(...other: T[]): T {
 		const val = other.reduce((acc, it) => acc &= ~it.valueOf(), +this._value);
-		return FlagEnumeration.findOrCreate(val, this.constructor);
+		return FlagEnumeration._findOrCreate(val, this.constructor);
 	}
 }

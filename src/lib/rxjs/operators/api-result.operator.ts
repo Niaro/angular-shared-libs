@@ -6,31 +6,34 @@ import { Action, ResponseError } from '../../models';
 import { reportJsErrorIfAny } from './report-js-error-if-any.operator';
 
 export function apiResult<T>(
-	success: Action<{ result: T }>,
-	failure: Action<{ apiError: ResponseError }>,
-	closeNotifier?: Observable<any>
-): OperatorFunction<T, ({ result: T; } | { apiError: ResponseError }) & TypedAction<string>> {
-	return (source: Observable<T>) => {
-		const stream = source.pipe(
-			map(result => success({ result })),
+	success: Action<{ result: T; }>,
+	failure: Action<{ apiError: ResponseError; }>,
+	closeNotifier$?: Observable<any>
+): OperatorFunction<T | null, ({ result: T; } | { apiError: ResponseError; }) & TypedAction<string>> {
+	return (source$: Observable<T | null>) => {
+		const stream$ = source$.pipe(
+			map(result => result
+				? success({ result: result! })
+				: failure({ apiError: ResponseError.notFound })
+			),
 			reportJsErrorIfAny,
 			catchError((apiError: ResponseError) => of(failure({ apiError })))
 		);
-		return closeNotifier ? stream.pipe(takeUntil(closeNotifier)) : stream;
+		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
 	};
 }
 
 export function apiVoidResult<T>(
 	success: Action,
-	failure: Action<{ apiError: ResponseError }>,
-	closeNotifier?: Observable<any>
-): OperatorFunction<T, ({} | { apiError: ResponseError }) & TypedAction<string>> {
-	return (source: Observable<T>) => {
-		const stream = source.pipe(
+	failure: Action<{ apiError: ResponseError; }>,
+	closeNotifier$?: Observable<any>
+): OperatorFunction<T, ({} | { apiError: ResponseError; }) & TypedAction<string>> {
+	return (source$: Observable<T>) => {
+		const stream$ = source$.pipe(
 			map(() => success()),
 			reportJsErrorIfAny,
 			catchError((apiError: ResponseError) => of(failure({ apiError })))
 		);
-		return closeNotifier ? stream.pipe(takeUntil(closeNotifier)) : stream;
+		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
 	};
 }

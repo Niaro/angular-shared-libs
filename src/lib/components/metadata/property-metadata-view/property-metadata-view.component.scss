@@ -1,19 +1,6 @@
 @import 'imports';
 
 :host {
-	caption {
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		font-size: 0.85em;
-		color: $color-semi-dark;
-		margin-bottom: 0.2em;
-
-		> mat-icon {
-			margin-left: 0.2em;
-		}
-	}
-
 	bp-copy {
 		margin-bottom: -8px;
 		position: relative;
@@ -28,11 +15,22 @@
 	}
 
 	&.view-type-boolean {
-		display: flex;
+		&,
+		> div {
+			display: flex;
+		}
 
 		span {
 			display: inline-flex;
 			align-items: center;
+
+			&.check {
+				margin-left: -3px;
+			}
+
+			&.close {
+				margin-left: -4px;
+			}
 		}
 	}
 

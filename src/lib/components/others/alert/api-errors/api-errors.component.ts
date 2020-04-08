@@ -4,7 +4,7 @@ import { IApiErrorMessage } from '@bp/shared/models';
 @Component({
 	selector: 'bp-api-errors',
 	templateUrl: './api-errors.component.html',
-	styleUrls: ['./api-errors.component.scss'],
+	styleUrls: [ './api-errors.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApiErrorsComponent {

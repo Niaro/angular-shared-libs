@@ -26,7 +26,9 @@ export function fromResize(...targets: HTMLElement[]) {
 					width: target.offsetWidth,
 					height: target.offsetHeight
 				})),
-				distinctUntilChanged((x: IResizeObserverEntry, y: IResizeObserverEntry) => x.width === y.width && x.height === y.height)
+				distinctUntilChanged(
+					(a: IResizeObserverEntry, b: IResizeObserverEntry) => a.width === b.width && a.height === b.height
+				)
 			);
 	}
 }

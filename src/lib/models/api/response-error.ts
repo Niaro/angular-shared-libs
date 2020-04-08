@@ -3,8 +3,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { isArray, camelCase, lowerCase, get, isString, has, assign } from 'lodash-es';
 
 export class ResponseError {
+
 	static get notFound() {
-		return new ResponseError({ status: StatusCode.notFound });
+		return new ResponseError({ status: StatusCode.NotFound });
 	}
 
 	status?: StatusCode;
@@ -16,63 +17,74 @@ export class ResponseError {
 	url?: string | null;
 
 	get isForbidden() {
-		return this.status === StatusCode.forbidden;
+		return this.status === StatusCode.Forbidden;
 	}
 
 	get isInternalServerError() {
-		return this.status === StatusCode.internalServerError;
+		return this.status === StatusCode.InternalServerError;
 	}
 
 	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string) {
 		if (isString(e))
-			this.messages = [{ message: e }];
+			this.messages = [ { message: e } ];
 		else if (e instanceof HttpErrorResponse) {
 			this.url = e.url;
-			this.status = e.status! >= 500 || e.status === 0 || e['statusText'] === 'Unknown Error'
-				? StatusCode.internalServerError
+			this.status = e.status! >= 500 || e.status === 0 || e[ 'statusText' ] === 'Unknown Error'
+				? StatusCode.InternalServerError
 				: e.status!;
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 
-			if (this.status === StatusCode.notFound)
-				this.messages = [{
+			if (this.status === StatusCode.NotFound)
+				this.messages = [ {
 					message: 'The resource has not been found',
-				}];
-			else if (this.status === StatusCode.internalServerError)
-				this.messages = [{
+				} ];
+			else if (this.status === StatusCode.InternalServerError)
+				this.messages = [ {
 					message: 'The request to the server has failed.',
 					type: 'Please check your connection and try again later or contact the support if the problem persists',
-				}];
+				} ];
+			else if (this.status === StatusCode.RateLimited)
+				this.messages = [ {
+					message: this.statusText,
+					type: 'Please repeat again a bit later',
+				} ];
 			else if (e.error)
-				this.extractMessagesFromApiErrorResponse(e.error);
+				this._extractMessagesFromApiErrorResponse(e.error);
 		} else if (has(e, 'response')) {
-			e = e as IApiErrorResponse;
+			e = <IApiErrorResponse> e;
 			this.status = e.response.code;
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
-			this.extractMessagesFromApiErrorResponse(e);
+			this._extractMessagesFromApiErrorResponse(e);
 		} else
 			assign(this, e);
 
 		this.messages.forEach(it => it.field = camelCase(it.field));
 	}
 
-	private extractMessagesFromApiErrorResponse(e: IApiErrorResponse) {
+	private _extractMessagesFromApiErrorResponse(e: IApiErrorResponse) {
 		this.messages = e.result
-			? isArray(e.result) ? e.result : [e.result]
-			: e.response && e.response.message && [{ message: lowerCase(e.response.message) }] || [];
+			? isArray(e.result) ? e.result : [ e.result ]
+			: e.response && e.response.message && [ { message: lowerCase(e.response.message) } ] || [];
 	}
 }
 
 export interface IApiErrorResponse {
+
 	response: {
 		status: string,
 		code: number,
-		message: string
+		message: string;
 	};
+
 	result?: IApiErrorMessage | IApiErrorMessage[];
 }
 
 export interface IApiErrorMessage {
+
 	message: string;
+
 	type?: string;
+
 	field?: string;
+
 }

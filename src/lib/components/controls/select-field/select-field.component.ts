@@ -6,16 +6,16 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 @Component({
 	selector: 'bp-select-field',
 	templateUrl: './select-field.component.html',
-	styleUrls: ['./select-field.component.scss'],
+	styleUrls: [ './select-field.component.scss' ],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [{
+	providers: [ {
 		provide: NG_VALUE_ACCESSOR,
 		useExisting: SelectComponent,
 		multi: true
-	}]
+	} ]
 })
 export class SelectComponent extends FormFieldControlComponent<any> {
 	@Input() items!: any[];

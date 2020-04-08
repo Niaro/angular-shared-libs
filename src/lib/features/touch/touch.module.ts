@@ -6,9 +6,9 @@ import { TouchDirective } from './touch.directive';
 import { TouchBuilder } from './touch-builder';
 
 @NgModule({
-	imports: [CommonModule],
-	exports: [TouchDirective],
-	declarations: [TouchDirective],
-	providers: [TouchBuilder]
+	imports: [ CommonModule ],
+	exports: [ TouchDirective ],
+	declarations: [ TouchDirective ],
+	providers: [ TouchBuilder ]
 })
 export class TouchModule { }

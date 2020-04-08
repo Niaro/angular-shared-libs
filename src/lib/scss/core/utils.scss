@@ -1,3 +1,23 @@
+.pulsing-blur {
+	filter: blur(3px);
+	pointer-events: none;
+	animation: pulsingBlur 1.5s infinite ease-in-out;
+}
+
+@keyframes pulsingBlur {
+	0% {
+		filter: blur(3px);
+	}
+
+	50% {
+		filter: blur(5px);
+	}
+
+	100% {
+		filter: blur(3px);
+	}
+}
+
 .text-right {
 	text-align: right;
 }
@@ -32,6 +52,10 @@
 
 .lowercase {
 	text-transform: lowercase;
+}
+
+.uppercase {
+	text-transform: uppercase;
 }
 
 .text-ellipsis {

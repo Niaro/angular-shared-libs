@@ -1,48 +1,53 @@
-<mat-form-field [appearance]="appearance"
-				[color]="color">
+<mat-form-field [appearance]="$any(appearance)" [color]="color" [floatLabel]="floatLabel">
 	<mat-label *ngIf="label || customLabel">
 		<span [ngSwitch]="!!customLabel">
 			<span *ngSwitchDefault>{{ label }}</span>
-			<ng-content *ngSwitchCase="true"
-						select="bp-input-label">
-			</ng-content>
+			<ng-content *ngSwitchCase="true" select="bp-input-label"> </ng-content>
 		</span>
 	</mat-label>
 
-	<textarea *ngIf="textarea; else inputTpl"
-			  matInput
-			  [attr.name]="name"
-			  [formControl]="internalControl"
-			  [placeholder]="placeholder"
-			  [required]="required">
+	<textarea
+		*ngIf="textarea; else inputTpl"
+		matInput
+		[attr.name]="name"
+		[formControl]="internalControl"
+		[placeholder]="placeholder"
+		[required]="!!required"
+	>
 	</textarea>
 
 	<ng-template #inputTpl>
-		<input *ngIf="autocomplete; else defaultInputTpl"
-			   matInput
-			   [attr.name]="name"
-			   [formControl]="internalControl"
-			   [placeholder]="placeholder"
-			   [required]="required"
-			   [value]="value"
-			   [matAutocomplete]="autocomplete">
+		<input
+			*ngIf="autocomplete; else defaultInputTpl"
+			matInput
+			[attr.name]="name"
+			[formControl]="internalControl"
+			[placeholder]="placeholder"
+			[required]="!!required"
+			[value]="value"
+			[matAutocomplete]="autocomplete"
+		/>
 
 		<ng-template #defaultInputTpl>
-			<input matInput
-				   [attr.name]="name"
-				   [formControl]="internalControl"
-				   [placeholder]="placeholder"
-				   [required]="required"
-				   [bpTextMask]="number ? numberMask : mask" />
+			<input
+				matInput
+				[attr.name]="name"
+				[formControl]="internalControl"
+				[placeholder]="placeholder"
+				[required]="!!required"
+				[bpTextMask]="number ? numberMask : mask"
+			/>
 		</ng-template>
 	</ng-template>
 
 	<div class="close-btn-wrapper">
-		<div [@slideRight]="(internalControl.valueChanges | async) ? 'on' : 'off'">
-			<button type="button"
-					mat-icon-button
-					[disabled]="internalControl.disabled"
-					(click)="internalControl.setValue(null)">
+		<div [@slideRight]="internalControl.value ? 'on' : 'off'">
+			<button
+				type="button"
+				mat-icon-button
+				[disabled]="internalControl.disabled"
+				(click)="internalControl.setValue(null)"
+			>
 				<mat-icon>close</mat-icon>
 			</button>
 		</div>
@@ -51,17 +56,13 @@
 	<mat-hint *ngIf="hint || customHint">
 		<span [ngSwitch]="!!customHint">
 			<span *ngSwitchDefault>{{ hint }}</span>
-			<ng-content *ngSwitchCase="true"
-						select="bp-input-hint">
-			</ng-content>
+			<ng-content *ngSwitchCase="true" select="bp-input-hint"> </ng-content>
 		</span>
 	</mat-hint>
 
 	<span *ngIf="prefix" matPrefix>
-		<ng-content select="bp-input-prefix"></ng-content>
+		<ng-content select="bp-input-prefix, [bpInputPrefix]"></ng-content>
 	</span>
 
-	<mat-error bpFieldError
-			   [bpFieldErrorSuppress]="hideErrorText">
-	</mat-error>
+	<mat-error bpFieldError [bpFieldErrorSuppress]="hideErrorText"> </mat-error>
 </mat-form-field>

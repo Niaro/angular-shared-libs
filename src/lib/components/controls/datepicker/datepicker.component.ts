@@ -11,8 +11,8 @@ import { ControlComponent } from '../control.component';
 @Component({
 	selector: 'bp-datepicker',
 	templateUrl: './datepicker.component.html',
-	styleUrls: ['./datepicker.component.scss'],
-	animations: [SLIDE_RIGHT],
+	styleUrls: [ './datepicker.component.scss' ],
+	animations: [ SLIDE_RIGHT ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
 		{
@@ -23,6 +23,7 @@ import { ControlComponent } from '../control.component';
 	]
 })
 export class DatePickerComponent extends ControlComponent<m.Moment | null> {
+	// tslint:disable-next-line: naming-convention
 	DatepickerCalendarHeaderComponent = DatepickerCalendarHeaderComponent;
 
 	@Input() label!: string;
@@ -34,9 +35,9 @@ export class DatePickerComponent extends ControlComponent<m.Moment | null> {
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: m.Moment | null): void {
 		lineMicrotask(() => {
-				this.value = value;
-				this.cdr.markForCheck();
-			});
+			this.value = value;
+			this._cdr.markForCheck();
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 

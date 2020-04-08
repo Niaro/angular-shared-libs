@@ -1,6 +1,5 @@
 import { isObject, isString, flatMap, compact } from 'lodash-es';
 import { TranslateService } from '@ngx-translate/core';
-import { Dictionary } from 'lodash';
 
 import { IValidationErrors, ValidationError, ValidationErrorTemplateVariables } from './models';
 
@@ -8,7 +7,7 @@ export class ValidationErrorStrings extends Array<string> {
 	constructor(errors: IValidationErrors, translate?: TranslateService) {
 		super();
 
-		const ERROR_STRINGS: Dictionary<string> = translate
+		const errorStrings: Dictionary<string> = translate
 			? translate.instant('error')
 			: require('../../../../../apps/widget/src/assets/i18n/en.json').error;
 
@@ -16,7 +15,7 @@ export class ValidationErrorStrings extends Array<string> {
 			if (isString(error))
 				return error;
 
-			const value = ERROR_STRINGS[validatorName];
+			const value = errorStrings[ validatorName ];
 
 			if (isObject(error)) {
 				const masks = value.match(/{{(\w+)}}/g);
@@ -24,7 +23,7 @@ export class ValidationErrorStrings extends Array<string> {
 					? masks
 						.map(v => ({
 							mask: v,
-							maskValue: error[v.replace(/({{|}})/g, '') as keyof ValidationErrorTemplateVariables]
+							maskValue: error[ <keyof ValidationErrorTemplateVariables> v.replace(/({{|}})/g, '') ]
 						}))
 						.reduce(
 							(txt, { mask, maskValue }) => maskValue ? txt.replace(mask, maskValue.toString()) : txt,

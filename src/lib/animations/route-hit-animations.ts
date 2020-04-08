@@ -13,7 +13,7 @@ export const ROUTE_HIT_ANIMATIONS = trigger('routeHitAnimations', [
 	transition(getTrue, [
 		query(`:enter`, style({ opacity: 0, position: 'fixed' }), optional),
 
-		query(`:enter .${slideUpOnRouteHit}`, style({ opacity: 0 }), optional),
+		query(`:enter .${ slideUpOnRouteHit }`, style({ opacity: 0 }), optional),
 
 		group([
 			sequence([
@@ -32,7 +32,7 @@ export const ROUTE_HIT_ANIMATIONS = trigger('routeHitAnimations', [
 				group([
 					query(`:enter:not(bp-right-drawer)`, style({ opacity: 1, position: 'static' }), optional),
 					query(
-						`:enter:not(bp-right-drawer) > *${except}`,
+						`:enter:not(bp-right-drawer) > *${ except }`,
 						[
 							style({
 								transform: 'translateY(-3%)',
@@ -64,7 +64,7 @@ export const ROUTE_HIT_ANIMATIONS = trigger('routeHitAnimations', [
 			]),
 
 			query(
-				`:enter .${slideUpOnRouteHit}`,
+				`:enter .${ slideUpOnRouteHit }`,
 				stagger(100, [
 					style({ transform: 'translateY(6%)', opacity: 0 }),
 					animate(
@@ -85,5 +85,5 @@ export function getTrue() {
 // TODO a workaround waiting for https://github.com/angular/material2/issues/8057 being merged
 export const INSTANT_HIDE_ON_VOID = trigger(
 	'instantHideOnVoid',
-	[transition('* => void', [animate('0ms', style({ display: 'none' }))])]
+	[ transition('* => void', [ animate('0ms', style({ display: 'none' })) ]) ]
 );

@@ -9,7 +9,7 @@ export const FADE_IN_LIST = trigger('fadeInList', [
 			':enter',
 			[
 				style({ opacity: 0 }),
-				stagger(50, useAnimation(fadeIn, NORMAL))
+				stagger(20, useAnimation(fadeIn, NORMAL))
 			],
 			{ optional: true }
 		)

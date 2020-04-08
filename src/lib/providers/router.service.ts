@@ -10,42 +10,42 @@ import { ResponseError } from '../models/api';
 })
 export class RouterService {
 
-	navigationStart$ = this.router.events.pipe(
+	navigationStart$ = this.ngRouter.events.pipe(
 		filter(it => it instanceof NavigationStart),
-		map(v => v as NavigationStart),
+		map(v => <NavigationStart> v),
 		share()
 	);
 
-	navigationEnd$ = this.router.events.pipe(
+	navigationEnd$ = this.ngRouter.events.pipe(
 		filter(it => it instanceof NavigationEnd),
-		map(v => v as NavigationEnd),
+		map(v => <NavigationEnd> v),
 		share()
 	);
 
 	isNavigateToErrorPage = true;
 
 	constructor(
-		public router: Router,
+		public ngRouter: Router,
 		public route: ActivatedRoute
 	) {
-		this.router.events
-			// the request prop means that an error has occurred on loading a lazy module, so we just generalize and send to the error page
-			.subscribe((e) => e instanceof NavigationError && e.error.request && this.navigateToErrorPage());
+		this.ngRouter.events
+			// the request prop means that an error has occurred on loading a lazy module,
+			// so we just generalize and send to the error page
+			.subscribe((e) => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
 	}
 
-	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt: any })) {
-		this.router.navigate(commands, {
-			...extras,
-			relativeTo: UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt) as ActivatedRoute
-		});
+	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; })) {
+		const relativeTo = extras.relativeTo
+			?? (extras.relativeToCmpt && <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt));
+		this.ngRouter.navigate(commands, { ...extras, relativeTo });
 	}
 
 	closeOutlet(outlet: string) {
-		this.router.navigateByUrl(UrlHelper.getUrlExcludingOutlet(outlet, this.router));
+		this.ngRouter.navigateByUrl(UrlHelper.buildUrlExcludingOutlet(outlet, this.ngRouter));
 	}
 
 	onPrimaryComponentNavigationEnd(component: any) {
-		return this.router.events.pipe(
+		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
 			map(() => UrlHelper.getMainBranchLastRoute(this.route).component),
 			distinctUntilChanged(),
@@ -53,23 +53,32 @@ export class RouterService {
 		);
 	}
 
-	onNavigationEnd(cmptType: Type<any>) {
-		return this.router.events.pipe(
+	onNavigationEndToRouteComponent(cmptType: Type<any>) {
+		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
-			map(() => UrlHelper.getComponentRoute(this.route, cmptType) as ActivatedRoute),
-			distinctUntilChanged((x, y) => (x && x.component) === (y && y.component)),
-			filter(v => v && v.component === cmptType)
+			map(() => <ActivatedRoute> UrlHelper.getComponentRoute(this.route, cmptType)),
+			distinctUntilChanged((p, q) => p?.component === q?.component),
+			filter(v => v?.component === cmptType)
+		);
+	}
+
+	onLeaveFromRouteComponent(cmptType: Type<any>) {
+		return this.ngRouter.events.pipe(
+			filter(e => e instanceof NavigationEnd),
+			map(() => !!UrlHelper.getComponentRoute(this.route, cmptType)?.component),
+			filter(v => v)
 		);
 	}
 
 	tryNavigateOnResponseError(e: ResponseError) {
-		// fullscreen pages handle errors on its own like the login page and all the non 500+ errors should be handled manually
+		// fullscreen pages handle errors on its own like the login page and all the non 500+ errors should be handled
+		// manually
 		if (!this.isNavigateToErrorPage || !e.isInternalServerError)
 			return;
-		this.navigateToErrorPage();
+		this._navigateToErrorPage();
 	}
 
-	private navigateToErrorPage() {
-		this.router.navigate(['/error'], { replaceUrl: false, skipLocationChange: true });
+	private _navigateToErrorPage() {
+		this.ngRouter.navigate([ '/error' ], { replaceUrl: false, skipLocationChange: true });
 	}
 }

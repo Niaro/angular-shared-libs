@@ -1,34 +1,32 @@
-<span *ngIf="prefix"
-	  matPrefix
-	  class="prefix">
+<span *ngIf="prefix" matPrefix class="prefix">
 	<ng-content select="bp-input-prefix"></ng-content>
 </span>
 
-<input *ngIf="autocomplete; else defaultTpl"
-	   #el
-	   matInput
-	   [attr.name]="name"
-	   [formControl]="internalControl"
-	   [placeholder]="placeholder"
-	   [matAutocomplete]="autocomplete"
-	   [matAutocompleteConnectedTo]="autocompleteOrigin">
+<input
+	*ngIf="autocomplete; else defaultTpl"
+	#el
+	matInput
+	[attr.name]="name"
+	[formControl]="internalControl"
+	[placeholder]="placeholder"
+	[matAutocomplete]="autocomplete"
+	[matAutocompleteConnectedTo]="autocompleteOrigin"
+/>
 
 <ng-template #defaultTpl>
-	<input #el
-		   matInput
-		   [attr.name]="name"
-		   [formControl]="internalControl"
-		   [placeholder]="placeholder"
-		   [bpTextMask]="mask" />
+	<input
+		#el
+		matInput
+		[attr.name]="name"
+		[formControl]="internalControl"
+		[placeholder]="placeholder"
+		[bpTextMask]="mask"
+	/>
 </ng-template>
 
-<ng-container *ngIf="internalControl.valueChanges | async">
-	<div *bpDelayedRender
-		 class="close-btn-wrapper"
-		 @slideRight>
-		<button type="button"
-				mat-icon-button
-				(click)="internalControl.setValue(null)">
+<ng-container *ngIf="internalControl.value">
+	<div *bpDelayedRender class="close-btn-wrapper" @slideRight>
+		<button type="button" mat-icon-button (click)="internalControl.setValue(null)">
 			<mat-icon>close</mat-icon>
 		</button>
 	</div>

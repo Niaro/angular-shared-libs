@@ -14,12 +14,12 @@ import { UrlHelper } from '@bp/shared/utils';
 
 import { FilterControlDirective } from './filter-control.directive';
 
-export type FilterValue = { [controlName: string]: any };
+export type FilterValue = { [ controlName: string ]: any; };
 
 @Component({
 	selector: 'bp-filter',
 	template: `<ng-content></ng-content>`,
-	styleUrls: ['./filter.component.scss'],
+	styleUrls: [ './filter.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterComponent<T = FilterValue> implements OnChanges, AfterContentInit {
@@ -28,7 +28,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 
 	@Input() type: 'query' | 'matrix' = 'matrix';
 
-	@Input() defaults: T = <T>{};
+	@Input() defaults: T = <T> {};
 
 	@Output('value') readonly value$: Observable<T>;
 
@@ -37,15 +37,18 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	empty!: boolean;
 
 	@ContentChildren(FilterControlDirective, { descendants: true })
-	private controlsQuery!: QueryList<FilterControlDirective>;
+	private _controlsQuery!: QueryList<FilterControlDirective>;
 
-	private _value$ = new BehaviorSubject<T>(<T>{});
+	private _value$ = new BehaviorSubject<T>(<T> {});
 
-	private defaults$ = new BehaviorSubject<T>(<T>{});
+	private _defaults$ = new BehaviorSubject<T>(<T> {});
 
-	private defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>>{});
+	private _defaultsStringed$ = new BehaviorSubject<Stringify<T>>(<Stringify<T>> {});
 
-	constructor(private router: Router, private route: ActivatedRoute) {
+	constructor(
+		private _router: Router,
+		private _route: ActivatedRoute
+	) {
 		this.value$ = this._value$.pipe(
 			tap(v => this.empty = isEmpty(v)),
 			filter(v => v !== undefined)
@@ -53,16 +56,16 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 	}
 
 	ngOnChanges({ defaults }: SimpleChanges) {
-		defaults && this.defaults$.next(this.defaults);
+		defaults && this._defaults$.next(this.defaults);
 	}
 
 	ngAfterContentInit() {
-		const filterControls$ = this.controlsQuery
+		const filterControls$ = this._controlsQuery
 			.changes
 			.pipe(
-				startWith(this.controlsQuery),
+				startWith(this._controlsQuery),
 				map((q: QueryList<FilterControlDirective>) => q.toArray()),
-				shareReplay(1)
+				shareReplay({ refCount: false, bufferSize: 1 })
 			);
 
 		/**
@@ -70,36 +73,36 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		 */
 		combineLatest(
 			filterControls$,
-			this.defaults$
+			this._defaults$
 		)
 			.pipe(
-				filter(([, defaults]) => !isEmpty(defaults)),
-				map(([controls, defaults]) => transform(
+				filter(([ , defaults ]) => !isEmpty(defaults)),
+				map(([ controls, defaults ]) => transform(
 					controls,
 					(acc, c) => set(acc, c.name, UrlHelper.toRouteString(get(defaults, c.name))),
-					<Stringify<T>>{}
+					<Stringify<T>> {}
 				))
 			)
-			.subscribe(this.defaultsStringed$);
+			.subscribe(this._defaultsStringed$);
 
 		/**
 		 * Update the filter controls on the route params change
 		 */
 		combineLatest(
 			filterControls$,
-			this.type === 'matrix' ? this.route.params : this.route.queryParams,
-			this.defaultsStringed$
+			this.type === 'matrix' ? this._route.params : this._route.queryParams,
+			this._defaultsStringed$
 		)
 			.pipe(
-				map(([controls, params, defaults]) => controls.map(c => ({
+				map(([ controls, params, defaults ]) => controls.map(c => ({
 					control: c,
-					routeValue: params[c.name],
+					routeValue: params[ c.name ],
 					defaultValue: get(defaults, c.name)
 				}))),
 				startWith(undefined),
 				pairwise(),
 				// update only those controls which are needed to be updated
-				map(([prevSet, nextSet]) => nextSet!.filter(n => {
+				map(([ prevSet, nextSet ]) => nextSet!.filter(n => {
 					const prev = prevSet && prevSet.find(p => n.control.name === p.control.name);
 					return !prev || n.routeValue !== prev.routeValue;
 				})),
@@ -118,14 +121,14 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			.pipe(
 				switchMap(controls => combineLatest(controls.map(c => c.value$.pipe(
 					startWith(c.value),
-					map((value): [string, any] => [c.name, value])
+					map((value): [ string, any ] => [ c.name, value ])
 				)))),
 				auditTime(50),
 				map(controlValues => fromPairs(
-					controlValues.filter(([, value]) => !isNil(value))
+					controlValues.filter(([ , value ]) => !isNil(value))
 				))
 			)
-			.subscribe(controlSelectedValues => this._value$.next(<T>controlSelectedValues));
+			.subscribe(controlSelectedValues => this._value$.next(<T> controlSelectedValues));
 
 		/**
 		 * Update the url on the filter controls value change
@@ -134,7 +137,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			.pipe(
 				switchMap(controls => merge(...controls.map(c => c.value$.pipe(
 					debounceTime(50),
-					map((value): [string, any] => [c.name, value]),
+					map((value): [ string, any ] => [ c.name, value ]),
 
 					// if more than one the filter control emits a value during the same event loop,
 					// the router will navigate only to the last fired one, but we need to proceed all of them.
@@ -142,22 +145,22 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					// we schedule it at the end of the current event loop
 					observeOn(asyncScheduler)
 				)))),
-				map(([controlName, value]): [Params, string, string | undefined] => [
-					this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route),
+				map(([ controlName, value ]): [ Params, string, string | undefined ] => [
+					this.type === 'matrix' ? UrlHelper.getRouteParams(this._route) : UrlHelper.getQueryParams(this._route),
 					controlName,
 					UrlHelper.toRouteString(value)
 				]),
-				filter(([routeParams, controlName, newRouteValue]) => newRouteValue !== routeParams[controlName])
+				filter(([ routeParams, controlName, newRouteValue ]) => newRouteValue !== routeParams[ controlName ])
 			)
-			.subscribe(([routeParams, controlName, newRouteValue]) => {
-				this.except.forEach(v => delete routeParams[v]);
+			.subscribe(([ routeParams, controlName, newRouteValue ]) => {
+				this.except.forEach(v => delete routeParams[ v ]);
 
-				if (isNil(newRouteValue) || newRouteValue === get(this.defaultsStringed$.value, controlName))
-					delete routeParams[controlName];
+				if (isNil(newRouteValue) || newRouteValue === get(this._defaultsStringed$.value, controlName))
+					delete routeParams[ controlName ];
 				else
-					routeParams[controlName] = newRouteValue;
+					routeParams[ controlName ] = newRouteValue;
 
-				this.updateUrl(routeParams);
+				this._updateUrl(routeParams);
 			});
 
 		/**
@@ -166,24 +169,26 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		filterControls$
 			.pipe(
 				pairwise(),
-				map(([prev, curr]) => difference(prev, curr)),
+				map(([ prev, curr ]) => difference(prev, curr)),
 				filter(v => v.length > 0)
 			)
 			.subscribe(deleted => {
-				const routeParams = this.type === 'matrix' ? UrlHelper.getRouteParams(this.route) : UrlHelper.getQueryParams(this.route);
-				deleted.forEach(v => delete routeParams[v.name]);
-				this.updateUrl(routeParams);
+				const routeParams = this.type === 'matrix'
+					? UrlHelper.getRouteParams(this._route)
+					: UrlHelper.getQueryParams(this._route);
+				deleted.forEach(v => delete routeParams[ v.name ]);
+				this._updateUrl(routeParams);
 			});
 	}
 
 	clear() {
-		this.controlsQuery.forEach(v => v.setValue(null));
+		this._controlsQuery.forEach(v => v.setValue(null));
 	}
 
-	private updateUrl(routeParams: Object) {
+	private _updateUrl(routeParams: Object) {
 		if (this.type === 'matrix')
-			this.router.navigate([routeParams], { relativeTo: this.route });
+			this._router.navigate([ routeParams ], { relativeTo: this._route });
 		else
-			this.router.navigate([], { queryParams: routeParams, relativeTo: this.route });
+			this._router.navigate([], { queryParams: routeParams, relativeTo: this._route });
 	}
 }

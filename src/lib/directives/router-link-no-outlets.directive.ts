@@ -1,10 +1,10 @@
-import { Directive, Input, OnChanges, OnDestroy, HostBinding, HostListener } from '@angular/core';
+import { Directive, Input, OnChanges, HostBinding, HostListener } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
 import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, UrlSegmentGroup, QueryParamsHandling } from '@angular/router';
-import { takeUntil, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { isString } from 'lodash-es';
 
-import { AsyncVoidSubject } from '../rxjs';
+import { Destroyable } from '../components/destroyable';
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive
@@ -14,19 +14,19 @@ import { AsyncVoidSubject } from '../rxjs';
 @Directive({
 	selector: 'a[routerLinkNoOutlets]' // tslint:disable-line
 })
-export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestroy {
+export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements OnChanges {
 
 	@Input()
 	set routerLinkNoOutlets(commands: any[] | string) {
 		if (commands != null)
-			this.commands = Array.isArray(commands) ? commands : [commands];
+			this._commands = Array.isArray(commands) ? commands : [ commands ];
 		else
-			this.commands = [];
+			this._commands = [];
 	}
 
 	@HostBinding('attr.target') @Input() target!: string;
 
-	@Input() queryParams!: { [k: string]: any };
+	@Input() queryParams!: { [ k: string ]: any };
 
 	@Input() fragment!: string;
 
@@ -38,31 +38,31 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 
 	@Input() replaceUrl!: boolean;
 
-	@Input() state?: { [k: string]: any };
+	@Input() state?: { [ k: string ]: any };
 
 	// the url displayed on the anchor element.
 	@HostBinding() href!: string;
 
-	private commands: any[] = [];
-	private destroyed$ = new AsyncVoidSubject();
+	private _commands: any[] = [];
 
 	constructor(
-		private router: Router,
-		private route: ActivatedRoute,
-		private locationStrategy: LocationStrategy
+		private _router: Router,
+		private _route: ActivatedRoute,
+		private _locationStrategy: LocationStrategy
 	) {
-		router.events
+		super();
+
+		_router.events
 			.pipe(
-				takeUntil(this.destroyed$),
-				filter(e => e instanceof NavigationEnd)
+				filter(e => e instanceof NavigationEnd),
+				this.takeUntilDestroyed,
 			)
-			.subscribe(() => this.updateTargetUrlAndHref());
+			.subscribe(() => this._updateTargetUrlAndHref());
 	}
 
-	ngOnChanges() { this.updateTargetUrlAndHref(); }
-	ngOnDestroy() { this.destroyed$.complete(); }
+	ngOnChanges() { this._updateTargetUrlAndHref(); }
 
-	@HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey'])
+	@HostListener('click', [ '$event.button', '$event.ctrlKey', '$event.metaKey', '$event.shiftKey' ])
 	onClick(button: number, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean): boolean {
 		if (button !== 0 || ctrlKey || metaKey || shiftKey)
 			return true;
@@ -70,7 +70,7 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 		if (isString(this.target) && this.target !== '_self')
 			return true;
 
-		this.router.navigateByUrl(this.urlTree, {
+		this._router.navigateByUrl(this.urlTree, {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
 			replaceUrl: attrBoolValue(this.replaceUrl),
 			state: this.state
@@ -79,13 +79,13 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 		return false;
 	}
 
-	private updateTargetUrlAndHref(): void {
-		this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+	private _updateTargetUrlAndHref(): void {
+		this.href = this._locationStrategy.prepareExternalUrl(this._router.serializeUrl(this.urlTree));
 	}
 
 	get urlTree(): UrlTree {
-		let tree = this.router.createUrlTree([{ outlets: { [PRIMARY_OUTLET]: this.commands }}], {
-			relativeTo: this.route.root,
+		let tree = this._router.createUrlTree([ { outlets: { [ PRIMARY_OUTLET ]: this._commands } } ], {
+			relativeTo: this._route.root,
 			queryParams: this.queryParams,
 			fragment: this.fragment,
 			queryParamsHandling: this.queryParamsHandling,
@@ -94,21 +94,22 @@ export class RouterLinkNoOutletsWithHrefDirective implements OnChanges, OnDestro
 
 		// clone tree, cause createUrlTree creates shared tree with the router and
 		// we don't want to affect inner router state
-		tree = this.router.parseUrl(tree.toString());
+		tree = this._router.parseUrl(tree.toString());
 
-		this.removeNonPrimaryOutlets(tree.root);
+		this._removeNonPrimaryOutlets(tree.root);
 
 		return tree;
 	}
 
-	private removeNonPrimaryOutlets({ children }: UrlSegmentGroup) {
+	private _removeNonPrimaryOutlets({ children }: UrlSegmentGroup) {
 		for (const key in children) {
-			if (children.hasOwnProperty(key)) {
-				if (key === PRIMARY_OUTLET)
-					this.removeNonPrimaryOutlets(children[key]);
-				else
-					delete children[key];
-			}
+			if (!children.hasOwnProperty(key))
+				continue;
+
+			if (key === PRIMARY_OUTLET)
+				this._removeNonPrimaryOutlets(children[ key ]);
+			else
+				delete children[ key ];
 		}
 	}
 }

@@ -23,6 +23,18 @@ export const BOX_SHADOWED_SLIDE_UP_ANIMATION = animation(
 );
 
 export const BOX_SHADOWED_SLIDE = trigger('slideBoxShadowed', [
-	transition(':enter', [query('.animation-target', useAnimation(BOX_SHADOWED_SLIDE_DOWN_ANIMATION), { optional: true })]),
-	transition(':leave', [query('.animation-target', useAnimation(BOX_SHADOWED_SLIDE_UP_ANIMATION), { optional: true })]),
+	transition(':enter', [
+		query(
+			'.animation-target',
+			useAnimation(BOX_SHADOWED_SLIDE_DOWN_ANIMATION),
+			{ optional: true }
+		)
+	]),
+	transition(':leave', [
+		query(
+			'.animation-target',
+			useAnimation(BOX_SHADOWED_SLIDE_UP_ANIMATION),
+			{ optional: true }
+		)
+	]),
 ]);

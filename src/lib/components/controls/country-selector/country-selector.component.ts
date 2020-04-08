@@ -1,19 +1,19 @@
 import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { isArray } from 'lodash-es';
+import { isArray, isEmpty } from 'lodash-es';
 
+import { Countries, Country, CountryCode } from '@bp/shared/models';
 import { lineMicrotask } from '@bp/shared/utils';
+import { FADE_IN_LIST } from '@bp/shared/animations';
 
 import { FormFieldControlComponent } from '../form-field-control.component';
-
 
 @Component({
 	selector: 'bp-country-selector',
 	templateUrl: './country-selector.component.html',
-	styleUrls: ['./country-selector.component.scss'],
+	styleUrls: [ './country-selector.component.scss' ],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
@@ -27,7 +27,8 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 			useExisting: CountrySelectorComponent,
 			multi: true
 		}
-	]
+	],
+	animations: [ FADE_IN_LIST ]
 })
 export class CountrySelectorComponent extends FormFieldControlComponent<Country | null> implements OnChanges {
 
@@ -41,11 +42,13 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() panelClass!: string;
 
+	name = 'country';
+
 	filtered = Countries.list;
 
 	throttle = 0;
 
-	UnitedStatesMinorOutlyingIslands = Countries.findByCode('UM');
+	unitedStatesMinorOutlyingIslands = Countries.findByCode('UM');
 
 	worldwide = Countries.worldwide;
 
@@ -60,65 +63,66 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 				: Countries.list;
 
 		if (countries) {
-			this.countries = this.countries ?? Countries.list;
+			this.countries = isEmpty(this.countries) ? Countries.list : this.countries;
 			this.filtered = this.countries;
 		}
 
 		if (hasWorldwide || excluded || countries) {
-			this.countries = this.updateWorldwideInCountriesList(this.countries);
-			this.filtered = this.updateWorldwideInCountriesList(this.filtered);
+			this.countries = this._getCountriesAccordingToHasWorldwideFlag(this.countries);
+			this.filtered = this._getCountriesAccordingToHasWorldwideFlag(this.filtered);
 		}
 
+		// tslint:disable-next-line: early-exit
 		if (value) {
-			const countryName = !this.value || !this.hasWorldwide && this.value === Countries.worldwide
-				? ''
-				: this.value.name;
+			const country = !this.value || !this.hasWorldwide && this.value === Countries.worldwide
+				? null
+				: this.value;
 
-			this.updateFilteredCountries(countryName);
-			this.internalControl.setValue(countryName, { emitEvent: false });
+			this._filterCountries(country?.name);
+			this.writeValue(country);
 		}
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
-	writeValue(value: Country | CountryCode | null): void {
+	writeValue(value?: Country | CountryCode | null): void {
 		lineMicrotask(() => {
-				this.setValue(
-					value instanceof Country
-						? value
-						: value && Countries.findByCode(value),
-				{ emitChange: false });
-				this.internalControl.setValue(this.value && this.value.name || '', { emitViewToModelChange: false });
-			});
+			this._setIncomingValue(value instanceof Country
+				? value
+				: (value && Countries.findByCode(value)) ?? null
+			);
+			this._setIncomingValueToInternalControl(this.value?.name ?? '');
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 
 	// #region Implementation of the Validator interface
-	protected validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
+	// tslint:disable-next-line: no-unnecessary-type-annotation
+	protected _validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
 		return !value && this.internalControl.value
 			? { 'countryNotFound': true }
 			: null;
-	}
+	};
 	// #endregion Implementation of the Validator interface
 
-	onInternalControlValueChange(input: string) {
-		this.updateFilteredCountries(input);
+	protected _onInternalControlValueChange(input: string | null) {
+		this._filterCountries(input);
 
-		if (this.value && this.value.name === input)
+		if (this.value?.name === input)
 			return;
 
-		this.setValue(input ? Countries.find(input) : null);
+		this.setValue(Countries.find(input));
 	}
 
-	private updateWorldwideInCountriesList(list: Country[]) {
+	private _getCountriesAccordingToHasWorldwideFlag(list: Country[]) {
 		return this.hasWorldwide
-			? [Countries.worldwide, ...list]
+			? [ Countries.worldwide, ...list ]
 			: list.filter(v => v !== Countries.worldwide);
 	}
 
-	private updateFilteredCountries(input: string) {
-		const loweredCountryName = input && input.toLowerCase();
+	private _filterCountries(input?: string | null) {
+		const loweredCountryName = input?.toLowerCase();
 		this.filtered = loweredCountryName
-			? this.countries.filter(it => it.lowerCaseName && it.lowerCaseName.includes(loweredCountryName))
+			? this.countries.filter(it => it.lowerCaseName?.includes(loweredCountryName))
 			: this.countries;
 	}
 }

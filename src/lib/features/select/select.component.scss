@@ -13,14 +13,14 @@
 .mat-select {
 	display: inline-block;
 	width: 100%;
-	outline: 0
+	outline: 0;
 }
 
 .mat-select-trigger {
 	display: inline-table;
 	cursor: pointer;
 	position: relative;
-	box-sizing: border-box
+	box-sizing: border-box;
 }
 
 .mat-select-disabled .mat-select-trigger {
@@ -28,7 +28,7 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	cursor: default
+	cursor: default;
 }
 
 .mat-select-value {
@@ -37,38 +37,44 @@
 	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap
+	white-space: nowrap;
 }
 
 .mat-select-value-text {
 	white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis
+	text-overflow: ellipsis;
 }
 
-.mat-select-arrow-wrapper {
+.mat-select-arflex-flow-row-wrapper {
 	display: table-cell;
-	vertical-align: middle
+	vertical-align: middle;
 }
 
-.mat-form-field-appearance-fill .mat-select-arrow-wrapper {
-	transform: translateY(-50%)
+.mat-form-field-appearance-fill .mat-select-arflex-flow-row-wrapper {
+	transform: translateY(-50%);
 }
 
-.mat-form-field-appearance-outline .mat-select-arrow-wrapper {
-	transform: translateY(-25%)
+.mat-form-field-appearance-outline .mat-select-arflex-flow-row-wrapper {
+	transform: translateY(-25%);
 }
 
-.mat-form-field-appearance-standard.mat-form-field-has-label .mat-select:not(.mat-select-empty) .mat-select-arrow-wrapper {
-	transform: translateY(-50%)
+.mat-form-field-appearance-standard.mat-form-field-has-label
+	.mat-select:not(.mat-select-empty)
+	.mat-select-arflex-flow-row-wrapper {
+	transform: translateY(-50%);
 }
 
-.mat-form-field-appearance-standard .mat-select.mat-select-empty .mat-select-arrow-wrapper {
-	transition: transform .4s cubic-bezier(.25, .8, .25, 1)
+.mat-form-field-appearance-standard
+	.mat-select.mat-select-empty
+	.mat-select-arflex-flow-row-wrapper {
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-._mat-animation-noopable.mat-form-field-appearance-standard .mat-select.mat-select-empty .mat-select-arrow-wrapper {
-	transition: none
+._mat-animation-noopable.mat-form-field-appearance-standard
+	.mat-select.mat-select-empty
+	.mat-select-arflex-flow-row-wrapper {
+	transition: none;
 }
 
 .mat-select-arrow {
@@ -77,11 +83,11 @@
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
 	border-top: 5px solid;
-	margin: 0 4px
+	margin: 0 4px;
 }
 
 .mat-select-panel-wrap {
-	flex-basis: 100%
+	flex-basis: 100%;
 }
 
 .mat-select-panel {
@@ -93,12 +99,12 @@
 	padding-bottom: 0;
 	max-height: 256px;
 	min-width: 100%;
-	border-radius: 4px
+	border-radius: 4px;
 }
 
-@media (-ms-high-contrast:active) {
+@media (-ms-high-contrast: active) {
 	.mat-select-panel {
-		outline: solid 1px
+		outline: solid 1px;
 	}
 }
 
@@ -113,31 +119,31 @@
 	.mat-optgroup-label,
 	.mat-option {
 		line-height: 3em;
-		height: 3em
+		height: 3em;
 	}
 }
 
 .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
-	cursor: pointer
+	cursor: pointer;
 }
 
 .mat-form-field-type-mat-select .mat-form-field-label {
-	width: calc(100% - 18px)
+	width: calc(100% - 18px);
 }
 
 .mat-select-placeholder {
-	transition: color .4s .133s cubic-bezier(.25, .8, .25, 1)
+	transition: color 0.4s 0.133s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 ._mat-animation-noopable .mat-select-placeholder {
-	transition: none
+	transition: none;
 }
 
 .mat-form-field-hide-placeholder .mat-select-placeholder {
 	color: transparent;
 	-webkit-text-fill-color: transparent;
 	transition: none;
-	display: block
+	display: block;
 }
 
 // #endregion copied from the mat select sources

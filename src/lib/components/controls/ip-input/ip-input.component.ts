@@ -8,9 +8,9 @@ import { FormFieldControlComponent } from '../form-field-control.component';
 @Component({
 	selector: 'bp-ip-input',
 	templateUrl: './ip-input.component.html',
-	styleUrls: ['./ip-input.component.scss'],
+	styleUrls: [ './ip-input.component.scss' ],
 	host: {
-		'(focusout)': 'onTouched()'
+		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
@@ -56,7 +56,7 @@ export class IpInputComponent extends FormFieldControlComponent<string> {
 	// 	includeMaskInValue: true
 	// };
 
-	onInternalControlValueChange(ip: string) {
+	protected _onInternalControlValueChange(ip: string) {
 		this.internalControl.valid && this.setValue(ip);
 	}
 }

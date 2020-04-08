@@ -5,10 +5,11 @@ import { PaymentMethodBrand } from '@bp/shared/models/business-domain/enums';
 @Component({
 	selector: 'bp-payment-method-brand',
 	templateUrl: './payment-method-brand.component.html',
-	styleUrls: ['./payment-method-brand.component.scss'],
+	styleUrls: [ './payment-method-brand.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentMethodBrandComponent implements OnChanges {
+
 	@Input() src!: PaymentMethodBrand | string;
 
 	brand!: PaymentMethodBrand | null;
@@ -18,4 +19,5 @@ export class PaymentMethodBrandComponent implements OnChanges {
 			? this.src
 			: PaymentMethodBrand.parse(this.src);
 	}
+
 }

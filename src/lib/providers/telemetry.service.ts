@@ -1,6 +1,8 @@
 import { Injectable, ErrorHandler } from '@angular/core';
 import * as LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
+import { from } from 'rxjs';
+import { shareReplay, first } from 'rxjs/operators';
 
 import { environment as env } from '@bp/environment';
 
@@ -15,7 +17,7 @@ export class TelemetryService {
 
 	static enabled = whenOnRemoteServerInitLogrocket();
 
-	private static instance: TelemetryService;
+	private static _instance: TelemetryService;
 
 	static routerErrorHandler(error: any) {
 		TelemetryService.captureError(error, 'router');
@@ -26,38 +28,55 @@ export class TelemetryService {
 	}
 
 	static captureError(error: Error | any, source: string) {
-		if (env.remoteServer)
-			LogRocket.captureException(
-				error instanceof Error ? error : new Error(JSON.stringify(error)),
-				{ tags: { source } }
-			);
-		else
+		if (env.localServer) {
 			console.error(error);
+			return;
+		}
+
+		LogRocket.captureException(
+			error instanceof Error ? error : new Error(JSON.stringify(error)),
+			{ tags: { source } }
+		);
+	}
+
+	static captureMessage(msg: string, dataToLog?: any) {
+		dataToLog && console.log(dataToLog);
+
+		if (env.remoteServer)
+			LogRocket.captureMessage(msg, { tags: { source: 'code' } });
+		else
+			console.warn(msg);
 	}
 
 	get enabled() { return TelemetryService.enabled; }
 
-	constructor() {
-		if (TelemetryService.instance)
-			return TelemetryService.instance;
+	sessionUrl$ = from(new Promise<string>(r => LogRocket.getSessionURL(v => r(v))))
+		.pipe(
+			first(),
+			shareReplay({ bufferSize: 1, refCount: false })
+		);
 
-		return TelemetryService.instance = this;
+	constructor() {
+		if (TelemetryService._instance)
+			return TelemetryService._instance;
+
+		return TelemetryService._instance = this;
 	}
 
 	getUserLogrocketUrl(userId: string) {
-		return `https://app.logrocket.com/${env.logrocket}/sessions?u=${userId}`;
-	}
-
-	getSessionUrl(): Promise<string> {
-		return new Promise(resolve => LogRocket.getSessionURL(v => resolve(v)));
+		return `https://app.logrocket.com/${ env.logrocket }/sessions?u=${ userId }`;
 	}
 
 	registerUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
-		LogRocket.identify(uid, userTraits as any);
+		LogRocket.identify(uid, <any> userTraits);
 	}
 
 	captureError(error: any) {
 		TelemetryService.captureError(error, 'manual');
+	}
+
+	captureMessage(msg: string, dataToLog?: any) {
+		TelemetryService.captureMessage(msg, dataToLog);
 	}
 }
 

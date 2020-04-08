@@ -1,3 +1,6 @@
+export * from './attr-bool-value';
+export * from './clone-and-remove';
+export * from './clone-and-splice';
 export * from './dom-helper';
 export * from './fastdom';
 export * from './is-extension-of';

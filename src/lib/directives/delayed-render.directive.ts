@@ -1,10 +1,11 @@
-import { Directive, TemplateRef, ViewContainerRef, OnDestroy, Input, ElementRef, AfterViewChecked } from '@angular/core';
+import { Directive, TemplateRef, ViewContainerRef, Input, ElementRef } from '@angular/core';
 import { timer } from 'rxjs';
-import { takeUntil, filter, first } from 'rxjs/operators';
+import { first, map, startWith, share } from 'rxjs/operators';
 
 import { lineMicrotask } from '@bp/shared/utils';
 
-import { AsyncVoidSubject, OptionalBehaviorSubject } from '../rxjs';
+import { fromMutation } from '../rxjs';
+import { Destroyable } from '../components/destroyable';
 
 /**
  * Rendering a significant amount of complex components in one event loop can create a visible freezes of the UI
@@ -12,56 +13,64 @@ import { AsyncVoidSubject, OptionalBehaviorSubject } from '../rxjs';
  * a manageable amount of work
  */
 @Directive({ selector: '[bpDelayedRender]' })
-export class DelayedRenderDirective implements OnDestroy, AfterViewChecked {
+export class DelayedRenderDirective extends Destroyable {
+
+
+	private static readonly _bodyMutations$ = fromMutation(document.body, { subtree: true, childList: true })
+		.pipe(share());
+
+	private static readonly _maxInstantRenderedViews = 7;
+
+	private static _instantViewsRenderingCounter = 0;
 
 	@Input('bpDelayedRender') id!: string;
 
-	private static instantViewsRenderingCounter = 0;
-
-	private static maxInstantRenderedViews = 7;
-
-	private destroyed$ = new AsyncVoidSubject();
-
-	private parentElement$ = new OptionalBehaviorSubject<HTMLElement | null>();
+	private get _$host() { return <Comment> this._host.nativeElement; }
 
 	// tslint:disable-next-line: member-ordering
 	constructor(
-		private host: ElementRef,
+		private _host: ElementRef,
 		private _viewContainer: ViewContainerRef,
-		private tplRef: TemplateRef<any>
+		private _tplRef: TemplateRef<any>
 	) {
-		this.parentElement$
-			.pipe(
-				filter(v => !!v),
-				first()
-			)
-			.subscribe(() => this.scheduleCmptRendering());
+		super();
+
+		this._waitTillParentElementAttachedToDom$()
+			.subscribe(() => this._scheduleCmptRendering());
 	}
 
-	ngAfterViewChecked() {
-		if (!this.parentElement$.value)
-			this.parentElement$.next((<Comment>this.host.nativeElement).parentElement);
+	private _waitTillParentElementAttachedToDom$() {
+		return DelayedRenderDirective._bodyMutations$.pipe(
+			map(() => this._$host.parentElement?.isConnected),
+			startWith(this._$host.parentElement?.isConnected),
+			first(v => !!v),
+		);
 	}
 
-	ngOnDestroy() {
-		this.destroyed$.complete();
-	}
-
-	private scheduleCmptRendering() {
-		if (DelayedRenderDirective.instantViewsRenderingCounter <= DelayedRenderDirective.maxInstantRenderedViews)
-			this.renderCmpt(); // to render in the current event loop a set number of views
+	private _scheduleCmptRendering() {
+		if (DelayedRenderDirective._instantViewsRenderingCounter <= DelayedRenderDirective._maxInstantRenderedViews)
+			this._renderCmpt(); // to render in the current event loop a set number of views
 		else
-			// if the rendered views counter exceeds the max we schedule rendering to the next event loops
-			timer((DelayedRenderDirective.instantViewsRenderingCounter - DelayedRenderDirective.maxInstantRenderedViews) * 3)
-				.pipe(takeUntil(this.destroyed$))
-				.subscribe(() => this.renderCmpt());
+			timer(this._calcNextRenderDueTime())
+				.pipe(this.takeUntilDestroyed)
+				.subscribe(() => this._renderCmpt());
 
-		DelayedRenderDirective.instantViewsRenderingCounter++;
+		DelayedRenderDirective._instantViewsRenderingCounter++;
 
-		lineMicrotask(() => DelayedRenderDirective.instantViewsRenderingCounter = 0);
+		lineMicrotask(() => DelayedRenderDirective._instantViewsRenderingCounter = 0);
 	}
 
-	private renderCmpt() {
-		this._viewContainer.createEmbeddedView(this.tplRef).detectChanges();
+	private _renderCmpt() {
+		this._viewContainer.createEmbeddedView(this._tplRef).detectChanges();
+	}
+
+	private _calcNextRenderDueTime() {
+		return DelayedRenderDirective._instantViewsRenderingCounter - DelayedRenderDirective._maxInstantRenderedViews * 2;
+
+		// const remainder = (DelayedRenderDirective._instantViewsRenderingCounter -
+		// 	DelayedRenderDirective._maxInstantRenderedViews) % DelayedRenderDirective._maxInstantRenderedViews;
+
+		// return DelayedRenderDirective._instantViewsRenderingCounter - remainder
+		// 	/ DelayedRenderDirective._maxInstantRenderedViews;
 	}
 }

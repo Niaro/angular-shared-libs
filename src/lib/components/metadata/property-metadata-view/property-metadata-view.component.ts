@@ -8,10 +8,11 @@ import { PropertyMetadata, FieldViewType, PropertyMetadataTable } from '@bp/shar
 @Component({
 	selector: 'bp-property-metadata-view',
 	templateUrl: './property-metadata-view.component.html',
-	styleUrls: ['./property-metadata-view.component.scss'],
+	styleUrls: [ './property-metadata-view.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyMetadataViewComponent implements OnChanges {
+	// tslint:disable-next-line: naming-convention
 	FieldViewType = FieldViewType;
 
 	@Input() label = true;
@@ -20,7 +21,7 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	@Input() metadata!: PropertyMetadata;
 
-	@Input() table?: PropertyMetadataTable;
+	@Input() table?: PropertyMetadataTable | null;
 
 	@Input() value: any;
 
@@ -28,22 +29,27 @@ export class PropertyMetadataViewComponent implements OnChanges {
 
 	// @Input() color: ThemePalette;
 
-	constructor(private renderer: Renderer2, private host: ElementRef) { }
+	get booleanIcon() { return this.value ? 'check' : 'close'; }
+
+	constructor(
+		private _renderer: Renderer2,
+		private _host: ElementRef
+	) { }
 
 	ngOnChanges({ metadata }: SimpleChanges) {
-		metadata && this.setHostClass(metadata);
+		metadata && this._setHostClass(metadata);
 	}
 
 	isInteger(value: number) {
 		return Number.isInteger(value);
 	}
 
-	private setHostClass({ previousValue: prev, currentValue: curr }: SimpleChange) {
-		prev && this.renderer.removeClass(this.host.nativeElement, this.getHostClass(prev));
-		curr && this.renderer.addClass(this.host.nativeElement, this.getHostClass(curr));
+	private _setHostClass({ previousValue: prev, currentValue: curr }: SimpleChange) {
+		prev && this._renderer.removeClass(this._host.nativeElement, this._getHostClass(prev));
+		curr && this._renderer.addClass(this._host.nativeElement, this._getHostClass(curr));
 	}
 
-	private getHostClass(md: PropertyMetadata) {
-		return `view-type-${md.viewType.cssClass}`;
+	private _getHostClass(md: PropertyMetadata) {
+		return `view-type-${ md.viewType.cssClass }`;
 	}
 }

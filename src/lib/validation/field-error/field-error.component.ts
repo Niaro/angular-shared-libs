@@ -11,7 +11,7 @@ import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 	// tslint:disable-next-line:component-selector
 	selector: '[bpFieldError]',
 	templateUrl: './field-error.component.html',
-	styleUrls: ['./field-error.component.scss'],
+	styleUrls: [ './field-error.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FieldErrorComponent implements OnChanges, AfterViewInit {
@@ -24,11 +24,11 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 
 	formControl$ = new OptionalBehaviorSubject<AbstractControl | AbstractControlDirective | null>();
 
-	get form() { return this.formGroupDirective && this.formGroupDirective.form; }
+	get form() { return this._formGroupDirective && this._formGroupDirective.form; }
 
 	constructor(
-		@Optional() private formField?: MatFormField,
-		@Optional() private formGroupDirective?: FormGroupDirective
+		@Optional() private _formField?: MatFormField,
+		@Optional() private _formGroupDirective?: FormGroupDirective
 	) {
 		this.formControl$
 			.pipe(
@@ -44,11 +44,11 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 	ngOnChanges({ formControlOrName }: SimpleChanges) {
 		formControlOrName && this.formControl$.next(this.formControlOrName instanceof AbstractControl
 			? this.formControlOrName
-			: this.form && this.form.controls[this.formControlOrName] || null
+			: this.form && this.form.controls[ this.formControlOrName ] || null
 		);
 	}
 
 	ngAfterViewInit() {
-		this.formField && this.formControl$.next(this.formField._control.ngControl);
+		this._formField && this.formControl$.next(this._formField._control.ngControl);
 	}
 }

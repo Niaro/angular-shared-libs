@@ -1,5 +1,7 @@
 export class Vector {
+
 	get absDx() { return Math.abs(this.dx); }
+
 	get absDy() { return Math.abs(this.dy); }
 
 	constructor(public dx: number, public dy: number) { }
@@ -11,14 +13,14 @@ export class Vector {
 	getAngle(other: Vector) {
 		const mr = this.length() * other.length();
 		if (mr === 0) return 0;
-		let r = this.dot(other) / mr;
+		let r = this._dot(other) / mr;
 		if (r > 1) r = 1;
 		return Math.acos(r);
 	}
 
 	getAngleDegree(other: Vector) {
 		let angle = this.getAngle(other);
-		if (this.cross(other) > 0)
+		if (this._cross(other) > 0)
 			angle *= -1;
 
 		return angle * 180 / Math.PI;
@@ -26,22 +28,22 @@ export class Vector {
 
 	direction(): Direction {
 		return this.absDx >= this.absDy
-			? (this.dx > 0 ? Direction.left : Direction.right)
-			: (this.dy > 0 ? Direction.up : Direction.down);
+			? (this.dx > 0 ? Direction.Left : Direction.Right)
+			: (this.dy > 0 ? Direction.Up : Direction.Down);
 	}
 
-	private dot(other: Vector) {
+	private _dot(other: Vector) {
 		return this.dx * other.dx + this.dy * other.dy;
 	}
 
-	private cross(other: Vector) {
+	private _cross(other: Vector) {
 		return this.dx * other.dy - this.dy * other.dx;
 	}
 }
 
 export enum Direction {
-	left,
-	right,
-	up,
-	down
+	Left,
+	Right,
+	Up,
+	Down
 }

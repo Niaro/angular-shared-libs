@@ -1,29 +1,34 @@
 import { BehaviorSubject, AsyncSubject } from 'rxjs';
 
-import { AsyncVoidSubject } from '../../rxjs';
+import { AsyncVoidSubject } from '../../rxjs/subjects';
 import { Enumeration } from '../misc';
 import { ResponseError } from './response-error';
 
 export class ProcessingFileStatus extends Enumeration {
+
 	static inProgress = new ProcessingFileStatus();
+
 	static finish = new ProcessingFileStatus();
+
 	static canceled = new ProcessingFileStatus();
+
 	static error = new ProcessingFileStatus();
+
 }
 
 export class ProcessingFile {
 
-	private readonly startProgressValue = 25; // imitate TTFB
+	private readonly _startProgressValue = 25; // imitate TTFB
 
-	isDownload = this.type === 'download';
+	isDownload = this._type === 'download';
 
-	isUpload = this.type === 'upload';
+	isUpload = this._type === 'upload';
 
-	private _progress$ = new BehaviorSubject(this.startProgressValue);
+	private _progress$ = new BehaviorSubject(this._startProgressValue);
 	progress$ = this._progress$.asObservable();
 	get progress() { return this._progress$.value; }
 	set progress(val: number) {
-		val > this.startProgressValue && this._progress$.next(val);
+		val > this._startProgressValue && this._progress$.next(val);
 	}
 
 	private _status$ = new BehaviorSubject<ProcessingFileStatus>(ProcessingFileStatus.inProgress);
@@ -44,7 +49,7 @@ export class ProcessingFile {
 
 	constructor(
 		public name: string,
-		private type: 'download' | 'upload'
+		private _type: 'download' | 'upload'
 	) {
 		this.name = name.replace(/\//g, ' ̸ ');
 	}

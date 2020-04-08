@@ -14,12 +14,17 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
-import { MatRippleModule } from '@angular/material/core';
+import { MatRippleModule, ErrorStateMatcher } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
+
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { PortalModule } from '@angular/cdk/portal';
+
+import { DirtyAndInvalidErrorStateMatcher } from './validation';
 
 const MODULES = [
 	MatCardModule,
@@ -42,15 +47,20 @@ const MODULES = [
 	MatAutocompleteModule,
 	MatSlideToggleModule,
 	MatButtonToggleModule,
-	MatChipsModule
+	MatChipsModule,
+	ScrollingModule,
+	PortalModule
 ];
 
 @NgModule({
 	imports: MODULES,
 	exports: MODULES,
+	providers: [
+		{ provide: ErrorStateMatcher, useClass: DirtyAndInvalidErrorStateMatcher },
+	]
 })
 export class MaterialModule {
-	static forRoot(): ModuleWithProviders {
+	static forRoot(): ModuleWithProviders<MaterialModule> {
 		return {
 			ngModule: MaterialModule,
 			providers: [

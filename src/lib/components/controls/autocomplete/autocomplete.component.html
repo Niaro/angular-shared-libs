@@ -1,41 +1,60 @@
 <ng-container *ngIf="appearance === 'round'; else defaultInputTpl">
-	<bp-round-input [name]="name"
-					[color]="color"
-					[formControl]="internalControl"
-					[placeholder]="placeholder"
-					[autocomplete]="autocomplete"
-					[throttle]="throttle">
+	<bp-round-input
+		[name]="name"
+		[color]="color"
+		[formControl]="internalControl"
+		[placeholder]="placeholder"
+		[autocomplete]="autocomplete"
+		[throttle]="throttle"
+	>
+		<bp-input-prefix *ngIf="hasSearchIcon">
+			<mat-icon class="material-icons-round search-icon">search</mat-icon>
+		</bp-input-prefix>
 	</bp-round-input>
 
-	<bp-validation-error *ngIf="externalControl"
-						 [errors]="externalControl!.errors">
+	<bp-validation-error *ngIf="externalControl" [errors]="externalControl!.errors">
 	</bp-validation-error>
 </ng-container>
 
 <ng-template #defaultInputTpl>
-	<bp-input [name]="name"
-			  [color]="color"
-			  [label]="label"
-			  [hint]="hint"
-			  [required]="required"
-			  [formControl]="internalControl"
-			  [placeholder]="placeholder"
-			  [autocomplete]="autocomplete"
-			  [throttle]="throttle"
-			  [appearance]="appearance"
-			  [hideErrorText]="hideErrorText">
+	<bp-input
+		[pending]="pending"
+		[name]="name"
+		[color]="color"
+		[label]="label"
+		[hint]="hint"
+		[required]="!!required"
+		[formControl]="internalControl"
+		[placeholder]="placeholder"
+		[autocomplete]="autocomplete"
+		[throttle]="throttle"
+		[appearance]="appearance"
+		[hideErrorText]="hideErrorText"
+		[floatLabel]="floatLabel"
+	>
+		<bp-input-prefix *ngIf="hasSearchIcon">
+			<mat-icon class="material-icons-round search-icon">search</mat-icon>
+		</bp-input-prefix>
 	</bp-input>
 </ng-template>
 
-<mat-autocomplete #autocomplete="matAutocomplete"
-				  [class]="panelClass">
-	<mat-option *ngFor="let item of filtered"
-				[value]="item">
-		<ng-container *ngIf="optionTpl; else defaultOptionTpl">
-			<ng-container *ngTemplateOutlet="optionTpl; context: { '\$implicit': item }"></ng-container>
+<mat-autocomplete #autocomplete="matAutocomplete" [class]="panelClass">
+	<div [@fadeInList]="(filtered$ | async)?.length">
+		<ng-container *ngFor="let item of filtered$ | async">
+			<mat-option *bpDelayedRender [class.selected]="item === value" [value]="item">
+				<ng-container *ngIf="optionTpl; else defaultOptionTpl">
+					<ng-container *ngTemplateOutlet="optionTpl; context: { $implicit: item }">
+					</ng-container>
+				</ng-container>
+				<ng-template #defaultOptionTpl>
+					{{
+						(itemDisplayPropertyName && item[itemDisplayPropertyName]) ||
+							item.displayName ||
+							item.name ||
+							item
+					}}
+				</ng-template>
+			</mat-option>
 		</ng-container>
-		<ng-template #defaultOptionTpl>
-			{{ itemDisplayPropertyName && item[itemDisplayPropertyName] || item.displayName || item.name || item }}
-		</ng-template>
-	</mat-option>
+	</div>
 </mat-autocomplete>

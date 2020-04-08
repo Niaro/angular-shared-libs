@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@ang
 @Component({
 	selector: 'bp-modal',
 	templateUrl: './modal.component.html',
-	styleUrls: ['./modal.component.scss'],
+	styleUrls: [ './modal.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent {

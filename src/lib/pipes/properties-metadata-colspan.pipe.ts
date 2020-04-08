@@ -9,7 +9,7 @@ export class PropertiesMetadataColspanPipe implements PipeTransform {
 		let counter = 1 + additionalSpan; // 1 is the spanning cell
 		index--;
 
-		while (array[index] && array[index].table!.headless) {
+		while (array[ index ] && array[ index ].table!.headless) {
 			counter++;
 			index--;
 		}

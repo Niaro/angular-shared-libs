@@ -14,7 +14,7 @@ export function match(target: string, search: string) {
 	if (!target)
 		return false;
 	search = isNil(search) ? '' : search;
-	return target.search(new RegExp(`^${regexpEscape(search)}$`, 'i')) !== -1;
+	return target.search(new RegExp(`^${ regexpEscape(search) }$`, 'i')) !== -1;
 }
 
 function regexpEscape(str: string) {

@@ -7,7 +7,9 @@ import { ZoneService } from '@bp/shared/providers/zone.service';
 
 class InsideAngularAction<T> extends Action<T> {
 	constructor(
+		// tslint:disable-next-line: naming-convention
 		protected scheduler: Scheduler,
+		// tslint:disable-next-line: naming-convention
 		protected job: (this: Action<T>, state?: T) => void
 	) {
 		super(scheduler, job);

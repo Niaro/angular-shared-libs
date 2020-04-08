@@ -6,29 +6,31 @@ import { MatCalendarHeader, MatDatepicker, MatCalendar, MatDatepickerIntl } from
 @Component({
 	selector: 'bp-datepicker-calendar-header',
 	templateUrl: './datepicker-calendar-header.component.html',
-	styleUrls: ['./datepicker-calendar-header.component.scss'],
+	styleUrls: [ './datepicker-calendar-header.component.scss' ],
 	exportAs: 'matCalendarHeader',
 	// tslint:disable-next-line:use-component-view-encapsulation
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatepickerCalendarHeaderComponent extends MatCalendarHeader<m.Moment> {
+
+	// tslint:disable-next-line: naming-convention
 	private dateAdapter: DateAdapter<m.Moment>;
 
 	constructor(
 		@Inject(MatDatepicker) public picker: MatDatepicker<m.Moment>,
-		_intl: MatDatepickerIntl,
+		intl: MatDatepickerIntl,
 		@Inject(MatCalendar) calendar: MatCalendar<m.Moment>,
-		@Optional() _dateAdapter: DateAdapter<m.Moment>,
-		 // TODO: Check on the upcoming versions of material the bug with exporting of the type
-		@Optional() @Inject(MAT_DATE_FORMATS) _dateFormats: any,
+		@Optional() dateAdapter: DateAdapter<m.Moment>,
+		// TODO: Check on the upcoming versions of material the bug with exporting of the type
+		@Optional() @Inject(MAT_DATE_FORMATS) dateFormats: any,
 		changeDetectorRef: ChangeDetectorRef
 	) {
-		super(_intl, calendar, _dateAdapter, _dateFormats, changeDetectorRef);
-		this.dateAdapter = _dateAdapter;
+		super(intl, calendar, dateAdapter, dateFormats, changeDetectorRef);
+		this.dateAdapter = dateAdapter;
 		// Dirty workaround of the mat pickers inability to set a panel class on
 		// the overlay
-		this.picker._popupRef.addPanelClass(this.picker.panelClass);
+		// this.picker._popupRef.addPanelClass(this.picker.panelClass);
 	}
 
 	clear() {

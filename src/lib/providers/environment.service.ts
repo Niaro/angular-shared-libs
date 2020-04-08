@@ -14,9 +14,11 @@ export class EnvironmentService {
 
 	get isProd() { return environment.name === 'prod'; }
 
+	get isSandbox() { return environment.name === 'sandbox'; }
+
 	get isNotProd() { return !this.isProd; }
 
-	get isNotProdOrSandbox() { return this.isNotProd && environment.name !== 'sandbox'; }
+	get isNotProdOrSandbox() { return this.isNotProd && !this.isSandbox; }
 
 	isDemostand = location.hostname.includes('cashier-demostand');
 

@@ -5,10 +5,13 @@ import { TouchManager } from './touch-manager';
 
 @Injectable()
 export class TouchBuilder {
-	constructor(private zone: NgZone) { }
+
+	constructor(private _zone: NgZone) { }
 
 	build(elementOrSelector: string | Element): TouchManager | null {
-		const $element = isString(elementOrSelector) ? document.querySelector(elementOrSelector) : elementOrSelector;
-		return $element && new TouchManager($element, this.zone);
+		const $element = isString(elementOrSelector)
+			? document.querySelector(elementOrSelector)
+			: elementOrSelector;
+		return $element && new TouchManager($element, this._zone);
 	}
 }
