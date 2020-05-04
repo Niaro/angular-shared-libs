@@ -14,7 +14,7 @@ import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/mater
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
-import { MatRippleModule, ErrorStateMatcher } from '@angular/material/core';
+import { MatRippleModule, ErrorStateMatcher, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -64,6 +64,7 @@ export class MaterialModule {
 		return {
 			ngModule: MaterialModule,
 			providers: [
+				{ provide: MAT_DATE_LOCALE, useValue: navigator.language || navigator.languages[ 0 ] },
 				{ provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
 				{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 5000 } }
 			]

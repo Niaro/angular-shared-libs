@@ -25,7 +25,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	@Input() asSelect!: boolean;
 
-	@Input() includeYear!: boolean;
+	@Input() includeYear = true;
 
 	@Input() panelClass!: string;
 

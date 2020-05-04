@@ -1,9 +1,9 @@
 import * as m from 'moment';
 import { lineMicrotask } from '../../utils';
-import { Enumeration } from './enums';
+import { Describable } from './enums';
 import { DateRange } from './date-range';
 
-export class DateRangeShortcut extends Enumeration {
+export class DateRangeShortcut extends Describable {
 
 	static week = new DateRangeShortcut();
 
@@ -20,6 +20,7 @@ export class DateRangeShortcut extends Enumeration {
 
 		lineMicrotask(() => {
 			this.dateRange = this._getDateRange()!;
+			this.description = `From the beginning of the current ${ this.displayName.toLowerCase() } to this day`;
 			setInterval(() => this.dateRange = this._getDateRange()!, 24 * 60 * 60 * 1000);
 		});
 	}
