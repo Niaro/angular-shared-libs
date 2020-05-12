@@ -66,8 +66,8 @@ $palette: (
 	info   : $info,
 );
 
-$overdue-color: mat-color($danger, 700);
-$refund-color : #9999ff;
+$color-overdue: mat-color($danger, 700);
+$color-refund : #9999ff;
 // #endregion colors
 
 // #region layout
