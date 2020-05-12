@@ -34,6 +34,7 @@ type IntercomConfig = {
 
 type Intercom = {
 	(action: 'boot' | 'update', options?: IntercomConfig): void;
+	(action: 'startTour', id: number): void;
 	(action: 'shutdown'): void;
 	(action: 'getVisitorId'): string | undefined;
 	(action: 'trackEvent', event: string, data?: Dictionary<string>): void;
@@ -63,6 +64,10 @@ export class IntercomService {
 		)
 		: of(undefined);
 
+	private _queryParams = new URLSearchParams(location.search);
+
+	private _productTourId = this._queryParams.get('product_tour_id') || this._queryParams.get('productTourId');
+
 	constructor(
 		private _router: RouterService,
 		private _telemetry: TelemetryService
@@ -89,6 +94,7 @@ export class IntercomService {
 		this._userId = config?.user_id;
 		this._whenTelemetryEnabledSaveSessionOnIntercom();
 		Intercom('update', config);
+		this._tryStartProductTour();
 	}
 
 	company(company: IntercomCompany) {
@@ -114,6 +120,10 @@ export class IntercomService {
 			return;
 
 		Intercom('shutdown');
+	}
+
+	private _tryStartProductTour() {
+		this._productTourId && Intercom('startTour', +this._productTourId);
 	}
 
 	private _whenTelemetryEnabledSaveSessionOnIntercom() {
