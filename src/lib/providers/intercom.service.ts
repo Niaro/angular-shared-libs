@@ -27,11 +27,12 @@ type IntercomConfig = {
 	name?: string;
 	created_at?: string;
 	company?: IntercomCompany;
-	[key: string]: string | Object | undefined;
+	[ key: string ]: string | Object | undefined;
 };
 
 type Intercom = {
 	(action: 'boot' | 'update', options?: IntercomConfig): void;
+	(action: 'startTour', id: number): void;
 	(action: 'shutdown'): void;
 	(action: 'getVisitorId'): string | undefined;
 	(action: 'trackEvent', event: string, data?: Dictionary<string>): void;
@@ -51,10 +52,14 @@ export class IntercomService {
 	private _userId$ = this.enabled && this._env.isRemoteServer
 		? timer(0, 50)
 			.pipe(
-				map(() => <string><unknown>((<any>window).Intercom && Intercom('getVisitorId'))),
+				map(() => <string> <unknown>((<any> window).Intercom && Intercom('getVisitorId'))),
 				first(v => !!v)
-		)
+			)
 		: of(undefined);
+
+	private _queryParams = new URLSearchParams(location.search);
+
+	private _productTourId = this._queryParams.get('product_tour_id') || this._queryParams.get('productTourId');
 
 	constructor(
 		private _env: EnvironmentService,
@@ -71,6 +76,7 @@ export class IntercomService {
 		}
 
 		this._boot(config);
+		this._tryStartProductTour();
 
 		this._isFirstBoot = false;
 	}
@@ -89,6 +95,10 @@ export class IntercomService {
 
 	trackEvent(event: string, data?: Dictionary<string>) {
 		Intercom('trackEvent', event, data);
+	}
+
+	private _tryStartProductTour() {
+		this._productTourId && Intercom('startTour', +this._productTourId);
 	}
 
 	private async _linkLogrocketSessionsToIntercomUser() {
@@ -124,7 +134,7 @@ export class IntercomService {
 
 	private _injectScript() {
 		$.addScriptCodeToBody({
-			code: `(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/${environment.intercom}'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();`
+			code: `(function () { var w = window; var ic = w.Intercom; if (typeof ic === "function") { ic('reattach_activator'); ic('update', w.intercomSettings); } else { var d = document; var i = function () { i.c(arguments); }; i.q = []; i.c = function (args) { i.q.push(args); }; w.Intercom = i; var l = function () { var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://widget.intercom.io/widget/${ environment.intercom }'; var x = d.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); }; if (w.attachEvent) { w.attachEvent('onload', l); } else { w.addEventListener('load', l, false); } } })();`
 		});
 	}
 }
