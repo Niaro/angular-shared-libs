@@ -1,0 +1,58 @@
+<div
+	cdk-overlay-origin
+	class="bp-select-trigger bp-select-trigger"
+	aria-hidden="true"
+	(click)="toggle()"
+	#origin="cdkOverlayOrigin"
+	#trigger
+>
+	<div class="bp-select-value bp-select-value" [ngSwitch]="empty">
+		<span class="bp-select-placeholder bp-select-placeholder" *ngSwitchCase="true">{{
+			placeholder || '\u00A0'
+		}}</span>
+		<span
+			class="bp-select-value-text bp-select-value-text"
+			*ngSwitchCase="false"
+			[ngSwitch]="!!customTrigger"
+		>
+			<span *ngSwitchDefault>{{ triggerValue || '\u00A0' }}</span>
+			<ng-content select="bp-select-trigger" *ngSwitchCase="true"></ng-content>
+		</span>
+	</div>
+
+	<div class="bp-select-arflex-flow-row-wrapper bp-select-arflex-flow-row-wrapper">
+		<div class="bp-select-arrow bp-select-arrow"></div>
+	</div>
+</div>
+
+<ng-template
+	cdk-connected-overlay
+	cdkConnectedOverlayLockPosition
+	cdkConnectedOverlayHasBackdrop
+	cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+	[cdkConnectedOverlayScrollStrategy]="_scrollStrategy"
+	[cdkConnectedOverlayOrigin]="origin"
+	[cdkConnectedOverlayOpen]="panelOpen"
+	[cdkConnectedOverlayPositions]="_positions"
+	[cdkConnectedOverlayMinWidth]="(_triggerRect?.width || 0) + SELECT_PANEL_PADDING_H"
+	[cdkConnectedOverlayOffsetY]="_offsetY"
+	(backdropClick)="close()"
+	(attach)="_onAttached()"
+	(detach)="close()"
+>
+	<div class="bp-select-panel-wrap bp-select-panel-wrap" [@transformPanelWrap]>
+		<div
+			#panel
+			class="bp-select-panel bp-select-panel {{ _getPanelTheme() }}"
+			[ngClass]="panelClass"
+			[class.font-size-override]="!_disableOptionCentering"
+			[@transformPanel]="multiple ? 'showing-multiple' : 'showing'"
+			(@transformPanel.done)="_panelDoneAnimating$.next($event.toState)"
+			[style.transformOrigin]="_disableOptionCentering ? '50% 0 0' : _transformOrigin"
+			[style.font-size.px]="_disableOptionCentering ? '' : _triggerFontSize"
+			(keydown)="_handleKeydown($event)"
+		>
+			<ng-content></ng-content>
+		</div>
+	</div>
+</ng-template>

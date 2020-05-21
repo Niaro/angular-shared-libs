@@ -1,0 +1,29 @@
+<bp-select
+	*ngIf="asSelect; else buttonShortCutsTpl"
+	placeholder="Period"
+	[panelClass]="['mat-primary', panelClass]"
+	[value]="selected"
+	[disableOptionCentering]="true"
+	(valueChange)="select($event)"
+>
+	<mat-option>-- Period --</mat-option>
+	<mat-option
+		*ngFor="let shortcut of dateRangeShortcuts"
+		[value]="shortcut"
+		[attr.title]="shortcut.description"
+	>
+		{{ shortcut.displayName }}
+	</mat-option>
+</bp-select>
+
+<ng-template #buttonShortCutsTpl>
+	<button
+		*ngFor="let shortcut of dateRangeShortcuts"
+		class="link interactive"
+		[attr.title]="shortcut.description"
+		[class.active]="shortcut === selected"
+		(click)="select(shortcut)"
+	>
+		{{ shortcut.displayName }}
+	</button>
+</ng-template>

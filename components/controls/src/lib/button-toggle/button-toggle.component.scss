@@ -1,0 +1,14 @@
+@import 'libs/shared/styles/importable/src/lib/index.scss';
+
+:host {
+	display: flex;
+	flex-flow: column;
+
+	label {
+		margin-bottom: 0.5rem;
+	}
+
+	.mat-button-toggle {
+		width: 100%;
+	}
+}

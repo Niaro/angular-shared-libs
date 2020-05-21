@@ -1,0 +1,54 @@
+@import 'libs/shared/styles/importable/src/lib/index.scss';
+
+:host {
+	display: flex;
+
+	> div {
+		display: inline-block;
+		position: relative;
+		overflow: hidden;
+		border: 1px solid $color-border;
+		transition: $transition-props;
+		transition-property: border-color, box-shadow;
+
+		&.show .img-background {
+			opacity: 1;
+		}
+
+		.img-background {
+			position: absolute;
+			transition: opacity $transition-props;
+			top: 0;
+			left: 0;
+			opacity: 0;
+			z-index: 1;
+			background: white;
+
+			&,
+			.img {
+				height: 100%;
+				width: 100%;
+			}
+
+			.img {
+				background-size: contain;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+		}
+
+		&.downloading {
+			animation: flickering 1.2s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+		}
+
+		.placeholder {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			width: 100%;
+			background: white;
+			color: $color-light;
+		}
+	}
+}

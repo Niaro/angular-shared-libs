@@ -1,0 +1,27 @@
+@import 'libs/shared/styles/importable/src/lib/index.scss';
+
+:host {
+	.separator {
+		margin: 0 0.5rem;
+	}
+
+	input {
+		@include placeholder-color(currentColor);
+		width: 5.5em;
+		background: transparent;
+		border: none;
+		padding: 0;
+		text-align: center;
+		color: currentColor;
+		font: inherit;
+
+		&::placeholder,
+		&::-webkit-input-placeholder {
+			text-align: left;
+		}
+
+		&.empty {
+			width: 2.5em;
+		}
+	}
+}
