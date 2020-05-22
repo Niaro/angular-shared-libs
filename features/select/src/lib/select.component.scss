@@ -98,15 +98,11 @@
 	max-height: 256px;
 	min-width: 100%;
 	border-radius: 4px;
-}
 
-@media (-ms-high-contrast: active) {
-	.bp-select-panel {
+	@media (-ms-high-contrast: active) {
 		outline: solid 1px;
 	}
-}
 
-.bp-select-panel {
 	&.font-size-override {
 		.mat-optgroup-label,
 		.mat-option {

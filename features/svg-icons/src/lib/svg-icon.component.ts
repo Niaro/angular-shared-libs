@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 
 @Component({
 	selector: 'bp-svg-icon',
@@ -8,7 +8,7 @@ import { Component, Input, ChangeDetectionStrategy, ElementRef, Renderer2, OnCha
 })
 export class SvgIconComponent implements OnChanges {
 
-	@Input() name!: String;
+	@Input() name!: string;
 
 	private get _$host() { return this._host.nativeElement; }
 
