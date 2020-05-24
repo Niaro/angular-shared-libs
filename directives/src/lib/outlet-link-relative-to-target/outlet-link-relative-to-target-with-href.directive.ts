@@ -1,12 +1,12 @@
-import { Directive, OnChanges, OnDestroy, HostBinding, Input, HostListener } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd, Event } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { LocationStrategy } from '@angular/common';
-import { isString } from 'lodash-es';
-
+import { Directive, HostBinding, HostListener, Input, OnChanges, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
 import { attrBoolValue } from '@bp/shared/utilities';
-
+import { isString } from 'lodash-es';
+import { Subscription } from 'rxjs';
 import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-to-target-base.directive';
+
+
 
 @Directive({
 	// tslint:disable-next-line: directive-selector
@@ -49,7 +49,7 @@ export class OutletLinkRelativeToTargetWithHrefDirective
 
 		this._router.navigateByUrl(this._urlTree, {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
-			replaceUrl: attrBoolValue(this.replaceUrl),
+			replaceUrl: attrBoolValue(this.replaceUrlOnLocationHistory),
 			state: this.state
 		});
 

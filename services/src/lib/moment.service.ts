@@ -7,7 +7,7 @@ import m from 'moment';
 export class MomentService {
 
 	init() {
-		m.fn.toJSON = function () { return <string> <any> this.unix(); };
+		m.fn.toJSON = function() { return <string> <any> this.unix(); };
 	}
 
 }

@@ -1,9 +1,8 @@
 import m from 'moment';
-
-import { Enumeration } from './enums';
 import { DateRange } from './date-range';
+import { Describable } from './enums';
 
-export class DateRangeShortcut extends Enumeration {
+export class DateRangeShortcut extends Describable {
 
 	static week = new DateRangeShortcut();
 
@@ -20,6 +19,8 @@ export class DateRangeShortcut extends Enumeration {
 
 		Promise.resolve().then(() => {
 			this.dateRange = this._getDateRange()!;
+			this.description = `From the beginning of the current ${ this.displayName.toLowerCase() } to this day`;
+
 			setInterval(() => this.dateRange = this._getDateRange()!, 24 * 60 * 60 * 1000);
 		});
 	}

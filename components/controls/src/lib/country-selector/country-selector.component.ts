@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { AbstractControl, ValidationErrors, ValidatorFn, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
-import { isArray, isEmpty } from 'lodash-es';
-
-import { Countries, Country, CountryCode } from '@bp/shared/models/business';
-import { lineMicrotask } from '@bp/shared/utilities';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
+import { Countries, Country, CountryCode } from '@bp/shared/models/business';
+import { lineMicrotask } from '@bp/shared/utilities';
+import { isArray, isEmpty } from 'lodash-es';
+
 
 @Component({
 	selector: 'bp-country-selector',
@@ -37,7 +37,10 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() hasWorldwide = false;
 
-	@Input() countries = Countries.list;
+	@Input()
+	get countries() { return this._countries; }
+	set countries(value: Country[] | null) { this._countries = value || Countries.list; }
+	private _countries = Countries.list;
 
 	@Input() panelClass!: string;
 
@@ -57,17 +60,17 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 		const { excluded, hasWorldwide, countries, value } = changes;
 
 		if (excluded)
-			this.countries = isArray(this.excluded)
+			this._countries = isArray(this.excluded)
 				? Countries.list.filter(it => !this.excluded.includes(it))
 				: Countries.list;
 
 		if (countries) {
-			this.countries = isEmpty(this.countries) ? Countries.list : this.countries;
-			this.filtered = this.countries;
+			this._countries = isEmpty(this._countries) ? Countries.list : this._countries;
+			this.filtered = this._countries;
 		}
 
 		if (hasWorldwide || excluded || countries) {
-			this.countries = this._getCountriesAccordingToHasWorldwideFlag(this.countries);
+			this._countries = this._getCountriesAccordingToHasWorldwideFlag(this._countries);
 			this.filtered = this._getCountriesAccordingToHasWorldwideFlag(this.filtered);
 		}
 
@@ -127,7 +130,9 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 	private _filterCountries(input?: string | null) {
 		const loweredInput = input?.toLowerCase();
 		this.filtered = loweredInput
-			? this.countries.filter(it => it.lowerCaseName?.includes(loweredInput) || it.lowerCaseCode === loweredInput)
-			: this.countries;
+			? this._countries.filter(
+				it => it.lowerCaseName?.includes(loweredInput) || it.lowerCaseCode === loweredInput
+			)
+			: this._countries;
 	}
 }

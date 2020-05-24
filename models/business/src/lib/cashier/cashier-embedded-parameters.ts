@@ -1,9 +1,8 @@
-import { PaymentMethodType } from '../enums';
 import { Currency } from '../currencies';
-
-import { CashierButtonMode, CashierTheme } from './enums';
+import { PaymentOptionType } from '../enums';
 import { CashierLanguage } from './cashier-languages';
 import { IClientDetails } from './client-details';
+import { CashierButtonMode, CashierTheme } from './enums';
 
 export interface ICashierEmbeddedParameters extends IClientDetails {
 
@@ -25,7 +24,7 @@ export interface ICashierEmbeddedParameters extends IClientDetails {
 
 	ip: string | null;
 
-	directPaymentMethod: PaymentMethodType | null;
+	directPaymentMethod: PaymentOptionType | null;
 
 	hideHeader: boolean | null;
 

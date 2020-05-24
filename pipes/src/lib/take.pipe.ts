@@ -5,7 +5,7 @@ import { take } from 'lodash-es';
 	name: 'take'
 })
 export class TakePipe implements PipeTransform {
-	transform(array: any[] | undefined | null, size: number): any[][] | undefined | null {
+	transform<T>(array: T[] | undefined | null, size: number): T[] | undefined | null {
 		return array && take(array, size);
 	}
 }

@@ -1,9 +1,9 @@
 import { Directive, Input } from '@angular/core';
-import { QueryParamsHandling, Router, ActivatedRoute, UrlTree } from '@angular/router';
+import { ActivatedRoute, QueryParamsHandling, Router, UrlTree } from '@angular/router';
+import { Dictionary } from '@bp/shared/typings';
+import { attrBoolValue } from '@bp/shared/utilities';
 import { isObject } from 'lodash-es';
 
-import { attrBoolValue } from '@bp/shared/utilities';
-import { Dictionary } from '@bp/shared/typings';
 
 @Directive()
 export class OutletLinkRelativeToTargetBaseDirective {
@@ -26,12 +26,11 @@ export class OutletLinkRelativeToTargetBaseDirective {
 
 	@Input() queryParamsHandling!: QueryParamsHandling;
 
-	@Input() preserveFragment!: boolean;
+	@Input() preserveFragment!: boolean | '';
 
-	@Input() skipLocationChange!: boolean;
+	@Input() skipLocationChange!: boolean | '';
 
-	@Input()
-	replaceUrl!: boolean;
+	@Input() replaceUrlOnLocationHistory!: boolean | '';
 
 	protected get _urlTree(): UrlTree {
 		return this._router.createUrlTree(this._commands, {

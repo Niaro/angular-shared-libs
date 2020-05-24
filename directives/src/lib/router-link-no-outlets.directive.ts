@@ -1,10 +1,10 @@
-import { Directive, Input, OnChanges, HostBinding, HostListener } from '@angular/core';
 import { LocationStrategy } from '@angular/common';
-import { UrlTree, Router, ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, UrlSegmentGroup, QueryParamsHandling } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { isString } from 'lodash-es';
-
+import { Directive, HostBinding, HostListener, Input, OnChanges } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, QueryParamsHandling, Router, UrlSegmentGroup, UrlTree } from '@angular/router';
 import { Destroyable } from '@bp/shared/models/common';
+import { isString } from 'lodash-es';
+import { filter } from 'rxjs/operators';
+
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive
@@ -32,11 +32,11 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 
 	@Input() queryParamsHandling!: QueryParamsHandling;
 
-	@Input() preserveFragment!: boolean;
+	@Input() preserveFragment!: boolean | '';
 
-	@Input() skipLocationChange!: boolean;
+	@Input() skipLocationChange!: boolean | '';
 
-	@Input() replaceUrl!: boolean;
+	@Input() replaceUrlOnLocationHistory!: boolean | '';
 
 	@Input() state?: { [ k: string ]: any; };
 
@@ -72,7 +72,7 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 
 		this._router.navigateByUrl(this.urlTree, {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
-			replaceUrl: attrBoolValue(this.replaceUrl),
+			replaceUrl: attrBoolValue(this.replaceUrlOnLocationHistory),
 			state: this.state
 		});
 

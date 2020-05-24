@@ -1,13 +1,13 @@
-import { Component, Input, ChangeDetectionStrategy, Output, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { map, filter, skip, distinctUntilChanged } from 'rxjs/operators';
-import { omit, isEqual } from 'lodash-es';
-
-import { PAGE_SIZE } from '@bp/shared/models/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FADE } from '@bp/shared/animations';
-import { UrlHelper } from '@bp/shared/utilities';
+import { PAGE_SIZE } from '@bp/shared/models/common';
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
+import { UrlHelper } from '@bp/shared/utilities';
+import { isEqual, omit } from 'lodash-es';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, filter, map, skip } from 'rxjs/operators';
+
 
 @Component({
 	selector: 'bp-paginator',
@@ -20,7 +20,7 @@ export class PaginatorComponent {
 
 	@Input() pageSizeOptions = [ 10, 24, 50, 100, 250 ];
 
-	@Input() totalLength!: number;
+	@Input() totalLength!: number | null;
 
 	@Input() pageLength?: number | null;
 
@@ -101,7 +101,7 @@ export class PaginatorComponent {
 
 	hasBack = () => this.offset >= this.pageSize;
 
-	hasNext = () => this.offset + (this.pageLength || 0) < this.totalLength;
+	hasNext = () => this.offset + (this.pageLength || 0) < (this.totalLength || 0);
 
 	private _navigate(params: Params) {
 		this._router.navigate([ UrlHelper.mergeRouteParams(this._route, params) ], { relativeTo: this._route });

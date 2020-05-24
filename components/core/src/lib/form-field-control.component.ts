@@ -1,14 +1,14 @@
-import { FormControl, ValidatorFn, ValidationErrors, FormGroupDirective } from '@angular/forms';
+import { ChangeDetectorRef, Directive, ElementRef, Input, OnChanges, OnInit, Optional, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroupDirective, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
-import { Input, ElementRef, Optional, SimpleChanges, OnChanges, ChangeDetectorRef, OnInit, Directive } from '@angular/core';
-import { MatFormFieldAppearance, FloatLabelType } from '@angular/material/form-field';
-import { auditTime, switchMap, filter, debounceTime } from 'rxjs/operators';
-import { Subscription, Subject } from 'rxjs';
-
+import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { lineMicrotask } from '@bp/shared/utilities';
-
+import { Subject, Subscription } from 'rxjs';
+import { auditTime, debounceTime, filter, switchMap } from 'rxjs/operators';
 import { ControlComponent } from './control.component';
+
+
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -36,9 +36,9 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	@Input() disabled!: boolean | null;
 
-	@Input() throttle = 200;
+	@Input() throttle: number | '' = 200;
 
-	@Input() debounce = 0;
+	@Input() debounce: number | '' = 0;
 
 	@Input() hideErrorText = false;
 
@@ -81,10 +81,10 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 		if (value)
 			this.writeValue(this.value);
 
-		if (throttle && <any> this.throttle === '')
+		if (throttle && this.throttle === '')
 			this.throttle = this._throttleTime;
 
-		if (debounce && <any> this.debounce === '')
+		if (debounce && this.debounce === '')
 			this.debounce = this._debounceTime;
 
 		if (throttle || debounce)

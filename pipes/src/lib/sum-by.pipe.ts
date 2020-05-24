@@ -5,7 +5,7 @@ import { sumBy } from 'lodash-es';
 	name: 'sumBy'
 })
 export class SumByPipe implements PipeTransform {
-	transform(array: any[] | null, property: string): number | null {
-		return array && sumBy(array, property);
+	transform<T>(array: T[] | null, property: keyof T): number | null {
+		return array && sumBy(array, <string> property);
 	}
 }

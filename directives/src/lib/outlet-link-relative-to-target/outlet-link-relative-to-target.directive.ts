@@ -1,9 +1,9 @@
-import { Directive, Attribute, Renderer2, ElementRef, HostListener } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Attribute, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { attrBoolValue } from '@bp/shared/utilities';
-
 import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-to-target-base.directive';
+
+
 
 @Directive({
 	// tslint:disable-next-line: directive-selector
@@ -29,7 +29,7 @@ export class OutletLinkRelativeToTargetDirective extends OutletLinkRelativeToTar
 	onClick(): boolean {
 		this._router.navigateByUrl(this._urlTree, {
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
-			replaceUrl: attrBoolValue(this.replaceUrl),
+			replaceUrl: attrBoolValue(this.replaceUrlOnLocationHistory),
 		});
 		return true;
 	}

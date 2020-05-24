@@ -1,5 +1,5 @@
-export function idTracker(index: number, item: { id: string | number }) {
+export function idTracker<T extends Object>(index: number, item: T) {
 	if (!item.hasOwnProperty('id'))
 		throw new Error('The Id Tracker requires on the item to have the id property');
-	return item.id;
+	return (<any> item).id;
 }

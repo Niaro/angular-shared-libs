@@ -1,6 +1,6 @@
-import { Directive, Input, OnChanges, ElementRef, HostBinding } from '@angular/core';
-
+import { Directive, ElementRef, HostBinding, Input, OnChanges } from '@angular/core';
 import { $ } from '@bp/shared/utilities';
+
 
 @Directive({
 	// tslint:disable-next-line: directive-selector
@@ -11,11 +11,11 @@ import { $ } from '@bp/shared/utilities';
 })
 export class DisabledDirective implements OnChanges {
 
-	@Input() disabled!: boolean;
+	@Input() disabled!: boolean | '';
 
 	@HostBinding('class.disabled')
 	@Input()
-	bpDisabled!: boolean;
+	bpDisabled!: boolean | '';
 
 	private get _$veil() { return this._$cachedVeil ?? (this._$cachedVeil = this._createVeil()); }
 	private _$cachedVeil!: HTMLElement;
@@ -31,7 +31,7 @@ export class DisabledDirective implements OnChanges {
 	constructor(private _host: ElementRef) { }
 
 	ngOnChanges() {
-		if (this.disabled || this.bpDisabled)
+		if (!!this.disabled || !!this.bpDisabled)
 			this._setVeil();
 		else
 			this._removeVeil();
