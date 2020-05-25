@@ -1,7 +1,7 @@
-import m from 'moment';
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, Inject, Optional, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Optional, ViewEncapsulation } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatCalendarHeader, MatDatepicker, MatCalendar, MatDatepickerIntl } from '@angular/material/datepicker';
+import { MatCalendar, MatCalendarHeader, MatDatepicker, MatDatepickerContent, MatDatepickerIntl } from '@angular/material/datepicker';
+import m from 'moment';
 
 @Component({
 	selector: 'bp-datepicker-calendar-header',
@@ -19,6 +19,7 @@ export class DatepickerCalendarHeaderComponent extends MatCalendarHeader<m.Momen
 
 	constructor(
 		@Inject(MatDatepicker) public picker: MatDatepicker<m.Moment>,
+		@Inject(MatDatepickerContent) public pickerContent: MatDatepickerContent<m.Moment>,
 		intl: MatDatepickerIntl,
 		@Inject(MatCalendar) calendar: MatCalendar<m.Moment>,
 		@Optional() dateAdapter: DateAdapter<m.Moment>,
@@ -28,6 +29,7 @@ export class DatepickerCalendarHeaderComponent extends MatCalendarHeader<m.Momen
 	) {
 		super(intl, calendar, dateAdapter, dateFormats, changeDetectorRef);
 		this.dateAdapter = dateAdapter;
+
 		// Dirty workaround of the mat pickers inability to set a panel class on
 		// the overlay
 		// this.picker._popupRef.addPanelClass(this.picker.panelClass);

@@ -33,7 +33,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 
 	@Input() excluded!: Country[];
 
-	@Input() placeholder = 'Country';
+	@Input() placeholder = 'Country or its code';
 
 	@Input() hasWorldwide = false;
 

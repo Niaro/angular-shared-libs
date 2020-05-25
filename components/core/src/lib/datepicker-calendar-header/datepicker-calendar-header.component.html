@@ -4,9 +4,9 @@
 			mat-button
 			type="button"
 			class="mat-calendar-period-button"
-			(click)="currentPeriodClicked()"
-			[attr.aria-label]="periodButtonLabel"
 			cdkAriaLive="polite"
+			[attr.aria-label]="periodButtonLabel"
+			(click)="currentPeriodClicked()"
 		>
 			{{ periodButtonText }}
 			<div
@@ -22,7 +22,7 @@
 			type="button"
 			title="Clear the field"
 			class="mat-calendar-clear-button"
-			[disabled]="!picker._selected"
+			[disabled]="!this.pickerContent._getSelected()"
 			(click)="clear()"
 		>
 			<mat-icon>delete_outline</mat-icon>

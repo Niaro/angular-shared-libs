@@ -1,11 +1,11 @@
 import {
-	Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Input, HostBinding
+	AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding,
+	Input
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { DateRange, DateRangeShortcut, DateRangeInputValue } from '@bp/shared/models/core';
-import { lineMicrotask } from '@bp/shared/utilities';
 import { ControlComponent } from '@bp/shared/components/core';
+import { DateRange, DateRangeInputValue, DateRangeShortcut } from '@bp/shared/models/core';
+import { lineMicrotask } from '@bp/shared/utilities';
 
 @Component({
 	selector: 'bp-date-range-shortcuts',
@@ -24,15 +24,13 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	@Input() asSelect!: boolean;
 
-	@Input() includeYear!: boolean;
-
 	@Input() panelClass!: string;
 
 	@Input() default: DateRangeShortcut | null = DateRangeShortcut.month;
 
 	@HostBinding('class.interactive-links') get isInteractiveLinks() { return !this.asSelect; }
 
-	dateRangeShortcuts!: DateRangeShortcut[];
+	dateRangeShortcuts: DateRangeShortcut[] = DateRangeShortcut.list();
 
 	selected!: DateRangeShortcut | null;
 
@@ -43,11 +41,6 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 	}
 
 	ngAfterViewInit() {
-		this.dateRangeShortcuts = <DateRangeShortcut[]>(this.includeYear
-			? DateRangeShortcut.list()
-			: DateRangeShortcut.list().filter(v => v !== DateRangeShortcut.year));
-		this._cdr.detectChanges();
-
 		/**
 		 * In case on init no one is written a value we set the default one
 		 */
