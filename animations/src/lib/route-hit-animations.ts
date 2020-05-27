@@ -1,4 +1,4 @@
-import { animate, query, style, transition, trigger, stagger, sequence, group } from '@angular/animations';
+import { animate, group, query, sequence, stagger, style, transition, trigger } from '@angular/animations';
 
 const slideUpOnRouteHit = 'slide-up-on-route-hit';
 const optional = {
