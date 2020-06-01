@@ -1,26 +1,22 @@
-import { Injectable, InjectionToken, Inject, NgZone } from '@angular/core';
-import { snakeCase, isEmpty, last, take } from 'lodash-es';
-import { Subject, Observable, from, throwError, defer } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import m from 'moment';
-
+import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
+import { FB_FUNCTIONS_REGION } from '@bp/firebase-functions';
+import { IPageQueryParams, PagedResults, ResponseError } from '@bp/shared/models/common';
+import { Entity } from '@bp/shared/models/metadata';
+import { Dictionary } from '@bp/shared/typings';
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from 'firebase/app';
-
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/functions';
+import 'firebase/performance';
 // Add the Firebase products that you want to use
 import 'firebase/storage';
-import 'firebase/functions';
-import 'firebase/firestore';
-import 'firebase/auth';
-import 'firebase/performance';
-
-import { Dictionary } from '@bp/shared/typings';
-import { Entity } from '@bp/shared/models/metadata';
-import { PagedResults, IPageQueryParams, ResponseError } from '@bp/shared/models/common';
-import { FB_FUNCTIONS_REGION } from '@bp/firebase-functions';
-
-import { TelemetryService } from './telemetry';
+import { isEmpty, last, snakeCase, take } from 'lodash-es';
+import m from 'moment';
+import { defer, from, Observable, Subject, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { EnvironmentService } from './environment.service';
+import { TelemetryService } from './telemetry';
 
 export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 
@@ -38,6 +34,8 @@ export class FirebaseService {
 
 	uploadError$ = new Subject<string>();
 
+	auth!: firebase.auth.Auth;
+
 	private _orderBy = 'updatedAt';
 
 	private _queryDocumentSnapshotsById: Dictionary<any> = {};
@@ -52,7 +50,6 @@ export class FirebaseService {
 
 	protected _perf?: firebase.performance.Performance;
 
-	protected _auth!: firebase.auth.Auth;
 
 	constructor(
 		protected _telemetry: TelemetryService,
@@ -77,12 +74,12 @@ export class FirebaseService {
 
 			this._storage = firebase.storage();
 			this._functions = firebase.app().functions(FB_FUNCTIONS_REGION);
-			this._auth = firebase.auth();
+			this.auth = firebase.auth();
 		});
 	}
 
 	signIn(credentials: { userName: string, password: string; }) {
-		return defer(() => from(this._auth.signInWithEmailAndPassword(credentials.userName, credentials.password))
+		return defer(() => from(this.auth.signInWithEmailAndPassword(credentials.userName, credentials.password))
 			.pipe(catchError(this._throwAsResponseError))
 		);
 	}
@@ -298,7 +295,7 @@ export class FirebaseService {
 	}
 
 	onAuthStateChange(): Observable<firebase.User | null> {
-		return new Observable(subscriber => this._auth
+		return new Observable(subscriber => this.auth
 			.onAuthStateChanged(
 				v => subscriber.next(v),
 				e => subscriber.error(this._mapToResponseError(e))
