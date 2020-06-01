@@ -1,9 +1,8 @@
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-
-import { HttpConfigService, CONTENT_TYPE, BYPASS_AUTH_CHECK } from './http-config.service';
+import { BYPASS_AUTH_CHECK, CONTENT_TYPE, HttpConfigService } from './http-config.service';
 
 @Injectable()
 export class HttpRequestInterceptorService implements HttpInterceptor {
@@ -37,6 +36,7 @@ export class HttpRequestInterceptorService implements HttpInterceptor {
 
 	private _shouldPrependBaseApiUrlToHttpRequestUrl(request: HttpRequest<any>) {
 		return !request.url.startsWith('http')
-			&& !request.url.includes('assets'); // all assets is relative to the origin
+			&& !request.url.includes('assets') // all assets is relative to the origin
+			&& !request.url.startsWith('/');
 	}
 }
