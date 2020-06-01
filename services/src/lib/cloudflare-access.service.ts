@@ -23,7 +23,7 @@ export class CloudflareAccessService {
 	async checkAccessAndTryRedirectToCFLogin() {
 		try {
 			const { url } = await this._http
-				.get<{ url?: string; }>(`cf-access-check?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
+				.get<{ url?: string; }>(`/cf-access-check?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
 				.toPromise();
 
 			if (url)
