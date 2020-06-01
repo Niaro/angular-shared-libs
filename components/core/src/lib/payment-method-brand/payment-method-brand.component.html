@@ -1,0 +1,6 @@
+<bp-svg-icon *ngIf="brand; else fallbackTpl" [attr.title]="brand!.displayName" [name]="brand!.name">
+</bp-svg-icon>
+
+<ng-template #fallbackTpl>
+	{{ src }}
+</ng-template>

@@ -1,0 +1,31 @@
+:host {
+	.mat-slide-toggle ::ng-deep .mat-slide-toggle-content {
+		display: flex;
+		align-items: center;
+
+		bp-hint {
+			margin-left: 0.25rem;
+			margin-bottom: 0.2rem;
+		}
+	}
+}
+
+:host(.w-100) {
+	::ng-deep .control {
+		&,
+		> .mat-form-field,
+		> .mat-form-field > .mat-form-field-wrapper {
+			width: 100%;
+		}
+	}
+}
+
+:host(.w-50) {
+	::ng-deep .control {
+		&,
+		> .mat-form-field,
+		> .mat-form-field > .mat-form-field-wrapper {
+			width: 50%;
+		}
+	}
+}

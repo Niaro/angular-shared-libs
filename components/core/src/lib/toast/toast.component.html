@@ -1,0 +1,24 @@
+<button *ngIf="options.closeButton" class="btn-icon-close xs" mat-icon-button (click)="remove()">
+	<bp-svg-icon class="xs" name="close"></bp-svg-icon>
+</button>
+
+<div *ngIf="title" class="mb-2 mat-h3" [class]="options.titleClass">
+	{{ title }}
+	<ng-container *ngIf="duplicatesCount">[{{ duplicatesCount + 1 }}]</ng-container>
+</div>
+
+<div
+	*ngIf="message && options.enableHtml"
+	[class]="options.messageClass"
+	[innerHTML]="message"
+></div>
+
+<div *ngIf="message && !options.enableHtml" [class]="options.messageClass">
+	{{ message }}
+</div>
+
+<button *ngIf="options.undoBtn" class="btn-undo mt-2" mat-stroked-button (click)="undo($event)">
+	{{ undoBtnText }}
+</button>
+
+<div *ngIf="options.progressBar" @fade class="toast-progress" [style.width.%]="width"></div>
