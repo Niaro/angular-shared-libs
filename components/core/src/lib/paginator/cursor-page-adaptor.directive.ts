@@ -1,8 +1,6 @@
-import { Directive, Input, SimpleChanges, Self, OnChanges } from '@angular/core';
-import { isNil } from 'lodash-es';
-
+import { Directive, Input, OnChanges, Self, SimpleChanges } from '@angular/core';
 import { PagedResults } from '@bp/shared/models/common';
-
+import { isNil } from 'lodash-es';
 import { PaginatorComponent } from './paginator.component';
 
 @Directive({
@@ -40,7 +38,7 @@ export class CursorPageAdaptorDirective implements OnChanges {
 			if (this.pagedResults.firstPage)
 				this._paginator.currentPage = 1;
 
-			this.pageCursors[ this._paginator.getNextPage() ] = this.pagedResults.nextPageCursor!;
+			this.pageCursors[ this._paginator.getNextPage() ] = this.pagedResults.nextPageCursor;
 			this._paginator.progressBack = this._paginator.progressNext = false;
 			this._paginator.cdr.detectChanges();
 		}
