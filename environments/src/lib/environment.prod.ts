@@ -1,7 +1,7 @@
 import { IEnvironment } from '@bp/shared/typings';
-
-import { environment as appEnvironment } from './environment.app';
 import { constants } from './constants';
+import { environment as appEnvironment } from './environment.app';
+
 
 export const environment: IEnvironment = {
 
@@ -12,7 +12,7 @@ export const environment: IEnvironment = {
 	get localServer() { return !this.remoteServer; },
 
 
-	widgetLoaderUrl: 'https://embed.bridgerpay.com/cashier',
+	cashierLoaderUrl: 'https://embed.bridgerpay.com/cashier',
 
 	...appEnvironment,
 

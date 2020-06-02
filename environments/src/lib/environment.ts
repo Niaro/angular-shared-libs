@@ -1,7 +1,7 @@
 import { IEnvironment } from '@bp/shared/typings';
-
-import { environment as appEnvironment } from './environment.app';
 import { constants } from './constants';
+import { environment as appEnvironment } from './environment.app';
+
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
@@ -15,10 +15,10 @@ export const environment: IEnvironment = {
 
 	get localServer() { return !this.remoteServer; },
 
-	widgetUrl: 'http://localhost:4201',
+	cashierUrl: 'http://localhost:4201',
 
-	// widgetLoaderUrl: 'http://localhost:4201/embed/embed_cashier.js',
-	widgetLoaderUrl: 'https://embed-stg.bridgerpay.com/cashier',
+	// cashierLoaderUrl: 'http://localhost:4201/embed/embed_cashier.js',
+	cashierLoaderUrl: 'https://embed-stg.bridgerpay.com/cashier',
 
 	// by putting this always as the last property in the object we allow overriding
 	// of any environment specific property by the apps

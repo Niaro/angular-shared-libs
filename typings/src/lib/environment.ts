@@ -6,7 +6,7 @@ export interface IAppEnvironment {
 
 	readonly intercom?: string;
 
-	readonly widgetUrl?: string;
+	readonly cashierUrl?: string;
 
 	readonly api?: {
 		url: string;
@@ -25,6 +25,6 @@ export interface IEnvironment extends IAppEnvironment {
 
 	readonly version: IVersion;
 
-	readonly widgetLoaderUrl: string;
+	readonly cashierLoaderUrl: string;
 
 }

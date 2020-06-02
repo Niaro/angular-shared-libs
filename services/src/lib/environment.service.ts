@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { IEnvironment } from '@bp/shared/typings';
+
 
 @Injectable({
 	providedIn: 'root'
@@ -19,13 +19,13 @@ export class EnvironmentService implements IEnvironment {
 
 	readonly localServer = this._env.localServer;
 
-	readonly widgetLoaderUrl = this._env.widgetLoaderUrl;
+	readonly cashierLoaderUrl = this._env.cashierLoaderUrl;
 
 	readonly logrocket = this._env.logrocket;
 
 	readonly intercom = this._env.intercom;
 
-	readonly widgetUrl = this._env.widgetUrl;
+	readonly cashierUrl = this._env.cashierUrl;
 
 	readonly api = this._env.api || { url: '', version: '' };
 

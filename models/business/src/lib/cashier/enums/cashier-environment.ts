@@ -1,7 +1,7 @@
 import { Enumeration } from '@bp/shared/models/core';
 
 export class CashierEnvironment extends Enumeration {
-	// TODO change to http://localhost:4201/widget-loader/main.js after the repos merging
+	// TODO change to http://localhost:4201/cashier-loader/main.js after the repos merging
 	static development = new CashierEnvironment(
 		'DEV',
 		'https://localhost:4203/embed/embed_cashier.js',
