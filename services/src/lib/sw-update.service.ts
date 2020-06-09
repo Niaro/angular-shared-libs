@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { interval, of } from 'rxjs';
 import { delay, exhaustMap, first, tap } from 'rxjs/operators';
 import { CloudflareAccessService } from './cloudflare-access.service';
-import { EnvironmentService } from './environment.service';
 
 /**
  * SwUpdatesService
@@ -15,8 +14,6 @@ import { EnvironmentService } from './environment.service';
  * 2. Re-checks every 5 mins.
  * 3. Whenever an update is available, it activates the update.
  *
- * @property
- * `updateActivated` {Observable<string>} - Emit the version hash whenever an update is activated.
  */
 @Injectable({
 	providedIn: 'root',
@@ -27,12 +24,11 @@ export class SwUpdatesService {
 
 	constructor(
 		private _app: ApplicationRef,
-		private _env: EnvironmentService,
 		private _swu: SwUpdate,
 		private _toaster: ToastrService,
 		private _cfAccess: CloudflareAccessService
 	) {
-
+		(<any> window).BP_SWU = this._swu;
 	}
 
 	reloadOnNewVersion({ checkCloudflareAuthorization }: { checkCloudflareAuthorization?: boolean; } = {}) {
