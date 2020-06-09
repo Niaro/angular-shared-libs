@@ -92,8 +92,6 @@ export class SwUpdatesService {
 	}
 
 	private _log(message: string) {
-		if (this._env.isProd && !this._env.isDemostand) return;
-
 		console.log(`%c[SwUpdates][${ m().format('LLL') }]: ${ message }`, 'color:#fd720c;');
 	}
 }
