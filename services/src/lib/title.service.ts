@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, PRIMARY_OUTLET } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { mapValues, omit, values, isEmpty, omitBy, keys } from 'lodash-es';
-
-import { $ } from '@bp/shared/utilities';
+import { ActivatedRoute, ActivatedRouteSnapshot, PRIMARY_OUTLET } from '@angular/router';
 import { MODAL_OUTLET } from '@bp/shared/models/core';
 import { Dictionary } from '@bp/shared/typings';
-
+import { $ } from '@bp/shared/utilities';
+import { isEmpty, keys, mapValues, omit, omitBy, values } from 'lodash-es';
 import { RouterService } from './router.service';
 
 const TITLES_DELIMITER = ' – ';
