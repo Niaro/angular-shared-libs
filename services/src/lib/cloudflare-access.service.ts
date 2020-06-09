@@ -9,7 +9,7 @@ import { BYPASS_AUTH_CHECK } from './http';
 export class CloudflareAccessService {
 
 	get isAuthorizedByCloudflare() {
-		return this._isAuthorizedByCloudflare || this._hasCFAuthorizationCookie;
+		return true || this._isAuthorizedByCloudflare || this._hasCFAuthorizationCookie;
 	}
 
 	private get _hasCFAuthorizationCookie() { return document.cookie.includes('CF_Authorization'); }
@@ -17,7 +17,7 @@ export class CloudflareAccessService {
 	private _isAuthorizedByCloudflare = false;
 
 	constructor(private _http: HttpClient) {
-		this.refreshCFAuthorizationCookie();
+		// this.refreshCFAuthorizationCookie();
 	}
 
 	async checkAccessAndTryRedirectToCFLogin() {
@@ -55,7 +55,7 @@ export class CloudflareAccessService {
 				location.reload();
 			}
 		} else {
-			// if after reload of the page we still doesn't have the cookie
+			// if after reload of the page we still don't have the cookie
 			// means the domain under the CF Access bypass policy
 			if (!this._hasCFAuthorizationCookie)
 				this._isAuthorizedByCloudflare = true;

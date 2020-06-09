@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
+import { ApplicationRef, Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { Destroyable } from '@bp/shared/models/common';
 import m from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { interval, of } from 'rxjs';
-import { delay, exhaustMap, tap } from 'rxjs/operators';
+import { delay, exhaustMap, first, tap } from 'rxjs/operators';
 import { CloudflareAccessService } from './cloudflare-access.service';
 import { EnvironmentService } from './environment.service';
 
@@ -22,55 +21,74 @@ import { EnvironmentService } from './environment.service';
 @Injectable({
 	providedIn: 'root',
 })
-export class SwUpdatesService extends Destroyable {
+export class SwUpdatesService {
 
 	private _checkInterval = 1000 * 60 * 5; // each 5 mins
 
 	constructor(
+		private _app: ApplicationRef,
 		private _env: EnvironmentService,
 		private _swu: SwUpdate,
 		private _toaster: ToastrService,
 		private _cfAccess: CloudflareAccessService
 	) {
-		super();
+
 	}
 
 	reloadOnNewVersion({ checkCloudflareAuthorization }: { checkCloudflareAuthorization?: boolean; } = {}) {
 		if (!this._swu.isEnabled) return;
 
-		// Periodically check for updates (after the app is stabilized).
-		interval(this._checkInterval)
-			.pipe(
-				exhaustMap(() => checkCloudflareAuthorization
-					? this._cfAccess.checkAccessAndTryRedirectToCFLogin()
-					: of()
-				),
-				tap(() => this._log('Checking for update...')),
-				this.takeUntilDestroyed
-			)
-			.subscribe(() => this._swu.checkForUpdate());
+		this._checkForUpdateOnAppIsStable();
 
-		// Activate available updates.
+		this._checkForUpdateInInterval(checkCloudflareAuthorization);
+
+		this._activateUpdateAsSoonAsAvailable();
+
+		this._whenUpdateActivatedReloadApp();
+	}
+	private async _checkForUpdateOnAppIsStable() {
+		await this._app.isStable.pipe(first()).toPromise();
+		this._checkForUpdate();
+	}
+
+	private async _whenUpdateActivatedReloadApp() {
+		this._swu.activated.subscribe(() => {
+			this._log(`Update activated`);
+			window.location.reload();
+		});
+	}
+
+	private async _activateUpdateAsSoonAsAvailable() {
 		this._swu.available
 			.pipe(
-				tap(() => this._toaster.info(
-					'A new version is available. The page will be reloaded in a moment.',
-					undefined,
-					{ disableTimeOut: true, tapToDismiss: false }
-				)),
-				delay(3000),
-				tap(evt => this._log(`Update available: ${ JSON.stringify(evt) }`)),
-				this.takeUntilDestroyed
+				tap(() => this._showNewVersionIsAvailableToast()),
+				delay(3000)  // time to read the message
 			)
 			.subscribe(() => this._swu.activateUpdate());
+	}
 
-		// Notify about activated updates.
-		this._swu.activated
-			.pipe(
-				tap(evt => this._log(`Update activated: ${ JSON.stringify(evt) }`)),
-				this.takeUntilDestroyed
-			)
-			.subscribe(() => window.location.reload());
+	private _showNewVersionIsAvailableToast() {
+		this._log(`Update available`);
+
+		this._toaster.info(
+			'A new version is available. The page will be reloaded in a moment.',
+			undefined,
+			{ disableTimeOut: true, tapToDismiss: false }
+		);
+	}
+
+	private _checkForUpdateInInterval(checkCloudflareAuthorization: boolean | undefined) {
+		interval(this._checkInterval)
+			.pipe(exhaustMap(() => checkCloudflareAuthorization
+				? this._cfAccess.checkAccessAndTryRedirectToCFLogin()
+				: of()
+			))
+			.subscribe(() => this._checkForUpdate());
+	}
+
+	private _checkForUpdate(): void {
+		this._log('Checking for update...');
+		this._swu.checkForUpdate();
 	}
 
 	private _log(message: string) {
