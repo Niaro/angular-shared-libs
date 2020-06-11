@@ -2,10 +2,16 @@ import { assign } from 'lodash-es';
 import { Constructor } from './constructor';
 import { QueryParamsBase } from './query-params-base';
 import { DateRange } from '../../misc/date-range';
+import { DateRangeShortcut } from '../../misc/date-range-shortcut';
 
 export interface IDaterangeQueryParams {
+
 	from: number;
+
 	to: number;
+
+	dateRangePreset?: DateRangeShortcut;
+
 }
 
 export type DaterangeQueryParamsCtor = Constructor<IDaterangeQueryParams>;
@@ -19,8 +25,12 @@ export function mixinDaterangeQueryParams<T extends Constructor<QueryParamsBase<
 }>>>
 	(base: T): DaterangeQueryParamsCtor & T {
 	return class extends base {
+
 		from!: number;
+
 		to!: number;
+
+		dateRangePreset?: DateRangeShortcut;
 
 		constructor(...args: any[]) {
 			super(...args);
@@ -31,9 +41,19 @@ export function mixinDaterangeQueryParams<T extends Constructor<QueryParamsBase<
 			if (this.routeParams.to)
 				this.to = +this.routeParams.to;
 
-			const dateRange = this.routeParams.range || this.routeParams.period || this.routeParams.dateRange;
+			const routeParamsDateRange = this.routeParams.range
+				|| this.routeParams.period
+				|| this.routeParams.dateRange;
+
+			const dateRange = routeParamsDateRange ? DateRange.parse(routeParamsDateRange) : undefined;
 			if (dateRange)
-				assign(this, DateRange.parse(dateRange).unix());
+				assign(this, dateRange.unix());
+
+			// tslint:disable-next-line: early-exit
+			if (dateRange?.fullRange)
+				this.dateRangePreset = DateRangeShortcut
+					.list<DateRangeShortcut>()
+					.find(v => v.dateRange.isSame(dateRange));
 		}
 	};
 }

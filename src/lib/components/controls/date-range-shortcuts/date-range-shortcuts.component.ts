@@ -1,8 +1,7 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Input, HostBinding } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as m from 'moment';
 
-import { DateRange, Enumeration, DateRangeInputValue } from '@bp/shared/models/misc';
+import { DateRange, DateRangeInputValue, DateRangeShortcut } from '@bp/shared/models/misc';
 import { lineMicrotask } from '@bp/shared/utils';
 
 import { ControlComponent } from '../control.component';
@@ -10,7 +9,7 @@ import { ControlComponent } from '../control.component';
 @Component({
 	selector: 'bp-date-range-shortcuts',
 	templateUrl: './date-range-shortcuts.component.html',
-	styleUrls: ['./date-range-shortcuts.component.scss'],
+	styleUrls: [ './date-range-shortcuts.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
 		{
@@ -24,7 +23,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	@Input() asSelect!: boolean;
 
-	@Input() includeYear!: boolean;
+	@Input() includeYear = true;
 
 	@Input() panelClass!: string;
 
@@ -76,38 +75,5 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 		this.selected = value;
 		this.setValue(value && value.dateRange);
-	}
-}
-
-export class DateRangeShortcut extends Enumeration {
-	static week = new DateRangeShortcut();
-	static month = new DateRangeShortcut();
-	static quarter = new DateRangeShortcut();
-	static year = new DateRangeShortcut();
-
-	dateRange!: DateRange;
-
-	constructor() {
-		super();
-
-		lineMicrotask(() => {
-			this.dateRange = this.getDateRange()!;
-			setInterval(() => this.dateRange = this.getDateRange()!, 24 * 60 * 60 * 1000);
-		});
-	}
-
-	private getDateRange() {
-		const to = m().endOf('day');
-
-		switch (this) {
-			case DateRangeShortcut.week:
-				return new DateRange({ from: m().utc().startOf('week'), to });
-			case DateRangeShortcut.month:
-				return new DateRange({ from: m().utc().startOf('month'), to });
-			case DateRangeShortcut.quarter:
-				return new DateRange({ from: m().utc().startOf('quarter'), to });
-			case DateRangeShortcut.year:
-				return new DateRange({ from: m().utc().startOf('year'), to });
-		}
 	}
 }
