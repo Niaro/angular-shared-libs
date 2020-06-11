@@ -1,9 +1,7 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, Input, HostBinding } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import { DateRange, DateRangeInputValue, DateRangeShortcut } from '@bp/shared/models/misc';
 import { lineMicrotask } from '@bp/shared/utils';
-
 import { ControlComponent } from '../control.component';
 
 @Component({
@@ -44,7 +42,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 	ngAfterViewInit() {
 		this.dateRangeShortcuts = (this.includeYear
 			? DateRangeShortcut.list()
-			: DateRangeShortcut.list().filter(v => v !== DateRangeShortcut.year)) as DateRangeShortcut[];
+			: DateRangeShortcut.list().filter((v: any) => v !== DateRangeShortcut.year)) as DateRangeShortcut[];
 		this.cdr.detectChanges();
 
 		/**

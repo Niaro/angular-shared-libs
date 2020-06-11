@@ -1,20 +1,20 @@
-import { Component, HostBinding, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
+import { lineMicrotask } from '@bp/shared/utils';
 import { isNil } from 'lodash-es';
 import * as m from 'moment';
-
-import { SLIDE_RIGHT } from '@bp/shared/animations';
-import { lineMicrotask } from '@bp/shared/utils';
-import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/misc/date-range';
-
 import { DatepickerCalendarHeaderComponent } from '../../others/datepicker-calendar-header';
 import { ControlComponent } from '../control.component';
+
+
 
 @Component({
 	selector: 'bp-date-range',
 	templateUrl: './date-range.component.html',
-	styleUrls: ['./date-range.component.scss'],
-	animations: [SLIDE_RIGHT],
+	styleUrls: [ './date-range.component.scss' ],
+	animations: [ SLIDE_RIGHT ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
 		{
@@ -29,6 +29,8 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	@Input() showDeleteSign = true;
 
 	@Input() noFutureDates = true;
+
+	@Input() interactive = true;
 
 	@Input() panelClass!: string;
 
@@ -47,9 +49,9 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: DateRangeInputValue): void {
 		lineMicrotask(() => {
-				this.value = DateRange.parse(value);
-				this.cdr.markForCheck();
-			});
+			this.value = DateRange.parse(value);
+			this.cdr.markForCheck();
+		});
 	}
 	// #endregion Implementation of the ControlValueAccessor interface
 

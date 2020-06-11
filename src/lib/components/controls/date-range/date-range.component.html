@@ -1,11 +1,11 @@
 <input class="from"
-	   [class.empty]="!value.from"
-	   [matDatepicker]="fromPicker"
 	   readonly
 	   placeholder="From"
+	   [class.empty]="!value.from"
+	   [matDatepicker]="fromPicker"
 	   [value]="value.from"
 	   [max]="value.to || (noFutureDates ? currentDay : null)"
-	   (click)="fromPicker.open()"
+	   (click)="interactive && fromPicker.open()"
 	   (dateChange)="patch({ from: $event.value })">
 
 <mat-datepicker #fromPicker
@@ -23,7 +23,7 @@
 	   [value]="value.to"
 	   [min]="value.from"
 	   [max]="noFutureDates ? currentDay : null"
-	   (click)="toPicker.open()"
+	   (click)="interactive && toPicker.open()"
 	   (dateChange)="patch({ to: $event.value })">
 
 <mat-datepicker #toPicker

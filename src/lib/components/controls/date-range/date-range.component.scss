@@ -6,7 +6,6 @@
 	}
 
 	input {
-		@include placeholder-color(currentColor);
 		width: 5.5em;
 		background: transparent;
 		border: none;
@@ -18,6 +17,8 @@
 		&::placeholder,
 		&::-webkit-input-placeholder {
 			text-align: left;
+			color: currentColor;
+			transition: color $animation-duration $animation-function;
 		}
 
 		&.empty {
