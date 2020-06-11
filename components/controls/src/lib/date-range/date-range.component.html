@@ -14,7 +14,7 @@
 	placeholder="From"
 	[value]="value.from"
 	[max]="value.to || (noFutureDates ? currentDay : null)"
-	(click)="fromPicker.open()"
+	(click)="interactive && fromPicker.open()"
 	(dateChange)="patch({ from: $event.value })"
 />
 
@@ -36,7 +36,7 @@
 	[value]="value.to"
 	[min]="value.from"
 	[max]="noFutureDates ? currentDay : null"
-	(click)="toPicker.open()"
+	(click)="interactive && toPicker.open()"
 	(dateChange)="patch({ to: $event.value })"
 />
 

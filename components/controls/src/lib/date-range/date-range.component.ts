@@ -1,12 +1,11 @@
-import { Component, HostBinding, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { ControlComponent, DatepickerCalendarHeaderComponent } from '@bp/shared/components/core';
+import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/core';
+import { lineMicrotask } from '@bp/shared/utilities';
 import { isNil } from 'lodash-es';
 import m from 'moment';
-
-import { SLIDE_RIGHT } from '@bp/shared/animations';
-import { lineMicrotask } from '@bp/shared/utilities';
-import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/core';
-import { DatepickerCalendarHeaderComponent, ControlComponent } from '@bp/shared/components/core';
 
 @Component({
 	selector: 'bp-date-range',
@@ -27,6 +26,8 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	@Input() showDeleteSign = true;
 
 	@Input() noFutureDates = true;
+
+	@Input() interactive = true;
 
 	@Input() panelClass!: string;
 
