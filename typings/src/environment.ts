@@ -6,7 +6,7 @@ export interface IAppEnvironment {
 
 	readonly intercom?: string;
 
-	readonly cashierUrl?: string;
+	readonly cashierAppUrl?: string;
 
 	readonly api?: {
 		url: string;

@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatCommonModule, MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-
 import { BpSelectComponent, BpSelectTrigger, BP_SELECT_SCROLL_STRATEGY_PROVIDER } from './select.component';
 
 @NgModule({
@@ -13,14 +11,14 @@ import { BpSelectComponent, BpSelectTrigger, BP_SELECT_SCROLL_STRATEGY_PROVIDER 
 		OverlayModule,
 		MatOptionModule,
 		MatCommonModule,
-		MatSelectModule
 	],
 	exports: [
 		MatFormFieldModule,
+		MatOptionModule,
+		MatCommonModule,
+
 		BpSelectComponent,
 		BpSelectTrigger,
-		MatOptionModule,
-		MatCommonModule
 	],
 	declarations: [
 		BpSelectComponent,

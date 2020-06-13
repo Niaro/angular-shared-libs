@@ -25,7 +25,7 @@ export class EnvironmentService implements IEnvironment {
 
 	readonly intercom = this._env.intercom;
 
-	readonly cashierUrl = this._env.cashierUrl;
+	readonly cashierAppUrl = this._env.cashierAppUrl;
 
 	readonly api = this._env.api || { url: '', version: '' };
 

@@ -1,6 +1,5 @@
-import { Component, OnChanges, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
-
-import { Country, CountryCode, Countries } from '@bp/shared/models/business';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Countries, Country, CountryCode } from '@bp/shared/models/countries';
 
 @Component({
 	selector: 'bp-country',

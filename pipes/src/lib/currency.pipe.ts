@@ -1,8 +1,7 @@
 import { formatCurrency } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
-import { Currency, CurrencyCode } from '@bp/shared/models/business';
+import { Currency, CurrencyCode } from '@bp/shared/models/currencies';
 import { isInteger, isNil } from 'lodash-es';
-
 
 @Pipe({
 	name: 'bpCurrency'

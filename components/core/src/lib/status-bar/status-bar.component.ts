@@ -1,7 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input, Host, Renderer2, SimpleChanges, OnChanges } from '@angular/core';
-
-import { Describable, Enumeration } from '@bp/shared/models/core';
-
+import { ChangeDetectionStrategy, Component, Host, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { Describable } from '@bp/shared/models/core';
+import { Enumeration } from '@bp/shared/models/core/enum';
 import { StatusBarContainerDirective } from './status-bar-container.directive';
 
 type StatusPosition = 'top' | 'left';
