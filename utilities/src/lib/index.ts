@@ -2,6 +2,7 @@ export * from './app-bootloader';
 export * from './attr-bool-value';
 export * from './clone-and-remove-by-id';
 export * from './clone-and-splice-by-id';
+export * from './clone-collection-and-try-update-item-by-id';
 export * from './dom-helper';
 export * from './fastdom';
 export * from './is-extension-of';
