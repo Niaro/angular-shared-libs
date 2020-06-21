@@ -5,20 +5,20 @@ import { ToastrService } from 'ngx-toastr';
 import { interval, of } from 'rxjs';
 import { delay, exhaustMap, first, tap } from 'rxjs/operators';
 import { CloudflareAccessService } from './cloudflare-access.service';
+import { TelemetryService } from './telemetry';
 
 /**
- * SwUpdatesService
- *
  * @description
  * 1. Checks for available ServiceWorker updates once instantiated.
  * 2. Re-checks every 5 mins.
- * 3. Whenever an update is available, it activates the update.
+ * 3. Whenever an update is available, it activates the update and reloads the page.
+ * 4. Logs each time PWA gets installed
  *
  */
 @Injectable({
 	providedIn: 'root',
 })
-export class SwUpdatesService {
+export class ProgressiveWebAppService {
 
 	private _checkInterval = 1000 * 60 * 5; // each 5 mins
 
@@ -29,6 +29,7 @@ export class SwUpdatesService {
 		private _cfAccess: CloudflareAccessService
 	) {
 		(<any> window).BP_SWU = this._swu;
+		this._logPWAInstalledEvent();
 	}
 
 	reloadOnNewVersion({ checkCloudflareAuthorization }: { checkCloudflareAuthorization?: boolean; } = {}) {
@@ -42,6 +43,7 @@ export class SwUpdatesService {
 
 		this._whenUpdateActivatedReloadApp();
 	}
+
 	private async _checkForUpdateOnAppIsStable() {
 		await this._app.isStable.pipe(first()).toPromise();
 		this._checkForUpdate();
@@ -88,6 +90,10 @@ export class SwUpdatesService {
 	}
 
 	private _log(message: string) {
-		console.log(`%c[SwUpdates][${ m().format('LLL') }]: ${ message }`, 'color:#fd720c;');
+		console.log(`%c[PWA][${ m().format('LLL') }]: ${ message }`, 'color:#fd720c;');
+	}
+
+	private _logPWAInstalledEvent() {
+		window.addEventListener('appinstalled', () => TelemetryService.captureMessage('PWA got installed'));
 	}
 }
