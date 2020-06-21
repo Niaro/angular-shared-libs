@@ -1,6 +1,6 @@
-import { Observable } from 'rxjs';
 import { Dictionary } from '@bp/shared/typings';
 import { MetaReducer } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 export interface IReporter {
 
@@ -23,8 +23,8 @@ export interface IReporter {
 	 */
 	captureMessage(message: string): void;
 
-	warn(...args: any[]): void;
+	warn(message?: any, ...optionalParams: any[]): void;
 
-	log(...args: any[]): void;
+	log(message?: any, ...optionalParams: any[]): void;
 
 }

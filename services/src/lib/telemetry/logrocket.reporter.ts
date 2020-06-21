@@ -1,10 +1,8 @@
-import { from } from 'rxjs';
-import { first, shareReplay } from 'rxjs/operators';
+import { Dictionary } from '@bp/shared/typings';
 import LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
-
-import { Dictionary } from '@bp/shared/typings';
-
+import { from } from 'rxjs';
+import { first, shareReplay } from 'rxjs/operators';
 import { IReporter } from './reporter.interface';
 
 export class LogRocketReporter implements IReporter {
@@ -81,12 +79,12 @@ export class LogRocketReporter implements IReporter {
 		LogRocket.captureMessage(message, { tags: { source: 'code' } });
 	}
 
-	warn(...args: any[]) {
-		LogRocket.warn(...args);
+	warn(message?: any, ...optionalParams: any[]) {
+		LogRocket.warn(message, optionalParams);
 	}
 
-	log(...args: any[]) {
-		LogRocket.log(...args);
+	log(message?: any, ...optionalParams: any[]) {
+		LogRocket.log(message, optionalParams);
 	}
 
 }

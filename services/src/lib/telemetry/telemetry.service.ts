@@ -1,11 +1,9 @@
-import { Injectable, ErrorHandler } from '@angular/core';
-import { of } from 'rxjs';
-
-import { IEnvironment, Dictionary } from '@bp/shared/typings';
-
-import { IReporter } from './reporter.interface';
-import { LogRocketReporter } from './logrocket.reporter';
+import { ErrorHandler, Injectable } from '@angular/core';
+import { Dictionary, IEnvironment } from '@bp/shared/typings';
 import { MetaReducer } from '@ngrx/store';
+import { of } from 'rxjs';
+import { LogRocketReporter } from './logrocket.reporter';
+import { IReporter } from './reporter.interface';
 
 @Injectable({
 	providedIn: 'root'
@@ -48,14 +46,14 @@ export class TelemetryService implements IReporter {
 		TelemetryService.captureError(error, 'app');
 	}
 
-	static log(...args: any[]) {
-		TelemetryService._reporter?.log(...args);
-		TelemetryService._env.localServer && console.warn(...args);
+	static log(message?: any, ...optionalParams: any[]) {
+		TelemetryService._reporter?.log(message, optionalParams);
+		TelemetryService._env.localServer && console.warn(message, optionalParams);
 	}
 
-	static warn(...args: any[]) {
-		TelemetryService._reporter?.warn(...args);
-		TelemetryService._env.localServer && console.warn(...args);
+	static warn(message?: any, ...optionalParams: any[]) {
+		TelemetryService._reporter?.warn(message, optionalParams);
+		TelemetryService._env.localServer && console.warn(message, optionalParams);
 	}
 
 	private _reporter = TelemetryService._reporter;
@@ -89,12 +87,12 @@ export class TelemetryService implements IReporter {
 		TelemetryService.captureMessage(msg, dataToLog);
 	}
 
-	warn(...args: any[]) {
-		TelemetryService.warn(...args);
+	warn(message?: any, ...optionalParams: any[]) {
+		TelemetryService.warn(message, optionalParams);
 	}
 
-	log(...args: any[]) {
-		TelemetryService.log(...args);
+	log(message?: any, ...optionalParams: any[]) {
+		TelemetryService.log(message, optionalParams);
 	}
 
 }
