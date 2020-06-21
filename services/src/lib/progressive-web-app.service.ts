@@ -30,6 +30,7 @@ export class ProgressiveWebAppService {
 	) {
 		(<any> window).BP_SWU = this._swu;
 		this._logPWAInstalledEvent();
+		this._logPWADisplayMode();
 	}
 
 	reloadOnNewVersion({ checkCloudflareAuthorization }: { checkCloudflareAuthorization?: boolean; } = {}) {
@@ -95,5 +96,10 @@ export class ProgressiveWebAppService {
 
 	private _logPWAInstalledEvent() {
 		window.addEventListener('appinstalled', () => TelemetryService.captureMessage('PWA got installed'));
+	}
+
+	private _logPWADisplayMode() {
+		if (window.matchMedia('(display-mode: standalone)').matches)
+			TelemetryService.captureMessage('PWA is started as standalone');
 	}
 }
