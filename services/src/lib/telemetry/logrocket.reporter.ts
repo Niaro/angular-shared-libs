@@ -80,11 +80,11 @@ export class LogRocketReporter implements IReporter {
 	}
 
 	warn(message?: any, ...optionalParams: any[]) {
-		LogRocket.warn(message, optionalParams);
+		LogRocket.warn(message, ...optionalParams);
 	}
 
 	log(message?: any, ...optionalParams: any[]) {
-		LogRocket.log(message, optionalParams);
+		LogRocket.log(message, ...optionalParams);
 	}
 
 }

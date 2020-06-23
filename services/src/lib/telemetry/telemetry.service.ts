@@ -47,13 +47,13 @@ export class TelemetryService implements IReporter {
 	}
 
 	static log(message?: any, ...optionalParams: any[]) {
-		TelemetryService._reporter?.log(message, optionalParams);
-		TelemetryService._env.localServer && console.warn(message, optionalParams);
+		TelemetryService._reporter?.log(message, ...optionalParams);
+		TelemetryService._env.localServer && console.warn(message, ...optionalParams);
 	}
 
 	static warn(message?: any, ...optionalParams: any[]) {
-		TelemetryService._reporter?.warn(message, optionalParams);
-		TelemetryService._env.localServer && console.warn(message, optionalParams);
+		TelemetryService._reporter?.warn(message, ...optionalParams);
+		TelemetryService._env.localServer && console.warn(message, ...optionalParams);
 	}
 
 	private _reporter = TelemetryService._reporter;
@@ -88,11 +88,11 @@ export class TelemetryService implements IReporter {
 	}
 
 	warn(message?: any, ...optionalParams: any[]) {
-		TelemetryService.warn(message, optionalParams);
+		TelemetryService.warn(message, ...optionalParams);
 	}
 
 	log(message?: any, ...optionalParams: any[]) {
-		TelemetryService.log(message, optionalParams);
+		TelemetryService.log(message, ...optionalParams);
 	}
 
 }
