@@ -76,7 +76,7 @@
 				<ng-container *ngSwitchCase="FieldViewType.moment">
 					{{
 						value
-							| moment
+							| momentFormat
 								: (metadata.viewFormatter
 										? metadata.viewFormatter!(value)
 										: 'LL LTS')

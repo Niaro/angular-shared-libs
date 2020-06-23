@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import m from 'moment';
 
 @Pipe({
-	name: 'moment'
+	name: 'momentFormat'
 })
 export class MomentPipe implements PipeTransform {
 	transform(unixOrMoment: number | m.Moment, format: string): string {
