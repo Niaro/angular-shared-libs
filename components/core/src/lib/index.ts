@@ -1,4 +1,6 @@
 export * from './alert';
+export * from './burger-btn';
+export * from './buttons';
 export * from './control.component';
 export * from './copy';
 export * from './country';
@@ -10,8 +12,6 @@ export * from './hint';
 export * from './img';
 export * from './paginator';
 export * from './payment-method-brand';
-export * from './pending-btn';
-export * from './pending-icon-btn';
 export * from './shared-components-core.module';
 export * from './status-bar';
 export * from './toast';
