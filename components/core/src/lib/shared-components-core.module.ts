@@ -10,8 +10,8 @@ import { SharedFeaturesSelectModule } from '@bp/shared/features/select';
 import { SharedFeaturesSvgIconsModule } from '@bp/shared/features/svg-icons';
 import { SharedPipesModule } from '@bp/shared/pipes';
 import { ToastrModule } from 'ngx-toastr';
-import { PendingBtnComponent, PendingIconBtnComponent } from '.';
 import { AlertComponent, AlertMessagesComponent, ApiErrorsComponent } from './alert';
+import { BurgerBtnComponent, PendingBtnComponent, PendingIconBtnComponent } from './buttons';
 import { CopyComponent } from './copy';
 import { CountryComponent } from './country';
 import { DatepickerCalendarHeaderComponent } from './datepicker-calendar-header';
@@ -36,16 +36,18 @@ const EXPOSED_COMPONENTS = [
 	StatusBarComponent,
 	FilterControlDirective,
 	FilterComponent,
-	PendingBtnComponent,
 	CopyComponent,
 	CountryComponent,
-	PendingIconBtnComponent,
 	PaymentMethodBrandComponent,
 	ImgComponent,
 	VersionComponent,
 	ToastComponent,
 	DatepickerCalendarHeaderComponent,
-	HintComponent
+	HintComponent,
+
+	PendingIconBtnComponent,
+	PendingBtnComponent,
+	BurgerBtnComponent,
 ];
 
 const EXPOSED_DIRECTIVES = [

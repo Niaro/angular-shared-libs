@@ -1,5 +1,4 @@
 export * from './alert';
-export * from './burger-btn';
 export * from './buttons';
 export * from './control.component';
 export * from './copy';

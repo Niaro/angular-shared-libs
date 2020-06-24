@@ -1,0 +1,28 @@
+:host {
+	$line-height: 2px;
+	$line-margin: 3px;
+	$cross-y-offset: $line-height * 2;
+	$cross-deg: 45deg;
+
+	div {
+		width: 20px;
+		height: $line-height;
+		margin: $line-margin;
+		background-color: currentColor;
+		transition: 0.3s ease;
+	}
+
+	&.cross {
+		.line1 {
+			transform: rotate(-$cross-deg) translate(-$line-margin, $cross-y-offset);
+		}
+
+		.line2 {
+			opacity: 0;
+		}
+
+		.line3 {
+			transform: rotate($cross-deg) translate(-$line-margin, -$cross-y-offset);
+		}
+	}
+}
