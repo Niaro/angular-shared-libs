@@ -1,16 +1,16 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { FADE } from '@bp/shared/animations';
 import { isNumber } from 'lodash-es';
 
-import { FADE } from '@bp/shared/animations';
 
 @Component({
-	selector: 'bp-icon-btn',
-	templateUrl: './icon-btn.component.html',
-	styleUrls: [ './icon-btn.component.scss' ],
+	selector: 'bp-pending-icon-btn',
+	templateUrl: './pending-icon-btn.component.html',
+	styleUrls: [ './pending-icon-btn.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [ FADE ]
 })
-export class IconBtnComponent {
+export class PendingIconBtnComponent {
 
 	@Input() pending!: boolean | null;
 

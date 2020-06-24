@@ -16,11 +16,11 @@ import { CountryComponent } from './country';
 import { DatepickerCalendarHeaderComponent } from './datepicker-calendar-header';
 import { FilterComponent, FilterControlDirective } from './filter';
 import { HintComponent } from './hint';
-import { IconBtnComponent } from './icon-btn';
 import { ImgComponent } from './img';
 import { CursorPageAdaptorDirective, PaginatorComponent } from './paginator';
 import { PaymentMethodBrandComponent } from './payment-method-brand';
 import { PendingBtnComponent } from './pending-btn';
+import { PendingIconBtnComponent } from './pending-icon-btn';
 import { StatusBarComponent, StatusBarContainerDirective } from './status-bar';
 import { ToastComponent } from './toast';
 import { VersionComponent } from './version';
@@ -40,7 +40,7 @@ const EXPOSED_COMPONENTS = [
 	PendingBtnComponent,
 	CopyComponent,
 	CountryComponent,
-	IconBtnComponent,
+	PendingIconBtnComponent,
 	PaymentMethodBrandComponent,
 	ImgComponent,
 	VersionComponent,

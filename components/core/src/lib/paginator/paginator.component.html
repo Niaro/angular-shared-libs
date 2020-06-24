@@ -25,7 +25,7 @@
 	</span>
 
 	<div class="buttons">
-		<bp-icon-btn
+		<bp-pending-icon-btn
 			class="prev"
 			title="Prev page"
 			[pending]="progressBack$ | async"
@@ -33,9 +33,9 @@
 			(click)="onBack()"
 		>
 			<mat-icon>arrow_back_ios</mat-icon>
-		</bp-icon-btn>
+		</bp-pending-icon-btn>
 
-		<bp-icon-btn
+		<bp-pending-icon-btn
 			class="next"
 			title="Next page"
 			[pending]="progressNext$ | async"
@@ -43,6 +43,6 @@
 			(click)="onNext()"
 		>
 			<mat-icon>arrow_back_ios</mat-icon>
-		</bp-icon-btn>
+		</bp-pending-icon-btn>
 	</div>
 </div>
