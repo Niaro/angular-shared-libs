@@ -8,6 +8,8 @@ export interface IVersion {
 
 	readonly release: string;
 
-	readonly prerelease: string;
+	readonly build: number;
+
+	readonly releaseWithBuild: string;
 
 }

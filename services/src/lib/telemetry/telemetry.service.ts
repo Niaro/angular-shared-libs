@@ -21,7 +21,11 @@ export class TelemetryService implements IReporter {
 	static init(env: IEnvironment) {
 		TelemetryService._env = env;
 		TelemetryService._reporter = env.logrocket
-			? new LogRocketReporter(env.logrocket, env.name, env.version.prerelease)
+			? new LogRocketReporter(
+				env.logrocket,
+				env.name,
+				env.name === 'prod' ? env.version.release : env.version.releaseWithBuild
+			)
 			: null;
 		TelemetryService.logMetaReducer = TelemetryService._reporter?.logMetaReducer ?? null;
 	}
