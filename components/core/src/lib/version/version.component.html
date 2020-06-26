@@ -1,5 +1,11 @@
-v{{
-	env.isProd && !env.isDemostand
-		? env.version.release
-		: env.version.releaseWithBuild + (env.isDemostand ? '' : '-' + env.name)
-}}
+<ng-container *ngIf="env.remoteServer">
+	v{{
+		env.isProd && !env.isDemostand
+			? env.version.release
+			: env.version.releaseWithBuild + (env.isDemostand ? '' : '-' + env.name)
+	}}
+</ng-container>
+
+<ng-container *ngIf="env.localServer">
+	v0.0.0-localhost
+</ng-container>

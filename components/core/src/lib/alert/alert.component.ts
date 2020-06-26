@@ -20,7 +20,7 @@ export class AlertComponent implements OnChanges {
 
 	@Input()
 	get errors() { return this._errors; }
-	set errors(value: IApiErrorMessage[] | null) { this._errors = value ?? null; }
+	set errors(value: IApiErrorMessage[] | null | undefined) { this._errors = value ?? null; }
 	private _errors!: IApiErrorMessage[] | null;
 
 	@Input()

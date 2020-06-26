@@ -38,7 +38,8 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 		)),
 		defer(() => [ new ResponseError(httpError) ])
 	)
-		.pipe(flatMap(throwError));
+		// tslint:disable-next-line: no-unnecessary-callback-wrapper
+		.pipe(flatMap(v => throwError(v)));
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next

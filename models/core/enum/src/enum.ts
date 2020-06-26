@@ -3,7 +3,9 @@ import {
 	lowerCase, upperFirst
 } from 'lodash-es';
 
-// tslint:disable: no-static-this
+// tslint:disable: static-this
+// We use static this in this context because we want to use
+// the inherited static this scope,
 export abstract class Enumeration {
 
 	private static _list: any[];
@@ -11,41 +13,40 @@ export abstract class Enumeration {
 	private static _isValue(v: any) { return isNumber(v) || isBoolean(v); }
 
 	static list<T extends Enumeration>(): T[] {
-
-		if (!Enumeration._list) {
+		if (!this._list) {
 			const list: T[] = [];
-			forIn(Enumeration, (it, key) => {
-				if (it instanceof Enumeration && isNaN(+key) && Enumeration._shouldList(it))
+			forIn(this, (it, key) => {
+				if (it instanceof Enumeration && isNaN(+key) && this._shouldList(it))
 					list.push(<T> it);
 			});
-			Enumeration._list = list;
+			this._list = list;
 		}
 
-		return Enumeration._list;
+		return this._list;
 	}
 
 	static find<T extends Enumeration>(value: number | string): T | null {
-		return (<any> Enumeration)[ value ] || null;
+		return (<any> this)[ value ] || null;
 	}
 
 	static parse(data: any): Enumeration | null {
 		if (isNil(data))
 			return null;
 
-		return data instanceof Enumeration.prototype.constructor
+		return data instanceof this.prototype.constructor
 			? <Enumeration> data
-			: Enumeration.find(Enumeration._isValue(data) ? data : camelCase(data));
+			: this.find(this._isValue(data) ? data : camelCase(data));
 	}
 
 	static parseStrict(data: any): Enumeration {
-		const result = Enumeration.parse(data);
+		const result = this.parse(data);
 		if (!result)
-			throw new Error(`Enum type ${ Enumeration.name } does not contains value ${ data }`);
+			throw new Error(`Enum type ${ this.name } does not contains value ${ data }`);
 
 		return result;
 	}
 
-	static isInstance(value: any) { return value instanceof Enumeration; }
+	static isInstance(value: any) { return value instanceof this; }
 
 	protected static _shouldList(value: Enumeration) {
 		return true;
@@ -67,11 +68,7 @@ export abstract class Enumeration {
 
 	protected _displayName: string;
 
-	private _id = `enum_${ Math
-		.random()
-		.toString(36)
-		.substr(2, 8)
-		}`;
+	private _id = `enum_${ this._getUniqId() }`;
 
 	constructor(displayName?: string | null);
 	constructor(value: number | boolean, displayName?: string);
@@ -110,6 +107,13 @@ export abstract class Enumeration {
 	protected _init() {
 		this.cssClass = this._getCssClass();
 		this._displayName = this._displayName ?? upperFirst(lowerCase(this.name));
+	}
+
+	private _getUniqId() {
+		return Math
+			.random()
+			.toString(36)
+			.substr(2, 8);
 	}
 
 	private _getCssClass() {

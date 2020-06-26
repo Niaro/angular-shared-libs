@@ -12,7 +12,7 @@ export class RouterService {
 
 	navigationStart$ = this.ngRouter.events.pipe(
 		filter(it => it instanceof NavigationStart),
-		tap(x => TelemetryService.warn(x)),
+		tap(x => TelemetryService.warn('Navigation Start', x)),
 		map(v => <NavigationStart> v),
 		share()
 	);
@@ -58,7 +58,7 @@ export class RouterService {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
 			map(() => <ActivatedRoute> UrlHelper.getComponentRoute(this.route, cmptType)),
-			tap(x => TelemetryService.warn(x?.routeConfig)),
+			tap(x => TelemetryService.warn('Route Config', x?.routeConfig)),
 			distinctUntilChanged((p, q) => p?.routeConfig === q?.routeConfig),
 			filter(v => v?.component === cmptType)
 		);
