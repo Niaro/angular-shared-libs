@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SvgSharedIconsDefinitionsComponent } from './svg-shared-icons-definitions.component';
+import { NgModule } from '@angular/core';
+
 import { SvgIconComponent } from './svg-icon.component';
+import { SvgSharedIconsDefinitionsComponent } from './svg-shared-icons-definitions.component';
 
 const EXPOSED = [
 	SvgSharedIconsDefinitionsComponent,

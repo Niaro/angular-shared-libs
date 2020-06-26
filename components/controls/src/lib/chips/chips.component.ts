@@ -1,3 +1,5 @@
+import { get, isEmpty, isString, uniq } from 'lodash-es';
+
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { CdkPortal } from '@angular/cdk/portal';
 import {
@@ -7,11 +9,11 @@ import {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+
 import { FADE } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { IDescribable } from '@bp/shared/models/core';
 import { lineMicrotask } from '@bp/shared/utilities';
-import { get, isEmpty, isString, uniq } from 'lodash-es';
 
 export interface IChipControlItem extends IDescribable {
 	[ prop: string ]: any;

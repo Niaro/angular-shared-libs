@@ -1,9 +1,11 @@
+import { isNil } from 'lodash-es';
+
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+
 import { FADE_IN, FADE_IN_LIST } from '@bp/shared/animations';
 import { ClassMetadata } from '@bp/shared/models/metadata';
 import { Dictionary, NonFunctionPropertyNames } from '@bp/shared/typings';
-import { isNil } from 'lodash-es';
 
 export type ControlsSectionScheme<T> = [ NonFunctionPropertyNames<T>, (NonFunctionPropertyNames<T> | 'stub')?][];
 

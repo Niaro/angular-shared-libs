@@ -1,7 +1,9 @@
-import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+
+import { HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
 import { BYPASS_AUTH_CHECK, CONTENT_TYPE, HttpConfigService } from './http-config.service';
 
 @Injectable()

@@ -1,8 +1,10 @@
+import { isObject } from 'lodash-es';
+
 import { Directive, Input } from '@angular/core';
 import { ActivatedRoute, QueryParamsHandling, Router, UrlTree } from '@angular/router';
+
 import { Dictionary } from '@bp/shared/typings';
 import { attrBoolValue } from '@bp/shared/utilities';
-import { isObject } from 'lodash-es';
 
 @Directive()
 export class OutletLinkRelativeToTargetBaseDirective {

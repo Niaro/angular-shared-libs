@@ -1,5 +1,6 @@
-import { DeepPartial } from '@bp/shared/typings';
 import { assign, isBoolean, isNumber, startCase } from 'lodash-es';
+
+import { DeepPartial } from '@bp/shared/typings';
 
 export class GenerateSchemeControl {
 	type: 'input' | 'textarea' | 'switch' | 'number';

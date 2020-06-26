@@ -1,10 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
-import { AbstractControl, AbstractControlDirective, FormGroupDirective, ValidationErrors } from '@angular/forms';
-import { MatFormField } from '@angular/material/form-field';
-import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { isEqual } from 'lodash-es';
 import { of } from 'rxjs';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
+import { AbstractControl, AbstractControlDirective, FormGroupDirective, ValidationErrors } from '@angular/forms';
+import { MatFormField } from '@angular/material/form-field';
+
+import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 
 @Component({
 	// tslint:disable-next-line:component-selector

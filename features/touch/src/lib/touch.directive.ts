@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Output, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, Output } from '@angular/core';
+
 import { TouchBuilder } from './touch-builder';
 
 @Directive({

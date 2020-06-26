@@ -1,6 +1,7 @@
 import fastdom from 'fastdom';
 import { Observable } from 'rxjs';
 import { subscribeOn } from 'rxjs/operators';
+
 import { BpScheduler } from '../schedulers/schedulers';
 
 export function fromMutate<T>(mutate: () => void): Observable<void> {

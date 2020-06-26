@@ -1,3 +1,6 @@
+import { isEmpty, isString } from 'lodash-es';
+import { BehaviorSubject, Subject } from 'rxjs';
+
 import {
 	ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, Input, OnChanges,
 	Optional, Output, SimpleChanges, TemplateRef, ViewChild
@@ -6,11 +9,11 @@ import {
 	AbstractControl, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
 	ValidatorFn
 } from '@angular/forms';
+
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { includes, lineMicrotask, match } from '@bp/shared/utilities';
-import { isEmpty, isString } from 'lodash-es';
-import { BehaviorSubject, Subject } from 'rxjs';
+
 import { InputComponent } from '../input';
 import { RoundInputComponent } from '../round-input';
 

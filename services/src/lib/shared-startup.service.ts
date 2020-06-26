@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+
 import { ZoneService } from '@bp/shared/rxjs';
+
 import { MomentService } from './moment.service';
 import { ObsoleteUrlsRerouterService } from './obsolete-urls-rerouter.service';
 import { TitleService } from './title.service';

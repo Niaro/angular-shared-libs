@@ -1,8 +1,11 @@
+import { distinctUntilChanged, filter, map, share, tap } from 'rxjs/operators';
+
 import { Injectable, Type } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationExtras, NavigationStart, Router } from '@angular/router';
+
 import { ResponseError } from '@bp/shared/models/common';
 import { UrlHelper } from '@bp/shared/utilities';
-import { distinctUntilChanged, filter, map, share, tap } from 'rxjs/operators';
+
 import { TelemetryService } from './telemetry';
 
 @Injectable({

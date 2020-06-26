@@ -1,8 +1,3 @@
-import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
-import { FB_FUNCTIONS_REGION } from '@bp/firebase-functions';
-import { IPageQueryParams, PagedResults, ResponseError } from '@bp/shared/models/common';
-import { Entity } from '@bp/shared/models/metadata';
-import { Dictionary } from '@bp/shared/typings';
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -15,6 +10,15 @@ import { isEmpty, last, snakeCase, take } from 'lodash-es';
 import m from 'moment';
 import { defer, from, Observable, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+
+import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
+
+import { IPageQueryParams, PagedResults, ResponseError } from '@bp/shared/models/common';
+import { Entity } from '@bp/shared/models/metadata';
+import { Dictionary } from '@bp/shared/typings';
+
+import { FB_FUNCTIONS_REGION } from '@bp/firebase-functions';
+
 import { EnvironmentService } from './environment.service';
 import { TelemetryService } from './telemetry';
 

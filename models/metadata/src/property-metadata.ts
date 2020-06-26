@@ -1,6 +1,9 @@
-import { Type } from '@angular/core';
-import { Enumeration } from '@bp/shared/models/core/enum';
 import { assign, isNil, startCase } from 'lodash-es';
+
+import { Type } from '@angular/core';
+
+import { Enumeration } from '@bp/shared/models/core/enum';
+
 import { FieldViewType } from './enums';
 import { MetadataEntity } from './metadata-entity';
 import { PropertyMetadataControl } from './property-metadata-control';

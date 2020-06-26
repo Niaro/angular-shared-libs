@@ -1,5 +1,6 @@
-import { Enumeration } from '@bp/shared/models/core/enum';
 import { isString } from 'lodash-es';
+
+import { Enumeration } from '@bp/shared/models/core/enum';
 
 export class PaymentMethodBrand extends Enumeration {
 	// #region Credit Cards

@@ -1,12 +1,14 @@
+import { isEqual, omit } from 'lodash-es';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { distinctUntilChanged, filter, map, skip } from 'rxjs/operators';
+
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+
 import { FADE } from '@bp/shared/animations';
 import { PAGE_SIZE } from '@bp/shared/models/common';
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { UrlHelper } from '@bp/shared/utilities';
-import { isEqual, omit } from 'lodash-es';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, skip } from 'rxjs/operators';
 
 @Component({
 	selector: 'bp-paginator',

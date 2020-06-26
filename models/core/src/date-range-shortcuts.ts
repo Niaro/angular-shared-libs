@@ -1,4 +1,5 @@
 import m from 'moment';
+
 import { DateRange } from './date-range';
 import { Describable } from './enums';
 

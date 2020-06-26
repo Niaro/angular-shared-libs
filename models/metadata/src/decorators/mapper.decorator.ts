@@ -1,5 +1,6 @@
 import { MetadataEntity } from '../metadata-entity';
 import { PropertyMapper } from '../property-metadata';
+
 import { Property } from './property-metadata.decorator';
 
 // tslint:disable-next-line: naming-convention

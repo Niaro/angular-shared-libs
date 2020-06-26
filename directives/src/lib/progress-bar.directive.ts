@@ -1,4 +1,5 @@
 import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
+
 import { $ } from '@bp/shared/utilities';
 
 @Directive({

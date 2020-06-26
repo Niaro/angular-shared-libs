@@ -1,11 +1,13 @@
+import { isNil } from 'lodash-es';
+import m from 'moment';
+
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 import { ControlComponent, DatepickerCalendarHeaderComponent } from '@bp/shared/components/core';
 import { DateRange, DateRangeInput, DateRangeInputValue } from '@bp/shared/models/core';
 import { lineMicrotask } from '@bp/shared/utilities';
-import { isNil } from 'lodash-es';
-import m from 'moment';
 
 @Component({
 	selector: 'bp-date-range',

@@ -1,8 +1,11 @@
+import { camelCase, has, isArray, isNil } from 'lodash-es';
+
 import { Type } from '@angular/core';
+
 import { Enumeration } from '@bp/shared/models/core/enum';
 import { Dictionary, NonFunctionPropertyNames } from '@bp/shared/typings';
 import { isExtensionOf } from '@bp/shared/utilities';
-import { camelCase, has, isArray, isNil } from 'lodash-es';
+
 import { ClassMetadata } from './class-metadata';
 import { MERGE_JSON_WITH_ENTITY_INSTANCE_TOKEN } from './decorators/merge-json-with-entity-instance.token';
 import { PropertyMapper, PropertyMapperFunction, PropertyMetadata } from './property-metadata';

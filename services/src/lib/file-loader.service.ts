@@ -1,10 +1,12 @@
-import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { ProcessingFile, QueryParamsBase, ResponseError } from '@bp/shared/models/common';
-import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { saveAs } from 'file-saver';
 import { without } from 'lodash-es';
 import { last, takeUntil, tap } from 'rxjs/operators';
+
+import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+import { ProcessingFile, QueryParamsBase, ResponseError } from '@bp/shared/models/common';
+import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 
 @Injectable({
 	providedIn: 'root'

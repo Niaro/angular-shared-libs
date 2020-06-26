@@ -1,3 +1,8 @@
+import { findLast, get, isArray, isEmpty, isEqual, isFunction, isNil, isNull, repeat } from 'lodash-es';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, skip } from 'rxjs/operators';
+import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
+
 import { BACKSPACE, DOWN_ARROW, END, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
 import {
 	AfterViewInit, Directive, ElementRef, HostListener, Input, OnChanges,
@@ -5,11 +10,9 @@ import {
 	SimpleChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { AsyncVoidSubject } from '@bp/shared/rxjs';
-import { findLast, get, isArray, isEmpty, isEqual, isFunction, isNil, isNull, repeat } from 'lodash-es';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, skip } from 'rxjs/operators';
-import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
+
 import { MaskPipe } from './mask-pipe';
 import { NumberMaskPipe } from './number-mask-pipe';
 import { TextMaskPipe } from './text-mask-pipe';

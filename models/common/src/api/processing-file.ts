@@ -1,6 +1,8 @@
+import { AsyncSubject, BehaviorSubject } from 'rxjs';
+
 import { Enumeration } from '@bp/shared/models/core/enum';
 import { AsyncVoidSubject } from '@bp/shared/rxjs';
-import { AsyncSubject, BehaviorSubject } from 'rxjs';
+
 import { ResponseError } from './response-error';
 
 export class ProcessingFileStatus extends Enumeration {

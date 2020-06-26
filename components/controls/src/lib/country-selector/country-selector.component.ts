@@ -1,10 +1,12 @@
+import { isArray, isEmpty } from 'lodash-es';
+
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from '@angular/forms';
+
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { Countries, Country, CountryCode } from '@bp/shared/models/countries';
 import { lineMicrotask } from '@bp/shared/utilities';
-import { isArray, isEmpty } from 'lodash-es';
 
 @Component({
 	selector: 'bp-country-selector',

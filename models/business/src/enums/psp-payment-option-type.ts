@@ -1,6 +1,7 @@
+import { kebabCase } from 'lodash-es';
+
 import { Describable } from '@bp/shared/models/core';
 import { lineMicrotask } from '@bp/shared/utilities';
-import { kebabCase } from 'lodash-es';
 
 export class PspPaymentOptionType extends Describable {
 

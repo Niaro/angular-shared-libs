@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Dictionary } from '@bp/shared/typings';
-import { $ } from '@bp/shared/utilities';
 import { defer, of, timer } from 'rxjs';
 import { first, map } from 'rxjs/operators';
+
+import { Injectable } from '@angular/core';
+
+import { Dictionary } from '@bp/shared/typings';
+import { $ } from '@bp/shared/utilities';
+
 import { EnvironmentService } from './environment.service';
 import { RouterService } from './router.service';
 import { TelemetryService } from './telemetry';

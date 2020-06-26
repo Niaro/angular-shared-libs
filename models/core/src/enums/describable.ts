@@ -1,4 +1,5 @@
 import { Enumeration } from '@bp/shared/models/core/enum';
+
 import { IDescribable } from '../interfaces';
 
 export abstract class Describable extends Enumeration implements IDescribable {

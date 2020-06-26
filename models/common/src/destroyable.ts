@@ -1,7 +1,9 @@
-import { Directive, OnDestroy } from '@angular/core';
-import { AsyncVoidSubject } from '@bp/shared/rxjs';
 import { Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { Directive, OnDestroy } from '@angular/core';
+
+import { AsyncVoidSubject } from '@bp/shared/rxjs';
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix

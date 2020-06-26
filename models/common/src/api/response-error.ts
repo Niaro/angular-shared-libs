@@ -1,6 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { DeepPartial } from '@bp/shared/typings';
 import { assign, camelCase, get, has, isArray, isString, lowerCase } from 'lodash-es';
+
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { DeepPartial } from '@bp/shared/typings';
+
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 
 export class ResponseError {

@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { get } from 'lodash-es';
 
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
 import { FADE_IN_LIST } from '@bp/shared/animations';
+import { ClassMetadata, Entity, PropertyMetadata } from '@bp/shared/models/metadata';
 import { NonFunctionPropertyNames } from '@bp/shared/typings';
-import { Entity, ClassMetadata, PropertyMetadata } from '@bp/shared/models/metadata';
 
 export type ViewsSectionScheme<T> = [ NonFunctionPropertyNames<T>, NonFunctionPropertyNames<T>?][];
 

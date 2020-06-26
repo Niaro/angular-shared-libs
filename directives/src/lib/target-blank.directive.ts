@@ -1,4 +1,4 @@
-import { Directive, Input, HostBinding, OnChanges, Self, Optional } from '@angular/core';
+import { Directive, HostBinding, Input, OnChanges, Optional, Self } from '@angular/core';
 import { RouterLinkWithHref } from '@angular/router';
 
 @Directive({

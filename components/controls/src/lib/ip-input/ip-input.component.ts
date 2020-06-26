@@ -1,9 +1,8 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { NG_VALUE_ACCESSOR, FormControl, NG_VALIDATORS } from '@angular/forms';
-
-import { Validators } from '@bp/shared/features/validation';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { FormFieldControlComponent } from '@bp/shared/components/core';
+import { Validators } from '@bp/shared/features/validation';
 
 @Component({
 	selector: 'bp-ip-input',

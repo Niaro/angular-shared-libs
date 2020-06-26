@@ -1,4 +1,4 @@
-import { animation, style, animate, trigger, transition, useAnimation } from '@angular/animations';
+import { animate, animation, style, transition, trigger, useAnimation } from '@angular/animations';
 
 import { SLOW } from './variables';
 

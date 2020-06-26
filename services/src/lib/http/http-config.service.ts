@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
+
+import { Injectable } from '@angular/core';
+
 import { EnvironmentService } from '../environment.service';
 
 export const BYPASS_AUTH_CHECK = 'bypass-auth-check';

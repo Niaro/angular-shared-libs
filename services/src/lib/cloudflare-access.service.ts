@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
+
 import { uniqId } from '@bp/shared/utilities';
+
 import { BYPASS_AUTH_CHECK } from './http';
 
 @Injectable({

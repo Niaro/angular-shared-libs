@@ -1,6 +1,6 @@
 import { asyncOutside } from './async-outside-angular.scheduler';
-import { outside } from './outside-angular.scheduler';
 import { inside } from './inside-angular.scheduler';
+import { outside } from './outside-angular.scheduler';
 
 export class BpScheduler {
 

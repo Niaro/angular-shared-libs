@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2, ElementRef, SimpleChange } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer2, SimpleChange, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatFormFieldAppearance, FloatLabelType } from '@angular/material/form-field';
 import { ThemePalette } from '@angular/material/core';
+import { FloatLabelType, MatFormFieldAppearance } from '@angular/material/form-field';
 
-import { PropertyMetadata, FieldControlType } from '@bp/shared/models/metadata';
 import { Validators } from '@bp/shared/features/validation';
+import { FieldControlType, PropertyMetadata } from '@bp/shared/models/metadata';
 
 @Component({
 	selector: 'bp-property-metadata-control',

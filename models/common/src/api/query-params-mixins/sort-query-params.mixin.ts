@@ -1,4 +1,5 @@
 import { SortDirection } from '@angular/material/sort';
+
 import { Constructor } from './constructor';
 import { QueryParamsBase } from './query-params-base';
 

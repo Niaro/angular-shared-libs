@@ -1,5 +1,6 @@
-import { Enumeration } from '@bp/shared/models/core/enum';
 import { isBoolean } from 'lodash-es';
+
+import { Enumeration } from '@bp/shared/models/core/enum';
 
 export class Ability extends Enumeration {
 

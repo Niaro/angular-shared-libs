@@ -1,3 +1,5 @@
+import { ToastrModule } from 'ngx-toastr';
+
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -6,10 +8,11 @@ import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+
 import { SharedFeaturesSelectModule } from '@bp/shared/features/select';
 import { SharedFeaturesSvgIconsModule } from '@bp/shared/features/svg-icons';
 import { SharedPipesModule } from '@bp/shared/pipes';
-import { ToastrModule } from 'ngx-toastr';
+
 import { AlertComponent, AlertMessagesComponent, ApiErrorsComponent } from './alert';
 import { BurgerBtnComponent, PendingBtnComponent, PendingIconBtnComponent } from './buttons';
 import { CopyComponent } from './copy';

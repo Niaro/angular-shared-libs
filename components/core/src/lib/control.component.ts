@@ -1,9 +1,11 @@
-import { ChangeDetectorRef, Directive, HostBinding, Input, isDevMode, OnDestroy, Output } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
-import { Destroyable } from '@bp/shared/models/common';
-import { lineMicrotask } from '@bp/shared/utilities';
 import { isEqual, isNil, uniq } from 'lodash-es';
 import { Subject } from 'rxjs';
+
+import { ChangeDetectorRef, Directive, HostBinding, Input, isDevMode, OnDestroy, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
+
+import { Destroyable } from '@bp/shared/models/common';
+import { lineMicrotask } from '@bp/shared/utilities';
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix

@@ -1,6 +1,6 @@
-import { trigger, transition, useAnimation, style, state } from '@angular/animations';
+import { slideInRight, slideInUp, slideOutRight, slideOutUp } from 'ng-animate';
 
-import { slideInUp, slideOutUp, slideInRight, slideOutRight } from 'ng-animate';
+import { state, style, transition, trigger, useAnimation } from '@angular/animations';
 
 import { FAST, NORMAL } from './variables';
 

@@ -1,5 +1,7 @@
-import { ValidatorFn, Validators } from '@angular/forms';
 import { assign } from 'lodash-es';
+
+import { ValidatorFn, Validators } from '@angular/forms';
+
 import { FieldControlType } from './enums';
 
 export class PropertyMetadataControl {

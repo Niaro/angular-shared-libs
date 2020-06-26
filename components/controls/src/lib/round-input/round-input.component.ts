@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';

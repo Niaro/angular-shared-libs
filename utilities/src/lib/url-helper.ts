@@ -1,7 +1,9 @@
+import { isArray, isBoolean, isNil, isObject, last, mapValues, pickBy, toPairs } from 'lodash-es';
+
 import { Type } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router, UrlSegmentGroup } from '@angular/router';
+
 import { Dictionary } from '@bp/shared/typings';
-import { isArray, isBoolean, isNil, isObject, last, mapValues, pickBy, toPairs } from 'lodash-es';
 
 export class UrlHelper {
 	static parse(value: string) {

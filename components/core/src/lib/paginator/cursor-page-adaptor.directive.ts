@@ -1,6 +1,9 @@
-import { Directive, Input, OnChanges, Self, SimpleChanges } from '@angular/core';
-import { PagedResults } from '@bp/shared/models/common';
 import { isNil } from 'lodash-es';
+
+import { Directive, Input, OnChanges, Self, SimpleChanges } from '@angular/core';
+
+import { PagedResults } from '@bp/shared/models/common';
+
 import { PaginatorComponent } from './paginator.component';
 
 @Directive({

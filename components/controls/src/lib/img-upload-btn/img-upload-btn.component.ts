@@ -1,13 +1,15 @@
+import { isNumber } from 'lodash-es';
+import { fromEvent, Subject } from 'rxjs';
+
 import {
 	ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, Output,
 	ViewChild
 } from '@angular/core';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { FADE, SLIDE } from '@bp/shared/animations';
 import { ControlComponent } from '@bp/shared/components/core';
 import { FirebaseService } from '@bp/shared/services';
-import { isNumber } from 'lodash-es';
-import { fromEvent, Subject } from 'rxjs';
 
 @Component({
 	selector: 'bp-img-upload-btn',

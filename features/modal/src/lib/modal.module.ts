@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule } from '@angular/material/dialog';
+import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { SharedFeaturesSvgIconsModule } from '@bp/shared/features/svg-icons';
 
-import { ModalComponent } from './modal.component';
 import { ModalOutletComponent } from './modal-outlet.component';
+import { ModalComponent } from './modal.component';
 
 const EXPOSED = [
 	ModalComponent,

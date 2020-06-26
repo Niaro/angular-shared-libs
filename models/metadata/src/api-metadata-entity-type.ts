@@ -1,5 +1,7 @@
-import { Enumeration } from '@bp/shared/models/core/enum';
 import m from 'moment';
+
+import { Enumeration } from '@bp/shared/models/core/enum';
+
 import { MetadataEntity } from './metadata-entity';
 
 export type Api<T extends Object> = {

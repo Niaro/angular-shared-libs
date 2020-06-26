@@ -1,5 +1,6 @@
-import { Directive, Output, HostListener } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+
+import { Directive, HostListener, Output } from '@angular/core';
 
 @Directive({
 	selector: '[bpHover]'

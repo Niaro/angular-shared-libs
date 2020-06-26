@@ -1,6 +1,8 @@
 import { Attribute, Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { attrBoolValue } from '@bp/shared/utilities';
+
 import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-to-target-base.directive';
 
 @Directive({

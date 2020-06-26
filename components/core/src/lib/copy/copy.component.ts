@@ -1,6 +1,7 @@
+import { ToastrService } from 'ngx-toastr';
+
 import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
-import { ToastrService } from 'ngx-toastr';
 
 const DEFAULT_TOOLTIP_MSG = 'Copy';
 

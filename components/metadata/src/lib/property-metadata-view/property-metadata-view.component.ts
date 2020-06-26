@@ -1,9 +1,9 @@
 import {
-	Component, ChangeDetectionStrategy, Input, SimpleChanges, OnChanges, Renderer2,
-	ElementRef, SimpleChange
+	ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, Renderer2,
+	SimpleChange, SimpleChanges
 } from '@angular/core';
 
-import { PropertyMetadata, FieldViewType, PropertyMetadataTable } from '@bp/shared/models/metadata';
+import { FieldViewType, PropertyMetadata, PropertyMetadataTable } from '@bp/shared/models/metadata';
 
 @Component({
 	selector: 'bp-property-metadata-view',

@@ -1,6 +1,7 @@
 import { PaymentOptionType } from '@bp/shared/models/business';
 import { CashierLanguage } from '@bp/shared/models/cashier';
 import { Currency } from '@bp/shared/models/currencies';
+
 import { IClientDetails } from './client-details';
 import { CashierLaunchButtonMode, CashierTheme } from './enums';
 

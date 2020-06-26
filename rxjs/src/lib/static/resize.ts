@@ -1,6 +1,8 @@
-import { ResizeSensor } from '@bp/shared/utilities';
 import { Observable, scheduled } from 'rxjs';
 import { distinctUntilChanged, map, mergeAll } from 'rxjs/operators';
+
+import { ResizeSensor } from '@bp/shared/utilities';
+
 import { measure } from '../fastdom-wrappers';
 import { BpScheduler } from '../schedulers';
 

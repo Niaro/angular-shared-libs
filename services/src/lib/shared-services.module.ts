@@ -1,11 +1,12 @@
 
-import { NgModule, ModuleWithProviders, ErrorHandler } from '@angular/core';
 import { LocalStorageModule } from 'angular-2-local-storage';
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorHandler, ModuleWithProviders, NgModule } from '@angular/core';
 
 import { APP_LOCAL_STORAGE_PREFIX } from '@bp/shared/models/core';
 
-import { HttpResponseInterceptorService, HttpRequestInterceptorService } from './http';
+import { HttpRequestInterceptorService, HttpResponseInterceptorService } from './http';
 import { AppErrorHandler } from './telemetry';
 
 const EXPOSED_MODULES = [

@@ -1,6 +1,9 @@
-import { Dictionary } from '@bp/shared/typings';
-import { TranslateService } from '@ngx-translate/core';
 import { compact, flatMap, isObject, isString } from 'lodash-es';
+
+import { TranslateService } from '@ngx-translate/core';
+
+import { Dictionary } from '@bp/shared/typings';
+
 import errorsMap from './errors-map';
 import { IValidationErrors, ValidationError, ValidationErrorTemplateVariables } from './models';
 

@@ -1,5 +1,6 @@
-import { Pipe, PipeTransform } from '@angular/core';
 import { lowerCase } from 'lodash-es';
+
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'lowerCase'

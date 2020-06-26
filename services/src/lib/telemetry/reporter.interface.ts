@@ -1,6 +1,8 @@
-import { Dictionary } from '@bp/shared/typings';
-import { MetaReducer } from '@ngrx/store';
 import { Observable } from 'rxjs';
+
+import { MetaReducer } from '@ngrx/store';
+
+import { Dictionary } from '@bp/shared/typings';
 
 export interface IReporter {
 

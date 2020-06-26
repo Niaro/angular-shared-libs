@@ -1,7 +1,9 @@
+import { IndividualConfig, Toast, ToastPackage, ToastrService } from 'ngx-toastr';
+
 import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone } from '@angular/core';
+
 import { FADE, SEMI_SLOW, TIMINGS } from '@bp/shared/animations';
-import { IndividualConfig, Toast, ToastPackage, ToastrService } from 'ngx-toastr';
 
 export type ToastConfig = IndividualConfig & { undoBtn: boolean; };
 

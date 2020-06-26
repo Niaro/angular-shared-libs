@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, ContentChild, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChild, Input, TemplateRef } from '@angular/core';
 
 @Component({
 	selector: 'bp-alert-messages',

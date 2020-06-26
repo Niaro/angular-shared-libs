@@ -1,6 +1,7 @@
-import { Component, OnChanges, ChangeDetectionStrategy, Input, SimpleChanges } from '@angular/core';
-import { fromEvent, BehaviorSubject } from 'rxjs';
-import { first, delay, share } from 'rxjs/operators';
+import { BehaviorSubject, fromEvent } from 'rxjs';
+import { delay, first, share } from 'rxjs/operators';
+
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { pending } from '@bp/shared/rxjs';
 

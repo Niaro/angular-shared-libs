@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FADE } from '@bp/shared/animations';
 import { isNumber } from 'lodash-es';
+
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { FADE } from '@bp/shared/animations';
 
 @Component({
 	selector: 'bp-pending-btn',

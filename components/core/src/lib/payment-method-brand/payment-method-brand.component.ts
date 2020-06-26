@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 
 import { PaymentMethodBrand } from '@bp/shared/models/business';
 

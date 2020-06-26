@@ -1,4 +1,4 @@
-import { Observable, OperatorFunction, concat, Subject } from 'rxjs';
+import { concat, Observable, OperatorFunction, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { ZoneService } from '../zone.service';

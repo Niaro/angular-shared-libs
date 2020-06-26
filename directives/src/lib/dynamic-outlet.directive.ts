@@ -1,5 +1,5 @@
-import { Directive, OnInit, OnDestroy, Input, ViewContainerRef, ComponentFactoryResolver, ChangeDetectorRef } from '@angular/core';
-import { RouterOutlet, ChildrenOutletContexts } from '@angular/router';
+import { ChangeDetectorRef, ComponentFactoryResolver, Directive, Input, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { ChildrenOutletContexts, RouterOutlet } from '@angular/router';
 
 @Directive({
 	// tslint:disable-next-line: directive-selector

@@ -1,5 +1,6 @@
-import { Pipe, PipeTransform } from '@angular/core';
 import { map } from 'lodash-es';
+
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'toKeyValuePairs'

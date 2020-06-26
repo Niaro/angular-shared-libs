@@ -1,7 +1,9 @@
-import { Component, ChangeDetectionStrategy, Input, OnChanges, HostBinding, Optional } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { TranslateService } from '@ngx-translate/core';
+
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, Optional } from '@angular/core';
 
 import { SLIDE } from '@bp/shared/animations';
 

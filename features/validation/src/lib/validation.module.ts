@@ -1,10 +1,10 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 
+import { DirtyAndInvalidErrorStateMatcher } from './dirty-and-invalid-error-state-matcher';
 import { FieldErrorComponent } from './field-error';
 import { ValidationErrorComponent } from './validation-error';
-import { DirtyAndInvalidErrorStateMatcher } from './dirty-and-invalid-error-state-matcher';
 
 const EXPOSED_COMPONENTS = [
 	FieldErrorComponent,

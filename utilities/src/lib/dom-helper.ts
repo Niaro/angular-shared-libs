@@ -1,6 +1,7 @@
+import { forIn, forOwn, isBoolean, isObject, isString } from 'lodash-es';
+
 import { Dimensions, Position, Size } from '@bp/shared/models/core';
 import { Dictionary } from '@bp/shared/typings';
-import { forIn, forOwn, isBoolean, isObject, isString } from 'lodash-es';
 
 export class $ {
 

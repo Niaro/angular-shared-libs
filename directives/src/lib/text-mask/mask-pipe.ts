@@ -1,4 +1,5 @@
 import { isNil, isUndefined } from 'lodash-es';
+
 import { TextMask, TextMaskConfig } from './text-mask.config';
 
 export abstract class MaskPipe {

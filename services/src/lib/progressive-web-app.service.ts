@@ -1,9 +1,11 @@
-import { ApplicationRef, Injectable } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
 import m from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { interval, of } from 'rxjs';
 import { delay, exhaustMap, first, tap } from 'rxjs/operators';
+
+import { ApplicationRef, Injectable } from '@angular/core';
+import { SwUpdate } from '@angular/service-worker';
+
 import { CloudflareAccessService } from './cloudflare-access.service';
 import { TelemetryService } from './telemetry';
 

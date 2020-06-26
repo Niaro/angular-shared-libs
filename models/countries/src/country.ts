@@ -1,6 +1,8 @@
 
-import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
 import { isString, mapValues } from 'lodash-es';
+
+import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
+
 import { CountryCode, COUNTRY_CODES } from './country-codes';
 import { State } from './state';
 import states from './states';

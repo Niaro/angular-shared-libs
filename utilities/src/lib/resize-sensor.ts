@@ -1,4 +1,5 @@
 import { isFunction } from 'lodash-es';
+
 import { fastdom } from './fastdom';
 
 type SizeInfo = {

@@ -1,4 +1,5 @@
 import { MetadataEntity } from '../metadata-entity';
+
 import { Property } from './property-metadata.decorator';
 
 /**

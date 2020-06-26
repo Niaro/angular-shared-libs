@@ -1,9 +1,12 @@
+import { isString } from 'lodash-es';
+import { Subscription } from 'rxjs';
+
 import { LocationStrategy } from '@angular/common';
 import { Directive, HostBinding, HostListener, Input, OnChanges, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
+
 import { attrBoolValue } from '@bp/shared/utilities';
-import { isString } from 'lodash-es';
-import { Subscription } from 'rxjs';
+
 import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-to-target-base.directive';
 
 @Directive({

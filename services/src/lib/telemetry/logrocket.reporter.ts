@@ -1,8 +1,10 @@
-import { Dictionary } from '@bp/shared/typings';
 import LogRocket from 'logrocket';
 import createNgrxMiddleware from 'logrocket-ngrx';
 import { from } from 'rxjs';
 import { first, shareReplay } from 'rxjs/operators';
+
+import { Dictionary } from '@bp/shared/typings';
+
 import { IReporter } from './reporter.interface';
 
 export class LogRocketReporter implements IReporter {

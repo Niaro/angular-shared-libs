@@ -1,4 +1,5 @@
-import { trigger, transition, useAnimation, animation, animate, keyframes, style } from '@angular/animations';
+import { animate, animation, keyframes, style, transition, trigger, useAnimation } from '@angular/animations';
+
 import { NORMAL, TIMINGS } from './variables';
 
 export const fadeIn = animation(animate(

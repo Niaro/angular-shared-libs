@@ -1,5 +1,7 @@
-import { DateRange, DateRangeShortcut } from '@bp/shared/models/core';
 import { assign } from 'lodash-es';
+
+import { DateRange, DateRangeShortcut } from '@bp/shared/models/core';
+
 import { Constructor } from './constructor';
 import { QueryParamsBase } from './query-params-base';
 

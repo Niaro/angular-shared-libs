@@ -1,5 +1,7 @@
-import { Injectable, NgZone } from '@angular/core';
 import { isString } from 'lodash-es';
+
+import { Injectable, NgZone } from '@angular/core';
+
 import { TouchManager } from './touch-manager';
 
 @Injectable({

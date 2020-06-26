@@ -1,5 +1,6 @@
-import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
 import { isString } from 'lodash-es';
+
+import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
 
 const CRYPTOS = new Map<CryptoCurrencyCode, CryptoCurrency>();
 

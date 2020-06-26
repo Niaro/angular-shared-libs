@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
 	providedIn: 'root'

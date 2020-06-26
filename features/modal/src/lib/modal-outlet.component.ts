@@ -1,9 +1,12 @@
+import { has, unset } from 'lodash-es';
+import { filter, map } from 'rxjs/operators';
+
 import { ChangeDetectionStrategy, Component, ContentChild, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NavigationEnd, PRIMARY_OUTLET, Router, RouterOutlet, RoutesRecognized } from '@angular/router';
+
 import { MODAL_OUTLET } from '@bp/shared/models/core';
-import { has, unset } from 'lodash-es';
-import { filter, map } from 'rxjs/operators';
+
 import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 

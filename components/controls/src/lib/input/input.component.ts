@@ -1,10 +1,12 @@
+import { isEmpty } from 'lodash-es';
+
 import { ChangeDetectionStrategy, Component, ContentChild, Directive, HostBinding, Input, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+
 import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { InputTextMaskConfig, NumberMaskConfig, TextMaskDirective } from '@bp/shared/directives';
-import { isEmpty } from 'lodash-es';
 
 /**
  * Allows the user to customize the label.

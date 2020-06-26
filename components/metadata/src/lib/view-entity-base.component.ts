@@ -1,6 +1,6 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 
-import { Entity, ClassMetadata } from '@bp/shared/models/metadata';
+import { ClassMetadata, Entity } from '@bp/shared/models/metadata';
 import { NonFunctionPropertyNames } from '@bp/shared/typings';
 
 @Directive()

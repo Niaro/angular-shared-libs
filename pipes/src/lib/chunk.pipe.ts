@@ -1,5 +1,6 @@
-import { Pipe, PipeTransform } from '@angular/core';
 import { chunk } from 'lodash-es';
+
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
 	name: 'chunk'

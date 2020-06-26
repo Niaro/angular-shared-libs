@@ -1,4 +1,5 @@
 import { MetadataEntity } from '../metadata-entity';
+
 import { MERGE_JSON_WITH_ENTITY_INSTANCE_TOKEN } from './merge-json-with-entity-instance.token';
 import { Property } from './property-metadata.decorator';
 

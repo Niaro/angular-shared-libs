@@ -1,6 +1,7 @@
+import { isString } from 'lodash-es';
+
 import { Countries, Country, CountryCode } from '@bp/shared/models/countries';
 import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
-import { isString } from 'lodash-es';
 
 export class CashierLanguage extends MetadataEntity {
 

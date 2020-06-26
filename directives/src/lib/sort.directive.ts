@@ -1,10 +1,12 @@
+import { camelCase, snakeCase } from 'lodash-es';
+import { first, map } from 'rxjs/operators';
+
 import { Directive, Self } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ISortQueryParams } from '@bp/shared/models/common';
 import { UrlHelper } from '@bp/shared/utilities';
-import { camelCase, snakeCase } from 'lodash-es';
-import { first, map } from 'rxjs/operators';
 
 @Directive({
 	selector: '[bpSort][matSort]'

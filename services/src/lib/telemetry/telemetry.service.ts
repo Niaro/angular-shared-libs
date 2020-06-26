@@ -1,7 +1,11 @@
-import { ErrorHandler, Injectable } from '@angular/core';
-import { Dictionary, IEnvironment } from '@bp/shared/typings';
-import { MetaReducer } from '@ngrx/store';
 import { of } from 'rxjs';
+
+import { ErrorHandler, Injectable } from '@angular/core';
+
+import { MetaReducer } from '@ngrx/store';
+
+import { Dictionary, IEnvironment } from '@bp/shared/typings';
+
 import { LogRocketReporter } from './logrocket.reporter';
 import { IReporter } from './reporter.interface';
 

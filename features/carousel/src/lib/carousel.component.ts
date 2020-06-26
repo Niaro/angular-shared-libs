@@ -1,8 +1,16 @@
+import { forOwn, get, isEqual, sum } from 'lodash-es';
+import { BehaviorSubject, combineLatest, fromEvent, Subject } from 'rxjs';
+import {
+	distinctUntilChanged, filter, first, flatMap, map, max,
+	startWith, subscribeOn, switchMap
+} from 'rxjs/operators';
+
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
 	AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, Input, OnChanges,
 	OnDestroy, Output, QueryList, Renderer2, SimpleChanges, TemplateRef, TrackByFunction, ViewChild, ViewChildren
 } from '@angular/core';
+
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { ISwipeEvent, TouchBuilder, TouchManager } from '@bp/shared/features/touch';
 import { Destroyable } from '@bp/shared/models/common';
@@ -10,12 +18,6 @@ import { Dimensions, Direction } from '@bp/shared/models/core';
 import { BpScheduler, fromMeasure, fromResize, measure, mutate } from '@bp/shared/rxjs';
 import { Dictionary } from '@bp/shared/typings';
 import { $, lineMicrotask } from '@bp/shared/utilities';
-import { forOwn, get, isEqual, sum } from 'lodash-es';
-import { BehaviorSubject, combineLatest, fromEvent, Subject } from 'rxjs';
-import {
-	distinctUntilChanged, filter, first, flatMap, map, max,
-	startWith, subscribeOn, switchMap
-} from 'rxjs/operators';
 
 export enum CarouselArrowType {
 	None = 'none',

@@ -1,4 +1,5 @@
 import { isEmpty, isFunction } from 'lodash-es';
+
 import { MaskPipe } from './mask-pipe';
 import { TextMask, TextMaskConfig } from './text-mask.config';
 

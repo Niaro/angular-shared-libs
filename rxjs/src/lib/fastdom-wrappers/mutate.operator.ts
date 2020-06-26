@@ -1,5 +1,6 @@
 import { Observable, OperatorFunction } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
+
 import { fromMutate } from './mutate.static';
 
 export function mutate<T>(mutateCb: (measured: T) => void): OperatorFunction<T, T> {

@@ -1,7 +1,8 @@
+import m from 'moment';
+
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Optional, ViewEncapsulation } from '@angular/core';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatCalendar, MatCalendarHeader, MatDatepicker, MatDatepickerContent, MatDatepickerIntl } from '@angular/material/datepicker';
-import m from 'moment';
 
 @Component({
 	selector: 'bp-datepicker-calendar-header',

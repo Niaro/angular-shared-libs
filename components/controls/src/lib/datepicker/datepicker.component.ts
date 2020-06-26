@@ -1,11 +1,11 @@
 import m from 'moment';
-import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
+import { ControlComponent, DatepickerCalendarHeaderComponent } from '@bp/shared/components/core';
 import { lineMicrotask } from '@bp/shared/utilities';
-
-import { DatepickerCalendarHeaderComponent, ControlComponent } from '@bp/shared/components/core';
 
 @Component({
 	selector: 'bp-datepicker',

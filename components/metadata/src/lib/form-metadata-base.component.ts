@@ -1,9 +1,9 @@
-import { Input, Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { ClassMetadata, PropertyMetadata, MetadataEntity } from '@bp/shared/models/metadata';
-import { NonFunctionPropertyNames } from '@bp/shared/typings';
 import { FormBaseComponent } from '@bp/shared/components/core';
+import { ClassMetadata, MetadataEntity, PropertyMetadata } from '@bp/shared/models/metadata';
+import { NonFunctionPropertyNames } from '@bp/shared/typings';
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix

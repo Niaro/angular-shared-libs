@@ -1,6 +1,9 @@
-import { getCurrencySymbol } from '@angular/common';
-import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
 import { isString } from 'lodash-es';
+
+import { getCurrencySymbol } from '@angular/common';
+
+import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
+
 import { CURRENCIES_CODES, CurrencyCode } from './currency-codes';
 
 export class Currency extends MetadataEntity {

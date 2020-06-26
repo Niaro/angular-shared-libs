@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Dictionary } from '@bp/shared/typings';
 import { keys } from 'lodash-es';
 import { filter, map } from 'rxjs/operators';
+
+import { Injectable } from '@angular/core';
+
+import { Dictionary } from '@bp/shared/typings';
+
 import { RouterService } from './router.service';
 
 @Injectable({

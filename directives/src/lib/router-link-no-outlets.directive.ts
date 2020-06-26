@@ -1,3 +1,6 @@
+import { isString } from 'lodash-es';
+import { filter } from 'rxjs/operators';
+
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { LocationStrategy } from '@angular/common';
 import { Directive, HostBinding, HostListener, Input, OnChanges } from '@angular/core';
@@ -5,9 +8,8 @@ import {
 	ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, QueryParamsHandling, Router, UrlSegmentGroup,
 	UrlTree
 } from '@angular/router';
+
 import { Destroyable } from '@bp/shared/models/common';
-import { isString } from 'lodash-es';
-import { filter } from 'rxjs/operators';
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive

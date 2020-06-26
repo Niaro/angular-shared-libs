@@ -1,4 +1,5 @@
 import { isNumber } from 'lodash-es';
+
 import { MaskPipe } from './mask-pipe';
 import { NumberMaskConfig } from './text-mask.config';
 

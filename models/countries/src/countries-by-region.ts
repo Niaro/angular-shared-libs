@@ -1,5 +1,7 @@
-import { Dictionary } from '@bp/shared/typings';
 import { mapValues } from 'lodash-es';
+
+import { Dictionary } from '@bp/shared/typings';
+
 import { Countries } from './countries';
 import { Country } from './country';
 import { CountryCode } from './country-codes';

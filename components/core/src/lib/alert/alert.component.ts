@@ -1,12 +1,14 @@
+import { LocalStorageService } from 'angular-2-local-storage';
+import { isEmpty } from 'lodash-es';
+import m from 'moment';
+
 import {
 	ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges,
 	SimpleChanges
 } from '@angular/core';
+
 import { SLIDE } from '@bp/shared/animations';
 import { IApiErrorMessage } from '@bp/shared/models/common';
-import { LocalStorageService } from 'angular-2-local-storage';
-import { isEmpty } from 'lodash-es';
-import m from 'moment';
 
 @Component({
 	selector: 'bp-alert',

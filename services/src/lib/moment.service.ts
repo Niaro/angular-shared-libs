@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
 import m from 'moment';
+
+import { Injectable } from '@angular/core';
 
 @Injectable({
 	providedIn: 'root'

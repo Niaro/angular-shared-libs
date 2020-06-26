@@ -1,7 +1,8 @@
-import { NgZone } from '@angular/core';
 import { AsyncAction } from 'rxjs/internal/scheduler/AsyncAction';
 import { AsyncScheduler } from 'rxjs/internal/scheduler/AsyncScheduler';
 import { SchedulerAction } from 'rxjs/internal/types';
+
+import { NgZone } from '@angular/core';
 
 import { ZoneService } from '../zone.service';
 

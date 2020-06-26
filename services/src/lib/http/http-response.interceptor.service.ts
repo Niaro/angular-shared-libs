@@ -1,14 +1,18 @@
+import { fromPairs, isNil } from 'lodash-es';
+import { defer, iif, Observable, throwError } from 'rxjs';
+import { catchError, flatMap, map, tap } from 'rxjs/operators';
+
 import {
 	HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest,
 	HttpResponse
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { IApiResponse, ResponseError, StatusCode } from '@bp/shared/models/common';
-import { fromPairs, isNil } from 'lodash-es';
-import { defer, iif, Observable, throwError } from 'rxjs';
-import { catchError, flatMap, map, tap } from 'rxjs/operators';
+
 import { RouterService } from '../router.service';
 import { TelemetryService } from '../telemetry';
+
 import { CORRELATION_ID_KEY, HttpConfigService } from './http-config.service';
 
 export const DO_NOT_REDIRECT_ON_500X = 'do-not-redirect-on-500x';
