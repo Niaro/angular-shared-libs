@@ -1,12 +1,11 @@
-import { Input, Output, ChangeDetectorRef, Directive, isDevMode } from '@angular/core';
-import { FormGroup, AbstractControl, FormArray, FormBuilder } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
-import { isEmpty, forOwn } from 'lodash-es';
-import { Subject, BehaviorSubject, of, combineLatest, EMPTY } from 'rxjs';
-import { switchMap, map, distinctUntilChanged, startWith } from 'rxjs/operators';
-
-import { ResponseError, IApiErrorMessage, Destroyable } from '@bp/shared/models/common';
+import { ChangeDetectorRef, Directive, Input, isDevMode, Output } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Destroyable, IApiErrorMessage, ResponseError } from '@bp/shared/models/common';
 import { FormGroupConfig } from '@bp/shared/typings';
+import { forOwn, isEmpty } from 'lodash-es';
+import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, combineLatest, EMPTY, of, Subject } from 'rxjs';
+import { distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -28,6 +27,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 
 		if (!value) {
 			this.errors = null;
+
 			return;
 		}
 
@@ -115,6 +115,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	private _getRootForm(form: FormGroup | FormArray) {
 		while (form.parent)
 			form = form.parent;
+
 		return form;
 	}
 
@@ -168,7 +169,10 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 				distinctUntilChanged()
 			);
 
-		combineLatest(this.formValid$, formDirty$)
+		combineLatest([
+			this.formValid$,
+			formDirty$
+		])
 			.pipe(map(([ valid, dirty ]) => valid && dirty))
 			.subscribe(this._formDirtyAndValid$);
 	}

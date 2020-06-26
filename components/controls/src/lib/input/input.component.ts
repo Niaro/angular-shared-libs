@@ -1,14 +1,10 @@
-import {
-	Component, Input, ChangeDetectionStrategy, ViewChild, Directive, ContentChild, HostBinding
-} from '@angular/core';
-import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { ChangeDetectionStrategy, Component, ContentChild, Directive, HostBinding, Input, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { isEmpty } from 'lodash-es';
-
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
-import { TextMaskDirective, NumberMaskConfig, InputTextMaskConfig } from '@bp/shared/directives';
-
 import { FormFieldControlComponent } from '@bp/shared/components/core';
+import { InputTextMaskConfig, NumberMaskConfig, TextMaskDirective } from '@bp/shared/directives';
+import { isEmpty } from 'lodash-es';
 
 /**
  * Allows the user to customize the label.
@@ -37,6 +33,7 @@ export class InputHintDirective { }
 })
 export class InputPrefixDirective { }
 
+// tslint:disable-next-line: max-classes-per-file
 @Component({
 	selector: 'bp-input',
 	templateUrl: './input.component.html',

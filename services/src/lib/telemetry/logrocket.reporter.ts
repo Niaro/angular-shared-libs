@@ -9,7 +9,7 @@ export class LogRocketReporter implements IReporter {
 
 	logMetaReducer = createNgrxMiddleware(LogRocket);
 
-	currentSessionUrl$ = from(new Promise<string>(r => LogRocket.getSessionURL(v => r(v))))
+	currentSessionUrl$ = from(new Promise<string>(r => LogRocket.getSessionURL(r)))
 		.pipe(
 			first(),
 			shareReplay({ bufferSize: 1, refCount: false })
@@ -29,11 +29,15 @@ export class LogRocketReporter implements IReporter {
 			network: {
 				requestSanitizer(req) {
 					// if the url contains 'ignore'
-					if (req.url.toLowerCase().includes('deposit'))
+					if (req.url
+						.toLowerCase()
+						.includes('deposit')
+					)
 						// scrub out the body
 						req.body = undefined;
 
 					req.headers[ 'Authorization' ] = undefined;
+
 					return req;
 				}
 			},

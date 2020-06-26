@@ -1,27 +1,28 @@
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { LocationStrategy } from '@angular/common';
 import { Directive, HostBinding, HostListener, Input, OnChanges } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, QueryParamsHandling, Router, UrlSegmentGroup, UrlTree } from '@angular/router';
+import {
+	ActivatedRoute, NavigationEnd, PRIMARY_OUTLET, QueryParamsHandling, Router, UrlSegmentGroup,
+	UrlTree
+} from '@angular/router';
 import { Destroyable } from '@bp/shared/models/common';
 import { isString } from 'lodash-es';
 import { filter } from 'rxjs/operators';
-
 
 /**
  * We need our own implementation of RouterLink directive because the angular's directive
  * doesn't remove current outlets presented in url from generated links
  */
-
 @Directive({
 	selector: 'a[routerLinkNoOutlets]' // tslint:disable-line
 })
 export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements OnChanges {
 
 	@Input()
-	set routerLinkNoOutlets(commands: any[] | string) {
-		if (commands != null)
-			this._commands = Array.isArray(commands) ? commands : [ commands ];
-		else
-			this._commands = [];
+	set routerLinkNoOutlets(commands: any[] | string | null) {
+		this._commands = commands === null
+			? []
+			: Array.isArray(commands) ? commands : [ commands ];
 	}
 
 	@HostBinding('attr.target') @Input() target!: string;
@@ -71,8 +72,8 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 			return true;
 
 		this._router.navigateByUrl(this.urlTree, {
-			skipLocationChange: attrBoolValue(this.skipLocationChange),
-			replaceUrl: attrBoolValue(this.replaceUrlOnLocationHistory),
+			skipLocationChange: coerceBooleanProperty(this.skipLocationChange),
+			replaceUrl: coerceBooleanProperty(this.replaceUrlOnLocationHistory),
 			state: this.state
 		});
 
@@ -89,7 +90,7 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 			queryParams: this.queryParams,
 			fragment: this.fragment,
 			queryParamsHandling: this.queryParamsHandling,
-			preserveFragment: attrBoolValue(this.preserveFragment)
+			preserveFragment: coerceBooleanProperty(this.preserveFragment)
 		});
 
 		// clone tree, cause createUrlTree creates shared tree with the router and
@@ -102,18 +103,11 @@ export class RouterLinkNoOutletsWithHrefDirective extends Destroyable implements
 	}
 
 	private _removeNonPrimaryOutlets({ children }: UrlSegmentGroup) {
-		for (const key in children) {
-			if (!children.hasOwnProperty(key))
-				continue;
-
+		for (const key of Object.keys(children)) {
 			if (key === PRIMARY_OUTLET)
 				this._removeNonPrimaryOutlets(children[ key ]);
 			else
 				delete children[ key ];
 		}
 	}
-}
-
-function attrBoolValue(s: any): boolean {
-	return s === '' || !!s;
 }

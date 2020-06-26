@@ -101,7 +101,7 @@ export class CountrySelectorComponent extends FormFieldControlComponent<Country 
 	// tslint:disable-next-line: no-unnecessary-type-annotation
 	protected _validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
 		return !value && this.internalControl.value
-			? { 'countryNotFound': true }
+			? { countryNotFound: true }
 			: null;
 	};
 

@@ -56,15 +56,26 @@ export class TitleService {
 
 	private _substituteMasksAndSetTitle(rawTitle: string = '') {
 		this._ngTitle.setTitle(
-			values(this._substitutionsReducers).reduce((title, substitute) => substitute(title), rawTitle)
+			values(this._substitutionsReducers)
+				.reduce(
+					(title, substitute) => substitute(title),
+					rawTitle
+				)
 		);
 	}
 
 	private _updateTitle() {
-		const outletsTitles = mapValues(this._harvestTitles(), v => v.reverse().join(TITLES_DELIMITER));
+		const outletsTitles = mapValues(
+			this._harvestTitles(),
+			v => v
+				.reverse()
+				.join(TITLES_DELIMITER)
+		);
 		const primaryTitle = outletsTitles[ PRIMARY_OUTLET ];
 		const modalTitle = outletsTitles[ MODAL_OUTLET ];
-		const rightDrawersTitle = values(omit(outletsTitles, PRIMARY_OUTLET, MODAL_OUTLET)).reverse().join(OUTLETS_DELIMITER);
+		const rightDrawersTitle = values(omit(outletsTitles, PRIMARY_OUTLET, MODAL_OUTLET))
+			.reverse()
+			.join(OUTLETS_DELIMITER);
 
 		this._rawTitle = (modalTitle
 			? modalTitle + TITLES_DELIMITER
@@ -79,7 +90,7 @@ export class TitleService {
 		const walkedMap = new Map<ActivatedRouteSnapshot, number>();
 
 		// we need the previous variable to restore the outlets titles order
-		let outletsTitles: Dictionary<string[]> = this._keysToObject(this._previousTitledOutlets);
+		let outletsTitles = this._keysToObject(this._previousTitledOutlets);
 		let curr: ActivatedRouteSnapshot | null = this._route.snapshot;
 		let currentOutlet = PRIMARY_OUTLET;
 
@@ -95,22 +106,25 @@ export class TitleService {
 			// tslint:disable-next-line: no-unnecessary-type-annotation
 			const toCheckChildIndex: number = (walkedMap.get(curr) || 0) + 1;
 
+			// tslint:disable-next-line: early-exit
 			if (curr.children.length && (!hasWalked || toCheckChildIndex < curr.children.length)) {
 				const next = hasWalked ? toCheckChildIndex : 0;
 				walkedMap.set(curr, next);
 				curr = curr.children[ next ];
-			} else if (curr.parent)
-				curr = curr.parent;
-			else
-				curr = null;
+			} else
+				curr = curr.parent ?? null;
 		}
 
-		outletsTitles = omitBy(outletsTitles, v => isEmpty(v));
+		outletsTitles = omitBy(outletsTitles, isEmpty);
 		this._previousTitledOutlets = keys(outletsTitles);
+
 		return outletsTitles;
 	}
 
-	private _keysToObject(val: string[] = []) {
-		return val.reduce((acc, v) => ({ ...acc, [ v ]: [] }), {});
+	private _keysToObject(val: string[] = []): Dictionary<string[]> {
+		return val.reduce(
+			(acc, v) => (<Dictionary<string[]>> { ...acc, [ v ]: [] }),
+			<Dictionary<string[]>> {}
+		);
 	}
 }

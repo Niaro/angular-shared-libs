@@ -1,11 +1,8 @@
 import { Injectable, Type } from '@angular/core';
-import {
-	Router, NavigationEnd, ActivatedRoute, NavigationError, NavigationStart, NavigationExtras
-} from '@angular/router';
-import { filter, distinctUntilChanged, map, share, tap } from 'rxjs/operators';
-
-import { UrlHelper } from '@bp/shared/utilities';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationExtras, NavigationStart, Router } from '@angular/router';
 import { ResponseError } from '@bp/shared/models/common';
+import { UrlHelper } from '@bp/shared/utilities';
+import { distinctUntilChanged, filter, map, share, tap } from 'rxjs/operators';
 import { TelemetryService } from './telemetry';
 
 @Injectable({
@@ -35,7 +32,7 @@ export class RouterService {
 		this.ngRouter.events
 			// the request prop means that an error has occurred on loading a lazy module,
 			// so we just generalize and send to the error page
-			.subscribe((e) => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
+			.subscribe(e => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
 	}
 
 	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; })) {

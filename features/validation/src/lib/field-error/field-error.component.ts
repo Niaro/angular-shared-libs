@@ -1,11 +1,10 @@
-import { Component, Input, OnChanges, AfterViewInit, SimpleChanges, ChangeDetectionStrategy, Optional } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, Optional, SimpleChanges } from '@angular/core';
+import { AbstractControl, AbstractControlDirective, FormGroupDirective, ValidationErrors } from '@angular/forms';
 import { MatFormField } from '@angular/material/form-field';
-import { isEqual } from 'lodash-es';
-import { AbstractControl, ValidationErrors, FormGroupDirective, AbstractControlDirective } from '@angular/forms';
-import { switchMap, distinctUntilChanged, map } from 'rxjs/operators';
-import { of } from 'rxjs';
-
 import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
+import { isEqual } from 'lodash-es';
+import { of } from 'rxjs';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 @Component({
 	// tslint:disable-next-line:component-selector
@@ -36,7 +35,7 @@ export class FieldErrorComponent implements OnChanges, AfterViewInit {
 					? v.statusChanges.pipe(map(() => v.errors))
 					: of(null)
 				),
-				distinctUntilChanged((a, b) => isEqual(a, b))
+				distinctUntilChanged(isEqual)
 			)
 			.subscribe(errors => this.errors$.next(errors));
 	}

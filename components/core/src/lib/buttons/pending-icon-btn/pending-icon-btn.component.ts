@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FADE } from '@bp/shared/animations';
 import { isNumber } from 'lodash-es';
 
-
 @Component({
 	selector: 'bp-pending-icon-btn',
 	templateUrl: './pending-icon-btn.component.html',

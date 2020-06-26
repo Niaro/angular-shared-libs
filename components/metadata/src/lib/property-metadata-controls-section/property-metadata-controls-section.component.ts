@@ -5,7 +5,6 @@ import { ClassMetadata } from '@bp/shared/models/metadata';
 import { Dictionary, NonFunctionPropertyNames } from '@bp/shared/typings';
 import { isNil } from 'lodash-es';
 
-
 export type ControlsSectionScheme<T> = [ NonFunctionPropertyNames<T>, (NonFunctionPropertyNames<T> | 'stub')?][];
 
 @Component({

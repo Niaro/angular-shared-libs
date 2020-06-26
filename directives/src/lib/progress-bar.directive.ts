@@ -1,5 +1,4 @@
-import { Input, OnChanges, Directive, ElementRef } from '@angular/core';
-
+import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 import { $ } from '@bp/shared/utilities';
 
 @Directive({
@@ -19,7 +18,7 @@ export class ProgressBarDirective implements OnChanges {
 
 	ngOnChanges() {
 		const progress = this.bpProgressBar || 0;
-		const inProgress = 0 < progress && progress <= 100;
+		const inProgress = progress > 0 && progress <= 100;
 
 		if (inProgress !== this.inProgress) {
 			$.setClass(this.$host, 'progress-bar', inProgress);

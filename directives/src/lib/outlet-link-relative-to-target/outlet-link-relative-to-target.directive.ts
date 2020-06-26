@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { attrBoolValue } from '@bp/shared/utilities';
 import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-to-target-base.directive';
 
-
-
 @Directive({
 	// tslint:disable-next-line: directive-selector
 	selector: ':not(a):not(area)[outletLinkRelativeToParent], :not(a):not(area)[outletLinkRelativeToRoot]'
@@ -15,7 +13,7 @@ export class OutletLinkRelativeToTargetDirective extends OutletLinkRelativeToTar
 		router: Router,
 		route: ActivatedRoute,
 		// tslint:disable-next-line: no-attribute-decorator
-		@Attribute('tabindex') tabIndex: string,
+		@Attribute('tabindex') tabIndex: string | null,
 		renderer: Renderer2,
 		el: ElementRef
 	) {
@@ -31,6 +29,7 @@ export class OutletLinkRelativeToTargetDirective extends OutletLinkRelativeToTar
 			skipLocationChange: attrBoolValue(this.skipLocationChange),
 			replaceUrl: attrBoolValue(this.replaceUrlOnLocationHistory),
 		});
+
 		return true;
 	}
 

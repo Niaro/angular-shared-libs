@@ -6,7 +6,7 @@ import { map } from 'lodash-es';
 })
 export class ToKeyValuePairsPipe implements PipeTransform {
 
-	transform<T extends Object>(v: T): { key: string, value: any; }[] {
+	transform<T extends Object>(v: T): { key: string; value: any; }[] {
 		return map(v, (value, key) => ({ value, key }));
 	}
 

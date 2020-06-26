@@ -1,10 +1,9 @@
-import { Output, Input, HostBinding, OnDestroy, ChangeDetectorRef, Directive, isDevMode } from '@angular/core';
-import { Subject } from 'rxjs';
-import { ControlValueAccessor, Validator, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { isNil, isEqual, uniq } from 'lodash-es';
-
-import { lineMicrotask } from '@bp/shared/utilities';
+import { ChangeDetectorRef, Directive, HostBinding, Input, isDevMode, OnDestroy, Output } from '@angular/core';
+import { AbstractControl, ControlValueAccessor, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
 import { Destroyable } from '@bp/shared/models/common';
+import { lineMicrotask } from '@bp/shared/utilities';
+import { isEqual, isNil, uniq } from 'lodash-es';
+import { Subject } from 'rxjs';
 
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
@@ -68,7 +67,6 @@ export abstract class ControlComponent<T = any>
 		if (isEqual(value, this.value))
 			// this.validatorOnChange();
 			return;
-
 
 		this.value = <T> value;
 		isDevMode() && console.warn(value, this.constructor.name);

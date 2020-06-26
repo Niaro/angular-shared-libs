@@ -1,4 +1,7 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+	HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest,
+	HttpResponse
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IApiResponse, ResponseError, StatusCode } from '@bp/shared/models/common';
 import { fromPairs, isNil } from 'lodash-es';
@@ -35,7 +38,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 		)),
 		defer(() => [ new ResponseError(httpError) ])
 	)
-		.pipe(flatMap(v => throwError(v)));
+		.pipe(flatMap(throwError));
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next
@@ -49,6 +52,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 				catchError((error: ResponseError) => {
 					this._whenRateLimitedLogIt(error);
 					this._whenNotHandledNavigateToApiErrorPage(error);
+
 					return throwError(error);
 				}));
 	}
@@ -56,6 +60,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 	private _cleanseParams(params: HttpParams) {
 		const keys = params instanceof HttpParams ? params.keys() : Object.keys(params);
 		const getValueByKey = (k: string) => params instanceof HttpParams ? params.get(k) : params[ k ];
+
 		return new HttpParams({
 			fromObject: fromPairs(
 				keys

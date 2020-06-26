@@ -5,7 +5,6 @@ import { CountryCode, COUNTRY_CODES } from './country-codes';
 import { State } from './state';
 import states from './states';
 
-
 const STATES_BY_COUNTRY = <{ [ country in CountryCode ]: State[]; }> <unknown> mapValues(
 	states,
 	(v: Partial<State>[]) => v.map((it: Partial<State>) => new State(it))

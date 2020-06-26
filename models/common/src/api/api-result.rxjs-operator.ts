@@ -20,6 +20,7 @@ export function apiResult<T>(
 			reportJsErrorIfAny,
 			catchError((apiError: ResponseError) => of(failure({ apiError })))
 		);
+
 		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
 	};
 }
@@ -31,10 +32,11 @@ export function apiVoidResult<T>(
 ): OperatorFunction<T, ({} | ApiErrorActionPayload) & TypedAction<string>> {
 	return (source$: Observable<T>) => {
 		const stream$ = source$.pipe(
-			map(() => success()),
+			map(success),
 			reportJsErrorIfAny,
 			catchError((apiError: ResponseError) => of(failure({ apiError })))
 		);
+
 		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
 	};
 }

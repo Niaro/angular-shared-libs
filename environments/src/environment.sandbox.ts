@@ -10,7 +10,6 @@ export const environment: IEnvironment = {
 
 	get localServer() { return !this.remoteServer; },
 
-
 	cashierLoaderUrl: 'https://embed-sandbox.bridgerpay.com/cashier',
 
 	...appEnvironment,

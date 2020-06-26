@@ -6,8 +6,6 @@ import { isString } from 'lodash-es';
 import { Subscription } from 'rxjs';
 import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-to-target-base.directive';
 
-
-
 @Directive({
 	// tslint:disable-next-line: directive-selector
 	selector: 'a[outletLinkRelativeToParent], a[outletLinkRelativeToRoot]'

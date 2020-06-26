@@ -1,20 +1,21 @@
-import {
-	Component, OnDestroy, OnChanges, AfterViewInit, ElementRef, ChangeDetectorRef,
-	SimpleChanges, Input, Output, ViewChild, ViewChildren, TemplateRef, ContentChild,
-	QueryList, ChangeDetectionStrategy, Renderer2, TrackByFunction
-} from '@angular/core';
-import { Subject, BehaviorSubject, combineLatest, fromEvent } from 'rxjs';
-import { startWith, map, switchMap, filter, subscribeOn, flatMap, first, max, distinctUntilChanged } from 'rxjs/operators';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { isEqual, forOwn, sum, get } from 'lodash-es';
-
+import {
+	AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, Input, OnChanges,
+	OnDestroy, Output, QueryList, Renderer2, SimpleChanges, TemplateRef, TrackByFunction, ViewChild, ViewChildren
+} from '@angular/core';
 import { FADE_IN_LIST } from '@bp/shared/animations';
-import { BpScheduler, measure, mutate, fromMeasure, fromResize } from '@bp/shared/rxjs';
-import { $, lineMicrotask } from '@bp/shared/utilities';
-import { Direction, Dimensions } from '@bp/shared/models/core';
-import { TouchManager, TouchBuilder, ISwipeEvent } from '@bp/shared/features/touch';
-import { Dictionary } from '@bp/shared/typings';
+import { ISwipeEvent, TouchBuilder, TouchManager } from '@bp/shared/features/touch';
 import { Destroyable } from '@bp/shared/models/common';
+import { Dimensions, Direction } from '@bp/shared/models/core';
+import { BpScheduler, fromMeasure, fromResize, measure, mutate } from '@bp/shared/rxjs';
+import { Dictionary } from '@bp/shared/typings';
+import { $, lineMicrotask } from '@bp/shared/utilities';
+import { forOwn, get, isEqual, sum } from 'lodash-es';
+import { BehaviorSubject, combineLatest, fromEvent, Subject } from 'rxjs';
+import {
+	distinctUntilChanged, filter, first, flatMap, map, max,
+	startWith, subscribeOn, switchMap
+} from 'rxjs/operators';
 
 export enum CarouselArrowType {
 	None = 'none',
@@ -75,6 +76,7 @@ export class CarouselComponent
 	@Input()
 	get activeItem() {
 		if (!this.items.length) return;
+
 		return get(this.items, this.activeIndex);
 	}
 	set activeItem(value: any) {
@@ -90,6 +92,7 @@ export class CarouselComponent
 	private _activeIndex = -1;
 	get activeIndex() {
 		if (!this.items.length) return -1;
+
 		return Math.min(this._activeIndex, this.items.length - 1);
 	}
 
@@ -111,25 +114,27 @@ export class CarouselComponent
 		distinctUntilChanged()
 	);
 
-	nextButtonDisabled$ = combineLatest(
+	nextButtonDisabled$ = combineLatest([
 		this.slidesVisibility$,
 		this.items$
-	).pipe(
-		map(([ { lastFullyVisible }, items ]) =>
-			(lastFullyVisible === undefined || lastFullyVisible === (items && items.length - 1)) && !this.looped
-		),
-		distinctUntilChanged()
-	);
+	])
+		.pipe(
+			map(([ { lastFullyVisible }, items ]) =>
+				(lastFullyVisible === undefined || lastFullyVisible === (items && items.length - 1)) && !this.looped
+			),
+			distinctUntilChanged()
+		);
 
-	showArrowButtons$ = combineLatest(
+	showArrowButtons$ = combineLatest([
 		this.prevButtonDisabled$,
 		this.nextButtonDisabled$
-	).pipe(
-		map(([ prevDisabled, nextDisabled ]) => this.arrowType
-			&& this.showArrows
-			&& this.arrowType !== CarouselArrowType.None
-			&& !(prevDisabled && nextDisabled))
-	);
+	])
+		.pipe(
+			map(([ prevDisabled, nextDisabled ]) => this.arrowType
+				&& this.showArrows
+				&& this.arrowType !== CarouselArrowType.None
+				&& !(prevDisabled && nextDisabled))
+		);
 
 	animate$ = new BehaviorSubject(false);
 
@@ -196,7 +201,10 @@ export class CarouselComponent
 		this._slidesQuery.changes
 			.pipe(
 				startWith<QueryList<ElementRef>>(this._slidesQuery),
-				map(q => q.toArray().map(ref => ref.nativeElement))
+				map(q => q
+					.toArray()
+					.map(ref => ref.nativeElement)
+				)
 			)
 			.subscribe(this._$slides$);
 
@@ -204,10 +212,10 @@ export class CarouselComponent
 			.pipe(switchMap($slides => fromResize(...$slides)))
 			.subscribe(() => this._shouldUpdateScroll && this._updateScroll());
 
-		combineLatest(
+		combineLatest([
 			this._$slides$,
 			this._slideStyle$
-		)
+		])
 			.pipe(mutate(([ $slides, style ]) => $slides
 				.forEach($slide => forOwn(style, (v, k) => this._renderer.setStyle($slide, k, v))))
 			)
@@ -222,10 +230,13 @@ export class CarouselComponent
 
 		this._updateItemsPerView();
 
-		setTimeout(() => {
-			this._updateItemsPerView(); // required second time because slides container width is not determined in modal
-			this._updateScroll();
-		}, 100); // 100ms required for modal
+		setTimeout(
+			() => {
+				this._updateItemsPerView(); // required second time because slides container width is not determined in modal
+				this._updateScroll();
+			},
+			100  // 100ms required for modal
+		);
 
 		this.startAutoplay();
 		this._cdr.detectChanges();
@@ -321,13 +332,13 @@ export class CarouselComponent
 				map(v => <[ number, Dimensions[] ]> v)
 			)
 			.subscribe(([ slideMaxWidth, offsets ]) => {
-				let maxOffset: number;
-				if (this.currentItemsPerView === 'unlimited')
-					maxOffset = sum(offsets.map(({ width }) => width)) - slideMaxWidth;
-				else
-					maxOffset = slideMaxWidth / this.currentItemsPerView * this.items.length - slideMaxWidth;
+				let maxOffset = this.currentItemsPerView === 'unlimited'
+					? sum(offsets.map(({ width }) => width)) - slideMaxWidth
+					: slideMaxWidth / this.currentItemsPerView * this.items.length - slideMaxWidth;
+
 				if (maxOffset < 0)
 					maxOffset = 0;
+
 				const slideOffset = offsets[ this.activeIndex ];
 				const offset = Math.min(slideOffset.left, maxOffset);
 
@@ -375,9 +386,10 @@ export class CarouselComponent
 	private _updateItemsPerView() {
 		fromMeasure(() => {
 			this.currentItemsPerView$.next(window.innerWidth <= this.mobileWidth ? 1 : this.itemsPerViewport);
+
 			return this._$slidesContainer.offsetWidth ? this._$slidesContainer.offsetWidth : null;
 		})
-			.subscribe((slideMaxWidth) => {
+			.subscribe(slideMaxWidth => {
 				let css: Dictionary<any>;
 				if (this.currentItemsPerView === 'unlimited')
 					css = {

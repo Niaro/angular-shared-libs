@@ -1,5 +1,5 @@
 import {
-	camelCase, forIn, forOwn, isArray, isBoolean, isNil, isNumber, kebabCase,
+	camelCase, forIn, forOwn, isBoolean, isNil, isNumber, kebabCase,
 	lowerCase, upperFirst
 } from 'lodash-es';
 
@@ -12,39 +12,40 @@ export abstract class Enumeration {
 
 	static list<T extends Enumeration>(): T[] {
 
-		if (!this._list) {
+		if (!Enumeration._list) {
 			const list: T[] = [];
-			forIn(this, (it, key) => {
-				if (it instanceof Enumeration && isNaN(+key) && this._shouldList(it))
+			forIn(Enumeration, (it, key) => {
+				if (it instanceof Enumeration && isNaN(+key) && Enumeration._shouldList(it))
 					list.push(<T> it);
 			});
-			this._list = list;
+			Enumeration._list = list;
 		}
 
-		return this._list;
+		return Enumeration._list;
 	}
 
 	static find<T extends Enumeration>(value: number | string): T | null {
-		return (<any> this)[ value ] || null;
+		return (<any> Enumeration)[ value ] || null;
 	}
 
 	static parse(data: any): Enumeration | null {
 		if (isNil(data))
 			return null;
 
-		return data instanceof this.prototype.constructor
+		return data instanceof Enumeration.prototype.constructor
 			? <Enumeration> data
-			: this.find(this._isValue(data) ? data : camelCase(data));
+			: Enumeration.find(Enumeration._isValue(data) ? data : camelCase(data));
 	}
 
 	static parseStrict(data: any): Enumeration {
-		const result = this.parse(data);
+		const result = Enumeration.parse(data);
 		if (!result)
-			throw new Error(`Enum type ${ this.name } does not contains value ${ data }`);
+			throw new Error(`Enum type ${ Enumeration.name } does not contains value ${ data }`);
+
 		return result;
 	}
 
-	static isInstance(value: any) { return value instanceof this; }
+	static isInstance(value: any) { return value instanceof Enumeration; }
 
 	protected static _shouldList(value: Enumeration) {
 		return true;
@@ -66,7 +67,11 @@ export abstract class Enumeration {
 
 	protected _displayName: string;
 
-	private _id = `enum_${ Math.random().toString(36).substr(2, 8) }`;
+	private _id = `enum_${ Math
+		.random()
+		.toString(36)
+		.substr(2, 8)
+		}`;
 
 	constructor(displayName?: string | null);
 	constructor(value: number | boolean, displayName?: string);
@@ -85,7 +90,9 @@ export abstract class Enumeration {
 		// the callback is fired and we are able to find by the id of the enum its name amidst the static properties
 		// PS we can't use queryMicrotask since it fires the microtask after the dom is rendered.
 		// and we need the enums to be inited before any components are rendered
-		Promise.resolve().then(() => this._init());
+		Promise
+			.resolve()
+			.then(() => this._init());
 	}
 
 	valueOf() {
@@ -117,48 +124,13 @@ export abstract class Enumeration {
 		forOwn(this.constructor, (it, key) => {
 			if (it instanceof Enumeration && it._id === this._id && isNaN(+key)) {
 				res = key;
+
 				return false;
 			}
+
 			return true;
 		});
+
 		return res;
-	}
-}
-
-export abstract class FlagEnumeration<T extends FlagEnumeration<T>> extends Enumeration {
-
-	static find<T>(value: number): T {
-		return FlagEnumeration._findOrCreate(value, FlagEnumeration);
-	}
-
-	private static _findOrCreate(value: number, constructor: any) {
-		return constructor[ value ] || new constructor(value);
-	}
-
-	readonly bunch: boolean;
-
-	constructor(value: number | T[], displayName?: string) {
-		let bunch = false;
-		if (isArray(value)) {
-			value = value.reduce((res, enm) => res |= +enm.valueOf(), 0);
-			bunch = true;
-		}
-		super(value, displayName);
-		this.bunch = bunch;
-	}
-
-	has(other: T) {
-		if (other === undefined) return false;
-		return (+this._value & +other.valueOf()) === other.valueOf();
-	}
-
-	combine(...other: T[]): T {
-		const val = other.reduce((acc, it) => acc |= +it.valueOf(), +this._value);
-		return FlagEnumeration._findOrCreate(val, this.constructor);
-	}
-
-	remove(...other: T[]): T {
-		const val = other.reduce((acc, it) => acc &= ~it.valueOf(), +this._value);
-		return FlagEnumeration._findOrCreate(val, this.constructor);
 	}
 }

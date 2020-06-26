@@ -1,15 +1,16 @@
 import {
-	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, Output, ElementRef,
-	ChangeDetectorRef, Optional, ContentChild, TemplateRef, ViewChild
+	ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, Input, OnChanges,
+	Optional, Output, SimpleChanges, TemplateRef, ViewChild
 } from '@angular/core';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, AbstractControl, ValidationErrors, FormGroupDirective } from '@angular/forms';
-import { isEmpty, isString } from 'lodash-es';
-import { Subject, BehaviorSubject } from 'rxjs';
-
-import { lineMicrotask, includes, match } from '@bp/shared/utilities';
+import {
+	AbstractControl, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
+	ValidatorFn
+} from '@angular/forms';
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
-
+import { includes, lineMicrotask, match } from '@bp/shared/utilities';
+import { isEmpty, isString } from 'lodash-es';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { InputComponent } from '../input';
 import { RoundInputComponent } from '../round-input';
 
@@ -61,7 +62,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	get autocompleteTrigger() { return this.input?.autocompleteTrigger || this.roundInput?.autocompleteTrigger; }
 
-	lowercasedItems?: { lowered: string, item: any; }[] | null;
+	lowercasedItems?: { lowered: string; item: any; }[] | null;
 
 	throttle = 0;
 
@@ -85,7 +86,9 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		// tslint:disable-next-line: early-exit
 		if (items || itemDisplayPropertyName) {
 			this.lowercasedItems = this.items && this.items!.map(v => ({
-				lowered: (v[ this.itemDisplayPropertyName! ] || v)?.toString().toLowerCase(),
+				lowered: (v[ this.itemDisplayPropertyName! ] || v)
+					?.toString()
+					.toLowerCase(),
 				item: v
 			}));
 			this.filtered$.next(this.items || []);
@@ -107,7 +110,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	// tslint:disable-next-line: no-unnecessary-type-annotation
 	protected _validator: ValidatorFn | null = ({ value }: AbstractControl): ValidationErrors | null => {
 		return !value && this.internalControl.value
-			? { 'autocompleteNotFound': true }
+			? { autocompleteNotFound: true }
 			: null;
 	};
 	// #endregion Implementation of the Validator interface
@@ -122,7 +125,9 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 		let found: any;
 		if (isString(value)) {
-			value = value.toString().trim();
+			value = value
+				.toString()
+				.trim();
 			this.filtered$.next(this.items!.filter(v => this._filterItem(v, value)));
 			found = this.items!.find(v => match(this._getItemCompareString(v), value));
 		} else {

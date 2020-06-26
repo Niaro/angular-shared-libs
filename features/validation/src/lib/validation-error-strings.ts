@@ -1,10 +1,8 @@
-import { isObject, isString, flatMap, compact } from 'lodash-es';
-import { TranslateService } from '@ngx-translate/core';
-
 import { Dictionary } from '@bp/shared/typings';
-
-import { IValidationErrors, ValidationError, ValidationErrorTemplateVariables } from './models';
+import { TranslateService } from '@ngx-translate/core';
+import { compact, flatMap, isObject, isString } from 'lodash-es';
 import errorsMap from './errors-map';
+import { IValidationErrors, ValidationError, ValidationErrorTemplateVariables } from './models';
 
 export class ValidationErrorStrings extends Array<string> {
 	constructor(errors: IValidationErrors, translate?: TranslateService) {
@@ -22,6 +20,7 @@ export class ValidationErrorStrings extends Array<string> {
 
 			if (isObject(error)) {
 				const masks = value.match(/{{(\w+)}}/g);
+
 				return masks
 					? masks
 						.map(v => ({

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IEnvironment } from '@bp/shared/typings';
 
-
 @Injectable({
 	providedIn: 'root'
 })

@@ -1,7 +1,6 @@
-import { isObject, isString, isBoolean, forIn, forOwn } from 'lodash-es';
-
-import { Position, Size, Dimensions } from '@bp/shared/models/core';
+import { Dimensions, Position, Size } from '@bp/shared/models/core';
 import { Dictionary } from '@bp/shared/typings';
+import { forIn, forOwn, isBoolean, isObject, isString } from 'lodash-es';
 
 export class $ {
 
@@ -37,7 +36,9 @@ export class $ {
 	// Searching methods
 	static siblings(el: Element): Element[] {
 		return el.parentNode
-			? <Element[]> Array.from(el.parentNode.childNodes).filter(child => child !== el)
+			? <Element[]> Array
+				.from(el.parentNode.childNodes)
+				.filter(child => child !== el)
 			: [];
 	}
 
@@ -52,12 +53,14 @@ export class $ {
 			return selector
 				? <Element[]> Array.from(targetOrSelector.querySelectorAll(selector))
 				: [];
+
 		return <Element[]> Array.from(document.querySelectorAll(targetOrSelector));
 	}
 
 	static findSingle<T = Element>(target: Element | string, selector?: string): T | null {
 		if (target instanceof Element)
 			return selector ? <T> <any> target.querySelector(selector) : null;
+
 		return <T> <any> document.querySelector(<string> target);
 	}
 
@@ -70,6 +73,7 @@ export class $ {
 			if (target.matches(selector))
 				return target;
 		}
+
 		return null;
 	}
 
@@ -82,6 +86,7 @@ export class $ {
 			if (isString(parent) ? target.matches(parent) : target === parent)
 				return true;
 		}
+
 		return false;
 	}
 
@@ -99,6 +104,7 @@ export class $ {
 	static isVisible(el: Element): boolean {
 		// first check if elem is hidden through css as this is not very costly
 		const style = getComputedStyle(el);
+
 		return style.display !== 'none' &&
 			style.display !== '' &&
 			style.visibility !== 'hidden' &&
@@ -124,7 +130,6 @@ export class $ {
 		return Math.ceil(parseFloat(cssValue));
 	}
 
-
 	/**
 	 * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
 	 *
@@ -140,8 +145,10 @@ export class $ {
 		if (context) {
 			context.font = font;
 			const metrics = context.measureText(text);
+
 			return metrics.width;
 		}
+
 		return null;
 	}
 
@@ -150,6 +157,7 @@ export class $ {
 	 */
 	static innerSize(el: Element): Size {
 		const style = getComputedStyle(el);
+
 		return new Size(
 			el.clientWidth - parseInt(style.paddingLeft || '0') - parseInt(style.paddingRight || '0'),
 			el.clientHeight - parseInt(style.paddingTop || '0') - parseInt(style.paddingBottom || '0')
@@ -162,6 +170,7 @@ export class $ {
 	static outerSize(el: Element): Size {
 		const style = getComputedStyle(el);
 		const { width, height } = el.getBoundingClientRect();
+
 		return new Size(
 			width + parseInt(style.marginLeft || '0') + parseInt(style.marginRight || '0'),
 			height + parseInt(style.marginTop || '0') + parseInt(style.marginBottom || '0')
@@ -173,6 +182,7 @@ export class $ {
 	 */
 	static offset(el: Element): Dimensions {
 		const { width, height, top, left } = el.getBoundingClientRect();
+
 		return new Dimensions({
 			width,
 			height,
@@ -251,6 +261,7 @@ export class $ {
 				return parent;
 			parent = parent.parentElement;
 		}
+
 		return window;
 	}
 
@@ -277,6 +288,7 @@ export class $ {
 		const target = targetId && (document.getElementById(targetId) || document.getElementsByName(targetId)[ 0 ]);
 		if (target && target.getBoundingClientRect)
 			return <HTMLElement> target;
+
 		return null;
 	}
 
@@ -286,6 +298,7 @@ export class $ {
 	static createImage(src: string) {
 		const img = new HTMLImageElement();
 		img.src = src;
+
 		return img;
 	}
 
@@ -293,8 +306,9 @@ export class $ {
 	 * Returns content of the meta-tag in head.
 	 */
 	static getMeta(name: string) {
-		const el = $.findSingle(document.head, `meta[name=${ name }]`);
-		return el ? el.getAttribute('content') : undefined;
+		return $
+			.findSingle(document.head, `meta[name=${ name }]`)
+			?.getAttribute('content') ?? null;
 	}
 
 	static dispatchEvent(el$: HTMLElement, eventName: string, bubbles = false, cancelable = false) {
@@ -302,7 +316,7 @@ export class $ {
 		el$.dispatchEvent(evt);
 	}
 
-	static addScriptCodeToBody({ code, src, data }: { code?: string, src?: string, data?: Dictionary<string>; }) {
+	static addScriptCodeToBody({ code, src, data }: { code?: string; src?: string; data?: Dictionary<string>; }) {
 		const $s = document.createElement('script');
 		$s.type = 'text/javascript';
 		$s.async = true;

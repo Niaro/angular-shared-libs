@@ -1,10 +1,9 @@
-import { Directive, TemplateRef, ViewContainerRef, Input, ElementRef } from '@angular/core';
-import { timer } from 'rxjs';
-import { first, map, startWith, share, observeOn } from 'rxjs/operators';
-
-import { lineMicrotask } from '@bp/shared/utilities';
-import { fromMutation, BpScheduler } from '@bp/shared/rxjs';
+import { Directive, ElementRef, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Destroyable } from '@bp/shared/models/common';
+import { BpScheduler, fromMutation } from '@bp/shared/rxjs';
+import { lineMicrotask } from '@bp/shared/utilities';
+import { timer } from 'rxjs';
+import { first, map, observeOn, share, startWith } from 'rxjs/operators';
 
 /**
  * Rendering a significant amount of complex components in one event loop can create a visible freezes of the UI
@@ -13,7 +12,6 @@ import { Destroyable } from '@bp/shared/models/common';
  */
 @Directive({ selector: '[bpDelayedRender]' })
 export class DelayedRenderDirective extends Destroyable {
-
 
 	private static readonly _bodyMutations$ = fromMutation(document.body, { subtree: true, childList: true })
 		.pipe(share());
@@ -61,7 +59,9 @@ export class DelayedRenderDirective extends Destroyable {
 	}
 
 	private _renderCmpt() {
-		this._viewContainer.createEmbeddedView(this._tplRef).detectChanges();
+		this._viewContainer
+			.createEmbeddedView(this._tplRef)
+			.detectChanges();
 	}
 
 	private _calcNextRenderDueTime() {

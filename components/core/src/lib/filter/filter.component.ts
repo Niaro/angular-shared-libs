@@ -1,18 +1,16 @@
 import {
-	Component, AfterContentInit, OnChanges, ContentChildren, QueryList, Input, SimpleChanges,
-	ChangeDetectionStrategy, Output
+	AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, Input, OnChanges,
+	Output, QueryList, SimpleChanges
 } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, BehaviorSubject, combineLatest, merge, asyncScheduler } from 'rxjs';
-import {
-	filter, startWith, shareReplay, map, pairwise, flatMap, switchMap, auditTime, observeOn,
-	debounceTime, tap
-} from 'rxjs/operators';
-import { isEmpty, transform, isNil, difference, fromPairs, get, set } from 'lodash-es';
-
-import { UrlHelper } from '@bp/shared/utilities';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Stringify } from '@bp/shared/typings';
-
+import { UrlHelper } from '@bp/shared/utilities';
+import { difference, fromPairs, get, isEmpty, isNil, set, transform } from 'lodash-es';
+import { asyncScheduler, BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
+import {
+	auditTime, debounceTime, filter, flatMap, map, observeOn, pairwise, shareReplay, startWith, switchMap,
+	tap
+} from 'rxjs/operators';
 import { FilterControlDirective } from './filter-control.directive';
 
 export type FilterValue = { [ controlName: string ]: any; };
@@ -72,10 +70,10 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		/**
 		 * Update defaultsStringed on the each controls change or the default change
 		 */
-		combineLatest(
+		combineLatest([
 			filterControls$,
 			this._defaults$
-		)
+		])
 			.pipe(
 				filter(([ , defaults ]) => !isEmpty(defaults)),
 				map(([ controls, defaults ]) => transform(
@@ -89,11 +87,11 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 		/**
 		 * Update the filter controls on the route params change
 		 */
-		combineLatest(
+		combineLatest([
 			filterControls$,
 			this.type === 'matrix' ? this._route.params : this._route.queryParams,
 			this._defaultsStringed$
-		)
+		])
 			.pipe(
 				map(([ controls, params, defaults ]) => controls.map(c => ({
 					control: c,
@@ -105,6 +103,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 				// update only those controls which are needed to be updated
 				map(([ prevSet, nextSet ]) => nextSet!.filter(n => {
 					const prev = prevSet && prevSet.find(p => n.control.name === p.control.name);
+
 					return !prev || n.routeValue !== prev.routeValue;
 				})),
 				flatMap(v => v)

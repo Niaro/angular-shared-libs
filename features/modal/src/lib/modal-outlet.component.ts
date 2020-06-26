@@ -1,11 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, ContentChild } from '@angular/core';
-import { RouterOutlet, Router, PRIMARY_OUTLET, NavigationEnd, RoutesRecognized } from '@angular/router';
+import { ChangeDetectionStrategy, Component, ContentChild, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { filter, map } from 'rxjs/operators';
-import { unset, has } from 'lodash-es';
-
+import { NavigationEnd, PRIMARY_OUTLET, Router, RouterOutlet, RoutesRecognized } from '@angular/router';
 import { MODAL_OUTLET } from '@bp/shared/models/core';
-
+import { has, unset } from 'lodash-es';
+import { filter, map } from 'rxjs/operators';
 import { IModalHostComponent } from './modal-host-component.interface';
 import { ModalComponent } from './modal.component';
 
@@ -21,7 +19,7 @@ export class ModalOutletComponent implements OnInit {
 
 	@ContentChild(RouterOutlet, { static: true }) outlet!: RouterOutlet;
 
-	private _activeDialog!: MatDialogRef<any, any> | null;
+	private _activeDialog!: MatDialogRef<any> | null;
 
 	private _urlWithOutlet!: string | null;
 
@@ -94,11 +92,13 @@ export class ModalOutletComponent implements OnInit {
 		const urlTree = this.router.parseUrl(this.router.url);
 		unset(urlTree, URL_TREE_PRIMARY_MODAL_OUTLET_PATH);
 		unset(urlTree, URL_TREE_MODAL_OUTLET_PATH);
+
 		return urlTree.toString();
 	}
 
 	private _hasUrlModalOutlet(url: string): boolean {
 		const urlTree = this.router.parseUrl(url);
+
 		return has(urlTree, URL_TREE_PRIMARY_MODAL_OUTLET_PATH) || has(urlTree, URL_TREE_MODAL_OUTLET_PATH);
 	}
 }

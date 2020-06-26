@@ -59,7 +59,9 @@ export class PaymentMethodBrand extends Enumeration {
 	// #endregion Ewallet
 
 	static parse(value: string | PaymentMethodBrand): PaymentMethodBrand | null {
-		if (isString(value) && value.toLowerCase().startsWith('master'))
+		if (isString(value) && value
+			.toLowerCase()
+			.startsWith('master'))
 			return PaymentMethodBrand.masterCard;
 
 		return super.parse(value);

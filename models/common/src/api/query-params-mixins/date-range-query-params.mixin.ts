@@ -16,10 +16,10 @@ export interface IDaterangeQueryParams {
 export type DaterangeQueryParamsCtor = Constructor<IDaterangeQueryParams>;
 
 export function mixinDaterangeQueryParams<T extends Constructor<QueryParamsBase<{
-	dateRange?: string | DateRange,
-	range?: string | DateRange,
-	period?: string | DateRange,
-	from?: string,
+	dateRange?: string | DateRange;
+	range?: string | DateRange;
+	period?: string | DateRange;
+	from?: string;
 	to?: string;
 }>>>
 	(base: T): DaterangeQueryParamsCtor & T {

@@ -46,18 +46,21 @@ export class ProgressiveWebAppService {
 	}
 
 	private async _checkForUpdateOnAppIsStable() {
-		await this._app.isStable.pipe(first()).toPromise();
+		await this._app.isStable
+			.pipe(first())
+			.toPromise();
+
 		this._checkForUpdate();
 	}
 
-	private async _whenUpdateActivatedReloadApp() {
+	private _whenUpdateActivatedReloadApp() {
 		this._swu.activated.subscribe(() => {
 			this._log(`Update activated`);
 			window.location.reload();
 		});
 	}
 
-	private async _activateUpdateAsSoonAsAvailable() {
+	private _activateUpdateAsSoonAsAvailable() {
 		this._swu.available
 			.pipe(
 				tap(() => this._showNewVersionIsAvailableToast()),
@@ -91,6 +94,7 @@ export class ProgressiveWebAppService {
 	}
 
 	private _log(message: string) {
+		// tslint:disable-next-line: newline-per-chained-call
 		console.log(`%c[PWA][${ m().format('LLL') }]: ${ message }`, 'color:#fd720c;');
 	}
 

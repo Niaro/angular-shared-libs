@@ -17,26 +17,52 @@ export class DateRangeShortcut extends Describable {
 	constructor() {
 		super();
 
-		Promise.resolve().then(() => {
-			this.dateRange = this._getDateRange()!;
-			this.description = `From the beginning of the current ${ this.displayName.toLowerCase() } to this day`;
+		Promise
+			.resolve()
+			.then(() => {
+				this.dateRange = this._getDateRange()!;
+				this.description = `From the beginning of the current ${ this.displayName.toLowerCase() } to this day`;
 
-			setInterval(() => this.dateRange = this._getDateRange()!, 24 * 60 * 60 * 1000);
-		});
+				setInterval(() => this.dateRange = this._getDateRange()!, 24 * 60 * 60 * 1000);
+			});
 	}
 
 	private _getDateRange() {
-		const to = m().endOf('day');
+		const to = m()
+			.endOf('day');
 
 		switch (this) {
 			case DateRangeShortcut.week:
-				return new DateRange({ to, from: m().utc().startOf('week') });
+				return new DateRange({
+					to,
+					from: m()
+						.utc()
+						.startOf('week')
+				});
+
 			case DateRangeShortcut.month:
-				return new DateRange({ to, from: m().utc().startOf('month') });
+				return new DateRange({
+					to,
+					from: m()
+						.utc()
+						.startOf('month')
+				});
+
 			case DateRangeShortcut.quarter:
-				return new DateRange({ to, from: m().utc().startOf('quarter') });
+				return new DateRange({
+					to,
+					from: m()
+						.utc()
+						.startOf('quarter')
+				});
+
 			case DateRangeShortcut.year:
-				return new DateRange({ to, from: m().utc().startOf('year') });
+				return new DateRange({
+					to,
+					from: m()
+						.utc()
+						.startOf('year')
+				});
 		}
 
 		throw new Error('DateRange for the DateRangeShortcut is not implemented');

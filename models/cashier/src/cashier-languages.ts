@@ -57,6 +57,7 @@ export class CashierLanguages {
 
 	static find(langName: string) {
 		langName = langName.toLowerCase();
+
 		return CashierLanguages.list.find(v => v.lowerCaseName === langName);
 	}
 

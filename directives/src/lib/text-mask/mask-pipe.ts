@@ -1,5 +1,5 @@
-import { TextMaskConfig, TextMask } from './text-mask.config';
 import { isNil, isUndefined } from 'lodash-es';
+import { TextMask, TextMaskConfig } from './text-mask.config';
 
 export abstract class MaskPipe {
 	readonly prefix: string;
@@ -25,6 +25,7 @@ export abstract class MaskPipe {
 	transform(rawValue: string): TextMask | undefined {
 		rawValue = isNil(rawValue) ? '' : rawValue;
 		const bodyMask = this._transformBody(rawValue);
+
 		return bodyMask && this._tryAddPrefixAndSuffix(bodyMask)
 			.filter(char => !isUndefined(char));
 	}
@@ -38,6 +39,7 @@ export abstract class MaskPipe {
 		const refinedRawValue = this.prefixRegExp && this.prefixRegExp.test(rawValue)
 			? rawValue.substring(this.prefixLength)
 			: rawValue;
+
 		return this.suffixRegExp && this.suffixRegExp.test(refinedRawValue)
 			? refinedRawValue.substring(0, refinedRawValue.length - this.suffixLength)
 			: refinedRawValue;
@@ -45,7 +47,9 @@ export abstract class MaskPipe {
 
 	protected _tryAddPrefixAndSuffix(mask: TextMask): TextMask {
 		if (this.prefixLength > 0)
-			mask = this.prefix.split('').concat(<any> mask);
+			mask = this.prefix
+				.split('')
+				.concat(<any> mask);
 
 		if (this.suffixLength > 0)
 			mask = mask.concat(this.suffix.split(''));

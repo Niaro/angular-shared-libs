@@ -1,18 +1,17 @@
-import {
-	Component, ChangeDetectionStrategy, OnChanges, Input, SimpleChanges, ViewChild,
-	ElementRef, ContentChild
-} from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { CdkPortal } from '@angular/cdk/portal';
-import { NG_VALUE_ACCESSOR, NG_VALIDATORS, ValidatorFn, ValidationErrors } from '@angular/forms';
+import {
+	ChangeDetectionStrategy, Component, ContentChild, ElementRef, Input, OnChanges, SimpleChanges,
+	ViewChild
+} from '@angular/core';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { isEmpty, uniq, get, isString } from 'lodash-es';
-
 import { FADE } from '@bp/shared/animations';
-import { lineMicrotask } from '@bp/shared/utilities';
-import { IDescribable } from '@bp/shared/models/core';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
+import { IDescribable } from '@bp/shared/models/core';
+import { lineMicrotask } from '@bp/shared/utilities';
+import { get, isEmpty, isString, uniq } from 'lodash-es';
 
 export interface IChipControlItem extends IDescribable {
 	[ prop: string ]: any;
@@ -56,7 +55,7 @@ export class ChipsControlComponent
 
 	separatorKeysCodes: number[] = [ ENTER, COMMA ];
 
-	lowercasedItems!: { lowered: string, item: IChipControlItem; }[];
+	lowercasedItems!: { lowered: string; item: IChipControlItem; }[];
 
 	throttle = 0;
 
@@ -71,7 +70,8 @@ export class ChipsControlComponent
 
 			this.lowercasedItems = this.items.map(item => ({
 				item,
-				lowered: this.getDisplayName(item).toLowerCase(),
+				lowered: this.getDisplayName(item)
+					.toLowerCase(),
 			}));
 
 			this.filtered = this.items;
@@ -99,12 +99,19 @@ export class ChipsControlComponent
 		if (isEmpty(this.items) || !isString(input))
 			return;
 
-		const loweredInput = input && input.toString().toLowerCase().trim();
+		const loweredInput = input && input.toString()
+			.toLowerCase()
+			.trim();
 		this.filtered = loweredInput
-			? this.lowercasedItems.filter(it => it.lowered.includes(loweredInput)).map(v => v.item)
+			? this.lowercasedItems
+				.filter(it => it.lowered.includes(loweredInput))
+				.map(v => v.item)
 			: this.items;
 
-		this.filtered = this.filtered.filter(v => !this._getCurrentArrayValue().includes(v));
+		this.filtered = this.filtered.filter(v => !this
+			._getCurrentArrayValue()
+			.includes(v)
+		);
 		this._cdr.markForCheck();
 	}
 
@@ -113,12 +120,18 @@ export class ChipsControlComponent
 			return;
 
 		const foundChips = value.split(/,|\s/)
-			.map(v => v.trim().toLowerCase())
+			.map(v => v
+				.trim()
+				.toLowerCase()
+			)
 			.filter(v => !!v)
 			.map(v => this.lowercasedItems.find(it => it.lowered.includes(v)))
 			.filter(v => !!v)
 			.map(v => v!.item)
-			.filter(v => !this._getCurrentArrayValue().includes(v));
+			.filter(v => !this
+				._getCurrentArrayValue()
+				.includes(v)
+			);
 
 		this.select(...foundChips);
 
@@ -126,7 +139,10 @@ export class ChipsControlComponent
 	}
 
 	remove(item: IChipControlItem): void {
-		this.setValue(this._getCurrentArrayValue().filter(v => v !== item));
+		this.setValue(this
+			._getCurrentArrayValue()
+			.filter(v => v !== item)
+		);
 		this._updateFilteredAccordingSelected();
 	}
 

@@ -9,6 +9,7 @@ import { BYPASS_AUTH_CHECK } from './http';
 export class CloudflareAccessService {
 
 	get isAuthorizedByCloudflare() {
+		// tslint:disable-next-line: binary-expression-operand-order
 		return true || this._isAuthorizedByCloudflare || this._hasCFAuthorizationCookie;
 	}
 

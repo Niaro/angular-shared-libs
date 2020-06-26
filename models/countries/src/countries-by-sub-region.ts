@@ -18,7 +18,7 @@ const countriesBySubregion = {
 		'IO', 'BI', 'KM', 'DJ', 'ER', 'ET', 'TF', 'KE', 'MG', 'MW', 'MU',
 		'YT', 'MZ', 'RE', 'RW', 'SC', 'SO', 'SS', 'TZ', 'UG', 'ZM', 'ZW'
 	],
-	'Caribbean': [
+	Caribbean: [
 		'AI', 'AG', 'AW', 'BS', 'BB', 'BQ', 'KY', 'CU', 'CW', 'DM', 'DO',
 		'GD', 'GP', 'HT', 'JM', 'MQ', 'MS', 'PR', 'BL', 'KN', 'LC', 'MF',
 		'VC', 'SX', 'TT', 'TC', 'VG', 'VI'
@@ -47,10 +47,10 @@ const countriesBySubregion = {
 	],
 	'Western Europe': [ 'AT', 'BE', 'FR', 'DE', 'LI', 'LU', 'MC', 'NL', 'CH' ],
 	'Eastern Europe': [ 'BY', 'BG', 'CZ', 'HU', 'MD', 'PL', 'RO', 'RU', 'SK', 'UA' ],
-	'Polynesia': [ 'AS', 'CK', 'PF', 'NU', 'PN', 'WS', 'TK', 'TO', 'TV', 'WF' ],
+	Polynesia: [ 'AS', 'CK', 'PF', 'NU', 'PN', 'WS', 'TK', 'TO', 'TV', 'WF' ],
 	'Australia and New Zealand': [ 'AU', 'CX', 'CC', 'HM', 'NZ', 'NF' ],
-	'Melanesia': [ 'FJ', 'NC', 'PG', 'SB', 'VU' ],
-	'Micronesia': [ 'GU', 'KI', 'MH', 'FM', 'NR', 'MP', 'PW', 'UM' ]
+	Melanesia: [ 'FJ', 'NC', 'PG', 'SB', 'VU' ],
+	Micronesia: [ 'GU', 'KI', 'MH', 'FM', 'NR', 'MP', 'PW', 'UM' ]
 };
 
 export const COUNTRIES_BY_SUBREGION = <Dictionary<Country[]>> <any> mapValues(

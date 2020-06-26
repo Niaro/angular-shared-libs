@@ -1,11 +1,10 @@
+import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
-import { tap, last, takeUntil } from 'rxjs/operators';
-import { without } from 'lodash-es';
-import { saveAs } from 'file-saver';
-
-import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
 import { ProcessingFile, QueryParamsBase, ResponseError } from '@bp/shared/models/common';
+import { OptionalBehaviorSubject } from '@bp/shared/rxjs';
+import { saveAs } from 'file-saver';
+import { without } from 'lodash-es';
+import { last, takeUntil, tap } from 'rxjs/operators';
 
 @Injectable({
 	providedIn: 'root'
@@ -34,7 +33,7 @@ export class FileLoaderService {
 			)
 			.subscribe({
 				next: e => e instanceof HttpResponse && e.body && saveAs(e.body, file.name),
-				error: (val) => this._handleError(val, file),
+				error: val => this._handleError(val, file),
 				complete: () => this._complete(file)
 			});
 
@@ -55,7 +54,7 @@ export class FileLoaderService {
 		switch (event.type) {
 			case HttpEventType.UploadProgress:
 			case HttpEventType.DownloadProgress:
-				file.progress = Math.round(event.total ? 100 * event.loaded / event.total : 88);
+				file.progress = Math.round(event.total ? event.loaded * 100 / event.total : 88);
 		}
 	}
 

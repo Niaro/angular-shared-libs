@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs';
 import { subscribeOn } from 'rxjs/operators';
-
 import { BpScheduler } from '../schedulers';
 
 /**
@@ -16,6 +15,7 @@ export function fromMutation(target: Node, options: MutationObserverInit = { att
 	return new Observable<MutationRecord[]>(subscriber => {
 		const mo = new MutationObserver(mutations => subscriber.next(mutations));
 		mo.observe(target, options);
+
 		return () => mo.disconnect();
 	})
 		.pipe(subscribeOn(BpScheduler.outside));

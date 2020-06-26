@@ -1,13 +1,12 @@
 import {
-	Component, Input, ChangeDetectionStrategy, HostBinding, OnChanges,
+	ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges,
 	SimpleChanges
 } from '@angular/core';
-import { isEmpty } from 'lodash-es';
-import { LocalStorageService } from 'angular-2-local-storage';
-import m from 'moment';
-
 import { SLIDE } from '@bp/shared/animations';
 import { IApiErrorMessage } from '@bp/shared/models/common';
+import { LocalStorageService } from 'angular-2-local-storage';
+import { isEmpty } from 'lodash-es';
+import m from 'moment';
 
 @Component({
 	selector: 'bp-alert',
@@ -21,8 +20,8 @@ export class AlertComponent implements OnChanges {
 
 	@Input()
 	get errors() { return this._errors; }
-	set errors(value: IApiErrorMessage[] | null | undefined) { this._errors = value; }
-	private _errors?: IApiErrorMessage[] | null;
+	set errors(value: IApiErrorMessage[] | null) { this._errors = value ?? null; }
+	private _errors!: IApiErrorMessage[] | null;
 
 	@Input()
 	get messages() { return this._messages; }
@@ -61,7 +60,11 @@ export class AlertComponent implements OnChanges {
 
 	onClose() {
 		this.show = false;
-		this._localStorage.set(this._storageKey, m().toISOString());
+		this._localStorage.set(
+			this._storageKey,
+			m()
+				.toISOString()
+		);
 	}
 
 	private _isCountdownComplete() {
@@ -69,8 +72,12 @@ export class AlertComponent implements OnChanges {
 
 		if (shownDatetimeText) {
 			const shownDatetime = m(shownDatetimeText);
-			const nextShowDatetime = shownDatetime.clone().add(this.frequency === 'daily' ? 1 : 7, 'days');
-			return m().isSameOrAfter(nextShowDatetime);
+			const nextShowDatetime = shownDatetime
+				.clone()
+				.add(this.frequency === 'daily' ? 1 : 7, 'days');
+
+			return m()
+				.isSameOrAfter(nextShowDatetime);
 		}
 
 		return true;

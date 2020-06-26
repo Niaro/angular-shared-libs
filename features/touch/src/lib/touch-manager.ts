@@ -1,10 +1,9 @@
 import { NgZone } from '@angular/core';
-import { Observable, Subject, Subscription, fromEvent } from 'rxjs';
-import { observeOn } from 'rxjs/operators';
-import { set } from 'lodash-es';
-
-import { Point, Vector, Direction } from '@bp/shared/models/core';
+import { Direction, Point, Vector } from '@bp/shared/models/core';
 import { BpScheduler } from '@bp/shared/rxjs';
+import { set } from 'lodash-es';
+import { fromEvent, Observable, Subject, Subscription } from 'rxjs';
+import { observeOn } from 'rxjs/operators';
 
 const DOUBLE_TAP_TIME = 250;
 const LONG_TAP_TIME = 750;
@@ -67,10 +66,17 @@ export class TouchManager {
 	constructor($element: Element, zone: NgZone) {
 
 		this._subscriptions.push(...zone.runOutsideAngular(() => [
-			fromEvent<TouchEvent>($element, 'touchstart').subscribe(e => this._onStart(e)),
-			fromEvent<TouchEvent>($element, 'touchmove').subscribe(e => this._onMove(e)),
-			fromEvent<TouchEvent>($element, 'touchend').subscribe(e => this._onEnd(e)),
-			fromEvent<TouchEvent>($element, 'touchcancel').subscribe(e => this._onCancel(e))
+			fromEvent<TouchEvent>($element, 'touchstart')
+				.subscribe(e => this._onStart(e)),
+
+			fromEvent<TouchEvent>($element, 'touchmove')
+				.subscribe(e => this._onMove(e)),
+
+			fromEvent<TouchEvent>($element, 'touchend')
+				.subscribe(e => this._onEnd(e)),
+
+			fromEvent<TouchEvent>($element, 'touchcancel')
+				.subscribe(e => this._onCancel(e))
 		]));
 
 		TouchManager.events.forEach(event => {
@@ -189,7 +195,7 @@ export class TouchManager {
 	}
 
 	private _cancel(type?: TimeoutType) {
-		type ? clearTimeout(this._timeouts.get(type)) : this._timeouts.forEach(tmout => clearTimeout(tmout));
+		type ? clearTimeout(this._timeouts.get(type)) : this._timeouts.forEach(clearTimeout);
 	}
 }
 

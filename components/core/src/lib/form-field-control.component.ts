@@ -8,8 +8,6 @@ import { Subject, Subscription } from 'rxjs';
 import { auditTime, debounceTime, filter, switchMap } from 'rxjs/operators';
 import { ControlComponent } from './control.component';
 
-
-
 @Directive()
 // tslint:disable-next-line: directive-class-suffix
 export abstract class FormFieldControlComponent<T> extends ControlComponent<T> implements OnChanges, OnInit {
@@ -125,7 +123,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	protected _validator: ValidatorFn | null = (): ValidationErrors | null => {
 		return this.internalControl.invalid
-			? { 'invalid': true }
+			? { invalid: true }
 			: null;
 	};
 

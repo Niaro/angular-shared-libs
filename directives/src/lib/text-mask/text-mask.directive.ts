@@ -1,22 +1,23 @@
+import { BACKSPACE, DOWN_ARROW, END, HOME, LEFT_ARROW, PAGE_DOWN, PAGE_UP, RIGHT_ARROW, UP_ARROW } from '@angular/cdk/keycodes';
 import {
-	Directive, ElementRef, Input, HostListener, Renderer2, OnChanges,
-	OnInit, AfterViewInit, SimpleChanges
+	AfterViewInit, Directive, ElementRef, HostListener, Input, OnChanges,
+	OnInit, Renderer2,
+	SimpleChanges
 } from '@angular/core';
-import { LEFT_ARROW, BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, UP_ARROW, RIGHT_ARROW, DOWN_ARROW } from '@angular/cdk/keycodes';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { skip, filter, map } from 'rxjs/operators';
-import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
-import { isFunction, isArray, isEmpty, isEqual, isNil, isNull, findLast, repeat, get } from 'lodash-es';
-
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AsyncVoidSubject } from '@bp/shared/rxjs';
-
-import { TextMaskConfig, NumberMaskConfig, TextMask, TextMaskFn } from './text-mask.config';
+import { findLast, get, isArray, isEmpty, isEqual, isFunction, isNil, isNull, repeat } from 'lodash-es';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, skip } from 'rxjs/operators';
+import { createTextMaskInputElement } from 'text-mask-core/dist/textMaskCore';
 import { MaskPipe } from './mask-pipe';
 import { NumberMaskPipe } from './number-mask-pipe';
 import { TextMaskPipe } from './text-mask-pipe';
+import { NumberMaskConfig, TextMask, TextMaskConfig, TextMaskFn } from './text-mask.config';
 
+// tslint:disable-next-line: strict-type-predicates
 const IS_ANDROID = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent);
+// tslint:disable-next-line: strict-type-predicates
 const DEFER = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame : setTimeout;
 
 export type InputTextMaskConfig = TextMask | TextMaskFn | Partial<TextMaskConfig | NumberMaskConfig>;
@@ -46,7 +47,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	get value() { return this._value$.value.value; }
 
 	private _value$ = new BehaviorSubject<{
-		value: string | number | null,
+		value: string | number | null;
 		source: ValueSource | undefined;
 	}>
 		({ value: null, source: undefined });
@@ -61,13 +62,15 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			&& this._activeConfig
 			&& this._$input.value !== this._activeConfig.placeholder;
 	}
-	private get _isInputSelectable() { return [ 'text', 'search', 'url', 'tel', 'password' ].includes(this._$input.type); }
+	private get _isInputSelectable() {
+		return [ 'text', 'search', 'url', 'tel', 'password' ].includes(this._$input.type);
+	}
 	private _textMaskInputManager!: {
 		state: {
-			previousConformedValue: string,
+			previousConformedValue: string;
 			previousOnRejectRawValue: string;
-		},
-		update: (val: string) => void;
+		};
+		update(val: string): void;
 	} | null;
 	private _firstMaskCharIndex = -1;
 	private _lastMaskCharIndex = -1;
@@ -106,12 +109,11 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	ngOnInit() {
-		if (this._$host.tagName === 'INPUT')
-			// `textMask` directive is used directly on an input element
-			this._$input = <HTMLInputElement> this._$host;
-		else
+		// `textMask` directive is used directly on an input element
+		this._$input = this._$host.tagName === 'INPUT'
+			? <HTMLInputElement> this._$host
 			// `textMask` directive is used on an abstracted input element, `ion-input`, `md-input`, etc
-			this._$input = <HTMLInputElement> this._$host.getElementsByTagName('INPUT')[ 0 ];
+			: <HTMLInputElement> this._$host.getElementsByTagName('INPUT')[ 0 ];
 
 		if (!this._$input)
 			throw new Error(`rtTextMask hasn't found the input element among descendants of the ${ this._$host.constructor.name }`);
@@ -123,7 +125,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	}
 
 	// begin of ControlValueAccessor
-	async writeValue(value: string | number | null | undefined) {
+	async writeValue(value?: string | number | null) {
 		await this._ready$.toPromise();
 
 		if (this.value === value)
@@ -221,7 +223,10 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 	onKeyDown(e: KeyboardEvent) {
 		if (!this._textMaskInputManager) return;
 
-		if ([ BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW ].includes(e.keyCode))
+		if ([ BACKSPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW ]
+			// tslint:disable-next-line: deprecation
+			.includes(e.keyCode)
+		)
 			setTimeout(() => this._setCaretToValidPosition());
 	}
 
@@ -244,6 +249,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 				this._activeConfig = null;
 			}
+
 			return;
 		}
 
@@ -375,6 +381,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			if (fractionDigits.length < decimalMinimumLimit)
 				return value.replace(fractionPart, fractionPart + repeat('0', decimalMinimumLimit - fractionDigits.length));
 		}
+
 		return value;
 	}
 
@@ -403,18 +410,20 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 			throw new Error(
 				`Placeholder character must not be used as part of the mask. Please specify a character
 				that is not present in your mask as your placeholder character.\n\n
-				The placeholder character that was received is: ${JSON.stringify(this._activeConfig!.placeholderChar) }\n\n
-				The mask that was received is: ${JSON.stringify(mask) }`
+				The placeholder character that was received is: ${ JSON.stringify(this._activeConfig!.placeholderChar) }\n\n
+				The mask that was received is: ${ JSON.stringify(mask) }`
 			);
 
 		let { placeholderChar } = this._activeConfig!;
 		if (this._activeConfig instanceof NumberMaskConfig && this._activeConfig.placeholderFromMask)
 			placeholderChar = '0';
 
-		return mask.map(char => char instanceof RegExp
-			? placeholderChar
-			: char
-		).join('');
+		return mask
+			.map(char => char instanceof RegExp
+				? placeholderChar
+				: char
+			)
+			.join('');
 	}
 
 	private _tryActivatePlaceholder() {

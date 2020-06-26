@@ -56,11 +56,13 @@ export class DateRangeComponent extends ControlComponent<DateRange> {
 	patch(v: DateRangeInput | null) {
 		if (isNil(v)) {
 			this.setValue(new DateRange());
+
 			return;
 		}
 
 		if (v.to)
-			v.to = m(v.to).endOf('day');
+			v.to = m(v.to)
+				.endOf('day');
 
 		this.setValue(new DateRange({ ...this.value, ...v }));
 	}

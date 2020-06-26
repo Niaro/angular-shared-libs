@@ -1,6 +1,6 @@
-import { isFunction, isEmpty } from 'lodash-es';
+import { isEmpty, isFunction } from 'lodash-es';
 import { MaskPipe } from './mask-pipe';
-import { TextMaskConfig, TextMask } from './text-mask.config';
+import { TextMask, TextMaskConfig } from './text-mask.config';
 
 export class TextMaskPipe extends MaskPipe {
 
@@ -32,7 +32,9 @@ export class TextMaskPipe extends MaskPipe {
 
 		const maskFromRefinedValue = isEmpty(refinedValue)
 			? [ null ]
-			: refinedValue!.split('').map(char => /./);
+			: refinedValue!
+				.split('')
+				.map(char => /./);
 
 		return resolvedMask || maskFromRefinedValue;
 	}

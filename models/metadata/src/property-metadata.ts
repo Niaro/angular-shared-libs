@@ -6,8 +6,6 @@ import { MetadataEntity } from './metadata-entity';
 import { PropertyMetadataControl } from './property-metadata-control';
 import { PropertyMetadataTable } from './property-metadata-table';
 
-
-
 export type PropertyMapperFunction = (value: any, constructorData: any, self: any) => any;
 
 export type PropertyMapper = PropertyMapperFunction

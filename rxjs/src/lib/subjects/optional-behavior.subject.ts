@@ -1,5 +1,4 @@
-import { Subject, Subscriber, Subscription, ObjectUnsubscribedError } from 'rxjs';
-import { SubscriptionLike } from 'rxjs';
+import { ObjectUnsubscribedError, Subject, Subscriber, Subscription, SubscriptionLike } from 'rxjs';
 
 export class OptionalBehaviorSubject<T> extends Subject<T> {
 
@@ -18,6 +17,7 @@ export class OptionalBehaviorSubject<T> extends Subject<T> {
 
 	// tslint:disable-next-line: naming-convention
 	_subscribe(subscriber: Subscriber<T>): Subscription {
+		// tslint:disable-next-line: deprecation
 		const subscription = super._subscribe(subscriber);
 		if (subscription && !(<SubscriptionLike> subscription).closed && (this._hasNextValue || this._hasInitValue))
 			subscriber.next(this._value);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 
@@ -34,7 +34,6 @@ export class CopyComponent {
 	@ViewChild('content')
 	/** @private */
 	contentRef!: ElementRef;
-
 
 	private get _$clipboardTextarea(): HTMLInputElement { return this.clipboardTextareaRef.nativeElement; }
 

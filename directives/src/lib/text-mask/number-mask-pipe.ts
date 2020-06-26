@@ -1,6 +1,6 @@
 import { isNumber } from 'lodash-es';
-import { NumberMaskConfig } from './text-mask.config';
 import { MaskPipe } from './mask-pipe';
+import { NumberMaskConfig } from './text-mask.config';
 
 const NON_DIGITS_REGEXP = /\D+/g;
 const DIGIT_REGEXP = /\d/;
@@ -63,7 +63,7 @@ export class NumberMaskPipe extends MaskPipe {
 
 		mask = integer ? this._convertToMask(integer) : [ DIGIT_REGEXP ];
 
-		if ((hasDecimal && this.config.allowDecimal) || this.config.requireDecimal === true) {
+		if ((hasDecimal && this.config.allowDecimal) || this.config.requireDecimal) {
 			if (refinedValue[ indexOfLastDecimal - 1 ] !== this.config.decimalSeparatorSymbol)
 				mask.push(this.caretTrap);
 
@@ -76,7 +76,7 @@ export class NumberMaskPipe extends MaskPipe {
 				mask = mask.concat(fraction);
 			}
 
-			if (this.config.requireDecimal === true
+			if (this.config.requireDecimal
 				&& refinedValue[ indexOfLastDecimal - 1 ] === this.config.decimalSeparatorSymbol
 			)
 				mask.push(DIGIT_REGEXP);
@@ -96,7 +96,7 @@ export class NumberMaskPipe extends MaskPipe {
 	}
 
 	// http://stackoverflow.com/a/10899795/604296
-	private _addThousandsSeparator(n: { replace: (arg0: RegExp, arg1: string) => void; }) {
+	private _addThousandsSeparator(n: { replace(arg0: RegExp, arg1: string): void; }) {
 		return n.replace(/\B(?=(\d{3})+(?!\d))/g, this.config.thousandsSeparatorSymbol);
 	}
 }

@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
 import { PropertyMetadata } from '@bp/shared/models/metadata';
 
 @Pipe({
@@ -7,7 +6,7 @@ import { PropertyMetadata } from '@bp/shared/models/metadata';
 })
 export class PropertiesMetadataColspanPipe implements PipeTransform {
 	transform(array: PropertyMetadata[], index: number, additionalSpan: number = 0): number | null {
-		let counter = 1 + additionalSpan; // 1 is the spanning cell
+		let counter = additionalSpan + 1; // 1 is the spanning cell
 		index--;
 
 		while (array[ index ] && array[ index ].table!.headless) {

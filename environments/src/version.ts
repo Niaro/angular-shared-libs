@@ -14,14 +14,17 @@ export class Version implements IVersion {
 
 	readonly releaseWithBuild: string;
 
-	constructor({ release, build }: { release: string, build: number; }) {
-		const [ major, minor, patch ] = release.split('.').map(v => +v);
+	constructor({ release, build, releaseWithBuild }: { release: string; build: number; releaseWithBuild: string; }) {
+		const [ major, minor, patch ] = release
+			.split('.')
+			.map(v => +v);
+
 		this.major = major;
 		this.minor = minor;
 		this.patch = patch;
 		this.release = release;
 		this.build = build;
-		this.releaseWithBuild = `${ release }-build.${ build }`;
+		this.releaseWithBuild = releaseWithBuild;
 	}
 
 }

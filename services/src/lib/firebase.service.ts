@@ -25,8 +25,7 @@ export const FIREBASE_APP_ID = new InjectionToken('firebase_app_id');
 })
 export class FirebaseService {
 
-
-	get currentUser() { return firebase.auth().currentUser; }
+	get currentUser() { return this.auth.currentUser; }
 
 	uploadProgress$ = new Subject<number | null>();
 
@@ -50,7 +49,6 @@ export class FirebaseService {
 
 	protected _perf?: firebase.performance.Performance;
 
-
 	constructor(
 		protected _telemetry: TelemetryService,
 		@Inject(FIREBASE_APP_ID) protected _firebaseAppId: string,
@@ -73,19 +71,23 @@ export class FirebaseService {
 				this._perf = firebase.performance();
 
 			this._storage = firebase.storage();
-			this._functions = firebase.app().functions(FB_FUNCTIONS_REGION);
+			this._functions = firebase.app()
+				.functions(FB_FUNCTIONS_REGION);
 			this.auth = firebase.auth();
 		});
 	}
 
-	signIn(credentials: { userName: string, password: string; }) {
+	signIn(credentials: { userName: string; password: string; }) {
 		return defer(() => from(this.auth.signInWithEmailAndPassword(credentials.userName, credentials.password))
 			.pipe(catchError(this._throwAsResponseError))
 		);
 	}
 
 	getDocumentId(collectionPath: string) {
-		return this._db.collection(collectionPath).doc().id;
+		return this._db
+			.collection(collectionPath)
+			.doc()
+			.id;
 	}
 
 	collection(collectionPath: string) {
@@ -112,9 +114,9 @@ export class FirebaseService {
 		collectionPath: string,
 		{ page, limit, authorUid, search, orderBy, country, isShared }: IPageQueryParams & {
 			search?: string;
-			authorUid?: string,
-			isShared?: boolean,
-			country?: string,
+			authorUid?: string;
+			isShared?: boolean;
+			country?: string;
 			orderBy?: string;
 		},
 		factory: (data: Partial<T>) => T
@@ -135,7 +137,13 @@ export class FirebaseService {
 
 			if (search) {
 				// 10 is cause array-contains-any support up to 10 comparison values only.
-				const searchTerms = take(search.toLowerCase().split(/\s|-/).filter(v => !!v), 10);
+				const searchTerms = take(
+					search
+						.toLowerCase()
+						.split(/\s|-/)
+						.filter(v => !!v),
+					10
+				);
 				if (searchTerms.length)
 					query = query.where('searchTerms', 'array-contains-any', searchTerms);
 			}
@@ -143,7 +151,7 @@ export class FirebaseService {
 			if (page)
 				query = query.startAfter(this._queryDocumentSnapshotsById[ page ]);
 
-			const unsubscribe = query.onSnapshot(
+			return query.onSnapshot(
 				snapshot => {
 					const { docs } = snapshot;
 					const lastDoc = last(docs);
@@ -162,7 +170,6 @@ export class FirebaseService {
 				},
 				e => subscriber.error(e)
 			);
-			return () => unsubscribe();
 		})
 			.pipe(catchError(this._throwAsResponseError));
 	}
@@ -171,18 +178,22 @@ export class FirebaseService {
 		collectionPath: string,
 		factory: (data: Partial<T>) => T
 	) {
-		return new Observable<T[]>(subscriber => {
-			const unsubscribe = this.collection(collectionPath).onSnapshot(
+		return new Observable<T[]>(subscriber => this
+			.collection(collectionPath)
+			.onSnapshot(
 				snapshot => subscriber.next(snapshot.docs.map(v => factory(<Partial<T>> v.data()))),
 				e => subscriber.error(e)
-			);
-			return () => unsubscribe();
-		})
+			)
+		)
 			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	getCollection<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
-		return from(this.collection(collectionPath).get())
+		return from(
+			this
+				.collection(collectionPath)
+				.get()
+		)
 			.pipe(
 				map(snapshot => snapshot.docs.map(v => factory(<Partial<T>> v.data()))),
 				catchError(this._throwAsResponseError)
@@ -193,18 +204,22 @@ export class FirebaseService {
 		documentPath: string,
 		factory: (data: Partial<T>) => T
 	) {
-		return new Observable<T>(subscriber => {
-			const unsubscribe = this.doc(documentPath).onSnapshot(
+		return new Observable<T>(subscriber => this
+			.doc(documentPath)
+			.onSnapshot(
 				snapshot => subscriber.next(factory(<Partial<T>> snapshot.data())),
 				e => subscriber.error(e)
-			);
-			return () => unsubscribe();
-		})
+			)
+		)
 			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	getDocument<T>(documentPath: string): Observable<Partial<T> | null> {
-		return from(this.doc(documentPath).get())
+		return from(
+			this
+				.doc(documentPath)
+				.get()
+		)
 			.pipe(
 				map(snapshot => (<Partial<T>> snapshot.data()) || null),
 				catchError(this._throwAsResponseError)
@@ -212,12 +227,20 @@ export class FirebaseService {
 	}
 
 	delete(documentPath: string): Observable<void> {
-		return from(this.doc(documentPath).delete())
+		return from(
+			this
+				.doc(documentPath)
+				.delete()
+		)
 			.pipe(catchError(this._throwAsResponseError));
 	}
 
 	set(documentPath: string, body: Object): Observable<void> {
-		return from(this.doc(documentPath).set(JSON.parse(JSON.stringify(body)), { merge: true }))
+		return from(
+			this
+				.doc(documentPath)
+				.set(JSON.parse(JSON.stringify(body)), { merge: true })
+		)
 			.pipe(catchError(this._throwAsResponseError));
 	}
 
@@ -263,7 +286,8 @@ export class FirebaseService {
 
 		this._uploadTask = fileRef.put(file);
 
-		this._uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+		this._uploadTask.on(
+			firebase.storage.TaskEvent.STATE_CHANGED,
 			snapshot => {
 				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 				progress > startProgressValue && this.uploadProgress$.next(progress);
@@ -274,7 +298,7 @@ export class FirebaseService {
 			},
 			() => this._uploadTask.snapshot.ref
 				.getDownloadURL()
-				.then((downloadURL) => {
+				.then(downloadURL => {
 					this.uploadedDownloadUrl$.next(downloadURL);
 					this.uploadProgress$.next(null);
 				})
@@ -291,6 +315,7 @@ export class FirebaseService {
 
 	async postFnCall<T, U = void>(firebaseFunctionName: string, body: T): Promise<U> {
 		const result = await this._functions.httpsCallable(firebaseFunctionName)(body);
+
 		return result.data;
 	}
 
@@ -303,10 +328,6 @@ export class FirebaseService {
 		);
 	}
 
-	authUseDeviceLang() {
-		firebase.auth().useDeviceLanguage();
-	}
-
 	private async _getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
 		const fileRef = this._storage
 			.ref(path)
@@ -316,7 +337,7 @@ export class FirebaseService {
 			.catch(() => { /* swallow 404 error since the empty var would be there is no file found */ });
 
 		return existFileMetadata
-			? await this._getFileRef(this._increaseFileNameCounter(existFileMetadata.name), path)
+			? this._getFileRef(this._increaseFileNameCounter(existFileMetadata.name), path)
 			: fileRef;
 	}
 
@@ -325,6 +346,7 @@ export class FirebaseService {
 		const counterRegexp = /_(\d+)$/;
 		const counterMatchInName = fileName.match(counterRegexp);
 		const counter = +(counterMatchInName && counterMatchInName[ 1 ] || 0) + 1;
+
 		return name.replace(
 			fileName,
 			counterMatchInName ? fileName.replace(counterRegexp, `_${ counter }`) : `${ fileName }_${ counter }`
@@ -333,11 +355,13 @@ export class FirebaseService {
 
 	private _snakeCaseFileName(name: string) {
 		const fileName = this._getFilenameWithoutExtension(name);
+
 		return name.replace(fileName, snakeCase(fileName));
 	}
 
 	private _getFilenameWithoutExtension(name: string): string {
 		if (!name) return '';
+
 		return (<any> /(.+?)(\.[^\.]+$|$)/.exec(name))[ 1 ];
 	}
 

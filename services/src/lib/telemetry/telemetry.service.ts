@@ -10,7 +10,7 @@ import { IReporter } from './reporter.interface';
 })
 export class TelemetryService implements IReporter {
 
-	static logMetaReducer: MetaReducer<any> | null;
+	static logMetaReducer: MetaReducer | null;
 
 	private static _instance: TelemetryService;
 

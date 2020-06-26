@@ -4,7 +4,6 @@ import { Dictionary } from '@bp/shared/typings';
 import { attrBoolValue } from '@bp/shared/utilities';
 import { isObject } from 'lodash-es';
 
-
 @Directive()
 export class OutletLinkRelativeToTargetBaseDirective {
 

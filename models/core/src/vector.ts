@@ -15,6 +15,7 @@ export class Vector {
 		if (mr === 0) return 0;
 		let r = this._dot(other) / mr;
 		if (r > 1) r = 1;
+
 		return Math.acos(r);
 	}
 

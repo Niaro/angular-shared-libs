@@ -1,5 +1,4 @@
 import { isFunction } from 'lodash-es';
-
 import { fastdom } from './fastdom';
 
 type SizeInfo = {
@@ -12,7 +11,7 @@ type OnResize = (sizeInfo: SizeInfo) => void;
 type HTMLDivResetSensorElement = HTMLDivElement & { resetSensor?: Function; };
 
 type HTMLResizableElement = HTMLElement & {
-	resizedAttached?: EventQueue,
+	resizedAttached?: EventQueue;
 	resizeSensor?: HTMLDivResetSensorElement;
 };
 
@@ -45,14 +44,13 @@ export class ResizeSensor {
 		cb: ($el: HTMLResizableElement) => void
 	) {
 		const elementsType = Object.prototype.toString.call(elements);
-		const isCollectionTyped = ('[object Array]' === elementsType
-			|| ('[object NodeList]' === elementsType)
-			|| ('[object HTMLCollection]' === elementsType)
-			|| ('[object Object]' === elementsType)
-		);
+		const isCollectionTyped = elementsType === '[object Array]'
+			|| elementsType === '[object NodeList]'
+			|| elementsType === '[object HTMLCollection]'
+			|| elementsType === '[object Object]';
 
 		if (isCollectionTyped)
-			(<HTMLResizableElement[]> elements).forEach(v => cb(v));
+			(<HTMLResizableElement[]> elements).forEach(cb);
 		else
 			cb(<HTMLResizableElement> elements);
 	}
@@ -80,6 +78,7 @@ export class ResizeSensor {
 
 		if ($el.resizedAttached) {
 			$el.resizedAttached.add(resized);
+
 			return;
 		}
 
@@ -136,10 +135,11 @@ export class ResizeSensor {
 			.measure(() => window.getComputedStyle($el));
 
 		const position = computedStyle ? computedStyle.position : null;
-		if ('absolute' !== position && 'relative' !== position && 'fixed' !== position)
+		if (position !== 'absolute' && position !== 'relative' && position !== 'fixed')
 			await fastdom.mutate(() => $el.style.position = 'relative');
 
-		let dirty: boolean, rafId: number;
+		let dirty: boolean;
+		let rafId: number;
 		let size: SizeInfo = await this._getElementSize($el);
 		let lastWidth = 0;
 		let lastHeight = 0;
@@ -150,8 +150,8 @@ export class ResizeSensor {
 			const { width, height } = await fastdom.measure(() => ({ width: $el.offsetWidth, height: $el.offsetHeight }));
 
 			await fastdom.mutate(() => {
-				$expandChild.style.width = (width + 10) + 'px';
-				$expandChild.style.height = (height + 10) + 'px';
+				$expandChild.style.width = `${ width + 10 }px`;
+				$expandChild.style.height = `${ height + 10 }px`;
 
 				$expand.scrollLeft = width + 10;
 				$expand.scrollTop = height + 10;
@@ -222,6 +222,7 @@ export class ResizeSensor {
 
 	private async _getElementSize(element: HTMLElement) {
 		const rect = await fastdom.measure(() => element.getBoundingClientRect());
+
 		return {
 			width: Math.round(rect.width),
 			height: Math.round(rect.height)
@@ -229,15 +230,12 @@ export class ResizeSensor {
 	}
 }
 
+// tslint:disable-next-line: strict-type-predicates
 if (typeof MutationObserver !== 'undefined') {
 	const observer = new MutationObserver(mutations => {
-		for (let i = 0; i < mutations.length; i++) {
-			const record = mutations[ i ];
-			for (let j = 0; j < record.addedNodes.length; j++) {
-				const $el = <HTMLResizableElement> record.addedNodes[ j ];
-				$el.resizeSensor && $el.resizeSensor.resetSensor && $el.resizeSensor.resetSensor();
-			}
-		}
+		for (const record of mutations)
+			for (const $el of <HTMLResizableElement[]> Array.from(record.addedNodes))
+				$el.resizeSensor?.resetSensor && $el.resizeSensor?.resetSensor();
 	});
 
 	document.addEventListener('DOMContentLoaded', () => observer.observe(document.body, {

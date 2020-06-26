@@ -1,7 +1,6 @@
 import { Directive, ElementRef, HostBinding, Input, OnChanges } from '@angular/core';
 import { $ } from '@bp/shared/utilities';
 
-
 @Directive({
 	// tslint:disable-next-line: directive-selector
 	selector: 'a[disabled], button[disabled], [bpDisabled]',

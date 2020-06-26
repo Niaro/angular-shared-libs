@@ -6,7 +6,7 @@ import {
 	state,
 	style,
 	transition,
-	trigger,
+	trigger
 } from '@angular/animations';
 
 /**
@@ -26,8 +26,10 @@ export const bpSelectAnimations: {
 	 * This is needed due to https://github.com/angular/angular/issues/23302
 	 */
 	transformPanelWrap: trigger('transformPanelWrap', [
-		transition('* => void', query('@transformPanel', [ animateChild() ],
-			{ optional: true }))
+		transition(
+			'* => void',
+			query('@transformPanel', [ animateChild() ], { optional: true })
+		)
 	]),
 
 	/**

@@ -2,7 +2,6 @@ import { AbstractControl, AsyncValidatorFn, FormArray, ValidatorFn, Validators a
 import { isEmpty, isNil, isRegExp, isString, keys, mapKeys, merge } from 'lodash-es';
 import { IValidationErrors } from './models';
 
-
 /**
  * Provides a set of custom validators.
  *
@@ -55,6 +54,7 @@ export class Validators {
 	static password(): ValidatorFn {
 		const minLength = 8;
 		const minLengthValidator = Validators.minLength(minLength);
+
 		return (c): IValidationErrors | null => {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 			const value = <string> c.value;
@@ -112,6 +112,7 @@ export class Validators {
 			if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +c.value ? +c.value : 0;
+
 			return actual < required
 				? { minimum: { required, actual } }
 				: null;
@@ -126,6 +127,7 @@ export class Validators {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = +value ? +value : 0;
+
 			return actual > required
 				? { maximum: { required, actual } }
 				: null;
@@ -140,6 +142,7 @@ export class Validators {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
+
 			return actual < required
 				? { minlength: { required, actual } }
 				: null;
@@ -154,6 +157,7 @@ export class Validators {
 			if (Validators.isEmptyValue(value)) return null; // don't validate empty values to allow optional controls
 
 			const actual = isString(value) ? value.length : 0;
+
 			return actual > required
 				? { maxlength: { required, actual } }
 				: null;
@@ -219,7 +223,7 @@ export class Validators {
 		if (isEmpty(presentValidators))
 			return null;
 
-		return (control) => Validators._mergeErrors(
+		return control => Validators._mergeErrors(
 			Validators._executeValidators(control, presentValidators)
 		);
 	}
@@ -233,12 +237,15 @@ export class Validators {
 		if (isEmpty(presentValidators))
 			return null;
 
-		return control => {
+		return async control => {
 			const promises = Validators
 				._executeAsyncValidators(control, presentValidators)
-				.map(Validators._convertToPromise);
+				.map(v => Validators._convertToPromise(v));
 
-			return Promise.all(promises).then(Validators._mergeErrors);
+			const errors = await Promise
+				.all(promises);
+
+			return Validators._mergeErrors(errors);
 		};
 	}
 
@@ -267,6 +274,7 @@ export class Validators {
 				errors === null ? accumulator : merge(accumulator, errors),
 			{}
 		);
+
 		return keys(result).length === 0 ? null : result;
 	}
 }

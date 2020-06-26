@@ -33,6 +33,7 @@ export class Countries {
 				.map(c => {
 					// take only actual name of country, like from `Iraq (‫العراق‬‎)` will take `Iraq `;
 					const match = c.name.match(/^.+(?=\()/);
+
 					return new Country({
 						name: match ? match[ 0 ].trim() : c.name,
 						displayName: c.name,
@@ -53,6 +54,7 @@ export class Countries {
 
 	static find(countryName: string | null) {
 		const lowerCaseCountryName = countryName?.toLowerCase();
+
 		return Countries.list.find(v => v.lowerCaseName === lowerCaseCountryName) ?? null;
 	}
 

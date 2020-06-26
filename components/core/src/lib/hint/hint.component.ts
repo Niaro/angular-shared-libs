@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, HostBinding } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 
 @Component({
 	selector: 'bp-hint',
@@ -6,7 +6,7 @@ import { Component, ChangeDetectionStrategy, Input, HostBinding } from '@angular
 	styleUrls: [ './hint.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
-		'class': 'material-icons-round'
+		class: 'material-icons-round'
 	}
 })
 export class HintComponent {

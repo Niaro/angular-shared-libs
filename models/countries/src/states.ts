@@ -1,296 +1,296 @@
 export default {
-	'CA': [
+	CA: [
 		{
-			'code': 'AB',
-			'name': 'Alberta'
+			code: 'AB',
+			name: 'Alberta'
 		},
 		{
-			'code': 'BC',
-			'name': 'British Columbia'
+			code: 'BC',
+			name: 'British Columbia'
 		},
 		{
-			'code': 'MB',
-			'name': 'Manitoba'
+			code: 'MB',
+			name: 'Manitoba'
 		},
 		{
-			'code': 'NB',
-			'name': 'New Brunswick'
+			code: 'NB',
+			name: 'New Brunswick'
 		},
 		{
-			'code': 'NL',
-			'name': 'Newfoundland and Labrador'
+			code: 'NL',
+			name: 'Newfoundland and Labrador'
 		},
 		{
-			'code': 'NS',
-			'name': 'Nova Scotia'
+			code: 'NS',
+			name: 'Nova Scotia'
 		},
 		{
-			'code': 'NT',
-			'name': 'Northwest Territories'
+			code: 'NT',
+			name: 'Northwest Territories'
 		},
 		{
-			'code': 'NU',
-			'name': 'Nunavut'
+			code: 'NU',
+			name: 'Nunavut'
 		},
 		{
-			'code': 'ON',
-			'name': 'Ontario'
+			code: 'ON',
+			name: 'Ontario'
 		},
 		{
-			'code': 'PE',
-			'name': 'Prince Edward Island'
+			code: 'PE',
+			name: 'Prince Edward Island'
 		},
 		{
-			'code': 'QC',
-			'name': 'Quebec'
+			code: 'QC',
+			name: 'Quebec'
 		},
 		{
-			'code': 'SK',
-			'name': 'Saskatchewan'
+			code: 'SK',
+			name: 'Saskatchewan'
 		},
 		{
-			'code': 'YT',
-			'name': 'Yukon'
+			code: 'YT',
+			name: 'Yukon'
 		}
 	],
-	'US': [
+	US: [
 		{
-			'code': 'AL',
-			'name': 'Alabama'
+			code: 'AL',
+			name: 'Alabama'
 		},
 		{
-			'code': 'AK',
-			'name': 'Alaska'
+			code: 'AK',
+			name: 'Alaska'
 		},
 		{
-			'code': 'AZ',
-			'name': 'Arizona'
+			code: 'AZ',
+			name: 'Arizona'
 		},
 		{
-			'code': 'AR',
-			'name': 'Arkansas'
+			code: 'AR',
+			name: 'Arkansas'
 		},
 		{
-			'code': 'CA',
-			'name': 'California'
+			code: 'CA',
+			name: 'California'
 		},
 		{
-			'code': 'CO',
-			'name': 'Colorado'
+			code: 'CO',
+			name: 'Colorado'
 		},
 		{
-			'code': 'CT',
-			'name': 'Connecticut'
+			code: 'CT',
+			name: 'Connecticut'
 		},
 		{
-			'code': 'DE',
-			'name': 'Delaware'
+			code: 'DE',
+			name: 'Delaware'
 		},
 		{
-			'code': 'DC',
-			'name': 'District Of Columbia'
+			code: 'DC',
+			name: 'District Of Columbia'
 		},
 		{
-			'code': 'FL',
-			'name': 'Florida'
+			code: 'FL',
+			name: 'Florida'
 		},
 		{
-			'code': 'GA',
-			'name': 'Georgia'
+			code: 'GA',
+			name: 'Georgia'
 		},
 		{
-			'code': 'HI',
-			'name': 'Hawaii'
+			code: 'HI',
+			name: 'Hawaii'
 		},
 		{
-			'code': 'ID',
-			'name': 'Idaho'
+			code: 'ID',
+			name: 'Idaho'
 		},
 		{
-			'code': 'IL',
-			'name': 'Illinois'
+			code: 'IL',
+			name: 'Illinois'
 		},
 		{
-			'code': 'IN',
-			'name': 'Indiana'
+			code: 'IN',
+			name: 'Indiana'
 		},
 		{
-			'code': 'IA',
-			'name': 'Iowa'
+			code: 'IA',
+			name: 'Iowa'
 		},
 		{
-			'code': 'KS',
-			'name': 'Kansas'
+			code: 'KS',
+			name: 'Kansas'
 		},
 		{
-			'code': 'KY',
-			'name': 'Kentucky'
+			code: 'KY',
+			name: 'Kentucky'
 		},
 		{
-			'code': 'LA',
-			'name': 'Louisiana'
+			code: 'LA',
+			name: 'Louisiana'
 		},
 		{
-			'code': 'ME',
-			'name': 'Maine'
+			code: 'ME',
+			name: 'Maine'
 		},
 		{
-			'code': 'MD',
-			'name': 'Maryland'
+			code: 'MD',
+			name: 'Maryland'
 		},
 		{
-			'code': 'MA',
-			'name': 'Massachusetts'
+			code: 'MA',
+			name: 'Massachusetts'
 		},
 		{
-			'code': 'MI',
-			'name': 'Michigan'
+			code: 'MI',
+			name: 'Michigan'
 		},
 		{
-			'code': 'MN',
-			'name': 'Minnesota'
+			code: 'MN',
+			name: 'Minnesota'
 		},
 		{
-			'code': 'MS',
-			'name': 'Mississippi'
+			code: 'MS',
+			name: 'Mississippi'
 		},
 		{
-			'code': 'MO',
-			'name': 'Missouri'
+			code: 'MO',
+			name: 'Missouri'
 		},
 		{
-			'code': 'MT',
-			'name': 'Montana'
+			code: 'MT',
+			name: 'Montana'
 		},
 		{
-			'code': 'NE',
-			'name': 'Nebraska'
+			code: 'NE',
+			name: 'Nebraska'
 		},
 		{
-			'code': 'NV',
-			'name': 'Nevada'
+			code: 'NV',
+			name: 'Nevada'
 		},
 		{
-			'code': 'NH',
-			'name': 'New Hampshire'
+			code: 'NH',
+			name: 'New Hampshire'
 		},
 		{
-			'code': 'NJ',
-			'name': 'New Jersey'
+			code: 'NJ',
+			name: 'New Jersey'
 		},
 		{
-			'code': 'NM',
-			'name': 'New Mexico'
+			code: 'NM',
+			name: 'New Mexico'
 		},
 		{
-			'code': 'NY',
-			'name': 'New York'
+			code: 'NY',
+			name: 'New York'
 		},
 		{
-			'code': 'NC',
-			'name': 'North Carolina'
+			code: 'NC',
+			name: 'North Carolina'
 		},
 		{
-			'code': 'ND',
-			'name': 'North Dakota'
+			code: 'ND',
+			name: 'North Dakota'
 		},
 		{
-			'code': 'OH',
-			'name': 'Ohio'
+			code: 'OH',
+			name: 'Ohio'
 		},
 		{
-			'code': 'OK',
-			'name': 'Oklahoma'
+			code: 'OK',
+			name: 'Oklahoma'
 		},
 		{
-			'code': 'OR',
-			'name': 'Oregon'
+			code: 'OR',
+			name: 'Oregon'
 		},
 		{
-			'code': 'PA',
-			'name': 'Pennsylvania'
+			code: 'PA',
+			name: 'Pennsylvania'
 		},
 		{
-			'code': 'RI',
-			'name': 'Rhode Island'
+			code: 'RI',
+			name: 'Rhode Island'
 		},
 		{
-			'code': 'SC',
-			'name': 'South Carolina'
+			code: 'SC',
+			name: 'South Carolina'
 		},
 		{
-			'code': 'SD',
-			'name': 'South Dakota'
+			code: 'SD',
+			name: 'South Dakota'
 		},
 		{
-			'code': 'TN',
-			'name': 'Tennessee'
+			code: 'TN',
+			name: 'Tennessee'
 		},
 		{
-			'code': 'TX',
-			'name': 'Texas'
+			code: 'TX',
+			name: 'Texas'
 		},
 		{
-			'code': 'UT',
-			'name': 'Utah'
+			code: 'UT',
+			name: 'Utah'
 		},
 		{
-			'code': 'VT',
-			'name': 'Vermont'
+			code: 'VT',
+			name: 'Vermont'
 		},
 		{
-			'code': 'VA',
-			'name': 'Virginia'
+			code: 'VA',
+			name: 'Virginia'
 		},
 		{
-			'code': 'WA',
-			'name': 'Washington'
+			code: 'WA',
+			name: 'Washington'
 		},
 		{
-			'code': 'WV',
-			'name': 'West Virginia'
+			code: 'WV',
+			name: 'West Virginia'
 		},
 		{
-			'code': 'WI',
-			'name': 'Wisconsin'
+			code: 'WI',
+			name: 'Wisconsin'
 		},
 		{
-			'code': 'WY',
-			'name': 'Wyoming'
+			code: 'WY',
+			name: 'Wyoming'
 		}
 	],
-	'AU': [
+	AU: [
 		{
-			'name': 'Australian Capital Territory',
-			'code': 'ACT'
+			name: 'Australian Capital Territory',
+			code: 'ACT'
 		},
 		{
-			'name': 'New South Wales',
-			'code': 'NSW'
+			name: 'New South Wales',
+			code: 'NSW'
 		},
 		{
-			'name': 'Northern Territory',
-			'code': 'NT'
+			name: 'Northern Territory',
+			code: 'NT'
 		},
 		{
-			'name': 'Queensland',
-			'code': 'QLD'
+			name: 'Queensland',
+			code: 'QLD'
 		},
 		{
-			'name': 'South Australia',
-			'code': 'SA'
+			name: 'South Australia',
+			code: 'SA'
 		},
 		{
-			'name': 'Tasmania',
-			'code': 'TAS'
+			name: 'Tasmania',
+			code: 'TAS'
 		},
 		{
-			'name': 'Victoria',
-			'code': 'VIC'
+			name: 'Victoria',
+			code: 'VIC'
 		},
 		{
-			'name': 'Western Australia',
-			'code': 'WA'
+			name: 'Western Australia',
+			code: 'WA'
 		}
 	]
 };

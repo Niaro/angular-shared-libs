@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface IReporter {
 
-	logMetaReducer: MetaReducer<any> | null;
+	logMetaReducer: MetaReducer | null;
 
 	currentSessionUrl$: Observable<string | null>;
 
@@ -16,7 +16,6 @@ export interface IReporter {
 	 *  Notifies listeners about the error
 	 */
 	captureError(error: Error | any, source: string): void;
-
 
 	/**
 	 *  Notifies listeners about the message

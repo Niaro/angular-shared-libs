@@ -8,13 +8,13 @@ import { RouterService } from './router.service';
 import { TelemetryService } from './telemetry';
 
 type IntercomCompany = {
-	id: string,
-	name: string,
-	plan?: string,
-	website?: string,
-	monthly_spend?: number,
+	id: string;
+	name: string;
+	plan?: string;
+	website?: string;
+	monthly_spend?: number;
 	upgraded_at?: number;
-	created_at?: number,
+	created_at?: number;
 };
 
 type IntercomBootConfig = {
@@ -148,6 +148,7 @@ export class IntercomService {
 
 		this._isLinkedLogrocketSessionsToIntercomUser = true;
 
+		// tslint:disable-next-line: variable-name
 		// tslint:disable-next-line: naming-convention
 		const logrocket_URL = this._telemetry.getUrlForUserSessions(userId);
 		logrocket_URL && this.update({ logrocket_URL });

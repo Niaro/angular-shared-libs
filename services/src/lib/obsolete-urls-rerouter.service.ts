@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { map, filter } from 'rxjs/operators';
-import { keys } from 'lodash-es';
-
 import { Dictionary } from '@bp/shared/typings';
-
+import { keys } from 'lodash-es';
+import { filter, map } from 'rxjs/operators';
 import { RouterService } from './router.service';
 
 @Injectable({
@@ -20,7 +18,9 @@ export class ObsoleteUrlsRerouterService {
 	rerouteUrlsMap: Dictionary<string> = {};
 
 	constructor(private _routing: RouterService) {
-		const appName = keys(this.rerouteUrlsPerAppMap).find(v => location.hostname.includes(v));
+		const appName = keys(this.rerouteUrlsPerAppMap)
+			.find(v => location.hostname.includes(v));
+
 		this.rerouteUrlsMap = this.rerouteUrlsPerAppMap[ appName! ] ?? {};
 	}
 

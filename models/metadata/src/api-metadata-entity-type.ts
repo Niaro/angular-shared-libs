@@ -2,8 +2,6 @@ import { Enumeration } from '@bp/shared/models/core/enum';
 import m from 'moment';
 import { MetadataEntity } from './metadata-entity';
 
-
-
 export type Api<T extends Object> = {
 	[ P in keyof T ]: T[ P ] extends MetadataEntity
 	? Object

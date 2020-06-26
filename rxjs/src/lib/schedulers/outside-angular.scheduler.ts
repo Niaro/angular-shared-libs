@@ -1,10 +1,9 @@
 import { NgZone } from '@angular/core';
-import { Subscription } from 'rxjs/internal/Subscription';
-import { Action } from 'rxjs/internal/scheduler/Action';
 import { Scheduler } from 'rxjs/internal/Scheduler';
-
+import { Action } from 'rxjs/internal/scheduler/Action';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { ZoneService } from '../zone.service';
-
+// tslint:disable: deprecation
 class OutsideAngularAction<T> extends Action<T> {
 	constructor(
 		// tslint:disable-next-line: naming-convention

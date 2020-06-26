@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { EnvironmentService } from '../environment.service';
 
-
 export const BYPASS_AUTH_CHECK = 'bypass-auth-check';
 
 export const CORRELATION_ID_KEY = 'x-correlation-id';
@@ -29,7 +28,7 @@ export class HttpConfigService {
 		// it doesn't happen
 		'ngsw-bypass': '',
 		// for cloudflare access https://developers.cloudflare.com/access/faq/
-		'credentials': 'same-origin'
+		credentials: 'same-origin'
 	};
 
 	private _authorized$ = new BehaviorSubject(false);

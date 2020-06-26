@@ -7,18 +7,16 @@ import { ClassMetadata } from './class-metadata';
 import { MERGE_JSON_WITH_ENTITY_INSTANCE_TOKEN } from './decorators/merge-json-with-entity-instance.token';
 import { PropertyMapper, PropertyMapperFunction, PropertyMetadata } from './property-metadata';
 
-
-
 // tslint:disable: no-static-this
 export abstract class MetadataEntity {
 
 	private static _metadata: ClassMetadata;
 
 	static get metadata(): ClassMetadata {
-		if (has(this, '_metadata'))
-			return this._metadata;
+		if (has(MetadataEntity, '_metadata'))
+			return MetadataEntity._metadata;
 
-		return this._metadata = new ClassMetadata(this);
+		return MetadataEntity._metadata = new ClassMetadata(MetadataEntity);
 	}
 
 	static getMetadata(model: MetadataEntity) {
@@ -29,11 +27,11 @@ export abstract class MetadataEntity {
 	}
 
 	static getMetaPropertyNames<T>(): NonFunctionPropertyNames<T>[] {
-		return <any> this.metadata.keys();
+		return <any> MetadataEntity.metadata.keys();
 	}
 
 	static getLabel<T>(prop: NonFunctionPropertyNames<T>) {
-		return this.metadata.get(prop)?.label;
+		return MetadataEntity.metadata.get(prop)?.label;
 	}
 
 	constructor(incomingInstanceData?: any) {
@@ -48,7 +46,9 @@ export abstract class MetadataEntity {
 	}
 
 	getLabel<T = this>(propName: NonFunctionPropertyNames<T>) {
-		return this.getMetadata().get(propName)?.label;
+		return this.getMetadata()
+			.get(propName)
+			?.label;
 	}
 
 	private _tryMergeJsonIntoInstanceData(instanceData: Dictionary<any>) {
@@ -64,7 +64,7 @@ export abstract class MetadataEntity {
 					: {}
 				)
 			}),
-			{}
+			<Object> {}
 		);
 
 		return {

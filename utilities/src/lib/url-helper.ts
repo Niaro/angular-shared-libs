@@ -1,12 +1,12 @@
 import { Type } from '@angular/core';
-import { ActivatedRouteSnapshot, ActivatedRoute, Params, Router, UrlSegmentGroup } from '@angular/router';
-import { isBoolean, isArray, mapValues, pickBy, isNil, last, toPairs, isObject } from 'lodash-es';
-
+import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router, UrlSegmentGroup } from '@angular/router';
 import { Dictionary } from '@bp/shared/typings';
+import { isArray, isBoolean, isNil, isObject, last, mapValues, pickBy, toPairs } from 'lodash-es';
 
 export class UrlHelper {
 	static parse(value: string) {
 		const values = UrlHelper.parseArray(value);
+
 		return values.length === 0
 			? null
 			: values.length > 1 ? values : value.toString();
@@ -30,10 +30,15 @@ export class UrlHelper {
 	static toRouteString(value: any) {
 		if (isBoolean(value))
 			return value ? 'true' : undefined;
+
 		if (isArray(value) && value.length)
-			return value.map(v => valueToString(v)).join(',');
+			return value
+				.map(valueToString)
+				.join(',');
+
 		if (value === '')
 			return;
+
 		return valueToString(value);
 	}
 
@@ -44,6 +49,7 @@ export class UrlHelper {
 	static getRouteParams(route: ActivatedRoute): Params {
 		const snapshot = UrlHelper.getMainBranchLastRoute(route.snapshot);
 		const params = snapshot.url.length ? last(snapshot.url)!.parameters : snapshot.params;
+
 		return pickBy(params, v => !isNil(v));
 	}
 
@@ -62,6 +68,7 @@ export class UrlHelper {
 
 	static getQueryParams(route: ActivatedRoute): Params {
 		const snapshot = UrlHelper.getMainBranchLastRoute(route.snapshot);
+
 		return pickBy(snapshot.queryParams, v => !isNil(v));
 	}
 
@@ -85,18 +92,21 @@ export class UrlHelper {
 			route = <T> route.firstChild;
 			results.push(route);
 		}
+
 		return results;
 	}
 
 	static getMainBranchLastRoute<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T {
 		while (route.firstChild)
 			route = <T> route.firstChild;
+
 		return route;
 	}
 
 	static buildUrlExcludingOutlet(outlet: string, router: Router) {
 		const currentUrlTree = router.parseUrl(router.url);
 		UrlHelper._deleteOutletRecursivelyFromSegments(outlet, currentUrlTree.root.children);
+
 		return currentUrlTree.toString();
 	}
 
@@ -113,19 +123,23 @@ export class UrlHelper {
 	}
 
 	private static _deleteOutletRecursivelyFromSegments(outlet: string, dictionary: Dictionary<UrlSegmentGroup>) {
-		// tslint:disable-next-line:forin
-		for (const property in dictionary) {
+		for (const property of Object.keys(dictionary)) {
 			if (property === outlet) {
 				delete dictionary[ property ];
+
 				return;
 			}
 
-			if (dictionary.hasOwnProperty(property) && isObject(dictionary[ property ]))
+			if (isObject(dictionary[ property ]))
 				UrlHelper._deleteOutletRecursivelyFromSegments(outlet, dictionary[ property ].children);
 		}
 	}
 }
 
 function valueToString(value: any): string {
-	return isNil(value) ? undefined : value.valueOf() && value.valueOf().toString();
+	return isNil(value)
+		? undefined
+		: value
+			.valueOf()
+			?.toString();
 }

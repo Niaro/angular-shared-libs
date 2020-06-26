@@ -1,15 +1,13 @@
-import { Observable, from } from 'rxjs';
-import { map, mergeAll, distinctUntilChanged } from 'rxjs/operators';
-
 import { ResizeSensor } from '@bp/shared/utilities';
-
-import { BpScheduler } from '../schedulers';
+import { Observable, scheduled } from 'rxjs';
+import { distinctUntilChanged, map, mergeAll } from 'rxjs/operators';
 import { measure } from '../fastdom-wrappers';
+import { BpScheduler } from '../schedulers';
 
 export function fromResize(...targets: HTMLElement[]) {
-	return from(targets, BpScheduler.asyncOutside)
+	return scheduled(targets, BpScheduler.asyncOutside)
 		.pipe(
-			map(target => create(target)),
+			map(create),
 			mergeAll()
 		);
 
@@ -18,6 +16,7 @@ export function fromResize(...targets: HTMLElement[]) {
 			(subscriber => {
 				const onResize = () => subscriber.next();
 				const sensor = new ResizeSensor(target, onResize);
+
 				return () => sensor.detach(onResize);
 			})
 			.pipe(

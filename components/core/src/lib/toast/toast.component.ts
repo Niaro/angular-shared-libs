@@ -1,8 +1,7 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
-import { Toast, ToastrService, ToastPackage, IndividualConfig } from 'ngx-toastr';
-
-import { TIMINGS, SEMI_SLOW, FADE } from '@bp/shared/animations';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { FADE, SEMI_SLOW, TIMINGS } from '@bp/shared/animations';
+import { IndividualConfig, Toast, ToastPackage, ToastrService } from 'ngx-toastr';
 
 export type ToastConfig = IndividualConfig & { undoBtn: boolean; };
 
@@ -17,25 +16,36 @@ export type ToastConfig = IndividualConfig & { undoBtn: boolean; };
 			state('inactive', style({
 				opacity: 0,
 			})),
-			transition('inactive => active', animate(TIMINGS, keyframes([
-				style({
-					transform: 'translate3d(100%, 0, 0)',
-					opacity: 0,
-				}),
-				style({
-					transform: 'none',
-					opacity: 1,
-				}),
-			])), SEMI_SLOW),
-			transition('active => removed', animate(TIMINGS, keyframes([
-				style({
-					opacity: 1,
-				}),
-				style({
-					transform: 'translate3d(100%, 0, 0)',
-					opacity: 0,
-				}),
-			])), SEMI_SLOW),
+			transition(
+				'inactive => active',
+				animate(TIMINGS, keyframes([
+					style({
+						transform: 'translate3d(100%, 0, 0)',
+						opacity: 0,
+					}),
+					style({
+						transform: 'none',
+						opacity: 1,
+					}),
+				])),
+				SEMI_SLOW
+			),
+			transition(
+				'active => removed',
+				animate(
+					TIMINGS,
+					keyframes([
+						style({
+							opacity: 1,
+						}),
+						style({
+							transform: 'translate3d(100%, 0, 0)',
+							opacity: 0,
+						}),
+					])
+				),
+				SEMI_SLOW
+			),
 		]),
 	],
 })
@@ -63,6 +73,7 @@ export class ToastComponent extends Toast {
 		event.stopPropagation();
 		this.undoBtnText = 'undid';
 		this.toastPackage.triggerAction();
+
 		return false;
 	}
 }

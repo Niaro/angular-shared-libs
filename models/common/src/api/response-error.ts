@@ -72,8 +72,8 @@ export class ResponseError {
 export interface IApiErrorResponse {
 
 	response: {
-		status: string,
-		code: number,
+		status: string;
+		code: number;
 		message: string;
 	};
 

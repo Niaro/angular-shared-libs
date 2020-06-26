@@ -70,7 +70,7 @@ export class TextMaskConfig {
 	 * @link https://git.io/v1pk1
 	 */
 	pipe!: (conformedValue: string, config: TextMaskConfig) => boolean | string | {
-		value: string,
+		value: string;
 		indexesOfPipedChars: number[];
 	};
 
@@ -96,6 +96,7 @@ export class TextMaskConfig {
 
 	assign<T>(config: Partial<T>) {
 		assign(this, config);
+
 		return this;
 	}
 }
@@ -210,7 +211,9 @@ export class NumberMaskConfig extends TextMaskConfig {
 	// }
 
 	private _getLocaleDecimalSeparatorSymbol(): string {
-		return 1.1.toLocaleString().substring(1, 2);
+		return 1.1
+			.toLocaleString()
+			.substring(1, 2);
 	}
 }
 

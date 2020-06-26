@@ -17,8 +17,11 @@ export class DateRange {
 	 */
 	static parseString(value: string, format?: string) {
 		const [ from, to ] = chunk(value.split(RANGE_DELIMITER), 2)
-			.map(dates => dates.map(d => d && m.unix(+d).utc()))
-			.map(dates => dates.map(d => d && d.isValid() ? d : undefined))
+			.map(dates => dates.map(date => m
+				.unix(+date)
+				.utc()
+			))
+			.map(dates => dates.map(date => date.isValid() ? date : undefined))
 			.flat();
 
 		return new DateRange({ from, to }, format);
@@ -91,6 +94,7 @@ export class DateRange {
 	toJSON() {
 		if (!this._from && !this._to)
 			return null;
+
 		return {
 			from: this._from ? this._from.toJSON() : null,
 			to: this._to ? this._to.toJSON() : null

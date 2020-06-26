@@ -8,7 +8,6 @@ import { isEqual, omit } from 'lodash-es';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, skip } from 'rxjs/operators';
 
-
 @Component({
 	selector: 'bp-paginator',
 	templateUrl: './paginator.component.html',
@@ -50,7 +49,10 @@ export class PaginatorComponent {
 	get progressNext() { return this.progressNext$.value; }
 	set progressNext(value: boolean) { this.progressNext$.next(value); }
 
-	readonly progress$ = combineLatest(this.progressBack$, this.progressNext$)
+	readonly progress$ = combineLatest([
+		this.progressBack$,
+		this.progressNext$
+	])
 		.pipe(map(([ back, next ]) => back || next));
 
 	constructor(
@@ -68,7 +70,7 @@ export class PaginatorComponent {
 		this._route.params
 			.pipe(
 				map(params => omit(params, 'page')),
-				distinctUntilChanged((a, b) => isEqual(a, b))
+				distinctUntilChanged(isEqual)
 			)
 			.subscribe(() => {
 				if (this.page)
@@ -90,12 +92,14 @@ export class PaginatorComponent {
 	}
 
 	onBack = () => {
-		this.page = this.getBackPage().toString();
+		this.page = this.getBackPage()
+			.toString();
 		this.currentPage = this.getBackPage();
 	};
 
 	onNext = () => {
-		this.page = this.getNextPage().toString();
+		this.page = this.getNextPage()
+			.toString();
 		this.currentPage = this.getNextPage();
 	};
 

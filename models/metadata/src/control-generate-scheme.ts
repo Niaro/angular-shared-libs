@@ -14,7 +14,7 @@ export class GenerateSchemeControl {
 
 	private _defaultValue: number | boolean | string;
 
-	constructor({ key, value }: { key: string, value: number | boolean | string; }) {
+	constructor({ key, value }: { key: string; value: number | boolean | string; }) {
 		this.key = key;
 		this._defaultValue = value;
 		this.isRender = [ 'payment_method_type', 'is_live', 'is3d_secure' ].includes(key) ? false : true;
@@ -30,6 +30,7 @@ export class GenerateSchemeControl {
 			return 'switch';
 		if ([ 'public_key' ].includes(this.key))
 			return 'textarea';
+
 		return 'input';
 	}
 }
