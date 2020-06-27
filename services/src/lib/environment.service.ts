@@ -39,7 +39,7 @@ export class EnvironmentService implements IEnvironment {
 
 	readonly isSandbox = this.name === 'sandbox';
 
-	readonly isNotProdOrSandbox = this.isNotProd && !this.isSandbox;
+	readonly isStagingOrDev = this.name === 'stg' || this.name === 'dev';
 
 	readonly isDemostand = location.hostname.includes('cashier-demostand');
 
