@@ -43,6 +43,8 @@ export class PropertyMetadata {
 
 	readonly copyable: boolean = false;
 
+	readonly underDevelopment: boolean = false;
+
 	/**
 	 * the name of the property to which this metadata belongs
 	 */

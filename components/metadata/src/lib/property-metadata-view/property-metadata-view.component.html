@@ -1,4 +1,4 @@
-<div [attr.title]="table?.ellipsis ? value : null">
+<div [class.feature-under-development]="metadata.underDevelopment" [attr.title]="table?.ellipsis ? value : null">
 	<ng-container *ngIf="metadata.viewType !== FieldViewType.boolean; else booleanViewTypeTpl">
 		<caption *ngIf="label && !table" class="property-metadata-view-caption">
 			{{
@@ -9,26 +9,11 @@
 				help_outline
 			</mat-icon>
 
-			<bp-copy
-				*ngIf="metadata.copyable"
-				class="ml-1"
-				size="sm"
-				[outlined]="true"
-				[value]="value"
-			>
-			</bp-copy>
+			<bp-copy *ngIf="metadata.copyable" class="ml-1" size="sm" [outlined]="true" [value]="value"> </bp-copy>
 		</caption>
 
-		<div
-			*ngIf="
-				value === '' || value === undefined || value === null || value.length === 0;
-				else valueTpl
-			"
-		>
-			<div
-				*ngIf="metadata.viewType === FieldViewType.thumbnail; else emptyValueTpl"
-				class="thumbnail empty"
-			>
+		<div *ngIf="value === '' || value === undefined || value === null || value.length === 0; else valueTpl">
+			<div *ngIf="metadata.viewType === FieldViewType.thumbnail; else emptyValueTpl" class="thumbnail empty">
 				<mat-icon>image</mat-icon>
 			</div>
 
@@ -52,17 +37,9 @@
 					</ng-template>
 				</ng-container>
 
-				<bp-country
-					*ngSwitchCase="FieldViewType.country"
-					[src]="value"
-					[compact]="isCompact"
-				>
-				</bp-country>
+				<bp-country *ngSwitchCase="FieldViewType.country" [src]="value" [compact]="isCompact"> </bp-country>
 
-				<bp-payment-method-brand
-					*ngSwitchCase="FieldViewType.paymentMethodBrand"
-					[src]="value"
-				>
+				<bp-payment-method-brand *ngSwitchCase="FieldViewType.paymentMethodBrand" [src]="value">
 				</bp-payment-method-brand>
 
 				<ng-container *ngSwitchCase="FieldViewType.currency">
@@ -74,13 +51,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.moment">
-					{{
-						value
-							| momentFormat
-								: (metadata.viewFormatter
-										? metadata.viewFormatter!(value)
-										: 'LL LTS')
-					}}
+					{{ value | momentFormat: (metadata.viewFormatter ? metadata.viewFormatter!(value) : 'LL LTS') }}
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.currencyCode">
@@ -102,12 +73,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.email">
-					<a
-						class="link"
-						bpTargetBlank
-						href="mailto:{{ value }}"
-						(click)="$event.stopPropagation()"
-					>
+					<a class="link" bpTargetBlank href="mailto:{{ value }}" (click)="$event.stopPropagation()">
 						{{ value }}
 					</a>
 				</ng-container>
@@ -119,9 +85,7 @@
 				</ng-container>
 
 				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
-					<ng-container
-						*ngIf="metadata.viewFormatter && metadata.viewFormatter!(value) as status"
-					>
+					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter!(value) as status">
 						<span
 							[ngClass]="'status-' + status.cssClass"
 							[class.mr-1]="!isCompact"
@@ -139,11 +103,7 @@
 
 				<ng-container *ngSwitchCase="FieldViewType.chip">
 					<mat-chip-list *ngIf="value?.length" [selectable]="false">
-						<mat-chip
-							*ngFor="let chip of value"
-							selected
-							[attr.title]="chip.description"
-						>
+						<mat-chip *ngFor="let chip of value" selected [attr.title]="chip.description">
 							{{ chip.displayName || chip.name || chip }}
 						</mat-chip>
 					</mat-chip-list>

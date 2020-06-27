@@ -35,15 +35,14 @@ export class TelemetryService implements IReporter {
 	}
 
 	static captureError(error: Error | any, source: string) {
-		TelemetryService._env.localServer && console.error(error);
 		TelemetryService._reporter?.captureError(error, source);
+		TelemetryService._env.localServer && console.error(error);
 	}
 
 	static captureMessage(msg: string, dataToLog?: any) {
 		msg = `[log]: ${ msg }`;
 		TelemetryService._reporter?.captureMessage(msg);
-		TelemetryService._env.localServer && console.warn(msg);
-		dataToLog && console.warn(dataToLog);
+		TelemetryService.warn(msg, dataToLog);
 	}
 
 	static routerErrorHandler(error: any) {

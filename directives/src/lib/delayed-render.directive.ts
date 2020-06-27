@@ -1,7 +1,7 @@
 import { timer } from 'rxjs';
 import { first, map, observeOn, share, startWith } from 'rxjs/operators';
 
-import { Directive, ElementRef, Input, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { Destroyable } from '@bp/shared/models/common';
 import { BpScheduler, fromMutation } from '@bp/shared/rxjs';
@@ -21,8 +21,6 @@ export class DelayedRenderDirective extends Destroyable {
 	private static readonly _maxInstantRenderedViews = 7;
 
 	private static _instantViewsRenderingCounter = 0;
-
-	@Input('bpDelayedRender') id!: string;
 
 	private get _$host() { return <Comment> this._host.nativeElement; }
 

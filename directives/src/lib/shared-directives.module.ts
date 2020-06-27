@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { DelayedRenderDirective } from './delayed-render.directive';
 import { DisabledDirective } from './disabled.directive';
 import { DynamicOutletDirective } from './dynamic-outlet.directive';
+import { FeatureUnderDevelopmentDirective } from './feature-under-development.directive';
 import { HoverDirective } from './hover.directive';
 import {
 	OutletLinkRelativeToTargetDirective, OutletLinkRelativeToTargetWithHrefDirective
@@ -25,6 +26,7 @@ const EXPOSED_DIRECTIVES = [
 	ProgressBarDirective,
 	DisabledDirective,
 	HoverDirective,
+	FeatureUnderDevelopmentDirective
 ];
 
 @NgModule({
