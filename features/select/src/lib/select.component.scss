@@ -46,32 +46,28 @@
 	text-overflow: ellipsis;
 }
 
-.bp-select-arflex-flow-row-wrapper {
+.bp-select-arrow-wrapper {
 	display: table-cell;
 	vertical-align: middle;
 }
 
-.mat-form-field-appearance-fill .bp-select-arflex-flow-row-wrapper {
+.mat-form-field-appearance-fill .bp-select-arrow-wrapper {
 	transform: translateY(-50%);
 }
 
-.mat-form-field-appearance-outline .bp-select-arflex-flow-row-wrapper {
+.mat-form-field-appearance-outline .bp-select-arrow-wrapper {
 	transform: translateY(-25%);
 }
 
-.mat-form-field-appearance-standard.mat-form-field-has-label
-	.bp-select:not(.bp-select-empty)
-	.bp-select-arflex-flow-row-wrapper {
+.mat-form-field-appearance-standard.mat-form-field-has-label .bp-select:not(.bp-select-empty) .bp-select-arrow-wrapper {
 	transform: translateY(-50%);
 }
 
-.mat-form-field-appearance-standard .bp-select.bp-select-empty .bp-select-arflex-flow-row-wrapper {
+.mat-form-field-appearance-standard .bp-select.bp-select-empty .bp-select-arrow-wrapper {
 	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-._mat-animation-noopable.mat-form-field-appearance-standard
-	.bp-select.bp-select-empty
-	.bp-select-arflex-flow-row-wrapper {
+._mat-animation-noopable.mat-form-field-appearance-standard .bp-select.bp-select-empty .bp-select-arrow-wrapper {
 	transition: none;
 }
 
