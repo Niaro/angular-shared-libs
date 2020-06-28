@@ -10,17 +10,13 @@
 		<span class="bp-select-placeholder bp-select-placeholder" *ngSwitchCase="true">{{
 			placeholder || '\u00A0'
 		}}</span>
-		<span
-			class="bp-select-value-text bp-select-value-text"
-			*ngSwitchCase="false"
-			[ngSwitch]="!!customTrigger"
-		>
+		<span class="bp-select-value-text bp-select-value-text" *ngSwitchCase="false" [ngSwitch]="!!customTrigger">
 			<span *ngSwitchDefault>{{ triggerValue || '\u00A0' }}</span>
 			<ng-content select="bp-select-trigger" *ngSwitchCase="true"></ng-content>
 		</span>
 	</div>
 
-	<div class="bp-select-arflex-flow-row-wrapper bp-select-arflex-flow-row-wrapper">
+	<div class="bp-select-arrow-wrapper bp-select-arrow-wrapper">
 		<div class="bp-select-arrow bp-select-arrow"></div>
 	</div>
 </div>
