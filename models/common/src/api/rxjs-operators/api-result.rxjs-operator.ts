@@ -6,8 +6,8 @@ import { TypedAction } from '@ngrx/store/src/models';
 import { reportJsErrorIfAny } from '@bp/shared/rxjs';
 import { Action } from '@bp/shared/typings';
 
-import { ApiErrorActionPayload, ApiResultActionPayload } from './ngrx-action-payloads';
-import { ResponseError } from './response-error';
+import { ApiErrorActionPayload, ApiResultActionPayload } from '../ngrx-action-payloads';
+import { ResponseError } from '../response-error';
 
 export function apiResult<T>(
 	success: Action<ApiResultActionPayload<T>>,
@@ -21,7 +21,7 @@ export function apiResult<T>(
 				: failure({ apiError: ResponseError.notFound })
 			),
 			reportJsErrorIfAny,
-			catchError((apiError: ResponseError) => of(failure({ apiError })))
+			catchError(apiError => of(failure({ apiError })))
 		);
 
 		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
@@ -37,7 +37,7 @@ export function apiVoidResult<T>(
 		const stream$ = source$.pipe(
 			map(success),
 			reportJsErrorIfAny,
-			catchError((apiError: ResponseError) => of(failure({ apiError })))
+			catchError(apiError => of(failure({ apiError })))
 		);
 
 		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
