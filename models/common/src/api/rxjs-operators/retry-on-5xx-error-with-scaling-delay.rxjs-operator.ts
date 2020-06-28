@@ -13,7 +13,8 @@ export const retryOn5XXErrorWithScalingDelay = ({
 } = {}) => <T>(source$: Observable<T>) => source$.pipe(
 	retryWhen(attempts$ => attempts$.pipe(mergeMap((error: ResponseError, i) => {
 		const retryAttempt = i + 1;
-		const needRetry = error.status === StatusCode.InternalServerError && retryAttempt <= maxRetryAttempts;
+		const needRetry = [ StatusCode.InternalServerError, StatusCode.UnknownError ].includes(error.status!)
+			&& retryAttempt <= maxRetryAttempts;
 
 		return needRetry
 			? timer(retryAttempt * scalingDelayDuration)

@@ -1,5 +1,5 @@
 export enum StatusCode {
-	NoConnection = 0,
+	UnknownError = 0,
 	Ok = 200,
 	Created = 201,
 	NoContent = 204,

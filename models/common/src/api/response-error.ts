@@ -33,9 +33,7 @@ export class ResponseError {
 			this.messages = [ { message: e } ];
 		else if (e instanceof HttpErrorResponse) {
 			this.url = e.url;
-			this.status = e.status! >= 500 || e.status === 0 || e[ 'statusText' ] === 'Unknown Error'
-				? StatusCode.InternalServerError
-				: e.status!;
+			this.status = this._parseStatus(e);
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 
 			if (this.status === StatusCode.NotFound)
@@ -69,6 +67,15 @@ export class ResponseError {
 		this.messages = e.result
 			? isArray(e.result) ? e.result : [ e.result ]
 			: e.response && e.response.message && [ { message: lowerCase(e.response.message) } ] || [];
+	}
+
+	private _parseStatus(e: HttpErrorResponse) {
+		if (e.status! >= 500)
+			return StatusCode.InternalServerError;
+
+		return e.status === 0 || e[ 'statusText' ] === 'Unknown Error'
+			? StatusCode.UnknownError
+			: e.status!;
 	}
 }
 
