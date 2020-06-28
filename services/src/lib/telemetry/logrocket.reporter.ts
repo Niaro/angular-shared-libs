@@ -30,12 +30,10 @@ export class LogRocketReporter implements IReporter {
 			},
 			network: {
 				requestSanitizer(req) {
-					// if the url contains 'ignore'
 					if (req.url
 						.toLowerCase()
 						.includes('deposit')
 					)
-						// scrub out the body
 						req.body = undefined;
 
 					req.headers[ 'Authorization' ] = undefined;

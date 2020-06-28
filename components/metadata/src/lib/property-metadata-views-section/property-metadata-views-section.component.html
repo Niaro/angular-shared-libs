@@ -3,12 +3,8 @@
 
 <div @fadeInList>
 	<div *ngFor="let group of sectionScheme" class="row">
-		<ng-container *ngFor="let name of group">
-			<bp-property-metadata-view
-				*bpDelayedRender
-				[metadata]="meta(name)"
-				[value]="get(entity, name!)"
-			>
+		<ng-container *ngFor="let name of group | takePresent">
+			<bp-property-metadata-view *bpDelayedRender [metadata]="meta(name)" [value]="get(entity, name!)">
 			</bp-property-metadata-view>
 		</ng-container>
 	</div>

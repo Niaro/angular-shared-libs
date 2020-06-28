@@ -8,6 +8,7 @@ export * from './safe.pipe';
 export * from './shared-pipes.module';
 export * from './start-case.pipe';
 export * from './sum-by.pipe';
+export * from './take-present.pipe';
 export * from './take.pipe';
 export * from './to-key-value-pairs.pipe';
 export * from './upper-first.pipe';
