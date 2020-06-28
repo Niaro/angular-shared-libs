@@ -5,6 +5,8 @@ import { uniqId } from '@bp/shared/utilities';
 
 import { BYPASS_AUTH_CHECK } from './http';
 
+export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
+
 @Injectable({
 	providedIn: 'root'
 })

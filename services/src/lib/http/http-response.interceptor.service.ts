@@ -15,7 +15,7 @@ import { TelemetryService } from '../telemetry';
 
 import { CORRELATION_ID_KEY, HttpConfigService } from './http-config.service';
 
-export const DO_NOT_REDIRECT_ON_5XX = 'do-not-redirect-on-500x';
+export const DO_NOT_REDIRECT_TO_ERROR_PAGE_ON_5XX = 'do-not-redirect-to-error-page-on-5xx';
 
 @Injectable()
 export class HttpResponseInterceptorService implements HttpInterceptor {
@@ -77,7 +77,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 	}
 
 	private _whenNotHandledNavigateToApiErrorPage(error: ResponseError) {
-		if (!error.url || !error.url.includes(DO_NOT_REDIRECT_ON_5XX))
+		if (!error.url || !error.url.includes(DO_NOT_REDIRECT_TO_ERROR_PAGE_ON_5XX))
 			this._router.tryNavigateOnResponseError(error);
 	}
 
