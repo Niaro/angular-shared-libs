@@ -1,0 +1,17 @@
+<ng-container *ngIf="appearance === 'round'; else defaultInputTpl">
+	<bp-round-input [formControl]="internalControl" [color]="color" [placeholder]="placeholder"> </bp-round-input>
+
+	<bp-validation-error *ngIf="externalControl" [errors]="externalControl!.errors"> </bp-validation-error>
+</ng-container>
+
+<ng-template #defaultInputTpl>
+	<bp-input
+		[label]="label"
+		[hint]="hint"
+		[color]="color"
+		[formControl]="internalControl"
+		[placeholder]="placeholder"
+		[floatLabel]="floatLabel"
+	>
+	</bp-input>
+</ng-template>

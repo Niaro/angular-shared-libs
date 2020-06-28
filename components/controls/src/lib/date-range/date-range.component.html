@@ -1,0 +1,48 @@
+<!-- TODO implement mat daterange -->
+<!-- <mat-date-range-input [rangePicker]="picker">
+	<input matStartDate matInput placeholder="Start date" />
+	<input matEndDate matInput placeholder="End date" />
+</mat-date-range-input>
+<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+<mat-date-range-picker #picker></mat-date-range-picker> -->
+
+<input
+	class="from"
+	[class.empty]="!value.from"
+	[matDatepicker]="fromPicker"
+	readonly
+	placeholder="From"
+	[value]="value.from"
+	[max]="value.to || (noFutureDates ? currentDay : null)"
+	(click)="interactive && fromPicker.open()"
+	(dateChange)="patch({ from: $event.value })"
+/>
+
+<mat-datepicker #fromPicker [panelClass]="panelClass" [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+</mat-datepicker>
+
+<span class="separator">-</span>
+
+<input
+	class="to"
+	[class.empty]="!value.to"
+	[matDatepicker]="toPicker"
+	readonly
+	placeholder="To"
+	[value]="value.to"
+	[min]="value.from"
+	[max]="noFutureDates ? currentDay : null"
+	(click)="interactive && toPicker.open()"
+	(dateChange)="patch({ to: $event.value })"
+/>
+
+<mat-datepicker #toPicker [panelClass]="panelClass" [calendarHeaderComponent]="DatepickerCalendarHeaderComponent">
+</mat-datepicker>
+
+<ng-container *ngIf="showDeleteSign && !value.empty">
+	<div *bpDelayedRender @slideRight class="close-btn-wrapper">
+		<button type="button" mat-icon-button (click)="patch(null)">
+			<mat-icon>close</mat-icon>
+		</button>
+	</div>
+</ng-container>

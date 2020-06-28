@@ -1,3 +1,0 @@
-v{{ env.isProd && !env.isDemostand
-	? env.version.release
-	: env.version.prerelease + (env.isDemostand ? '' : '-'+ env.name) }}

@@ -1,0 +1,9 @@
+<textarea #clipboardTextarea></textarea>
+
+<button #copyBtn mat-icon-button [ngClass]="size" [attr.title]="tooltip" [color]="color" (click)="copy($event)">
+	<mat-icon [class.material-icons-outlined]="outlined">file_copy</mat-icon>
+</button>
+
+<span *ngIf="!value" #content class="content">
+	<ng-content></ng-content>
+</span>

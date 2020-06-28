@@ -1,0 +1,23 @@
+import { merge } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
+@Injectable({
+	providedIn: 'root'
+})
+export class ModalService {
+
+	hasOpenedDialogs$ = merge(
+		this._dialog.afterOpened.pipe(map(() => true)),
+		this._dialog.afterAllClosed.pipe(map(() => false)),
+	);
+
+	constructor(private _dialog: MatDialog) { }
+
+	closeAll() {
+		this._dialog.closeAll();
+	}
+
+}

@@ -1,9 +1,0 @@
-<bp-svg-icon *ngIf="brand; else fallbackTpl"
-			 [matTooltip]="brand!.displayName"
-			 matTooltipPosition="above"
-			 [name]="brand!.name">
-</bp-svg-icon>
-
-<ng-template #fallbackTpl>
-	{{ src }}
-</ng-template>

@@ -1,0 +1,143 @@
+// we use .bp-select styles
+.bp-select-panel-wrap.bp-select-panel-wrap {
+	.bp-select-panel {
+		&:not(.font-size-override) .mat-option {
+			line-height: 2.5em;
+			height: 2.5em;
+		}
+	}
+}
+
+// #region copied from the mat select sources
+
+.bp-select {
+	display: inline-block;
+	width: 100%;
+	outline: 0;
+}
+
+.bp-select-trigger {
+	display: inline-table;
+	cursor: pointer;
+	position: relative;
+	box-sizing: border-box;
+}
+
+.bp-select-disabled .bp-select-trigger {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+
+.bp-select-value {
+	display: table-cell;
+	max-width: 0;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bp-select-value-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bp-select-arflex-flow-row-wrapper {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.mat-form-field-appearance-fill .bp-select-arflex-flow-row-wrapper {
+	transform: translateY(-50%);
+}
+
+.mat-form-field-appearance-outline .bp-select-arflex-flow-row-wrapper {
+	transform: translateY(-25%);
+}
+
+.mat-form-field-appearance-standard.mat-form-field-has-label
+	.bp-select:not(.bp-select-empty)
+	.bp-select-arflex-flow-row-wrapper {
+	transform: translateY(-50%);
+}
+
+.mat-form-field-appearance-standard .bp-select.bp-select-empty .bp-select-arflex-flow-row-wrapper {
+	transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+._mat-animation-noopable.mat-form-field-appearance-standard
+	.bp-select.bp-select-empty
+	.bp-select-arflex-flow-row-wrapper {
+	transition: none;
+}
+
+.bp-select-arrow {
+	width: 0;
+	height: 0;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid;
+	margin: 0 4px;
+}
+
+.bp-select-panel-wrap {
+	flex-basis: 100%;
+}
+
+.bp-select-panel {
+	min-width: 112px;
+	max-width: 280px;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+	padding-top: 0;
+	padding-bottom: 0;
+	max-height: 256px;
+	min-width: 100%;
+	border-radius: 4px;
+
+	@media (-ms-high-contrast: active) {
+		outline: solid 1px;
+	}
+
+	&.font-size-override {
+		.mat-optgroup-label,
+		.mat-option {
+			font-size: inherit;
+		}
+	}
+
+	.mat-optgroup-label,
+	.mat-option {
+		line-height: 3em;
+		height: 3em;
+	}
+}
+
+.mat-form-field-type-bp-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+	cursor: pointer;
+}
+
+.mat-form-field-type-bp-select .mat-form-field-label {
+	width: calc(100% - 18px);
+}
+
+.bp-select-placeholder {
+	transition: color 0.4s 0.133s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+._mat-animation-noopable .bp-select-placeholder {
+	transition: none;
+}
+
+.mat-form-field-hide-placeholder .bp-select-placeholder {
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	transition: none;
+	display: block;
+}
+
+// #endregion copied from the mat select sources

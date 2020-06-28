@@ -1,0 +1,31 @@
+:host {
+	display: flex;
+	fill: currentColor;
+	justify-content: center;
+
+	&.logo {
+		height: 26px;
+		width: 26px;
+	}
+
+	&.logo-short-text {
+		height: 26px;
+		width: 180px;
+	}
+
+	&.crosshair,
+	&.tick {
+		width: 13px;
+		height: 9px;
+	}
+
+	&.jira {
+		width: 24px;
+		height: 24px;
+	}
+
+	&.export {
+		position: relative;
+		top: -1px;
+	}
+}

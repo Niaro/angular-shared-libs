@@ -1,0 +1,94 @@
+import LogRocket from 'logrocket';
+import createNgrxMiddleware from 'logrocket-ngrx';
+import { from } from 'rxjs';
+import { first, shareReplay } from 'rxjs/operators';
+
+import { Dictionary } from '@bp/shared/typings';
+
+import { IReporter } from './reporter.interface';
+
+export class LogRocketReporter implements IReporter {
+
+	logMetaReducer = createNgrxMiddleware(LogRocket);
+
+	currentSessionUrl$ = from(new Promise<string>(r => LogRocket.getSessionURL(r)))
+		.pipe(
+			first(),
+			shareReplay({ bufferSize: 1, refCount: false })
+		);
+
+	constructor(private _appId: string, private _envName: string, private _release: string) {
+		this._init();
+	}
+
+	private _init() {
+		LogRocket.init(this._appId, {
+			release: this._release,
+			dom: this._assignAssetsUrlIfPrivateApp(),
+			console: {
+				shouldAggregateConsoleErrors: true,
+			},
+			network: {
+				requestSanitizer(req) {
+					if (req.url
+						.toLowerCase()
+						.includes('deposit')
+					)
+						req.body = undefined;
+
+					req.headers[ 'Authorization' ] = undefined;
+
+					return req;
+				}
+			},
+		});
+	}
+
+	private _assignAssetsUrlIfPrivateApp(): { baseHref: string; } | undefined {
+		const isMerchantAdminApp = this._appId.includes('merchant-admin');
+		const isAdminApp = /^(?!.*merchant).*admin.*$/.test(this._appId || '');
+		const isDemostand = this._appId.includes('demostand');
+
+		if (!isMerchantAdminApp && !isAdminApp && !isDemostand)
+			return;
+
+		const merchantPrefixOrEmpty = isMerchantAdminApp ? 'merchant-' : '';
+
+		return {
+			baseHref: isDemostand
+				? 'https://cashier-demostand.web.app/'
+				: `https://storage.googleapis.com/${ merchantPrefixOrEmpty }admin-logrocket-assets/${ this._envName }/${ this._release }/`
+		};
+	}
+
+	getUrlForUserSessions(userId: string): string {
+		return `https://app.logrocket.com/${ this._appId }/sessions?u=${ userId }`;
+	}
+
+	identifyUser(
+		userId: string,
+		userTraits?: Dictionary<string | number | boolean | null | undefined> | undefined
+	): void {
+		LogRocket.identify(userId, <any> userTraits);
+	}
+
+	captureError(error: any, source: string): void {
+		LogRocket.captureException(
+			error instanceof Error ? error : new Error(JSON.stringify(error)),
+			{ tags: { source } }
+		);
+	}
+
+	captureMessage(message: string): void {
+		LogRocket.captureMessage(message, { tags: { source: 'code' } });
+	}
+
+	warn(message?: any, ...optionalParams: any[]) {
+		LogRocket.warn(message, ...optionalParams);
+	}
+
+	log(message?: any, ...optionalParams: any[]) {
+		LogRocket.log(message, ...optionalParams);
+	}
+
+}

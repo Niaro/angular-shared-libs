@@ -1,0 +1,21 @@
+import { isString } from 'lodash-es';
+
+import { Injectable, NgZone } from '@angular/core';
+
+import { TouchManager } from './touch-manager';
+
+@Injectable({
+	providedIn: 'root'
+})
+export class TouchBuilder {
+
+	constructor(private _zone: NgZone) { }
+
+	build(elementOrSelector: string | Element): TouchManager | null {
+		const $element = isString(elementOrSelector)
+			? document.querySelector(elementOrSelector)
+			: elementOrSelector;
+
+		return $element && new TouchManager($element, this._zone);
+	}
+}

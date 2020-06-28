@@ -1,0 +1,42 @@
+<span>
+	<label>Items per page:</label>
+
+	<mat-form-field>
+		<bp-select [value]="pageSize$ | async" (valueChange)="pageSize$.next($event); currentPage = 1">
+			<mat-option *ngFor="let option of pageSizeOptions" [value]="option">
+				{{ option }}
+			</mat-option>
+		</bp-select>
+	</mat-form-field>
+</span>
+
+<div *ngIf="hasBack() || hasNext()" @fade>
+	<span class="state">
+		{{ (currentPage$ | async) === 1 ? 1 : offset + 1 }}
+		-
+		{{ (pageLength ? (offset > 0 ? offset + pageLength! : pageLength!) : offset + pageSize) || pageSize }}
+		{{ totalLength ? 'of ' + totalLength : hasNext() ? 'of many' : '' }}
+	</span>
+
+	<div class="buttons">
+		<bp-pending-icon-btn
+			class="prev"
+			title="Prev page"
+			[pending]="progressBack$ | async"
+			[disabled]="!hasBack() || (progress$ | async)"
+			(click)="onBack()"
+		>
+			<mat-icon>arrow_back_ios</mat-icon>
+		</bp-pending-icon-btn>
+
+		<bp-pending-icon-btn
+			class="next"
+			title="Next page"
+			[pending]="progressNext$ | async"
+			[disabled]="!hasNext() || (progress$ | async)"
+			(click)="onNext()"
+		>
+			<mat-icon>arrow_back_ios</mat-icon>
+		</bp-pending-icon-btn>
+	</div>
+</div>

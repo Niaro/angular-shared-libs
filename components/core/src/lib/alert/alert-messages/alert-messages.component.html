@@ -1,0 +1,20 @@
+<ng-container *ngIf="messages.length === 1; else listTpl">
+	<ng-container *ngTemplateOutlet="msgTpl; context: { $implicit: messages[0] }"></ng-container>
+</ng-container>
+
+<ng-template #listTpl>
+	<ul>
+		<li *ngFor="let m of messages">
+			<ng-container *ngTemplateOutlet="msgTpl; context: { $implicit: m }"></ng-container>
+		</li>
+	</ul>
+</ng-template>
+
+<ng-template #msgTpl let-msg>
+	<ng-container *ngIf="tpl; else defaultMsgViewTpl">
+		<ng-container *ngTemplateOutlet="tpl; context: { $implicit: msg }"></ng-container>
+	</ng-container>
+	<ng-template #defaultMsgViewTpl>
+		{{ msg }}
+	</ng-template>
+</ng-template>

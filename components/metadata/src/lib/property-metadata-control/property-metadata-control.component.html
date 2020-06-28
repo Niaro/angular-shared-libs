@@ -1,0 +1,104 @@
+<bp-input
+	*ngIf="
+		[FieldControlType.input, FieldControlType.textarea, FieldControlType.number, FieldControlType.email].includes(
+			mdControl.type
+		)
+	"
+	[textarea]="mdControl.type === FieldControlType.textarea"
+	[number]="mdControl.type === FieldControlType.number"
+	[formControl]="control"
+	[color]="color"
+	[name]="metadata.property"
+	[label]="metadata.label"
+	[hint]="metadata.hint"
+	[required]="mdControl.required"
+	[placeholder]="metadata.placeholder"
+	[appearance]="appearance"
+	[floatLabel]="floatLabel"
+>
+</bp-input>
+
+<ng-container [ngSwitch]="mdControl.type">
+	<bp-country-selector
+		*ngSwitchCase="FieldControlType.country"
+		[countries]="mdControl.list"
+		[formControl]="control"
+		[color]="color"
+		[name]="metadata.property"
+		[label]="metadata.label"
+		[hint]="metadata.hint"
+		[required]="mdControl.required"
+		[placeholder]="metadata.placeholder"
+		[appearance]="appearance"
+		[floatLabel]="floatLabel"
+	>
+	</bp-country-selector>
+
+	<bp-select-field
+		*ngSwitchCase="FieldControlType.select"
+		[items]="mdControl.list"
+		[formControl]="control"
+		[color]="color"
+		[name]="metadata.property"
+		[label]="metadata.label"
+		[hint]="metadata.hint"
+		[required]="mdControl.required"
+		[placeholder]="metadata.placeholder"
+		[appearance]="appearance"
+		[floatLabel]="floatLabel"
+	>
+	</bp-select-field>
+
+	<bp-autocomplete
+		*ngSwitchCase="FieldControlType.autocomplete"
+		[items]="mdControl.list"
+		[formControl]="control"
+		[color]="color"
+		[name]="metadata.property"
+		[label]="metadata.label"
+		[hint]="metadata.hint"
+		[required]="mdControl.required"
+		[placeholder]="metadata.placeholder"
+		[appearance]="appearance"
+		[floatLabel]="floatLabel"
+	>
+	</bp-autocomplete>
+
+	<bp-button-toggle
+		*ngSwitchCase="FieldControlType.buttonToggle"
+		[items]="mdControl.list"
+		[formControl]="control"
+		[color]="color"
+		[name]="metadata.property"
+		[label]="metadata.label"
+		[hint]="metadata.hint"
+		[required]="mdControl.required"
+		[placeholder]="metadata.placeholder"
+	>
+	</bp-button-toggle>
+
+	<mat-slide-toggle
+		*ngSwitchCase="FieldControlType.switch"
+		[formControl]="control"
+		[name]="metadata.property"
+		[color]="color"
+		(click)="control.markAsTouched()"
+	>
+		{{ metadata.label }} <bp-hint *ngIf="metadata.hint" [msg]="metadata.hint"></bp-hint>
+	</mat-slide-toggle>
+
+	<bp-chips
+		*ngSwitchCase="FieldControlType.chip"
+		[items]="mdControl.list"
+		[formControl]="control"
+		[color]="color"
+		[name]="metadata.property"
+		[label]="metadata.label"
+		[hint]="metadata.hint"
+		[required]="mdControl.required"
+		[placeholder]="metadata.placeholder"
+		[appearance]="appearance"
+		[floatLabel]="floatLabel"
+	>
+	</bp-chips>
+</ng-container>

@@ -1,0 +1,104 @@
+$link-color: $color-primary;
+
+.link {
+	text-decoration: none;
+	color: $link-color;
+	transition: $animation-duration $animation-function;
+	transition-property: color, font-weight;
+	background: transparent;
+	border: none;
+	padding: 0;
+	position: relative;
+
+	@include afterBottomBorder(transparent, 1px);
+
+	&:after {
+		opacity: 0.4;
+		transition: $animation-duration $animation-function;
+		transition-property: background, opacity;
+	}
+
+	&:hover:after {
+		background: currentColor;
+	}
+
+	&.semi-dark {
+		color: $color-semi-dark;
+	}
+
+	&.current-color {
+		color: currentColor;
+
+		&.bottom-bordered {
+			&:after {
+				background: currentColor;
+			}
+
+			&:hover:after {
+				opacity: 0.7;
+			}
+		}
+	}
+
+	&.interactive {
+		&:after {
+			background: repeating-linear-gradient(
+				to right,
+				currentColor,
+				currentColor 1px,
+				transparent 1px,
+				transparent 3px
+			);
+		}
+
+		&.active {
+			font-weight: $font-weight-extra-bold;
+
+			&:after {
+				opacity: 0;
+			}
+		}
+
+		&:hover:after {
+			opacity: 0;
+		}
+	}
+
+	.mat-row & {
+		&.table-link {
+			color: inherit;
+		}
+	}
+
+	.mat-row:hover & {
+		&.table-link {
+			&:after {
+				background: currentColor;
+			}
+
+			&:hover {
+				color: $link-color;
+
+				&:after {
+					background: $link-color;
+				}
+			}
+		}
+	}
+}
+
+.mat-h4,
+.mat-subheading-1,
+h4 {
+	text-transform: uppercase;
+}
+
+b,
+strong {
+	font-weight: $font-weight-bold;
+}
+
+.no-link-decoration {
+	color: inherit;
+	text-decoration: none;
+}

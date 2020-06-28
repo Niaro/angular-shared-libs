@@ -1,0 +1,129 @@
+<div [class.feature-under-development]="metadata.underDevelopment" [attr.title]="table?.ellipsis ? value : null">
+	<ng-container *ngIf="metadata.viewType !== FieldViewType.boolean; else booleanViewTypeTpl">
+		<caption *ngIf="label && !table" class="property-metadata-view-caption">
+			{{
+				metadata.label
+			}}
+
+			<mat-icon *ngIf="metadata.longHint" class="sm" [attr.title]="metadata.longHint">
+				help_outline
+			</mat-icon>
+
+			<bp-copy *ngIf="metadata.copyable" class="ml-1" size="sm" [outlined]="true" [value]="value"> </bp-copy>
+		</caption>
+
+		<div *ngIf="value === '' || value === undefined || value === null || value.length === 0; else valueTpl">
+			<div *ngIf="metadata.viewType === FieldViewType.thumbnail; else emptyValueTpl" class="thumbnail empty">
+				<mat-icon>image</mat-icon>
+			</div>
+
+			<ng-template #emptyValueTpl>
+				—
+			</ng-template>
+		</div>
+
+		<ng-template #valueTpl>
+			<div [ngSwitch]="metadata.viewType" [class.text-ellipsis]="table?.ellipsis">
+				<ng-container *ngSwitchCase="FieldViewType.text">
+					{{ value.displayName || value.name || value }}
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.textarea">
+					<ng-container *ngIf="isCompact; else textareaTpl">
+						{{ value }}
+					</ng-container>
+					<ng-template #textareaTpl>
+						<textarea readonly rows="2" [value]="value"> </textarea>
+					</ng-template>
+				</ng-container>
+
+				<bp-country *ngSwitchCase="FieldViewType.country" [src]="value" [compact]="isCompact"> </bp-country>
+
+				<bp-payment-method-brand *ngSwitchCase="FieldViewType.paymentMethodBrand" [src]="value">
+				</bp-payment-method-brand>
+
+				<ng-container *ngSwitchCase="FieldViewType.currency">
+					{{ value | bpCurrency }}
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.percent">
+					{{ value | percent: '0.0-2' }}
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.moment">
+					{{ value | momentFormat: (metadata.viewFormatter ? metadata.viewFormatter!(value) : 'LL LTS') }}
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.currencyCode">
+					{{ value.symbol === value.code ? '' : value.symbol }} {{ value.code }}
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.status">
+					<span
+						[ngClass]="'status-' + value.cssClass"
+						[class.mr-1]="!isCompact"
+						[class.circle-sm]="!isCompact"
+						[class.circle]="isCompact"
+						[attr.title]="isCompact ? value.displayName : null"
+					>
+					</span>
+					<ng-container *ngIf="!isCompact">
+						{{ value.displayName }}
+					</ng-container>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.email">
+					<a class="link" bpTargetBlank href="mailto:{{ value }}" (click)="$event.stopPropagation()">
+						{{ value }}
+					</a>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.link">
+					<a class="link" bpTargetBlank [href]="value" (click)="$event.stopPropagation()">
+						{{ value }}
+					</a>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.booleanCircle">
+					<ng-container *ngIf="metadata.viewFormatter && metadata.viewFormatter!(value) as status">
+						<span
+							[ngClass]="'status-' + status.cssClass"
+							[class.mr-1]="!isCompact"
+							[class.circle-sm]="!isCompact"
+							[class.circle]="isCompact"
+							[attr.title]="isCompact ? status.displayName : null"
+						>
+						</span>
+						<ng-container *ngIf="!isCompact">
+							{{ status.displayName }}
+						</ng-container>
+					</ng-container>
+					<span *ngIf="!metadata.viewFormatter" class="circle status-{{ value }}"> </span>
+				</ng-container>
+
+				<ng-container *ngSwitchCase="FieldViewType.chip">
+					<mat-chip-list *ngIf="value?.length" [selectable]="false">
+						<mat-chip *ngFor="let chip of value" selected [attr.title]="chip.description">
+							{{ chip.displayName || chip.name || chip }}
+						</mat-chip>
+					</mat-chip-list>
+				</ng-container>
+
+				<bp-img *ngSwitchCase="FieldViewType.thumbnail" [size]="40" [url]="value"> </bp-img>
+			</div>
+		</ng-template>
+	</ng-container>
+
+	<ng-template #booleanViewTypeTpl>
+		<mat-icon *ngIf="table; else defaultBooleanViewTypeTpl" [ngClass]="booleanIcon">
+			{{ booleanIcon }}
+		</mat-icon>
+
+		<ng-template #defaultBooleanViewTypeTpl>
+			<span [ngClass]="booleanIcon">
+				<mat-icon class="mr-1">{{ booleanIcon }}</mat-icon>
+				{{ metadata.label }}
+			</span>
+		</ng-template>
+	</ng-template>
+</div>

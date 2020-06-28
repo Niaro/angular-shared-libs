@@ -1,0 +1,12 @@
+:host {
+	display: inline-flex;
+	align-items: center;
+
+	.mat-progress-spinner {
+		right: 8px;
+
+		::ng-deep svg circle {
+			stroke: white;
+		}
+	}
+}

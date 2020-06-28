@@ -1,0 +1,13 @@
+@import 'libs/shared/styles/importable/src/lib/index.scss';
+
+:host {
+	textarea {
+		position: fixed;
+		top: -9999999px;
+		right: -9999999px;
+	}
+
+	.content {
+		display: none;
+	}
+}
