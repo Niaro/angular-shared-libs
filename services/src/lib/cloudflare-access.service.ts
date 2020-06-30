@@ -1,4 +1,5 @@
-import { Observable, timer } from 'rxjs';
+import { EMPTY, Observable, throwError, timer } from 'rxjs';
+import { concatMap, flatMap } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -28,8 +29,13 @@ export class CloudflareAccessService {
 
 	async updateCloudflareAuthorizationCookie(): Promise<void> {
 		console.log('updateCloudflareAuthorizationCookie');
-		await this._checkCloudflareAccess()
-			.pipe(retryWithScalingDelay({ scalingDelayDuration: 500 }))
+		await timer(500)
+			.pipe(
+				concatMap(() => this._checkCloudflareAccess()
+					.pipe(flatMap(v => !!v.url ? throwError('cookie not updated') : EMPTY))
+				),
+				retryWithScalingDelay({ scalingDelayDuration: 500 })
+			)
 			.toPromise();
 	}
 
