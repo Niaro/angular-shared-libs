@@ -1,8 +1,9 @@
-import { timer } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { retryWithScalingDelay } from '@bp/shared/rxjs';
 import { uniqId } from '@bp/shared/utilities';
 
 import { BYPASS_AUTH_CHECK } from './http';
@@ -27,13 +28,16 @@ export class CloudflareAccessService {
 
 	async updateCloudflareAuthorizationCookie(): Promise<void> {
 		console.log('updateCloudflareAuthorizationCookie');
-		await this._checkCloudflareAccess();
+		await this._checkCloudflareAccess()
+			.pipe(retryWithScalingDelay({ scalingDelayDuration: 500 }))
+			.toPromise();
 	}
 
 	async checkAccessAndTryRedirectToCFLogin() {
 		console.log('checkAccessAndTryRedirectToCFLogin');
 		try {
-			const { url } = await this._checkCloudflareAccess();
+			const { url } = await this._checkCloudflareAccess()
+				.toPromise();
 
 			if (url && !location.pathname.includes(CLOUDFLARE_ACCESS_AUTHORIZED_PATHNAME))
 				location.href = url;
@@ -42,16 +46,9 @@ export class CloudflareAccessService {
 		}
 	}
 
-	private async _checkCloudflareAccess(): Promise<{ url?: string; }> {
-		const response = await this._http
-			.get(`/${ CLOUDFLARE_ACCESS_CHECK_PATHNAME }?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
-			.toPromise();
-
-		console.log(`: --------------------------------------------------------------------------`);
-		console.log(`_checkCloudflareAccess`, document.cookie);
-		console.log(`: --------------------------------------------------------------------------`);
-
-		return response;
+	private _checkCloudflareAccess(): Observable<{ url?: string; }> {
+		return this._http
+			.get(`/${ CLOUDFLARE_ACCESS_CHECK_PATHNAME }?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`);
 	}
 
 	/**
