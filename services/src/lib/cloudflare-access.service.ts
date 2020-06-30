@@ -23,13 +23,25 @@ export class CloudflareAccessService {
 
 	async checkAccessAndTryRedirectToCFLogin() {
 		try {
-			const { url } = await this._http
+			const response = await this._http
 				.get<{ url?: string; }>(`/cf-access-check?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
 				.toPromise();
 
-			if (url)
-				location.href = url;
-		} catch (error) { }
+			console.log(`: -------------------------------------------------------------------------`);
+			console.log(`CloudflareAccessService -> checkAccessAndTryRedirectToCFLogin -> url`, response);
+			console.log(`: -------------------------------------------------------------------------`);
+
+			console.log(`: -------------------------------------------------------------------------------------------------`);
+			console.log(document.cookie);
+			console.log(`: -------------------------------------------------------------------------------------------------`);
+			if (response.url)
+				location.href = response.url;
+		} catch (error) {
+			console.log(`: -----------------------------------------------------------------------------`);
+			console.log(`CloudflareAccessService -> checkAccessAndTryRedirectToCFLogin -> error`, error);
+			console.log(`: -----------------------------------------------------------------------------`);
+
+		}
 	}
 
 	/**
