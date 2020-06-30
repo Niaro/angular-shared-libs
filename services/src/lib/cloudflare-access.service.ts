@@ -9,6 +9,10 @@ import { BYPASS_AUTH_CHECK } from './http';
 
 export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
 
+export const CLOUDFLARE_ACCESS_CHECK_PATHNAME = 'cf-access-check';
+
+export const CLOUDFLARE_ACCESS_AUTHORIZED_PATHNAME = 'cdn-cgi/access/authorized';
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -21,27 +25,25 @@ export class CloudflareAccessService {
 			.subscribe(() => this.checkAccessAndTryRedirectToCFLogin());
 	}
 
+	async updateCloudflareAuthorizationCookie(): Promise<void> {
+		await this._checkCloudflareAccess();
+	}
+
 	async checkAccessAndTryRedirectToCFLogin() {
 		try {
-			const response = await this._http
-				.get<{ url?: string; }>(`/cf-access-check?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
-				.toPromise();
+			const { url } = await this._checkCloudflareAccess();
 
-			console.log(`: -------------------------------------------------------------------------`);
-			console.log(`CloudflareAccessService -> checkAccessAndTryRedirectToCFLogin -> url`, response);
-			console.log(`: -------------------------------------------------------------------------`);
-
-			console.log(`: -------------------------------------------------------------------------------------------------`);
-			console.log(document.cookie);
-			console.log(`: -------------------------------------------------------------------------------------------------`);
-			if (response.url)
-				location.href = response.url;
+			if (url && !location.pathname.includes(CLOUDFLARE_ACCESS_AUTHORIZED_PATHNAME))
+				location.href = url;
 		} catch (error) {
-			console.log(`: -----------------------------------------------------------------------------`);
-			console.log(`CloudflareAccessService -> checkAccessAndTryRedirectToCFLogin -> error`, error);
-			console.log(`: -----------------------------------------------------------------------------`);
 
 		}
+	}
+
+	private _checkCloudflareAccess(): Promise<{ url?: string; }> {
+		return this._http
+			.get(`/${ CLOUDFLARE_ACCESS_CHECK_PATHNAME }?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
+			.toPromise();
 	}
 
 	/**
