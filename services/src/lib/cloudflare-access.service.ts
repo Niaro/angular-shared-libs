@@ -23,7 +23,7 @@ export class CloudflareAccessService {
 	constructor(private _http: HttpClient) { }
 
 	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage() {
-		timer(0, 1000 * 60 * 1)
+		timer(1000 * 60 * 2)
 			.subscribe(() => this.checkAccessAndTryRedirectToCFLogin());
 	}
 
