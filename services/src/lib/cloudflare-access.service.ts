@@ -26,10 +26,12 @@ export class CloudflareAccessService {
 	}
 
 	async updateCloudflareAuthorizationCookie(): Promise<void> {
+		console.log('updateCloudflareAuthorizationCookie');
 		await this._checkCloudflareAccess();
 	}
 
 	async checkAccessAndTryRedirectToCFLogin() {
+		console.log('checkAccessAndTryRedirectToCFLogin');
 		try {
 			const { url } = await this._checkCloudflareAccess();
 
@@ -40,10 +42,16 @@ export class CloudflareAccessService {
 		}
 	}
 
-	private _checkCloudflareAccess(): Promise<{ url?: string; }> {
-		return this._http
+	private async _checkCloudflareAccess(): Promise<{ url?: string; }> {
+		const response = await this._http
 			.get(`/${ CLOUDFLARE_ACCESS_CHECK_PATHNAME }?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
 			.toPromise();
+
+		console.log(`: --------------------------------------------------------------------------`);
+		console.log(`_checkCloudflareAccess`, document.cookie);
+		console.log(`: --------------------------------------------------------------------------`);
+
+		return response;
 	}
 
 	/**
