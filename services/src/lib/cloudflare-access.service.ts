@@ -1,5 +1,7 @@
+import { timer } from 'rxjs';
+
 import { HttpClient } from '@angular/common/http';
-import { Injectable, isDevMode } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { uniqId } from '@bp/shared/utilities';
 
@@ -12,17 +14,11 @@ export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
 })
 export class CloudflareAccessService {
 
-	get isAuthorizedByCloudflare() {
-		// tslint:disable-next-line: binary-expression-operand-order
-		return true || this._isAuthorizedByCloudflare || this._hasCFAuthorizationCookie;
-	}
+	constructor(private _http: HttpClient) { }
 
-	private get _hasCFAuthorizationCookie() { return document.cookie.includes('CF_Authorization'); }
-
-	private _isAuthorizedByCloudflare = false;
-
-	constructor(private _http: HttpClient) {
-		// this.refreshCFAuthorizationCookie();
+	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage() {
+		timer(0, 1000 * 60 * 1)
+			.subscribe(() => this.checkAccessAndTryRedirectToCFLogin());
 	}
 
 	async checkAccessAndTryRedirectToCFLogin() {
@@ -42,29 +38,30 @@ export class CloudflareAccessService {
 	 * cookie along the way. Thus to make a direct request to the origin server we are forced to unregister
 	 * the pwa worker and get the fresh data from the origin with the updated CF_Authorization cookie
 	 */
-	async refreshCFAuthorizationCookie() {
-		if (!navigator.serviceWorker || isDevMode())
-			return;
+	// async refreshCFAuthorizationCookie() {
 
-		const ngswJS = `ngsw-worker.js`;
+	// 	if (!navigator.serviceWorker || isDevMode())
+	// 		return;
 
-		const regs = await navigator.serviceWorker
-			.getRegistrations();
-		const ngsw = regs.find(v => v.active?.scriptURL.includes(ngswJS));
+	// 	const ngswJS = `ngsw-worker.js`;
 
-		if (ngsw) {
-			if (this._hasCFAuthorizationCookie)
-				this._isAuthorizedByCloudflare = true;
-			else {
-				ngsw.unregister();
-				location.reload();
-			}
-		} else {
-			// if after reload of the page we still don't have the cookie
-			// means the domain under the CF Access bypass policy
-			if (!this._hasCFAuthorizationCookie)
-				this._isAuthorizedByCloudflare = true;
-			navigator.serviceWorker.register(ngswJS);
-		}
-	}
+	// 	const regs = await navigator.serviceWorker
+	// 		.getRegistrations();
+	// 	const ngsw = regs.find(v => v.active?.scriptURL.includes(ngswJS));
+
+	// 	if (ngsw) {
+	// 		if (this._hasCFAuthorizationCookie)
+	// 			this._isAuthorizedByCloudflare = true;
+	// 		else {
+	// 			ngsw.unregister();
+	// 			location.reload();
+	// 		}
+	// 	} else {
+	// 		// if after reload of the page we still don't have the cookie
+	// 		// means the domain under the CF Access bypass policy
+	// 		if (!this._hasCFAuthorizationCookie)
+	// 			this._isAuthorizedByCloudflare = true;
+	// 		navigator.serviceWorker.register(ngswJS);
+	// 	}
+	// }
 }
