@@ -29,12 +29,15 @@ export class CloudflareAccessService {
 
 	async updateCloudflareAuthorizationCookie(): Promise<void> {
 		console.log('updateCloudflareAuthorizationCookie');
-		await timer(500)
+		await timer(1000)
 			.pipe(
-				concatMap(() => this._checkCloudflareAccess()
-					.pipe(flatMap(v => !!v.url ? throwError('cookie not updated') : EMPTY))
+				concatMap(() => this._tryGetCloudflareLoginUrl()
+					.pipe(flatMap(v => !!v.url
+						? throwError('Updating of cloudflare authorization cookie failed')
+						: EMPTY
+					))
 				),
-				retryWithScalingDelay({ scalingDelayDuration: 500 })
+				retryWithScalingDelay({ scalingDelayDuration: 1000 })
 			)
 			.toPromise();
 	}
@@ -42,7 +45,7 @@ export class CloudflareAccessService {
 	async checkAccessAndTryRedirectToCFLogin() {
 		console.log('checkAccessAndTryRedirectToCFLogin');
 		try {
-			const { url } = await this._checkCloudflareAccess()
+			const { url } = await this._tryGetCloudflareLoginUrl()
 				.toPromise();
 
 			if (url && !location.pathname.includes(CLOUDFLARE_ACCESS_AUTHORIZED_PATHNAME))
@@ -52,7 +55,9 @@ export class CloudflareAccessService {
 		}
 	}
 
-	private _checkCloudflareAccess(): Observable<{ url?: string; }> {
+	private _tryGetCloudflareLoginUrl(): Observable<{ url?: string; }> {
+		console.log('_tryGetCloudflareLoginUrl');
+
 		return this._http
 			.get(`/${ CLOUDFLARE_ACCESS_CHECK_PATHNAME }?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`);
 	}
