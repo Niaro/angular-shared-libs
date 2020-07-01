@@ -28,7 +28,7 @@ export class CloudflareAccessService {
 			)
 			.subscribe(() => {
 				if (!Cookies.get('CF_Authorization'))
-					location.href = `${ location.origin }/index.html`;
+					location.href = `${ location.origin }/index.html?ngsw-bypass`;
 			});
 	}
 
