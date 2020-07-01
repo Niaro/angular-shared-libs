@@ -1,4 +1,6 @@
+import Cookies from 'js-cookie';
 import { Observable, timer } from 'rxjs';
+import { mergeMapTo, tap } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -18,18 +20,25 @@ export class CloudflareAccessService {
 
 	private _beforeRedirectHook?: () => void;
 
-	constructor(private _http: HttpClient) { }
+	constructor(private _http: HttpClient) {
+		timer(0, 1000 * 30)
+			.pipe(
+				mergeMapTo(this._tryGetCloudflareLoginUrl()),
+				tap(() => console.warn('CF_Authorization\n', Cookies.get('CF_Authorization')))
+			)
+			.subscribe();
+	}
 
 	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage(
 		{ beforeRedirectHook }: { beforeRedirectHook?(): void; } = {}
-	) {
+	): void {
 		this._beforeRedirectHook = beforeRedirectHook;
 
 		timer(1000 * 60 * 2)
 			.subscribe(() => this.checkAccessAndTryRedirectToCFLogin());
 	}
 
-	async checkAccessAndTryRedirectToCFLogin() {
+	async checkAccessAndTryRedirectToCFLogin(): Promise<void> {
 		try {
 			const { url } = await this._tryGetCloudflareLoginUrl()
 				.toPromise();
