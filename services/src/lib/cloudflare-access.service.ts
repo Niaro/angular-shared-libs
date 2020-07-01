@@ -4,6 +4,7 @@ import { Injectable, isDevMode } from '@angular/core';
 import { uniqId } from '@bp/shared/utilities';
 
 import { BYPASS_AUTH_CHECK } from './http';
+import { TelemetryService } from './telemetry';
 
 export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
 
@@ -31,8 +32,10 @@ export class CloudflareAccessService {
 				.get<{ url?: string; }>(`/cf-access-check?cache-bust=${ uniqId() }&${ BYPASS_AUTH_CHECK }`)
 				.toPromise();
 
-			if (url)
+			if (url) {
+				TelemetryService.captureMessage('Cloudflare Login Page Redirect');
 				location.href = url;
+			}
 		} catch (error) { }
 	}
 
