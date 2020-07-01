@@ -27,8 +27,8 @@ export class CloudflareAccessService {
 				tap(() => console.warn('CF_Authorization\n', Cookies.get('CF_Authorization')))
 			)
 			.subscribe(() => {
-				if (!Cookies.get('CF_Authorization') && !location.href.includes('ngsw-bypass'))
-					location.href = `${ location.origin }/index.html?ngsw-bypass`;
+				if (location.href.includes('cdn-cgi/access/authorized'))
+					location.pathname = `${ location.origin }/index.html?ngsw-bypass`;
 			});
 	}
 
