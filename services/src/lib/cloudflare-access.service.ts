@@ -13,6 +13,9 @@ export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
 
 export const CLOUDFLARE_ACCESS_CHECK_PATHNAME = 'cf-access-check';
 
+if (location.href.includes('cdn-cgi/access/authorized'))
+	location.pathname = `${ location.origin }/index.html?ngsw-bypass`;
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -21,14 +24,15 @@ export class CloudflareAccessService {
 	private _beforeRedirectHook?: () => void;
 
 	constructor(private _http: HttpClient) {
+
 		timer(0, 1000 * 30)
 			.pipe(
 				mergeMapTo(this._tryGetCloudflareLoginUrl()),
 				tap(() => console.warn('CF_Authorization\n', Cookies.get('CF_Authorization')))
 			)
 			.subscribe(() => {
-				if (location.href.includes('cdn-cgi/access/authorized'))
-					location.pathname = `${ location.origin }/index.html?ngsw-bypass`;
+				// if (location.href.includes('cdn-cgi/access/authorized'))
+				// 	location.pathname = `${ location.origin }/index.html?ngsw-bypass`;
 			});
 	}
 
