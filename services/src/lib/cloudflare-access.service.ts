@@ -26,7 +26,10 @@ export class CloudflareAccessService {
 				mergeMapTo(this._tryGetCloudflareLoginUrl()),
 				tap(() => console.warn('CF_Authorization\n', Cookies.get('CF_Authorization')))
 			)
-			.subscribe();
+			.subscribe(() => {
+				if (!Cookies.get('CF_Authorization'))
+					location.href = `${ location.origin }/index.html`;
+			});
 	}
 
 	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage(
