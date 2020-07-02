@@ -13,9 +13,6 @@ export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
 
 export const CLOUDFLARE_ACCESS_CHECK_PATHNAME = 'cf-access-check';
 
-if (location.href.includes('cdn-cgi/access/authorized'))
-	location.href = `${ location.origin }/index.html?ngsw-bypass&cache-bust=${ uniqId() }`;
-
 @Injectable({
 	providedIn: 'root'
 })
@@ -30,10 +27,7 @@ export class CloudflareAccessService {
 				mergeMapTo(this._tryGetCloudflareLoginUrl()),
 				tap(() => console.warn('CF_Authorization\n', Cookies.get('CF_Authorization')))
 			)
-			.subscribe(() => {
-				// if (location.href.includes('cdn-cgi/access/authorized'))
-				// 	location.pathname = `${ location.origin }/index.html?ngsw-bypass`;
-			});
+			.subscribe();
 	}
 
 	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage(
@@ -50,10 +44,8 @@ export class CloudflareAccessService {
 			const { url } = await this._tryGetCloudflareLoginUrl()
 				.toPromise();
 
-			if (url) {
-				this._beforeRedirectHook && this._beforeRedirectHook();
+			if (url)
 				location.href = url;
-			}
 		} catch (error) {
 
 		}
