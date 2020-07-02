@@ -18,8 +18,6 @@ export const CLOUDFLARE_ACCESS_CHECK_PATHNAME = 'cf-access-check';
 })
 export class CloudflareAccessService {
 
-	private _beforeRedirectHook?: () => void;
-
 	constructor(private _http: HttpClient) {
 
 		timer(0, 1000 * 30)
@@ -30,11 +28,7 @@ export class CloudflareAccessService {
 			.subscribe();
 	}
 
-	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage(
-		{ beforeRedirectHook }: { beforeRedirectHook?(): void; } = {}
-	): void {
-		this._beforeRedirectHook = beforeRedirectHook;
-
+	whenUserUnathorizedByCloudflareRedirectToCloudflareLoginPage(): void {
 		timer(1000 * 60 * 2)
 			.subscribe(() => this.checkAccessAndTryRedirectToCFLogin());
 	}
