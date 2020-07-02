@@ -4,7 +4,7 @@ import { mergeMap, retryWhen } from 'rxjs/operators';
 import { ResponseError } from '../response-error';
 import { StatusCode } from '../status-code';
 
-export const retryOn5XXErrorWithScalingDelay = ({
+export const retryOn5XXOrUnknownErrorWithScalingDelay = ({
 	maxRetryAttempts = 5,
 	scalingDelayDuration = 1000
 }: {
