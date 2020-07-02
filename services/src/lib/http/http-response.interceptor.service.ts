@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { IApiResponse, ResponseError, StatusCode } from '@bp/shared/models/common';
+import { IApiResponse, ResponseError, retryOn5XXOrUnknownErrorWithScalingDelay, StatusCode } from '@bp/shared/models/common';
 
 import { RouterService } from '../router.service';
 import { TelemetryService } from '../telemetry';
@@ -51,6 +51,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 				params: this._cleanseParams(req.params)
 			}))
 			.pipe(
+				retryOn5XXOrUnknownErrorWithScalingDelay(),
 				tap(this.saveCorrelationIdFromResponseForNextRequests),
 				map(this.normalizeApiResponse),
 				catchError(this.parseHttpErrorResponseIntoResponseError),
