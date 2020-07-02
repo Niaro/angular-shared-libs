@@ -25,15 +25,16 @@ export class ProgressiveWebAppService {
 
 	constructor(
 		private _app: ApplicationRef,
-		private _pwaService: SwUpdate,
+		private _swUpdateService: SwUpdate,
 		private _toaster: ToastrService
 	) {
+		(<any> window).BP_SWU = this._swUpdateService;
 		this._logPWAInstalledEvent();
 		this._logPWADisplayMode();
 	}
 
 	reloadOnNewVersion() {
-		if (!this._pwaService.isEnabled) return;
+		if (!this._swUpdateService.isEnabled) return;
 
 		this._whenAppIsStableCheckForUpdate();
 
@@ -53,19 +54,19 @@ export class ProgressiveWebAppService {
 	}
 
 	private _whenUpdateActivatedReloadApp() {
-		this._pwaService.activated.subscribe(() => {
+		this._swUpdateService.activated.subscribe(() => {
 			this._log(`Update activated`);
 			window.location.reload();
 		});
 	}
 
 	private _activateUpdateAsSoonAsAvailable() {
-		this._pwaService.available
+		this._swUpdateService.available
 			.pipe(
 				tap(() => this._showNewVersionIsAvailableToast()),
 				delay(3000)  // time to read the message
 			)
-			.subscribe(() => this._pwaService.activateUpdate());
+			.subscribe(() => this._swUpdateService.activateUpdate());
 	}
 
 	private _showNewVersionIsAvailableToast() {
@@ -85,7 +86,7 @@ export class ProgressiveWebAppService {
 
 	private _checkForUpdate(): void {
 		this._log('Checking for update...');
-		this._pwaService.checkForUpdate();
+		this._swUpdateService.checkForUpdate();
 	}
 
 	private _log(message: string) {

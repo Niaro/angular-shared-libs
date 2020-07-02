@@ -14,7 +14,7 @@ export const SKIP_CLOUDFLARE_ACCESS_CHECK = 'skip-cloudflare-access-check';
 export const CLOUDFLARE_ACCESS_CHECK_PATHNAME = 'cf-access-check';
 
 if (location.href.includes('cdn-cgi/access/authorized'))
-	location.href = `${ location.origin }/index.html?ngsw-bypass`;
+	setTimeout(() => location.href = `${ location.origin }/index.html?ngsw-bypass`, 1000);
 
 @Injectable({
 	providedIn: 'root'
