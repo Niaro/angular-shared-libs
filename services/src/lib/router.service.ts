@@ -15,7 +15,7 @@ export class RouterService {
 
 	navigationStart$ = this.ngRouter.events.pipe(
 		filter(it => it instanceof NavigationStart),
-		tap(x => TelemetryService.warn('Navigation Start', x)),
+		tap(x => console.warn('Navigation Start', x)),
 		map(v => <NavigationStart> v),
 		share()
 	);

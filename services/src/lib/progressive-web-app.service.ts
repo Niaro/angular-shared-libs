@@ -1,12 +1,11 @@
 import m from 'moment';
 import { ToastrService } from 'ngx-toastr';
-import { interval, of } from 'rxjs';
-import { delay, exhaustMap, first, tap } from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { delay, first, tap } from 'rxjs/operators';
 
 import { ApplicationRef, Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 
-import { CloudflareAccessService } from './cloudflare-access.service';
 import { TelemetryService } from './telemetry';
 
 /**
@@ -26,28 +25,27 @@ export class ProgressiveWebAppService {
 
 	constructor(
 		private _app: ApplicationRef,
-		private _swu: SwUpdate,
-		private _toaster: ToastrService,
-		private _cfAccess: CloudflareAccessService
+		private _swUpdateService: SwUpdate,
+		private _toaster: ToastrService
 	) {
-		(<any> window).BP_SWU = this._swu;
+		(<any> window).BP_SWU = this._swUpdateService;
 		this._logPWAInstalledEvent();
 		this._logPWADisplayMode();
 	}
 
-	reloadOnNewVersion({ checkCloudflareAuthorization }: { checkCloudflareAuthorization?: boolean; } = {}) {
-		if (!this._swu.isEnabled) return;
+	reloadOnNewVersion() {
+		if (!this._swUpdateService.isEnabled) return;
 
-		this._checkForUpdateOnAppIsStable();
+		this._whenAppIsStableCheckForUpdate();
 
-		this._checkForUpdateInInterval(checkCloudflareAuthorization);
+		this._inIntervalCheckForUpdate();
 
 		this._activateUpdateAsSoonAsAvailable();
 
 		this._whenUpdateActivatedReloadApp();
 	}
 
-	private async _checkForUpdateOnAppIsStable() {
+	private async _whenAppIsStableCheckForUpdate() {
 		await this._app.isStable
 			.pipe(first())
 			.toPromise();
@@ -56,19 +54,19 @@ export class ProgressiveWebAppService {
 	}
 
 	private _whenUpdateActivatedReloadApp() {
-		this._swu.activated.subscribe(() => {
+		this._swUpdateService.activated.subscribe(() => {
 			this._log(`Update activated`);
 			window.location.reload();
 		});
 	}
 
 	private _activateUpdateAsSoonAsAvailable() {
-		this._swu.available
+		this._swUpdateService.available
 			.pipe(
 				tap(() => this._showNewVersionIsAvailableToast()),
 				delay(3000)  // time to read the message
 			)
-			.subscribe(() => this._swu.activateUpdate());
+			.subscribe(() => this._swUpdateService.activateUpdate());
 	}
 
 	private _showNewVersionIsAvailableToast() {
@@ -81,18 +79,14 @@ export class ProgressiveWebAppService {
 		);
 	}
 
-	private _checkForUpdateInInterval(checkCloudflareAuthorization: boolean | undefined) {
+	private _inIntervalCheckForUpdate() {
 		interval(this._checkInterval)
-			.pipe(exhaustMap(() => checkCloudflareAuthorization
-				? this._cfAccess.checkAccessAndTryRedirectToCFLogin()
-				: of()
-			))
 			.subscribe(() => this._checkForUpdate());
 	}
 
 	private _checkForUpdate(): void {
 		this._log('Checking for update...');
-		this._swu.checkForUpdate();
+		this._swUpdateService.checkForUpdate();
 	}
 
 	private _log(message: string) {
