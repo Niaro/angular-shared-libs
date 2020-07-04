@@ -18,6 +18,7 @@ import { IApiErrorMessage } from '@bp/shared/models/common';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnChanges {
+
 	@Input() type: 'primary' | 'accent' | 'success' | 'warning' | 'danger' | 'info' = 'primary';
 
 	@Input()

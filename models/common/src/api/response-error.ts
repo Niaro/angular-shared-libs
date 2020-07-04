@@ -36,21 +36,7 @@ export class ResponseError {
 			this.status = this._parseStatus(e);
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 
-			if (this.status === StatusCode.NotFound)
-				this.messages = [ {
-					message: 'The resource has not been found',
-				} ];
-			else if (this.status === StatusCode.InternalServerError)
-				this.messages = [ {
-					message: 'The request to the server has failed.',
-					type: 'Please check your connection and try again later or contact the support if the problem persists',
-				} ];
-			else if (this.status === StatusCode.RateLimited)
-				this.messages = [ {
-					message: this.statusText,
-					type: 'Please repeat again a bit later',
-				} ];
-			else if (e.error)
+			if (e.error)
 				this._extractMessagesFromApiErrorResponse(e.error);
 		} else if (has(e, 'response')) {
 			e = <IApiErrorResponse> e;
@@ -59,6 +45,21 @@ export class ResponseError {
 			this._extractMessagesFromApiErrorResponse(e);
 		} else
 			assign(this, e);
+
+		if (this.status === StatusCode.NotFound)
+			this.messages = [ {
+				message: 'The resource has not been found',
+			} ];
+		else if ([ StatusCode.InternalServerError, StatusCode.UnknownError ].includes(this.status!))
+			this.messages = [ {
+				message: 'The request to the server has failed.',
+				type: 'Please check your connection and try again later or contact support if the problem persists',
+			} ];
+		else if (this.status === StatusCode.RateLimited)
+			this.messages = [ {
+				message: 'You are being rate limited due to spamming the server with requests',
+				type: 'Please repeat a bit later',
+			} ];
 
 		this.messages.forEach(it => it.field = camelCase(it.field));
 	}

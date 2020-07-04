@@ -10,18 +10,14 @@ import { Injectable } from '@angular/core';
 
 import { IApiResponse, ResponseError, retryOn5XXOrUnknownErrorWithScalingDelay, StatusCode } from '@bp/shared/models/common';
 
-import { RouterService } from '../router.service';
 import { TelemetryService } from '../telemetry';
 
 import { CORRELATION_ID_KEY, HttpConfigService } from './http-config.service';
-
-export const DO_NOT_REDIRECT_TO_ERROR_PAGE_ON_5XX = 'do-not-redirect-to-error-page-on-5xx';
 
 @Injectable()
 export class HttpResponseInterceptorService implements HttpInterceptor {
 
 	constructor(
-		private _router: RouterService,
 		private _httpConfig: HttpConfigService,
 		private _telemetry: TelemetryService
 	) { }
@@ -57,7 +53,6 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 				catchError(this.parseHttpErrorResponseIntoResponseError),
 				catchError((error: ResponseError) => {
 					this._whenRateLimitedLogIt(error);
-					this._whenNotHandledNavigateToApiErrorPage(error);
 
 					return throwError(error);
 				}));
@@ -75,11 +70,6 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 					.filter(([ , v ]) => v !== '' && v !== 'NaN' && !isNil(v))
 			)
 		});
-	}
-
-	private _whenNotHandledNavigateToApiErrorPage(error: ResponseError) {
-		if (!error.url || !error.url.includes(DO_NOT_REDIRECT_TO_ERROR_PAGE_ON_5XX))
-			this._router.tryNavigateOnResponseError(error);
 	}
 
 	private _whenRateLimitedLogIt(error: ResponseError) {
