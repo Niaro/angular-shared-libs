@@ -61,7 +61,7 @@ export class RouterService {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
 			map(() => <ActivatedRoute> UrlHelper.getComponentRoute(this.route, cmptType)),
-			tap(x => TelemetryService.warn('Route Config', x?.routeConfig)),
+			tap(v => v?.routeConfig && TelemetryService.warn('Route Config', v?.routeConfig)),
 			distinctUntilChanged((p, q) => p?.routeConfig === q?.routeConfig),
 			filter(v => v?.component === cmptType)
 		);
