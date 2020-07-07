@@ -1,10 +1,10 @@
 import { timer } from 'rxjs';
-import { first, map, observeOn, share, startWith } from 'rxjs/operators';
+import { first, map, share, startWith } from 'rxjs/operators';
 
 import { Directive, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 
 import { Destroyable } from '@bp/shared/models/common';
-import { BpScheduler, fromMutation } from '@bp/shared/rxjs';
+import { fromMutation, observeInsideNgZone } from '@bp/shared/rxjs';
 import { lineMicrotask } from '@bp/shared/utilities';
 
 /**
@@ -41,7 +41,7 @@ export class DelayedRenderDirective extends Destroyable {
 			map(() => this._$host.parentElement?.isConnected),
 			startWith(this._$host.parentElement?.isConnected),
 			first(v => !!v),
-			observeOn(BpScheduler.inside)
+			observeInsideNgZone()
 		);
 	}
 
