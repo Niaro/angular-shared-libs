@@ -1,6 +1,6 @@
 import { fromPairs, isNil } from 'lodash-es';
 import { defer, iif, Observable, throwError } from 'rxjs';
-import { catchError, flatMap, map, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import {
 	HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest,
@@ -39,7 +39,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 		defer(() => [ new ResponseError(httpError) ])
 	)
 		// tslint:disable-next-line: no-unnecessary-callback-wrapper
-		.pipe(flatMap(v => throwError(v)));
+		.pipe(mergeMap(v => throwError(v)));
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next
@@ -59,6 +59,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 	}
 
 	private _cleanseParams(params: HttpParams) {
+		// file deepcode ignore PrototypePollution: <please specify a reason of ignoring this>
 		const keys = params instanceof HttpParams ? params.keys() : Object.keys(params);
 		const getValueByKey = (k: string) => params instanceof HttpParams ? params.get(k) : params[ k ];
 

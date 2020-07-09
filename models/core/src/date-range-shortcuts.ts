@@ -18,6 +18,7 @@ export class DateRangeShortcut extends Describable {
 	constructor() {
 		super();
 
+		// deepcode ignore PromiseNotCaughtGeneral: <please specify a reason of ignoring this>
 		Promise
 			.resolve()
 			.then(() => {
