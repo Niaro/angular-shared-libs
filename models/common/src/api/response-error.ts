@@ -6,6 +6,7 @@ import { DeepPartial } from '@bp/shared/typings';
 
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 
+// TODO Turn this into Global Error Structure, which should facade all kind of errors for our alert system
 export class ResponseError {
 
 	static get notFound() {
@@ -15,6 +16,10 @@ export class ResponseError {
 	status?: StatusCode;
 
 	statusText?: string;
+
+	get firstMessage() {
+		return this.messages[ 0 ]?.message;
+	}
 
 	messages: IApiErrorMessage[] = [];
 
@@ -28,8 +33,13 @@ export class ResponseError {
 		return this.status === StatusCode.InternalServerError;
 	}
 
-	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string) {
-		if (isString(e))
+	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string | Error) {
+		if (e instanceof ResponseError)
+			return e;
+
+		if (e instanceof Error)
+			this.messages = [ { message: e.message } ];
+		else if (isString(e))
 			this.messages = [ { message: e } ];
 		else if (e instanceof HttpErrorResponse) {
 			this.url = e.url;

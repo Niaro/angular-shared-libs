@@ -21,7 +21,7 @@ export function apiResult<T>(
 				: failure({ apiError: ResponseError.notFound })
 			),
 			reportJsErrorIfAny,
-			catchError(apiError => of(failure({ apiError })))
+			catchError((error: ResponseError | Error) => of(failure({ apiError: new ResponseError(error) })))
 		);
 
 		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;
@@ -37,7 +37,7 @@ export function apiVoidResult<T>(
 		const stream$ = source$.pipe(
 			map(success),
 			reportJsErrorIfAny,
-			catchError(apiError => of(failure({ apiError })))
+			catchError((error: ResponseError | Error) => of(failure({ apiError: new ResponseError(error) })))
 		);
 
 		return closeNotifier$ ? stream$.pipe(takeUntil(closeNotifier$)) : stream$;

@@ -33,7 +33,7 @@ export class Currency extends MetadataEntity {
 			return <Currency> Currency._cache.get(this.code);
 
 		if (!CURRENCIES_CODES.includes(this.code))
-			throw new Error(`Such currency doesn't exist - ${ this.code }`);
+			throw new Error(`Such currency doesn't exist - "${ this.code }"`);
 
 		this.symbol = getCurrencySymbol(this.code, 'narrow');
 
