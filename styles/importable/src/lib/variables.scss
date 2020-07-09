@@ -1,6 +1,4 @@
 // #region colors
-$color-light            : #ccc !default;
-$color-semi-dark        : #929292 !default;
 $color-dark             : #333 !default;
 $color-border           : #e2e8ec !default;
 $color-bg               : #fafafa !default;
@@ -10,8 +8,13 @@ $color-backdrop         : rgba(0, 0, 0, 0.25);
 $color-primary          : #2578ea !default;
 $color-primary-light    : #6ea6ff !default;
 $color-primary-dark     : #004db7 !default;
-$color-danger           : #ff6666;
-$color-success          : #00ef77;
+$color-danger           : #ff6666 !default;
+$color-success          : #00ef77 !default;
+$mist                   : #eceff1 !default;
+$lightboxgray           : #ebebeb !default;
+$lightgray              : #ccc !default;
+$mediumgray             : #929292 !default;
+$darkgray               : #444444 !default;
 
 $primary-colors: (
 	50      : lighten($color-primary, 40%),

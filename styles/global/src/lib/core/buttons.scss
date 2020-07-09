@@ -44,8 +44,8 @@
 		}
 
 		&:not(.pending) {
-			background: $color-light;
-			border-color: $color-light;
+			background: $lightgray;
+			border-color: $lightgray;
 		}
 
 		&.pending {
