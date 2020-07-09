@@ -65,7 +65,7 @@ export class PaginatorComponent {
 		this._route.params
 			.pipe(
 				map(({ pageSize }) => +pageSize),
-				filter(v => !isNaN(v) && v !== this.pageSize)
+				filter(v => !Number.isNaN(v) && v !== this.pageSize)
 			)
 			.subscribe(this.pageSize$);
 

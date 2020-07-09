@@ -93,7 +93,7 @@ export class Validators {
 	static digits(c: AbstractControl): IValidationErrors | null {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
-		return isNaN(+c.value)
+		return Number.isNaN(+c.value)
 			? { digits: true }
 			: null;
 	}

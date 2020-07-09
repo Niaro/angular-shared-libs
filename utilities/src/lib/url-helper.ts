@@ -26,7 +26,7 @@ export class UrlHelper {
 	static parseNumberArray(value: string): number[] {
 		return UrlHelper.parseArray(value)
 			.map(id => +id)
-			.filter(id => !isNaN(id));
+			.filter(id => !Number.isNaN(id));
 	}
 
 	static toRouteString(value: any) {
@@ -117,7 +117,7 @@ export class UrlHelper {
 			return url;
 
 		const queryParams = Object.keys(params)
-			.filter(k => !isNil(params[ k ]) && !isNaN(<number> params[ k ]))
+			.filter(k => !isNil(params[ k ]) && !Number.isNaN(<number> params[ k ]))
 			.map(k => `${ encodeURIComponent(k) }=${ encodeURIComponent(params[ k ].toString()) }`)
 			.join('&');
 
