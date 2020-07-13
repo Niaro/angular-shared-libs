@@ -11,7 +11,7 @@ import { OutletLinkRelativeToTargetBaseDirective } from './outlet-link-relative-
 
 @Directive({
 	// tslint:disable-next-line: directive-selector
-	selector: 'a[outletLinkRelativeToParent], a[outletLinkRelativeToRoot]'
+	selector: 'a[outletLinkRelativeToParent], a[outletLinkRelativeToRootFirstChild], a[outletLinkRelativeToRoot]'
 })
 export class OutletLinkRelativeToTargetWithHrefDirective
 	extends OutletLinkRelativeToTargetBaseDirective
