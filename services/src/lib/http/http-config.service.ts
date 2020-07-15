@@ -23,7 +23,7 @@ export class HttpConfigService {
 
 	private readonly _backendEndpointVersionSegment = `${ this._env.api.version ? `/${ this._env.api.version }` : '' }`;
 
-	private _backendLocalhost = `http://localhost:5000${ this._backendEndpointVersionSegment }`;
+	private _backendLocalhost = `http://localhost:5000/api${ this._backendEndpointVersionSegment }`;
 
 	private readonly _useBackendLocalhost$ = new BehaviorSubject(!!this._localStorage.get(USE_BACKEND_LOCALHOST_KEY));
 	useBackendLocalhost$ = this._useBackendLocalhost$.asObservable();
