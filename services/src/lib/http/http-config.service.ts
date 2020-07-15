@@ -1,3 +1,4 @@
+import { LocalStorageService } from 'angular-2-local-storage';
 import { BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -11,18 +12,29 @@ export const CORRELATION_ID_KEY = 'x-correlation-id';
 
 export const CONTENT_TYPE = 'Content-Type';
 
+const USE_BACKEND_LOCALHOST_KEY = 'use-backend-localhost-key';
+
 @Injectable({ providedIn: 'root' })
 export class HttpConfigService {
 
-	private readonly _apiUrlMainPart = `${ this._env.api.url
+	private readonly _backendEndpointBaseSegment = `${ this._env.api.url
 		? (this._env.api.url.includes('api') ? this._env.api.url : `${ this._env.api.url }/api`)
 		: '/api' }`;
 
-	private readonly _apiUrlVersionPart = `${ this._env.api.version ? `/${ this._env.api.version }` : '' }`;
+	private readonly _backendEndpointVersionSegment = `${ this._env.api.version ? `/${ this._env.api.version }` : '' }`;
 
-	readonly baseApiUrl = `${ this._apiUrlMainPart }${ this._apiUrlVersionPart }`;
+	private _backendLocalhost = `http://localhost:5000${ this._backendEndpointVersionSegment }`;
 
-	headers: { [ key: string ]: string | null; } = {
+	private readonly _useBackendLocalhost$ = new BehaviorSubject(!!this._localStorage.get(USE_BACKEND_LOCALHOST_KEY));
+	useBackendLocalhost$ = this._useBackendLocalhost$.asObservable();
+
+	get backendBaseSegment(): string {
+		return this._useBackendLocalhost$.value
+			? this._backendLocalhost
+			: `${ this._backendEndpointBaseSegment }${ this._backendEndpointVersionSegment }`;
+	}
+
+	readonly headers: { [ key: string ]: string | null; } = {
 		[ CONTENT_TYPE ]: 'application/json',
 		'json-naming-strategy': 'camelcase',
 		// all the api calls should bypass the service worker since due to cloudlflare we sometimes have the 302
@@ -33,18 +45,33 @@ export class HttpConfigService {
 		credentials: 'same-origin'
 	};
 
-	private _authorized$ = new BehaviorSubject(false);
-	firstAuthorization$ = this._authorized$.pipe(first(v => !!v));
+	private readonly _authorized$ = new BehaviorSubject(false);
 
-	constructor(private _env: EnvironmentService) { }
+	readonly firstAuthorization$ = this._authorized$.pipe(first(v => !!v));
+
+	constructor(
+		private _env: EnvironmentService,
+		private _localStorage: LocalStorageService
+	) {
+		(<any> window).BP_HTTP_CONFIG = this;
+	}
 
 	setAuthorizationHeader(token: string): void {
 		this.headers.Authorization = `Bearer ${ token }`;
 		this._authorized$.next(true);
 	}
 
-	removeAuthorizationHeader() {
+	removeAuthorizationHeader(): void {
 		this.headers.Authorization = '';
 		this._authorized$.next(false);
+	}
+
+	acceptLanguage(lang: string): void {
+		this.headers[ 'Accept-Language' ] = lang;
+	}
+
+	toggleBackendLocalhost(): void {
+		this._useBackendLocalhost$.next(!this._useBackendLocalhost$.value);
+		this._localStorage.set(USE_BACKEND_LOCALHOST_KEY, this._useBackendLocalhost$.value);
 	}
 }

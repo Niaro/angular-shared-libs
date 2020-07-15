@@ -26,8 +26,8 @@ export class HttpRequestInterceptorService implements HttpInterceptor {
 
 	private _enhanceRequest(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next.handle(request.clone({
-			url: this._shouldPrependBaseApiUrlToHttpRequestUrl(request)
-				? `${ this._httpConfig.baseApiUrl }/${ request.url }`
+			url: this._shouldPrependBackendBaseSegmentToHttpRequestUrl(request)
+				? `${ this._httpConfig.backendBaseSegment }/${ request.url }`
 				: request.url,
 			setHeaders: {
 				...(request.url.startsWith('http') ? {} : this._httpConfig.headers),
@@ -36,7 +36,7 @@ export class HttpRequestInterceptorService implements HttpInterceptor {
 		}));
 	}
 
-	private _shouldPrependBaseApiUrlToHttpRequestUrl(request: HttpRequest<any>) {
+	private _shouldPrependBackendBaseSegmentToHttpRequestUrl(request: HttpRequest<any>) {
 		return !request.url.startsWith('http')
 			&& !request.url.includes('assets') // all assets is relative to the origin
 			&& !request.url.startsWith('/');
