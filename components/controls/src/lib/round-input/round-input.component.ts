@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { SLIDE_RIGHT } from '@bp/shared/animations';
 
@@ -14,11 +14,18 @@ import { InputComponent } from '../input';
 		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [ {
-		provide: NG_VALUE_ACCESSOR,
-		useExisting: RoundInputComponent,
-		multi: true
-	} ]
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: RoundInputComponent,
+			multi: true
+		},
+		{
+			provide: NG_VALIDATORS,
+			useExisting: RoundInputComponent,
+			multi: true
+		}
+	]
 })
 export class RoundInputComponent extends InputComponent {
 
