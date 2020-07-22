@@ -7,11 +7,11 @@
 		[autocomplete]="autocomplete"
 		[throttle]="throttle"
 		[debounce]="debounce"
+		[hasSearchIcon]="hasSearchIcon"
 	>
 	</bp-round-input>
 
-	<bp-validation-error *ngIf="externalControl" [errors]="externalControl!.errors">
-	</bp-validation-error>
+	<bp-validation-error *ngIf="externalControl" [errors]="externalControl!.errors"> </bp-validation-error>
 </ng-container>
 
 <ng-template #defaultInputTpl>
@@ -30,6 +30,7 @@
 		[appearance]="appearance"
 		[hideErrorText]="hideErrorText"
 		[floatLabel]="floatLabel"
+		[hasSearchIcon]="hasSearchIcon"
 	>
 	</bp-input>
 </ng-template>
@@ -39,8 +40,7 @@
 		<ng-container *ngFor="let item of filtered$ | async">
 			<mat-option *bpDelayedRender [class.selected]="item === value" [value]="item">
 				<ng-container *ngIf="optionTpl; else defaultOptionTpl">
-					<ng-container *ngTemplateOutlet="optionTpl; context: { $implicit: item }">
-					</ng-container>
+					<ng-container *ngTemplateOutlet="optionTpl; context: { $implicit: item }"> </ng-container>
 				</ng-container>
 				<ng-template #defaultOptionTpl>
 					{{
