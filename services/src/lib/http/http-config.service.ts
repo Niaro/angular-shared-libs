@@ -27,6 +27,7 @@ export class HttpConfigService {
 
 	private readonly _useBackendLocalhost$ = new BehaviorSubject(!!this._localStorage.get(USE_BACKEND_LOCALHOST_KEY));
 	useBackendLocalhost$ = this._useBackendLocalhost$.asObservable();
+	get useBackendLocalhost() { return this._useBackendLocalhost$.value; }
 
 	get backendBaseSegment(): string {
 		return this._useBackendLocalhost$.value
