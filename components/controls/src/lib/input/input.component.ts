@@ -68,7 +68,7 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 
 	@Input() autocomplete!: MatAutocomplete;
 
-	@Input() hasSearchIcon!: boolean;
+	@Input() hasSearchIcon?: boolean;
 
 	@Input()
 	@HostBinding('class.pending')
