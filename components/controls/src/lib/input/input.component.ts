@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash-es';
 
 import { ChangeDetectionStrategy, Component, ContentChild, Directive, HostBinding, Input, ViewChild } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
@@ -45,11 +45,18 @@ export class InputPrefixDirective { }
 		'(focusin)': 'onTouched()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [ {
-		provide: NG_VALUE_ACCESSOR,
-		useExisting: InputComponent,
-		multi: true
-	} ]
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: InputComponent,
+			multi: true
+		},
+		{
+			provide: NG_VALIDATORS,
+			useExisting: InputComponent,
+			multi: true
+		}
+	]
 })
 export class InputComponent extends FormFieldControlComponent<string | number> {
 
