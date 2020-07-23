@@ -100,6 +100,13 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		}
 	}
 
+	getDisplayValue(item: any) {
+		return (this.itemDisplayPropertyName && item[ this.itemDisplayPropertyName! ])
+			?? item?.displayName
+			?? item?.name
+			?? item.toString();
+	}
+
 	// #region Implementation of the ControlValueAccessor interface
 	writeValue(value: any): void {
 		lineMicrotask(() => {
@@ -132,7 +139,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 				.toString()
 				.trim();
 			this.filtered$.next(this.items!.filter(v => this._filterItem(v, value)));
-			found = this.items!.find(v => match(this._getItemCompareString(v), value));
+			found = this.items!.find(v => match(v.toString(), value) || match(this.getDisplayValue(v), value));
 		} else {
 			this.filtered$.next(this.items!);
 			found = value;
@@ -145,10 +152,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	private _filterItem(item: any, search: string) {
 		return this.filterListFn
 			? this.filterListFn(item, search)
-			: includes(this._getItemCompareString(item), search);
+			: includes(item.toString(), search) || includes(this.getDisplayValue(item), search);
 	}
 
-	private _getItemCompareString(item: any) {
-		return (item[ this.itemDisplayPropertyName! ] || item)?.toString();
-	}
 }

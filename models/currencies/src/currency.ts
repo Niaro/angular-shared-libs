@@ -6,6 +6,19 @@ import { MapIncomingValue, MetadataEntity } from '@bp/shared/models/metadata';
 
 import { CURRENCIES_CODES, CurrencyCode } from './currency-codes';
 
+let intlGetDisplayName: { of(iso: string): string; };
+
+function tryGetCurrencyNameInEnglish(this: any, iso: string): string | null {
+	try {
+		return (intlGetDisplayName
+			|| (intlGetDisplayName = new (<any> Intl).DisplayNames([ 'en' ], { type: 'currency' })))
+			.of(iso) ?? null;
+	} catch (error) {
+
+		return null;
+	}
+}
+
 export class Currency extends MetadataEntity {
 
 	static list: Currency[];
@@ -39,9 +52,8 @@ export class Currency extends MetadataEntity {
 
 		Currency._cache.set(this.code, this);
 
-		this.displayName = this.code === this.symbol
-			? this.code
-			: `${ this.code } ${ this.symbol }`;
+		this.displayName = tryGetCurrencyNameInEnglish(this.code)
+			?? (this.code === this.symbol ? this.code : `${ this.code } ${ this.symbol }`);
 
 		Object.freeze(this);
 	}

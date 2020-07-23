@@ -1,4 +1,4 @@
-import { compact, flatMap, isObject, isString } from 'lodash-es';
+import { compact, isObject, isString, map } from 'lodash-es';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -42,6 +42,8 @@ export class ValidationErrorStrings extends Array<string> {
 
 		// in case if we have an error for the control but don't have
 		// predefined error msg for the error we get [undefined], thus we compact it
-		return compact(flatMap(errors, (error, validatorName) => getErrorString(validatorName, error)));
+		return compact(
+			map(errors, (error, validatorName) => getErrorString(validatorName, error))
+		);
 	}
 }

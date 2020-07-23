@@ -40,7 +40,7 @@ export class DisabledDirective implements OnChanges {
 	private _setVeil() {
 		if (this._veiled)
 			return;
-
+		// TODO The tabindex -1 removes only the host from the pages tab order, children can be tabbed
 		this._storedPointerEventsStyle = this._$host.style.pointerEvents;
 		this._storedTabIndex = this._$host.getAttribute('tabindex');
 		this._$host.setAttribute('tabindex', '-1');
