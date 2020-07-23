@@ -66,19 +66,22 @@ export abstract class ControlComponent<T = any>
 	// #endregion Implementation of the Validator interface
 
 	setValue(value: T, { emitChange }: { emitChange: boolean; } = { emitChange: true }) {
-		if (isEqual(value, this.value))
-			// this.validatorOnChange();
+		if (isEqual(value, this.value)) {
+			this.validatorOnChange();
+
 			return;
+		}
+
+		isDevMode() && console.warn(value, this.constructor.name);
 
 		this.value = <T> value;
-		isDevMode() && console.warn(value, this.constructor.name);
+
 		if (emitChange) {
 			this.valueChange$.next(<T> value);
 			this.onChange(value);
 		}
 
-		this.validatorOnChange();
-		this._cdr.detectChanges();
+		// this._cdr.detectChanges();
 		this._cdr.markForCheck();
 	}
 

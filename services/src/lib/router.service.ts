@@ -38,7 +38,7 @@ export class RouterService {
 			.subscribe(e => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
 	}
 
-	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; })) {
+	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; }) = {}) {
 		const relativeTo = extras.relativeTo
 			?? (extras.relativeToCmpt && <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt));
 		this.ngRouter.navigate(commands, { ...extras, relativeTo });

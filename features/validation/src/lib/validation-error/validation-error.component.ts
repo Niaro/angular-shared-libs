@@ -1,3 +1,4 @@
+import { omit, pick } from 'lodash-es';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -31,13 +32,23 @@ export class ValidationErrorComponent implements OnChanges {
 
 	ngOnChanges() {
 		// tslint:disable-next-line: early-exit
-		if (this.errors)
+		if (this.errors) {
+			const errors = this._moveRequiredErrorToBottom(this.errors);
 			this.error$ = this._translate
 				? this._translate.onLangChange.pipe(
-					map(() => new ValidationErrorStrings(this.errors!, this._translate)[ 0 ])
+					map(() => new ValidationErrorStrings(errors!, this._translate)[ 0 ])
 				)
-				: of(new ValidationErrorStrings(this.errors)[ 0 ]);
-		else
+				: of(new ValidationErrorStrings(errors)[ 0 ]);
+		} else
 			this.error$ = null;
+	}
+
+	private _moveRequiredErrorToBottom(errors: IValidationErrors): IValidationErrors {
+		const requiredValidationRuleName = 'required';
+
+		return <IValidationErrors> {
+			...omit(this.errors, requiredValidationRuleName),
+			...pick(this.errors, requiredValidationRuleName)
+		};
 	}
 }

@@ -43,12 +43,7 @@
 					<ng-container *ngTemplateOutlet="optionTpl; context: { $implicit: item }"> </ng-container>
 				</ng-container>
 				<ng-template #defaultOptionTpl>
-					{{
-						(itemDisplayPropertyName && item[itemDisplayPropertyName]) ||
-							item.displayName ||
-							item.name ||
-							item
-					}}
+					{{ getDisplayValue(item) }}
 				</ng-template>
 			</mat-option>
 		</ng-container>
