@@ -12,7 +12,7 @@ export class PropertyMetadataControl {
 
 	readonly required: boolean = false;
 
-	readonly validator?: ValidatorFn;
+	readonly validator?: ValidatorFn | null;
 
 	constructor(data?: Partial<PropertyMetadataControl>) {
 		assign(this, data);
