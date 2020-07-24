@@ -11,7 +11,7 @@ import { InputComponent } from '../input';
 	styleUrls: [ './round-input.component.scss' ],
 	animations: [ SLIDE_RIGHT ],
 	host: {
-		'(focusin)': 'onTouched()'
+		'(focusin)': 'onTouched(); tryOpenAutocompletePanel()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [

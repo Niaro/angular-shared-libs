@@ -13,7 +13,7 @@ import { lineMicrotask } from '@bp/shared/utilities';
 	templateUrl: './country-selector.component.html',
 	styleUrls: [ './country-selector.component.scss' ],
 	host: {
-		'(focusin)': 'onTouched()'
+		'(focusin)': 'onTouched();'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
