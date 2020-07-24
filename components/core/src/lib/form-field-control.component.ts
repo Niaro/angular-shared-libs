@@ -160,13 +160,13 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 				switchMap(v => v!.statusChanges),
 			)
 			.subscribe(() => {
-
 				this.internalControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
 
 				const errors = {
 					...this.externalControl?.errors,
 					...this.internalControl?.errors
 				};
+
 				this.internalControl.setErrors(isEmpty(errors) ? null : errors);
 				this._cdr.markForCheck();
 			});

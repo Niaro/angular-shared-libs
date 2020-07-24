@@ -7,6 +7,7 @@ export * from './dom-helper';
 export * from './fastdom';
 export * from './is-extension-of';
 export * from './is-page-context';
+export * from './is-present';
 export * from './line-microtask';
 export * from './object-normalize';
 export * from './resize-sensor';
