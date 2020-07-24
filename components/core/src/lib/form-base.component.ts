@@ -1,4 +1,4 @@
-import { forOwn, isEmpty } from 'lodash-es';
+import { forOwn, get, isEmpty, partition } from 'lodash-es';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, combineLatest, EMPTY, of, Subject } from 'rxjs';
 import { distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { ChangeDetectorRef, Directive, Input, isDevMode, Output } from '@angular
 import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 import { Destroyable, IApiErrorMessage, ResponseError } from '@bp/shared/models/common';
+import { takeFirstTruthy } from '@bp/shared/rxjs';
 import { FormGroupConfig } from '@bp/shared/typings';
 
 @Directive()
@@ -17,7 +18,8 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	get pending() { return this._pending; }
 	set pending(value: boolean | null) {
 		this._pending = !!value;
-		this.errors = null;
+		if (this._pending)
+			this.errors = null;
 		this._disableOnPending();
 	}
 	private _pending = false;
@@ -33,17 +35,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			return;
 		}
 
-		if (value.messages && this.form) {
-			value.messages
-				.filter(it => !!it.field)
-				.forEach(it => this.form!.controls[ it.field! ].setErrors({ server: it.message }));
-
-			this.errors = value.messages.filter(it => !it.field);
-		}
-
-		if (isEmpty(value.messages))
-			this._error = this.errors = null;
-		this._cdr.detectChanges();
+		this._setGlobalAndControlErrors(value.messages);
 	}
 	private _error!: ResponseError | null;
 	errors!: IApiErrorMessage[] | null;
@@ -51,17 +43,18 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 	@Output('submitted')
 	readonly submittedValidFormValue$ = new Subject<T>();
 
-	private readonly _formDirtyAndValid$ = new BehaviorSubject(false);
+	private readonly _formEnabled$ = new BehaviorSubject(true);
+	@Output('formEnabled')
+	readonly formEnabled$ = this._formEnabled$.asObservable();
 
+	private readonly _formDirtyAndValid$ = new BehaviorSubject(false);
 	@Output('formDirtyAndValid')
 	readonly formDirtyAndValid$ = this._formDirtyAndValid$.asObservable();
 
 	// tslint:disable-next-line: no-output-native
 	private readonly _formInvalid$ = new BehaviorSubject(false);
-
 	@Output('formInvalid')
 	readonly formInvalid$ = this._formInvalid$.asObservable();
-
 	readonly formValid$ = this._formInvalid$.pipe(map(v => !v));
 
 	private readonly _form$ = new BehaviorSubject<FormGroup | null>(null);
@@ -80,8 +73,9 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 		protected _toaster: ToastrService,
 	) {
 		super();
-		this._setupFormInvalidObservable();
-		this._setupFormDirtyAndValidObservable();
+		this._observeFormEnabled();
+		this._observeFormInvalid();
+		this._observeFormDirtyAndValid();
 	}
 
 	submit() {
@@ -143,7 +137,22 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			this.form.enable({ emitEvent: false });
 	}
 
-	private _setupFormInvalidObservable() {
+	private _observeFormEnabled() {
+		this.form$
+			.pipe(
+				switchMap(v => v
+					? v.statusChanges.pipe(
+						startWith(null),
+						map(() => v.enabled)
+					)
+					: of(false)
+				),
+				distinctUntilChanged()
+			)
+			.subscribe(this._formEnabled$);
+	}
+
+	private _observeFormInvalid() {
 		this.form$
 			.pipe(
 				switchMap(v => v
@@ -158,7 +167,7 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			.subscribe(this._formInvalid$);
 	}
 
-	private _setupFormDirtyAndValidObservable() {
+	private _observeFormDirtyAndValid() {
 		const formDirty$ = this.form$
 			.pipe(
 				switchMap(v => v
@@ -178,4 +187,33 @@ export abstract class FormBaseComponent<T = any> extends Destroyable {
 			.pipe(map(([ valid, dirty ]) => valid && dirty))
 			.subscribe(this._formDirtyAndValid$);
 	}
+
+	private async _setGlobalAndControlErrors(errors: IApiErrorMessage[]) {
+		await this.formEnabled$
+			.pipe(takeFirstTruthy)
+			.toPromise();
+
+		if (errors && this.form) {
+			const [ errorsWithControls, errorsWithoutFoundControls ] = partition(
+				errors
+					.filter(v => !!v.field)
+					.map(v => <const>[ v, get(this.form!.controls, v.field!.replace('.', '.controls.')) ]),
+				v => !!v[ 1 ]
+			);
+
+			errorsWithControls
+				.forEach(([ error, control ]) => control.setErrors({ server: error.message }));
+
+			this.errors = [
+				...errors.filter(it => !it.field),
+				...errorsWithoutFoundControls.map(v => v[ 0 ])
+			];
+		}
+
+		if (isEmpty(errors))
+			this._error = this.errors = null;
+
+		this._cdr.detectChanges();
+	}
+
 }

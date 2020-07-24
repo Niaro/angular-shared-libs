@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import {
 	ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, Input, OnChanges,
-	Optional, Output, SimpleChanges, TemplateRef, ViewChild
+	Optional, Output, SimpleChanges, TemplateRef
 } from '@angular/core';
 import {
 	AbstractControl, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
@@ -13,9 +13,6 @@ import {
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { includes, lineMicrotask, match } from '@bp/shared/utilities';
-
-import { InputComponent } from '../input';
-import { RoundInputComponent } from '../round-input';
 
 @Component({
 	selector: 'bp-autocomplete',
@@ -57,14 +54,6 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@ContentChild(TemplateRef) optionTpl?: TemplateRef<any>;
 
-	@ViewChild(InputComponent) input?: InputComponent;
-
-	@ViewChild(RoundInputComponent) roundInput?: RoundInputComponent;
-
-	get isFocusedInput() { return this.input?.isFocused || this.roundInput?.isFocused; }
-
-	get autocompleteTrigger() { return this.input?.autocompleteTrigger || this.roundInput?.autocompleteTrigger; }
-
 	lowercasedItems?: { lowered: string; item: any; }[] | null;
 
 	throttle = 0;
@@ -95,8 +84,6 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 				item: v
 			}));
 			this.filtered$.next(this.items || []);
-
-			this.isFocused && this.autocompleteTrigger?.openPanel();
 		}
 	}
 

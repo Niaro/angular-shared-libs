@@ -71,7 +71,11 @@ export class ResponseError {
 				type: 'Please repeat a bit later',
 			} ];
 
-		this.messages.forEach(it => it.field = camelCase(it.field));
+		this.messages.forEach(it => it.field = it.field
+			?.split('.')
+			.map(camelCase)
+			.join('.')
+		);
 	}
 
 	private _extractMessagesFromApiErrorResponse(e: IApiErrorResponse) {

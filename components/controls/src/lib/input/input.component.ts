@@ -42,7 +42,7 @@ export class InputPrefixDirective { }
 	styleUrls: [ './input.component.scss' ],
 	animations: [ STATEFUL_SLIDE_RIGHT ],
 	host: {
-		'(focusin)': 'onTouched()'
+		'(focusin)': 'onTouched(); tryOpenAutocompletePanel()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	providers: [
@@ -105,5 +105,9 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 			? +(value!)
 			: value
 		);
+	}
+
+	tryOpenAutocompletePanel() {
+		this.autocompleteTrigger?.openPanel();
 	}
 }
