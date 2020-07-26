@@ -4,7 +4,6 @@ import { ChangeDetectionStrategy, Component, ContentChild, Directive, HostBindin
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
-import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { InputTextMaskConfig, NumberMaskConfig, TextMaskDirective } from '@bp/shared/directives';
 
@@ -40,7 +39,6 @@ export class InputPrefixDirective { }
 	selector: 'bp-input',
 	templateUrl: './input.component.html',
 	styleUrls: [ './input.component.scss' ],
-	animations: [ STATEFUL_SLIDE_RIGHT ],
 	host: {
 		'(focusin)': 'onTouched(); tryOpenAutocompletePanel()'
 	},
