@@ -1,9 +1,9 @@
 import { BehaviorSubject, fromEvent } from 'rxjs';
-import { delay, first, share } from 'rxjs/operators';
+import { delay, first, takeUntil, tap } from 'rxjs/operators';
 
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { pending } from '@bp/shared/rxjs';
+import { Destroyable } from '@bp/shared/models/common';
 
 @Component({
 	selector: 'bp-img',
@@ -11,7 +11,7 @@ import { pending } from '@bp/shared/rxjs';
 	styleUrls: [ './img.component.scss' ],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImgComponent implements OnChanges {
+export class ImgComponent extends Destroyable implements OnChanges {
 
 	@Input() url?: string | null;
 
@@ -33,27 +33,23 @@ export class ImgComponent implements OnChanges {
 	}
 
 	private _loadImg(url: string) {
+		this.isDownloading$.next(true);
 		const img = new Image();
 		img.src = url;
 
 		if (img.complete) {
 			this.src = url;
-			this.showImg$.next(true);
 			this.isDownloading$.next(false);
-		} else {
-			const load$ = fromEvent(img, 'load')
+		} else
+			fromEvent(img, 'load')
 				.pipe(
 					first(),
-					pending(this.isDownloading$),
-					share()
-				);
-			load$
-				.subscribe(() => this.src = url);
-
-			load$
-				.pipe(delay(100)) // wait til the img is rendered then show it to apply smooth animation
-				.subscribe(() => this.showImg$.next(true));
-		}
+					tap(() => this.src = url),
+					delay(100),  // wait til the img is rendered then show it to apply smooth animation
+					this.takeUntilDestroyed,
+					takeUntil(fromEvent(img, 'error')),
+				)
+				.subscribe({ complete: () => this.isDownloading$.next(false) });
 	}
 
 }
