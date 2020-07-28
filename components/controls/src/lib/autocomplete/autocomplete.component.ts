@@ -122,11 +122,12 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 		let found: any;
 		if (isString(value)) {
-			value = value
-				.toString()
+			const searchValue = value
 				.trim();
-			this.filtered$.next(this.items!.filter(v => this._filterItem(v, value)));
-			found = this.items!.find(v => match(v.toString(), value) || match(this.getDisplayValue(v), value));
+			if (searchValue.length <= 1)
+				return;
+			this.filtered$.next(this.items!.filter(v => this._filterItem(v, searchValue)));
+			found = this.items!.find(v => match(v.toString(), searchValue) || match(this.getDisplayValue(v), searchValue));
 		} else {
 			this.filtered$.next(this.items!);
 			found = value;
@@ -136,10 +137,10 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		this.setValue(found || null);
 	}
 
-	private _filterItem(item: any, search: string) {
+	private _filterItem(item: any, searchValue: string) {
 		return this.filterListFn
-			? this.filterListFn(item, search)
-			: includes(item.toString(), search) || includes(this.getDisplayValue(item), search);
+			? this.filterListFn(item, searchValue)
+			: includes(item.toString(), searchValue) || includes(this.getDisplayValue(item), searchValue);
 	}
 
 }

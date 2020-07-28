@@ -14,6 +14,8 @@ export class DynamicOutletDirective implements OnInit, OnDestroy {
 
 	get isActivated() { return this.ngOutlet?.isActivated; }
 
+	get component() { return this.ngOutlet?.component; }
+
 	get activatedRouteData() { return this.ngOutlet?.activatedRouteData; }
 
 	constructor(

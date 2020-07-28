@@ -110,6 +110,9 @@ export class PaginatorComponent {
 	hasNext = () => this.offset + (this.pageLength || 0) < (this.totalLength || 0);
 
 	private _navigate(params: Params) {
-		this._router.navigate([ UrlHelper.mergeRouteParams(this._route, params) ], { relativeTo: this._route });
+		this._router.navigate(
+			[ UrlHelper.mergeLastPrimaryRouteSnapshotParamsWithSourceParams(this._route, params) ],
+			{ relativeTo: this._route }
+		);
 	}
 }

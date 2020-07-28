@@ -38,7 +38,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	@Input() disabled!: boolean | null;
 
-	@Input() throttle: number | '' = 200;
+	@Input() throttle: number | '' = 0;
 
 	@Input() debounce: number | '' = 0;
 
