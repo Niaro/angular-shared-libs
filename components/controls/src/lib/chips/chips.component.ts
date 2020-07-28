@@ -157,9 +157,9 @@ export class ChipsControlComponent
 		this._updateFilteredAccordingSelected();
 	}
 
-	setValue(value: IChipControlItem[] | null) {
+	setValue(value: IChipControlItem[] | null, options?: { emitChange: boolean; }) {
 		this._resetInput();
-		super.setValue(isEmpty(value) ? null : value);
+		super.setValue(isEmpty(value) ? null : value, options);
 	}
 
 	private _resetInput() {

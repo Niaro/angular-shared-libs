@@ -1,7 +1,7 @@
 import { difference, fromPairs, get, isEmpty, isNil, set, transform } from 'lodash-es';
 import { asyncScheduler, BehaviorSubject, combineLatest, merge, Observable } from 'rxjs';
 import {
-	auditTime, debounceTime, filter, flatMap, map, observeOn, pairwise, shareReplay, startWith, switchMap,
+	auditTime, debounceTime, filter, map, mergeMap, observeOn, pairwise, shareReplay, startWith, switchMap,
 	tap
 } from 'rxjs/operators';
 
@@ -109,7 +109,7 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 
 					return !prev || n.routeValue !== prev.routeValue;
 				})),
-				flatMap(v => v)
+				mergeMap(v => v)
 			)
 			.subscribe(({ control, routeValue, defaultValue }) => {
 				const newControlValue = isNil(routeValue) ? defaultValue : routeValue;
@@ -149,7 +149,9 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 					observeOn(asyncScheduler)
 				)))),
 				map(([ controlName, value ]): [ Params, string, string | undefined ] => [
-					this.type === 'matrix' ? UrlHelper.getRouteParams(this._route) : UrlHelper.getQueryParams(this._route),
+					this.type === 'matrix'
+						? UrlHelper.getLastPrimaryRouteNonNilParams(this._route)
+						: UrlHelper.getLastPrimaryRouteQueryParams(this._route),
 					controlName,
 					UrlHelper.toRouteString(value)
 				]),
@@ -177,8 +179,8 @@ export class FilterComponent<T = FilterValue> implements OnChanges, AfterContent
 			)
 			.subscribe(deleted => {
 				const routeParams = this.type === 'matrix'
-					? UrlHelper.getRouteParams(this._route)
-					: UrlHelper.getQueryParams(this._route);
+					? UrlHelper.getLastPrimaryRouteNonNilParams(this._route)
+					: UrlHelper.getLastPrimaryRouteQueryParams(this._route);
 				deleted.forEach(v => delete routeParams[ v.name ]);
 				this._updateUrl(routeParams);
 			});
