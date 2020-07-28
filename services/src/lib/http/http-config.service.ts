@@ -23,15 +23,15 @@ export class HttpConfigService {
 
 	private readonly _backendEndpointVersionSegment = `${ this._env.api.version ? `/${ this._env.api.version }` : '' }`;
 
-	private _backendLocalhost = `http://localhost:5000/api${ this._backendEndpointVersionSegment }`;
+	private _localBackendHost = `http://localhost:5000/api${ this._backendEndpointVersionSegment }`;
 
-	private readonly _useBackendLocalhost$ = new BehaviorSubject(!!this._localStorage.get(USE_BACKEND_LOCALHOST_KEY));
-	useBackendLocalhost$ = this._useBackendLocalhost$.asObservable();
-	get useBackendLocalhost() { return this._useBackendLocalhost$.value; }
+	private readonly _useLocalBackend$ = new BehaviorSubject(!!this._localStorage.get(USE_BACKEND_LOCALHOST_KEY));
+	useLocalBackend$ = this._useLocalBackend$.asObservable();
+	get useLocalBackend() { return this._useLocalBackend$.value; }
 
 	get backendBaseSegment(): string {
-		return this._useBackendLocalhost$.value
-			? this._backendLocalhost
+		return this._useLocalBackend$.value
+			? this._localBackendHost
 			: `${ this._backendEndpointBaseSegment }${ this._backendEndpointVersionSegment }`;
 	}
 
@@ -71,8 +71,8 @@ export class HttpConfigService {
 		this.headers[ 'Accept-Language' ] = lang;
 	}
 
-	toggleBackendLocalhost(): void {
-		this._useBackendLocalhost$.next(!this._useBackendLocalhost$.value);
-		this._localStorage.set(USE_BACKEND_LOCALHOST_KEY, this._useBackendLocalhost$.value);
+	toggleLocalBackend(): void {
+		this._useLocalBackend$.next(!this._useLocalBackend$.value);
+		this._localStorage.set(USE_BACKEND_LOCALHOST_KEY, this._useLocalBackend$.value);
 	}
 }
