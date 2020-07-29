@@ -145,7 +145,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 					: this.internalControl.valueChanges
 		)
 			.subscribe(v => {
-				this.externalControl?.markAsDirty();
+				this.internalControl.dirty && this.externalControl?.markAsDirty();
 				this._onInternalControlValueChange(v);
 			});
 	}
