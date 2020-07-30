@@ -33,10 +33,12 @@ export class UrlHelper {
 		if (isBoolean(value))
 			return value ? 'true' : undefined;
 
-		if (isArray(value) && value.length)
-			return value
-				.map(valueToString)
-				.join(',');
+		if (isArray(value))
+			return value.length
+				? value
+					.map(valueToString)
+					.join(',')
+				: undefined;
 
 		if (value === '')
 			return;
