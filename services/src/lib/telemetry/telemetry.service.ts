@@ -6,6 +6,8 @@ import { MetaReducer } from '@ngrx/store';
 
 import { Dictionary, IEnvironment } from '@bp/shared/typings';
 
+import { HttpConfigService } from '../http';
+
 import { LogRocketReporter } from './logrocket.reporter';
 import { IReporter } from './reporter.interface';
 
@@ -22,8 +24,13 @@ export class TelemetryService implements IReporter {
 
 	private static _reporter: IReporter | null;
 
+	private static _localLogging: boolean;
+
+	static get localLogging() { return TelemetryService._localLogging; }
+
 	static init(env: IEnvironment) {
 		TelemetryService._env = env;
+		TelemetryService._localLogging = env.localServer;
 		TelemetryService._reporter = env.logrocket
 			? new LogRocketReporter(
 				env.logrocket,
@@ -35,14 +42,16 @@ export class TelemetryService implements IReporter {
 	}
 
 	static captureError(error: Error | any, source: string) {
-		TelemetryService._reporter?.captureError(error, source);
-		TelemetryService._env.localServer && console.error(error);
+		if (TelemetryService._localLogging)
+			console.error(error);
+		else
+			TelemetryService._reporter?.captureError(error, source);
 	}
 
 	static captureMessage(msg: string, dataToLog?: any) {
 		msg = `[log]: ${ msg }`;
-		TelemetryService._reporter?.captureMessage(msg);
 		TelemetryService.warn(msg, dataToLog);
+		!TelemetryService._localLogging && TelemetryService._reporter?.captureMessage(msg);
 	}
 
 	static routerErrorHandler(error: any) {
@@ -54,13 +63,17 @@ export class TelemetryService implements IReporter {
 	}
 
 	static log(message?: any, ...optionalParams: any[]) {
-		TelemetryService._reporter?.log(message, ...optionalParams);
-		TelemetryService._env.localServer && console.warn(message, ...optionalParams);
+		if (TelemetryService._localLogging)
+			console.warn(message, ...optionalParams);
+		else
+			TelemetryService._reporter?.log(message, ...optionalParams);
 	}
 
 	static warn(message?: any, ...optionalParams: any[]) {
-		TelemetryService._reporter?.warn(message, ...optionalParams);
-		TelemetryService._env.localServer && console.warn(message, ...optionalParams);
+		if (TelemetryService._localLogging)
+			console.warn(message, ...optionalParams);
+		else
+			TelemetryService._reporter?.warn(message, ...optionalParams);
 	}
 
 	private _reporter = TelemetryService._reporter;
@@ -71,11 +84,20 @@ export class TelemetryService implements IReporter {
 
 	logMetaReducer = this._reporter?.logMetaReducer ?? null;
 
-	constructor() {
+	constructor(private _httpConfig: HttpConfigService) {
 		if (TelemetryService._instance)
 			return TelemetryService._instance;
 
+		this._switchToLocalLoggingOnLocalBackendFlag();
+
 		return TelemetryService._instance = this;
+	}
+
+	private _switchToLocalLoggingOnLocalBackendFlag() {
+		this._httpConfig.useLocalBackend$
+			.subscribe(useLocalBackend =>
+				TelemetryService._localLogging = TelemetryService._env.localServer || useLocalBackend
+			);
 	}
 
 	identifyUser(uid: string, userTraits?: Dictionary<string | number | boolean | null | undefined>) {
