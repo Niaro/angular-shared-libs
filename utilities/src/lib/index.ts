@@ -13,5 +13,6 @@ export * from './object-normalize';
 export * from './resize-sensor';
 export * from './string-utils';
 export * from './trackers';
+export * from './transform-map-to-object';
 export * from './uniq-id';
 export * from './url-helper';
