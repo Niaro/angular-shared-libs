@@ -6,7 +6,7 @@ import { MetaReducer } from '@ngrx/store';
 
 import { Dictionary, IEnvironment } from '@bp/shared/typings';
 
-import { HttpConfigService } from '../http';
+import { HttpConfigService } from '../http/http-config.service';
 
 import { LogRocketReporter } from './logrocket.reporter';
 import { IReporter } from './reporter.interface';

@@ -8,6 +8,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SharedComponentsControlsModule } from '@bp/shared/components/controls';
 import { SharedComponentsCoreModule } from '@bp/shared/components/core';
 import { SharedDirectivesModule } from '@bp/shared/directives';
+import { SharedFeaturesTooltipModule } from '@bp/shared/features/tooltip';
 import { SharedPipesModule } from '@bp/shared/pipes';
 
 import { PropertyMetadataControlComponent } from './property-metadata-control';
@@ -33,7 +34,8 @@ const EXPOSED_COMPONENTS = [
 		SharedPipesModule,
 		SharedComponentsCoreModule,
 		SharedComponentsControlsModule,
-		SharedDirectivesModule
+		SharedDirectivesModule,
+		SharedFeaturesTooltipModule
 	],
 	exports: EXPOSED_COMPONENTS,
 	declarations: EXPOSED_COMPONENTS

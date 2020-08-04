@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 
 import { SharedFeaturesSelectModule } from '@bp/shared/features/select';
 import { SharedFeaturesSvgIconsModule } from '@bp/shared/features/svg-icons';
+import { SharedFeaturesTooltipModule } from '@bp/shared/features/tooltip';
 import { SharedPipesModule } from '@bp/shared/pipes';
 
 import { AlertComponent, AlertMessagesComponent, ApiErrorsComponent } from './alert';
@@ -78,7 +79,8 @@ const EXPOSED = [
 
 		SharedPipesModule,
 		SharedFeaturesSvgIconsModule,
-		SharedFeaturesSelectModule
+		SharedFeaturesSelectModule,
+		SharedFeaturesTooltipModule
 	],
 	exports: [ EXPOSED, EXPOSED_MODULES ],
 	declarations: EXPOSED,

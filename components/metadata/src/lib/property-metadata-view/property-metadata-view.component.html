@@ -1,11 +1,11 @@
-<div [class.feature-under-development]="metadata.underDevelopment" [attr.title]="table?.ellipsis ? value : null">
+<div [class.feature-under-development]="metadata.underDevelopment" [bpTooltip]="table?.ellipsis ? value : null">
 	<ng-container *ngIf="metadata.viewType !== FieldViewType.boolean; else booleanViewTypeTpl">
 		<caption *ngIf="label && !table" class="property-metadata-view-caption">
 			{{
 				metadata.label
 			}}
 
-			<mat-icon *ngIf="metadata.longHint" class="sm" [attr.title]="metadata.longHint">
+			<mat-icon *ngIf="metadata.longHint" class="sm" [bpTooltip]="metadata.longHint">
 				help_outline
 			</mat-icon>
 
@@ -64,7 +64,7 @@
 						[class.mr-1]="!isCompact"
 						[class.circle-sm]="!isCompact"
 						[class.circle]="isCompact"
-						[attr.title]="isCompact ? value.displayName : null"
+						[bpTooltip]="isCompact ? value.displayName : null"
 					>
 					</span>
 					<ng-container *ngIf="!isCompact">
@@ -91,7 +91,7 @@
 							[class.mr-1]="!isCompact"
 							[class.circle-sm]="!isCompact"
 							[class.circle]="isCompact"
-							[attr.title]="isCompact ? status.displayName : null"
+							[bpTooltip]="isCompact ? status.displayName : null"
 						>
 						</span>
 						<ng-container *ngIf="!isCompact">
@@ -103,7 +103,7 @@
 
 				<ng-container *ngSwitchCase="FieldViewType.chip">
 					<mat-chip-list *ngIf="value?.length" [selectable]="false">
-						<mat-chip *ngFor="let chip of value" selected [attr.title]="chip.description">
+						<mat-chip *ngFor="let chip of value" selected [bpTooltip]="chip.description">
 							{{ chip.displayName || chip.name || chip }}
 						</mat-chip>
 					</mat-chip-list>
