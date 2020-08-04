@@ -10,6 +10,7 @@ export * from './is-page-context';
 export * from './is-present';
 export * from './line-microtask';
 export * from './object-normalize';
+export * from './request-idle-callback';
 export * from './resize-sensor';
 export * from './string-utils';
 export * from './trackers';

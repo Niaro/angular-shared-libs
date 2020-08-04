@@ -1,10 +1,5 @@
-<span class="flag-wrapper" [title]="compact && country && !hideTooltip ? country?.name : ''">
-	<bp-svg-icon
-		*ngIf="isWorldwide; else defaultTpl"
-		name="earth"
-		class="flag"
-		[ngClass]="{ round: round }"
-	>
+<span class="flag-wrapper" [bpTooltip]="compact && country && !hideTooltip ? country?.name : ''">
+	<bp-svg-icon *ngIf="isWorldwide; else defaultTpl" name="earth" class="flag" [ngClass]="{ round: round }">
 	</bp-svg-icon>
 
 	<ng-template #defaultTpl>

@@ -14,6 +14,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SharedComponentsCoreModule } from '@bp/shared/components/core';
 import { SharedDirectivesModule } from '@bp/shared/directives';
 import { SharedFeaturesSelectModule } from '@bp/shared/features/select';
+import { SharedFeaturesTooltipModule } from '@bp/shared/features/tooltip';
 import { SharedFeaturesValidationModule } from '@bp/shared/features/validation';
 import { SharedPipesModule } from '@bp/shared/pipes';
 
@@ -66,6 +67,7 @@ const EXPOSED_COMPONENTS = [
 		SharedDirectivesModule,
 		SharedComponentsCoreModule,
 		SharedFeaturesSelectModule,
+		SharedFeaturesTooltipModule,
 		SharedFeaturesValidationModule
 	],
 	exports: EXPOSED_COMPONENTS,

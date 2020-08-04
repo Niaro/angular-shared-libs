@@ -2,10 +2,7 @@
 	<label>Items per page:</label>
 
 	<mat-form-field>
-		<bp-select
-			[value]="pageSize$ | async"
-			(valueChange)="pageSize$.next($event); currentPage = 1"
-		>
+		<bp-select [value]="pageSize$ | async" (valueChange)="pageSize$.next($event); currentPage = 1">
 			<mat-option *ngFor="let option of pageSizeOptions" [value]="option">
 				{{ option }}
 			</mat-option>
@@ -17,17 +14,14 @@
 	<span class="state">
 		{{ (currentPage$ | async) === 1 ? 1 : offset + 1 }}
 		-
-		{{
-			(pageLength ? (offset > 0 ? offset + pageLength! : pageLength!) : offset + pageSize) ||
-				pageSize
-		}}
+		{{ (pageLength ? (offset > 0 ? offset + pageLength! : pageLength!) : offset + pageSize) || pageSize }}
 		{{ totalLength ? 'of ' + totalLength : hasNext() ? 'of many' : '' }}
 	</span>
 
 	<div class="buttons">
 		<bp-pending-icon-btn
 			class="prev"
-			title="Prev page"
+			bpTooltip="Prev page"
 			[pending]="progressBack$ | async"
 			[disabled]="!hasBack() || (progress$ | async)"
 			(click)="onBack()"
@@ -37,7 +31,7 @@
 
 		<bp-pending-icon-btn
 			class="next"
-			title="Next page"
+			bpTooltip="Next page"
 			[pending]="progressNext$ | async"
 			[disabled]="!hasNext() || (progress$ | async)"
 			(click)="onNext()"
