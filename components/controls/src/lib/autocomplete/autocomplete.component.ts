@@ -67,7 +67,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	) {
 		super(host, cdr, formGroupDirective);
 
-		this.internalControl.valueChanges.subscribe(v => this.inputChange$.next(v));
+		this.internalControl.valueChanges.subscribe(v => this.internalControl.dirty && this.inputChange$.next(v));
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
