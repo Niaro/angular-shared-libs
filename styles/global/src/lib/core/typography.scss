@@ -23,10 +23,10 @@ $link-color: $color-primary;
 	}
 
 	&.semi-dark {
-		color: $color-semi-dark;
+		color: $mediumgray;
 	}
 
-	&.current-color {
+	&.use-current-color {
 		color: currentColor;
 
 		&.bottom-bordered {

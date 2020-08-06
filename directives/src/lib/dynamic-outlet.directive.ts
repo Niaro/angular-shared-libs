@@ -10,9 +10,13 @@ export class DynamicOutletDirective implements OnInit, OnDestroy {
 
 	@Input() name!: string;
 
-	outlet!: RouterOutlet;
+	ngOutlet!: RouterOutlet;
 
-	get isActivated() { return this.outlet && this.outlet.isActivated; }
+	get isActivated() { return this.ngOutlet?.isActivated; }
+
+	get component() { return this.ngOutlet?.component; }
+
+	get activatedRouteData() { return this.ngOutlet?.activatedRouteData; }
 
 	constructor(
 		private _parentContexts: ChildrenOutletContexts,
@@ -22,13 +26,13 @@ export class DynamicOutletDirective implements OnInit, OnDestroy {
 	) { }
 
 	ngOnInit() {
-		this.outlet = new RouterOutlet(this._parentContexts, this._location, this._resolver, this.name, this._changeDetector);
+		this.ngOutlet = new RouterOutlet(this._parentContexts, this._location, this._resolver, this.name, this._changeDetector);
 		// tslint:disable-next-line:no-lifecycle-call
-		this.outlet.ngOnInit();
+		this.ngOutlet.ngOnInit();
 	}
 
 	ngOnDestroy() {
 		// tslint:disable-next-line:no-lifecycle-call
-		this.outlet && this.outlet.ngOnDestroy();
+		this.ngOutlet?.ngOnDestroy();
 	}
 }

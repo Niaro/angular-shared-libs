@@ -1,0 +1,10 @@
+@import '~tippy.js/dist/tippy.css';
+@import '~tippy.js/themes/material.css';
+@import '~tippy.js/dist/backdrop.css';
+@import '~tippy.js/animations/shift-away.css';
+
+.tippy-box[data-theme~='material'] {
+	font-weight: 300;
+	font-size: 12px;
+	line-height: 1.6;
+}

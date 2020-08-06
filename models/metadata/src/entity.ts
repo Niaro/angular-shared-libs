@@ -1,8 +1,6 @@
 import m from 'moment';
 
-import { Default, Label } from './decorators';
-import { Mapper } from './decorators/mapper.decorator';
-import { View } from './decorators/view.decorator';
+import { Default, Label, Mapper, View } from './decorators';
 import { FieldViewType } from './enums';
 import { unixMomentMapper } from './mappers';
 import { MetadataEntity } from './metadata-entity';

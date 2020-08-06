@@ -93,7 +93,7 @@ export class Validators {
 	static digits(c: AbstractControl): IValidationErrors | null {
 		if (Validators.isEmptyValue(c.value)) return null; // don't validate empty values to allow optional controls
 
-		return isNaN(+c.value)
+		return Number.isNaN(+c.value)
 			? { digits: true }
 			: null;
 	}
@@ -194,7 +194,7 @@ export class Validators {
 	/**
 	 * Validator that requires a control to match a regex to its value.
 	 */
-	static pattern(pattern: string | RegExp): ValidatorFn {
+	static pattern(pattern: string | RegExp, msg?: string): ValidatorFn {
 		const regex = isRegExp(pattern) ? pattern : new RegExp(pattern);
 
 		return ({ value }): IValidationErrors | null => {
@@ -202,7 +202,7 @@ export class Validators {
 
 			return regex.test(value)
 				? null
-				: { pattern: { required: regex.source, actual: value } };
+				: { pattern: msg ? msg : { required: regex.source, actual: value } };
 		};
 	}
 

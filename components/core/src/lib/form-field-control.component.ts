@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash-es';
 import { Subject, Subscription } from 'rxjs';
 import { auditTime, debounceTime, filter, switchMap } from 'rxjs/operators';
 
@@ -37,7 +38,7 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 
 	@Input() disabled!: boolean | null;
 
-	@Input() throttle: number | '' = 200;
+	@Input() throttle: number | '' = 0;
 
 	@Input() debounce: number | '' = 0;
 
@@ -144,14 +145,14 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 					: this.internalControl.valueChanges
 		)
 			.subscribe(v => {
-				this.externalControl?.markAsDirty();
+				this.internalControl.dirty && this.externalControl?.markAsDirty();
 				this._onInternalControlValueChange(v);
 			});
 	}
 
 	protected _reflectExternalControlOnInternal() {
-		this.externalControl$
-			.subscribe(external => this.internalControl.setValidators(external?.validator ?? null));
+		// this.externalControl$
+		// 	.subscribe(external => this.internalControl.setValidators(external?.validator ?? null));
 
 		this.externalControl$
 			.pipe(
@@ -160,6 +161,13 @@ export abstract class FormFieldControlComponent<T> extends ControlComponent<T> i
 			)
 			.subscribe(() => {
 				this.internalControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+				const errors = {
+					...this.externalControl?.errors,
+					...this.internalControl?.errors
+				};
+
+				this.internalControl.setErrors(isEmpty(errors) ? null : errors);
 				this._cdr.markForCheck();
 			});
 	}

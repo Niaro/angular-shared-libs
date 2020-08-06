@@ -38,9 +38,9 @@ export class RouterService {
 			.subscribe(e => e instanceof NavigationError && e.error.request && this._navigateToErrorPage());
 	}
 
-	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; })) {
+	navigate(commands: any[], extras: (NavigationExtras & { relativeToCmpt?: Type<any>; }) = {}) {
 		const relativeTo = extras.relativeTo
-			?? (extras.relativeToCmpt && <ActivatedRoute> UrlHelper.getComponentRoute(this.route, extras.relativeToCmpt));
+			?? (extras.relativeToCmpt && <ActivatedRoute> UrlHelper.getComponentActivatedRoute(this.route, extras.relativeToCmpt));
 		this.ngRouter.navigate(commands, { ...extras, relativeTo });
 	}
 
@@ -51,7 +51,7 @@ export class RouterService {
 	onPrimaryComponentNavigationEnd(component: any) {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
-			map(() => UrlHelper.getMainBranchLastRoute(this.route).component),
+			map(() => UrlHelper.getLastPrimaryRoute(this.route).component),
 			distinctUntilChanged(),
 			filter(it => it === component)
 		);
@@ -60,8 +60,8 @@ export class RouterService {
 	onNavigationEndToRouteComponent(cmptType: Type<any>) {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
-			map(() => <ActivatedRoute> UrlHelper.getComponentRoute(this.route, cmptType)),
-			tap(x => TelemetryService.warn('Route Config', x?.routeConfig)),
+			map(() => <ActivatedRoute> UrlHelper.getComponentActivatedRoute(this.route, cmptType)),
+			tap(v => v?.routeConfig && TelemetryService.warn('Route Config', v?.routeConfig)),
 			distinctUntilChanged((p, q) => p?.routeConfig === q?.routeConfig),
 			filter(v => v?.component === cmptType)
 		);
@@ -70,7 +70,7 @@ export class RouterService {
 	onLeaveFromRouteComponent(cmptType: Type<any>) {
 		return this.ngRouter.events.pipe(
 			filter(e => e instanceof NavigationEnd),
-			map(() => !!UrlHelper.getComponentRoute(this.route, cmptType)?.component),
+			map(() => !!UrlHelper.getComponentActivatedRoute(this.route, cmptType)?.component),
 			filter(v => v)
 		);
 	}

@@ -834,10 +834,13 @@ export class BpSelectComponent extends _BpSelectComponentMixinBase implements Af
 	private _initializeSelection(): void {
 		// Defer setting the value in order to avoid the "Expression
 		// has changed after it was checked" errors from Angular.
-		Promise.resolve().then(() => {
-			this._setSelectionByValue(this.ngControl ? this.ngControl.value : this._value);
-			this.stateChanges.next();
-		});
+		// deepcode ignore PromiseNotCaughtNode: <please specify a reason of ignoring this>
+		Promise
+			.resolve()
+			.then(() => {
+				this._setSelectionByValue(this.ngControl ? this.ngControl.value : this._value);
+				this.stateChanges.next();
+			});
 	}
 
 	/**

@@ -16,7 +16,7 @@ export abstract class Enumeration {
 		if (!this._list) {
 			const list: T[] = [];
 			forIn(this, (it, key) => {
-				if (it instanceof Enumeration && isNaN(+key) && this._shouldList(it))
+				if (it instanceof Enumeration && Number.isNaN(+key) && this._shouldList(it))
 					list.push(<T> it);
 			});
 			this._list = list;
@@ -126,7 +126,7 @@ export abstract class Enumeration {
 	private _getValueName() {
 		let res = '';
 		forOwn(this.constructor, (it, key) => {
-			if (it instanceof Enumeration && it._id === this._id && isNaN(+key)) {
+			if (it instanceof Enumeration && it._id === this._id && Number.isNaN(+key)) {
 				res = key;
 
 				return false;

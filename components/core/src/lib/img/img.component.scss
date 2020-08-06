@@ -11,11 +11,7 @@
 		transition: $transition-props;
 		transition-property: border-color, box-shadow;
 
-		&.show .img-background {
-			opacity: 1;
-		}
-
-		.img-background {
+		img {
 			position: absolute;
 			transition: opacity $transition-props;
 			top: 0;
@@ -23,18 +19,14 @@
 			opacity: 0;
 			z-index: 1;
 			background: white;
+			object-fit: scale-down;
+			object-position: center;
+			height: 100%;
+			width: 100%;
+		}
 
-			&,
-			.img {
-				height: 100%;
-				width: 100%;
-			}
-
-			.img {
-				background-size: contain;
-				background-repeat: no-repeat;
-				background-position: center;
-			}
+		&:not(.downloading) img {
+			opacity: 1;
 		}
 
 		&.downloading {
@@ -48,7 +40,7 @@
 			height: 100%;
 			width: 100%;
 			background: white;
-			color: $color-light;
+			color: $lightgray;
 		}
 	}
 }

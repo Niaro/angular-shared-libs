@@ -37,7 +37,7 @@
 
 .toast-top-right {
 	top: calc(#{$toolbar-height} + 1rem);
-	right: 2rem; // 1 plus rem for scrollbar
+	right: 1rem; // 1 plus rem for scrollbar
 }
 
 .toast-bottom-right {

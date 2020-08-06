@@ -29,7 +29,7 @@ export class SortDirective {
 				sortDir: direction
 			})))
 			.subscribe(params => router.navigate(
-				[ UrlHelper.mergeRouteParams(route, params) ],
+				[ UrlHelper.mergeLastPrimaryRouteSnapshotParamsWithSourceParams(route, params) ],
 				{ relativeTo: route })
 			);
 	}

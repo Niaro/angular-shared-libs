@@ -1,7 +1,7 @@
 import { forEach, get, isEmpty, isEqual, isNil, isPlainObject, mapValues } from 'lodash-es';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of } from 'rxjs';
-import { auditTime, filter, map, startWith, switchMap } from 'rxjs/operators';
+import { auditTime, filter, map, skipWhile, startWith, switchMap } from 'rxjs/operators';
 
 import { ChangeDetectorRef, Directive, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -19,11 +19,15 @@ export abstract class FormEntityBaseComponent<T extends Entity = Entity>
 
 	private readonly _entity$ = new BehaviorSubject<T | null>(null);
 
-	@Output('entityChange') readonly entity$ = this._entity$.asObservable();
+	@Output('entityChange') readonly entity$ = this._entity$
+		.pipe(skipWhile((v, i) => v === null && i === 0));
 
 	@Input()
 	get entity() { return this._entity$.value!; }
-	set entity(value: T | null) { this._entity$.next(value); }
+	set entity(value: T | null) {
+		if (value !== this._entity$.value)
+			this._entity$.next(value);
+	}
 
 	@Input() factory!: (v?: Partial<T>) => T;
 

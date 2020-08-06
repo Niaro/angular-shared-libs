@@ -102,9 +102,6 @@ export class TextMaskConfig {
 }
 
 export class NumberMaskConfig extends TextMaskConfig {
-	prefix = '';
-
-	suffix = '';
 
 	/**
 	 * @default 'whitespace'
@@ -203,6 +200,8 @@ export class NumberMaskConfig extends TextMaskConfig {
 
 	constructor(config?: Partial<NumberMaskConfig>) {
 		super();
+		this.prefix = '';
+		this.suffix = '';
 		config && this.assign(config);
 	}
 
@@ -211,6 +210,7 @@ export class NumberMaskConfig extends TextMaskConfig {
 	// }
 
 	private _getLocaleDecimalSeparatorSymbol(): string {
+		// deepcode ignore ArrayMethodOnNonArray: it does work
 		return 1.1
 			.toLocaleString()
 			.substring(1, 2);

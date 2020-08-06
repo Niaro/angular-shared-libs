@@ -21,7 +21,7 @@
 	<div class="buttons">
 		<bp-pending-icon-btn
 			class="prev"
-			title="Prev page"
+			bpTooltip="Prev page"
 			[pending]="progressBack$ | async"
 			[disabled]="!hasBack() || (progress$ | async)"
 			(click)="onBack()"
@@ -31,7 +31,7 @@
 
 		<bp-pending-icon-btn
 			class="next"
-			title="Next page"
+			bpTooltip="Next page"
 			[pending]="progressNext$ | async"
 			[disabled]="!hasNext() || (progress$ | async)"
 			(click)="onNext()"

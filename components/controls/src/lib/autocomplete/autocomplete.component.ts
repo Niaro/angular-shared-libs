@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import {
 	ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, Input, OnChanges,
-	Optional, Output, SimpleChanges, TemplateRef, ViewChild
+	Optional, Output, SimpleChanges, TemplateRef
 } from '@angular/core';
 import {
 	AbstractControl, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors,
@@ -13,9 +13,6 @@ import {
 import { FADE_IN_LIST } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { includes, lineMicrotask, match } from '@bp/shared/utilities';
-
-import { InputComponent } from '../input';
-import { RoundInputComponent } from '../round-input';
 
 @Component({
 	selector: 'bp-autocomplete',
@@ -57,14 +54,6 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 	@ContentChild(TemplateRef) optionTpl?: TemplateRef<any>;
 
-	@ViewChild(InputComponent) input?: InputComponent;
-
-	@ViewChild(RoundInputComponent) roundInput?: RoundInputComponent;
-
-	get isFocusedInput() { return this.input?.isFocused || this.roundInput?.isFocused; }
-
-	get autocompleteTrigger() { return this.input?.autocompleteTrigger || this.roundInput?.autocompleteTrigger; }
-
 	lowercasedItems?: { lowered: string; item: any; }[] | null;
 
 	throttle = 0;
@@ -78,7 +67,7 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 	) {
 		super(host, cdr, formGroupDirective);
 
-		this.internalControl.valueChanges.subscribe(v => this.inputChange$.next(v));
+		this.internalControl.valueChanges.subscribe(v => this.internalControl.dirty && this.inputChange$.next(v));
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
@@ -95,9 +84,14 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 				item: v
 			}));
 			this.filtered$.next(this.items || []);
-
-			this.isFocused && this.autocompleteTrigger?.openPanel();
 		}
+	}
+
+	getDisplayValue(item: any) {
+		return (this.itemDisplayPropertyName && item[ this.itemDisplayPropertyName! ])
+			?? item?.displayName
+			?? item?.name
+			?? item.toString();
 	}
 
 	// #region Implementation of the ControlValueAccessor interface
@@ -128,11 +122,12 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 
 		let found: any;
 		if (isString(value)) {
-			value = value
-				.toString()
+			const searchValue = value
 				.trim();
-			this.filtered$.next(this.items!.filter(v => this._filterItem(v, value)));
-			found = this.items!.find(v => match(this._getItemCompareString(v), value));
+			if (searchValue.length <= 1)
+				return;
+			this.filtered$.next(this.items!.filter(v => this._filterItem(v, searchValue)));
+			found = this.items!.find(v => match(v.toString(), searchValue) || match(this.getDisplayValue(v), searchValue));
 		} else {
 			this.filtered$.next(this.items!);
 			found = value;
@@ -142,13 +137,10 @@ export class AutocompleteComponent extends FormFieldControlComponent<any | null>
 		this.setValue(found || null);
 	}
 
-	private _filterItem(item: any, search: string) {
+	private _filterItem(item: any, searchValue: string) {
 		return this.filterListFn
-			? this.filterListFn(item, search)
-			: includes(this._getItemCompareString(item), search);
+			? this.filterListFn(item, searchValue)
+			: includes(item.toString(), searchValue) || includes(this.getDisplayValue(item), searchValue);
 	}
 
-	private _getItemCompareString(item: any) {
-		return (item[ this.itemDisplayPropertyName! ] || item)?.toString();
-	}
 }

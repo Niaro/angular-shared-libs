@@ -1,20 +1,22 @@
 // Firebase App (the core Firebase SDK) is always required and must be listed first
-import firebase from 'firebase/app';
+import {
+	app, apps, auth, FirebaseError, firestore, functions, initializeApp, performance, storage, User
+} from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/functions';
 import 'firebase/performance';
-// Add the Firebase products that you want to use
 import 'firebase/storage';
 import { isEmpty, last, snakeCase, take } from 'lodash-es';
 import m from 'moment';
-import { defer, from, Observable, Subject, throwError } from 'rxjs';
+import { defer, from, MonoTypeOperatorFunction, Observable, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { Inject, Injectable, InjectionToken, NgZone } from '@angular/core';
 
 import { IPageQueryParams, PagedResults, ResponseError } from '@bp/shared/models/common';
 import { Entity } from '@bp/shared/models/metadata';
+import { observeInsideNgZone } from '@bp/shared/rxjs';
 import { Dictionary } from '@bp/shared/typings';
 
 import { FB_FUNCTIONS_REGION } from '@bp/firebase-functions';
@@ -37,21 +39,21 @@ export class FirebaseService {
 
 	uploadError$ = new Subject<string>();
 
-	auth!: firebase.auth.Auth;
+	auth!: auth.Auth;
 
 	private _orderBy = 'updatedAt';
 
 	private _queryDocumentSnapshotsById: Dictionary<any> = {};
 
-	protected get _db() { return firebase.firestore(); }
+	protected _db!: firestore.Firestore;
 
-	protected _storage!: firebase.storage.Storage;
+	protected _storage!: storage.Storage;
 
-	protected _functions!: firebase.functions.Functions;
+	protected _functions!: functions.Functions;
 
-	protected _uploadTask!: firebase.storage.UploadTask;
+	protected _uploadTask!: storage.UploadTask;
 
-	protected _perf?: firebase.performance.Performance;
+	protected _perf?: performance.Performance;
 
 	constructor(
 		protected _telemetry: TelemetryService,
@@ -60,8 +62,8 @@ export class FirebaseService {
 		private _env: EnvironmentService
 	) {
 		this._zone.runOutsideAngular(() => {
-			if (isEmpty(firebase.apps))
-				this._zone.runOutsideAngular(() => firebase.initializeApp({
+			if (isEmpty(apps))
+				initializeApp({
 					apiKey: 'AIzaSyCE0HJJUq4otCVdCbdBINJApcVmj3h-isU',
 					authDomain: 'web-hosting-213618.firebaseapp.com',
 					databaseURL: 'https://web-hosting-213618.firebaseio.com',
@@ -69,21 +71,33 @@ export class FirebaseService {
 					storageBucket: 'web-hosting-213618.appspot.com',
 					messagingSenderId: '977741303368',
 					appId: this._firebaseAppId,
-				}));
+				});
 
 			if (this._env.remoteServer)
-				this._perf = firebase.performance();
+				this._perf = performance();
 
-			this._storage = firebase.storage();
-			this._functions = firebase.app()
+			this._db = firestore();
+			this._storage = storage();
+			this._functions = app()
 				.functions(FB_FUNCTIONS_REGION);
-			this.auth = firebase.auth();
+			this.auth = auth();
+
+			this._enableFirestorePersistence();
+		});
+	}
+
+	private _enableFirestorePersistence() {
+		this._db.settings({
+			cacheSizeBytes: firestore.CACHE_SIZE_UNLIMITED
+		});
+		this._db.enablePersistence({
+			synchronizeTabs: true
 		});
 	}
 
 	signIn(credentials: { userName: string; password: string; }) {
 		return defer(() => from(this.auth.signInWithEmailAndPassword(credentials.userName, credentials.password))
-			.pipe(catchError(this._throwAsResponseError))
+			.pipe(this._runInsideAngularAndRethrowAsResponseError())
 		);
 	}
 
@@ -107,11 +121,11 @@ export class FirebaseService {
 	}
 
 	arrayUnion(...elements: any[]) {
-		return firebase.firestore.FieldValue.arrayUnion(...elements);
+		return firestore.FieldValue.arrayUnion(...elements);
 	}
 
 	arrayRemove(...elements: any[]) {
-		return firebase.firestore.FieldValue.arrayRemove(...elements);
+		return firestore.FieldValue.arrayRemove(...elements);
 	}
 
 	getCollectionByQueryOnSnapshot<T>(
@@ -175,7 +189,7 @@ export class FirebaseService {
 				e => subscriber.error(e)
 			);
 		})
-			.pipe(catchError(this._throwAsResponseError));
+			.pipe(this._runInsideAngularAndRethrowAsResponseError());
 	}
 
 	getCollectionOnSnapshot<T>(
@@ -189,7 +203,7 @@ export class FirebaseService {
 				e => subscriber.error(e)
 			)
 		)
-			.pipe(catchError(this._throwAsResponseError));
+			.pipe(this._runInsideAngularAndRethrowAsResponseError());
 	}
 
 	getCollection<T>(collectionPath: string, factory: (data: Partial<T>) => T): Observable<T[]> {
@@ -200,7 +214,7 @@ export class FirebaseService {
 		)
 			.pipe(
 				map(snapshot => snapshot.docs.map(v => factory(<Partial<T>> v.data()))),
-				catchError(this._throwAsResponseError)
+				this._runInsideAngularAndRethrowAsResponseError()
 			);
 	}
 
@@ -215,7 +229,7 @@ export class FirebaseService {
 				e => subscriber.error(e)
 			)
 		)
-			.pipe(catchError(this._throwAsResponseError));
+			.pipe(this._runInsideAngularAndRethrowAsResponseError());
 	}
 
 	getDocument<T>(documentPath: string): Observable<Partial<T> | null> {
@@ -226,7 +240,7 @@ export class FirebaseService {
 		)
 			.pipe(
 				map(snapshot => (<Partial<T>> snapshot.data()) || null),
-				catchError(this._throwAsResponseError)
+				this._runInsideAngularAndRethrowAsResponseError()
 			);
 	}
 
@@ -236,7 +250,7 @@ export class FirebaseService {
 				.doc(documentPath)
 				.delete()
 		)
-			.pipe(catchError(this._throwAsResponseError));
+			.pipe(this._runInsideAngularAndRethrowAsResponseError());
 	}
 
 	set(documentPath: string, body: Object): Observable<void> {
@@ -245,7 +259,7 @@ export class FirebaseService {
 				.doc(documentPath)
 				.set(JSON.parse(JSON.stringify(body)), { merge: true })
 		)
-			.pipe(catchError(this._throwAsResponseError));
+			.pipe(this._runInsideAngularAndRethrowAsResponseError());
 	}
 
 	save<T extends Entity>(
@@ -291,7 +305,7 @@ export class FirebaseService {
 		this._uploadTask = fileRef.put(file);
 
 		this._uploadTask.on(
-			firebase.storage.TaskEvent.STATE_CHANGED,
+			storage.TaskEvent.STATE_CHANGED,
 			snapshot => {
 				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 				progress > startProgressValue && this.uploadProgress$.next(progress);
@@ -313,7 +327,7 @@ export class FirebaseService {
 		return from(this._functions.httpsCallable(firebaseFunctionName)(body))
 			.pipe(
 				map(v => v.data),
-				catchError(this._throwAsResponseError)
+				this._runInsideAngularAndRethrowAsResponseError()
 			);
 	}
 
@@ -323,7 +337,7 @@ export class FirebaseService {
 		return result.data;
 	}
 
-	onAuthStateChange(): Observable<firebase.User | null> {
+	onAuthStateChange(): Observable<User | null> {
 		return new Observable(subscriber => this.auth
 			.onAuthStateChanged(
 				v => subscriber.next(v),
@@ -332,12 +346,12 @@ export class FirebaseService {
 		);
 	}
 
-	private async _getFileRef(fileName: string, path: string): Promise<firebase.storage.Reference> {
+	private async _getFileRef(fileName: string, path: string): Promise<storage.Reference> {
 		const fileRef = this._storage
 			.ref(path)
 			.child(this._snakeCaseFileName(fileName));
 
-		const existFileMetadata: firebase.storage.FullMetadata = await fileRef.getMetadata()
+		const existFileMetadata: storage.FullMetadata = await fileRef.getMetadata()
 			.catch(() => { /* swallow 404 error since the empty var would be there is no file found */ });
 
 		return existFileMetadata
@@ -369,8 +383,15 @@ export class FirebaseService {
 		return (<any> /(.+?)(\.[^\.]+$|$)/.exec(name))[ 1 ];
 	}
 
-	private _throwAsResponseError = (v: firebase.FirebaseError) => throwError(this._mapToResponseError(v));
+	private _runInsideAngularAndRethrowAsResponseError<T>(): MonoTypeOperatorFunction<T> {
+		return (source$: Observable<T>) => source$.pipe(
+			catchError(this._throwAsResponseError),
+			observeInsideNgZone(),
+		);
+	}
 
-	private _mapToResponseError = (e: firebase.FirebaseError | firebase.auth.Error) =>
+	private _throwAsResponseError = (v: FirebaseError) => throwError(this._mapToResponseError(v));
+
+	private _mapToResponseError = (e: FirebaseError | auth.Error) =>
 		new ResponseError({ messages: [ { type: e.code, message: e.message } ] });
 }

@@ -1,10 +1,9 @@
 import { isEmpty } from 'lodash-es';
 
 import { ChangeDetectionStrategy, Component, ContentChild, Directive, HostBinding, Input, ViewChild } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
-import { STATEFUL_SLIDE_RIGHT } from '@bp/shared/animations';
 import { FormFieldControlComponent } from '@bp/shared/components/core';
 import { InputTextMaskConfig, NumberMaskConfig, TextMaskDirective } from '@bp/shared/directives';
 
@@ -40,16 +39,22 @@ export class InputPrefixDirective { }
 	selector: 'bp-input',
 	templateUrl: './input.component.html',
 	styleUrls: [ './input.component.scss' ],
-	animations: [ STATEFUL_SLIDE_RIGHT ],
 	host: {
-		'(focusin)': 'onTouched()'
+		'(focusin)': 'onTouched(); tryOpenAutocompletePanel()'
 	},
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	providers: [ {
-		provide: NG_VALUE_ACCESSOR,
-		useExisting: InputComponent,
-		multi: true
-	} ]
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: InputComponent,
+			multi: true
+		},
+		{
+			provide: NG_VALIDATORS,
+			useExisting: InputComponent,
+			multi: true
+		}
+	]
 })
 export class InputComponent extends FormFieldControlComponent<string | number> {
 
@@ -61,7 +66,7 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 
 	@Input() autocomplete!: MatAutocomplete;
 
-	@Input() hasSearchIcon!: boolean;
+	@Input() hasSearchIcon?: boolean;
 
 	@Input()
 	@HostBinding('class.pending')
@@ -98,5 +103,9 @@ export class InputComponent extends FormFieldControlComponent<string | number> {
 			? +(value!)
 			: value
 		);
+	}
+
+	tryOpenAutocompletePanel() {
+		this.autocompleteTrigger?.openPanel();
 	}
 }

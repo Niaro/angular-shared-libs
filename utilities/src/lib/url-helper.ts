@@ -1,4 +1,4 @@
-import { isArray, isBoolean, isNil, isObject, last, mapValues, pickBy, toPairs } from 'lodash-es';
+import { isArray, isBoolean, isNil, isObject, last, mapValues, pickBy } from 'lodash-es';
 
 import { Type } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router, UrlSegmentGroup } from '@angular/router';
@@ -26,17 +26,19 @@ export class UrlHelper {
 	static parseNumberArray(value: string): number[] {
 		return UrlHelper.parseArray(value)
 			.map(id => +id)
-			.filter(id => !isNaN(id));
+			.filter(id => !Number.isNaN(id));
 	}
 
 	static toRouteString(value: any) {
 		if (isBoolean(value))
 			return value ? 'true' : undefined;
 
-		if (isArray(value) && value.length)
-			return value
-				.map(valueToString)
-				.join(',');
+		if (isArray(value))
+			return value.length
+				? value
+					.map(valueToString)
+					.join(',')
+				: undefined;
 
 		if (value === '')
 			return;
@@ -48,39 +50,62 @@ export class UrlHelper {
 		return mapValues(value, v => UrlHelper.toRouteString(v));
 	}
 
-	static getRouteParams(route: ActivatedRoute): Params {
-		const snapshot = UrlHelper.getMainBranchLastRoute(route.snapshot);
+	static getLastPrimaryRouteNonNilParams(route: ActivatedRoute): Params {
+		return UrlHelper.getRouteSnapshotNonNilParams(UrlHelper.getLastPrimaryRoute(route));
+	}
+
+	static mergeLastPrimaryRouteSnapshotParamsWithSourceParams(route: ActivatedRoute, sourceParams: Params) {
+		return UrlHelper._mergeRouteParamsAndDeleteNilAndEmptyValues(
+			UrlHelper.getLastPrimaryRouteNonNilParams(route),
+			sourceParams
+		);
+	}
+
+	static mergeRouteSnapshotParamsWithSourceParams(
+		routeOrRouteSnapshot: ActivatedRoute | ActivatedRouteSnapshot,
+		sourceParams: Params
+	) {
+		return UrlHelper._mergeRouteParamsAndDeleteNilAndEmptyValues(
+			UrlHelper.getRouteSnapshotNonNilParams(routeOrRouteSnapshot),
+			sourceParams
+		);
+	}
+
+	static getRouteSnapshotNonNilParams(routeOrRouteSnapshot: ActivatedRoute | ActivatedRouteSnapshot): Params {
+		const snapshot = routeOrRouteSnapshot instanceof ActivatedRouteSnapshot
+			? routeOrRouteSnapshot
+			: routeOrRouteSnapshot.snapshot;
 		const params = snapshot.url.length ? last(snapshot.url)!.parameters : snapshot.params;
 
 		return pickBy(params, v => !isNil(v));
 	}
 
-	static mergeRouteParams(route: ActivatedRoute, params: Params) {
-		const routeParams = UrlHelper.getRouteParams(route);
-
-		toPairs(params)
-			.map(([ k, v ]) => [ k, isNil(v) ? v : v.toString() ])
-			.forEach(([ k, v ]) => isNil(v) || v === ''
-				? delete routeParams[ k ]
-				: routeParams[ k ] = v.toString()
-			);
-
-		return routeParams;
+	private static _mergeRouteParamsAndDeleteNilAndEmptyValues(target: Params, source: Params) {
+		return pickBy(
+			mapValues(
+				{
+					...target,
+					...source
+				},
+				v => v?.toString()
+			),
+			v => !isNil(v) && v !== ''
+		);
 	}
 
-	static getQueryParams(route: ActivatedRoute): Params {
-		const snapshot = UrlHelper.getMainBranchLastRoute(route.snapshot);
+	static getLastPrimaryRouteQueryParams(route: ActivatedRoute): Params {
+		const snapshot = UrlHelper.getLastPrimaryRoute(route.snapshot);
 
 		return pickBy(snapshot.queryParams, v => !isNil(v));
 	}
 
-	static getComponentRoute(route: ActivatedRouteSnapshot | ActivatedRoute, targetRouteCmpt: Type<any>)
+	static getComponentActivatedRoute(route: ActivatedRouteSnapshot | ActivatedRoute, targetRouteCmpt: Type<any>)
 		: ActivatedRouteSnapshot | ActivatedRoute | null {
 		if (route.routeConfig?.component === targetRouteCmpt)
 			return route;
 
 		for (const childRoute of route.children) {
-			const cmptRoute = UrlHelper.getComponentRoute(childRoute, targetRouteCmpt);
+			const cmptRoute = UrlHelper.getComponentActivatedRoute(childRoute, targetRouteCmpt);
 			if (cmptRoute)
 				return cmptRoute;
 		}
@@ -88,7 +113,7 @@ export class UrlHelper {
 		return null;
 	}
 
-	static getMainBranchRoutes<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T[] {
+	static getPrimaryRoutes<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T[] {
 		const results = [ route ];
 		while (route.firstChild) {
 			route = <T> route.firstChild;
@@ -98,7 +123,7 @@ export class UrlHelper {
 		return results;
 	}
 
-	static getMainBranchLastRoute<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T {
+	static getLastPrimaryRoute<T extends ActivatedRouteSnapshot | ActivatedRoute>(route: T): T {
 		while (route.firstChild)
 			route = <T> route.firstChild;
 
@@ -117,7 +142,7 @@ export class UrlHelper {
 			return url;
 
 		const queryParams = Object.keys(params)
-			.filter(k => !isNil(params[ k ]) && !isNaN(<number> params[ k ]))
+			.filter(k => !isNil(params[ k ]) && !Number.isNaN(<number> params[ k ]))
 			.map(k => `${ encodeURIComponent(k) }=${ encodeURIComponent(params[ k ].toString()) }`)
 			.join('&');
 

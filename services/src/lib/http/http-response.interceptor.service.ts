@@ -1,6 +1,6 @@
 import { fromPairs, isNil } from 'lodash-es';
 import { defer, iif, Observable, throwError } from 'rxjs';
-import { catchError, flatMap, map, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import {
 	HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpParams, HttpRequest,
@@ -10,18 +10,14 @@ import { Injectable } from '@angular/core';
 
 import { IApiResponse, ResponseError, retryOn5XXOrUnknownErrorWithScalingDelay, StatusCode } from '@bp/shared/models/common';
 
-import { RouterService } from '../router.service';
 import { TelemetryService } from '../telemetry';
 
 import { CORRELATION_ID_KEY, HttpConfigService } from './http-config.service';
-
-export const DO_NOT_REDIRECT_TO_ERROR_PAGE_ON_5XX = 'do-not-redirect-to-error-page-on-5xx';
 
 @Injectable()
 export class HttpResponseInterceptorService implements HttpInterceptor {
 
 	constructor(
-		private _router: RouterService,
 		private _httpConfig: HttpConfigService,
 		private _telemetry: TelemetryService
 	) { }
@@ -43,7 +39,7 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 		defer(() => [ new ResponseError(httpError) ])
 	)
 		// tslint:disable-next-line: no-unnecessary-callback-wrapper
-		.pipe(flatMap(v => throwError(v)));
+		.pipe(mergeMap(v => throwError(v)));
 
 	intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
 		return next
@@ -57,13 +53,13 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 				catchError(this.parseHttpErrorResponseIntoResponseError),
 				catchError((error: ResponseError) => {
 					this._whenRateLimitedLogIt(error);
-					this._whenNotHandledNavigateToApiErrorPage(error);
 
 					return throwError(error);
 				}));
 	}
 
 	private _cleanseParams(params: HttpParams) {
+		// file deepcode ignore PrototypePollution: <please specify a reason of ignoring this>
 		const keys = params instanceof HttpParams ? params.keys() : Object.keys(params);
 		const getValueByKey = (k: string) => params instanceof HttpParams ? params.get(k) : params[ k ];
 
@@ -75,11 +71,6 @@ export class HttpResponseInterceptorService implements HttpInterceptor {
 					.filter(([ , v ]) => v !== '' && v !== 'NaN' && !isNil(v))
 			)
 		});
-	}
-
-	private _whenNotHandledNavigateToApiErrorPage(error: ResponseError) {
-		if (!error.url || !error.url.includes(DO_NOT_REDIRECT_TO_ERROR_PAGE_ON_5XX))
-			this._router.tryNavigateOnResponseError(error);
 	}
 
 	private _whenRateLimitedLogIt(error: ResponseError) {

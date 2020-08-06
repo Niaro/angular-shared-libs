@@ -14,7 +14,7 @@ export function titleCase(v: any) {
 }
 
 export function numberMapper(v: any) {
-	return isNumber(v) && !isNaN(v) ? v : 0;
+	return isNumber(v) && !Number.isNaN(v) ? v : 0;
 }
 
 export function unixMomentMapper(v: any) {

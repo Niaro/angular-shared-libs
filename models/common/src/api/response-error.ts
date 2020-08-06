@@ -6,6 +6,7 @@ import { DeepPartial } from '@bp/shared/typings';
 
 import { StatusCode, STATUS_CODE_MESSAGES } from './status-code';
 
+// TODO Turn this into Global Error Structure, which should facade all kind of errors for our alert system
 export class ResponseError {
 
 	static get notFound() {
@@ -15,6 +16,10 @@ export class ResponseError {
 	status?: StatusCode;
 
 	statusText?: string;
+
+	get firstMessage() {
+		return this.messages[ 0 ]?.message;
+	}
 
 	messages: IApiErrorMessage[] = [];
 
@@ -28,29 +33,20 @@ export class ResponseError {
 		return this.status === StatusCode.InternalServerError;
 	}
 
-	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string) {
-		if (isString(e))
+	constructor(e: HttpErrorResponse | IApiErrorResponse | DeepPartial<ResponseError> | string | Error) {
+		if (e instanceof ResponseError)
+			return e;
+
+		if (e instanceof Error)
+			this.messages = [ { message: e.message } ];
+		else if (isString(e))
 			this.messages = [ { message: e } ];
 		else if (e instanceof HttpErrorResponse) {
 			this.url = e.url;
 			this.status = this._parseStatus(e);
 			this.statusText = get(STATUS_CODE_MESSAGES, this.status);
 
-			if (this.status === StatusCode.NotFound)
-				this.messages = [ {
-					message: 'The resource has not been found',
-				} ];
-			else if (this.status === StatusCode.InternalServerError)
-				this.messages = [ {
-					message: 'The request to the server has failed.',
-					type: 'Please check your connection and try again later or contact the support if the problem persists',
-				} ];
-			else if (this.status === StatusCode.RateLimited)
-				this.messages = [ {
-					message: this.statusText,
-					type: 'Please repeat again a bit later',
-				} ];
-			else if (e.error)
+			if (e.error)
 				this._extractMessagesFromApiErrorResponse(e.error);
 		} else if (has(e, 'response')) {
 			e = <IApiErrorResponse> e;
@@ -60,7 +56,26 @@ export class ResponseError {
 		} else
 			assign(this, e);
 
-		this.messages.forEach(it => it.field = camelCase(it.field));
+		if (this.status === StatusCode.NotFound)
+			this.messages = [ {
+				message: 'The resource has not been found',
+			} ];
+		else if ([ StatusCode.InternalServerError, StatusCode.UnknownError ].includes(this.status!))
+			this.messages = [ {
+				message: 'The request to the server has failed.',
+				type: 'Please check your connection and try again later or contact support if the problem persists',
+			} ];
+		else if (this.status === StatusCode.RateLimited)
+			this.messages = [ {
+				message: 'You are being rate limited due to spamming the server with requests',
+				type: 'Please repeat a bit later',
+			} ];
+
+		this.messages.forEach(it => it.field = it.field
+			?.split('.')
+			.map(camelCase)
+			.join('.')
+		);
 	}
 
 	private _extractMessagesFromApiErrorResponse(e: IApiErrorResponse) {

@@ -1,11 +1,10 @@
 import { set } from 'lodash-es';
 import { fromEvent, Observable, Subject, Subscription } from 'rxjs';
-import { observeOn } from 'rxjs/operators';
 
 import { NgZone } from '@angular/core';
 
 import { Direction, Point, Vector } from '@bp/shared/models/core';
-import { BpScheduler } from '@bp/shared/rxjs';
+import { observeInsideNgZone } from '@bp/shared/rxjs';
 
 const DOUBLE_TAP_TIME = 250;
 const LONG_TAP_TIME = 750;
@@ -83,7 +82,7 @@ export class TouchManager {
 
 		TouchManager.events.forEach(event => {
 			this._subjects[ event ] = new Subject();
-			set(this, `${ event }$`, this._subjects[ event ].pipe(observeOn(BpScheduler.inside)));
+			set(this, `${ event }$`, this._subjects[ event ].pipe(observeInsideNgZone()));
 		});
 	}
 

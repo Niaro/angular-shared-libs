@@ -95,7 +95,7 @@
 }
 
 .flex {
-	display: flex;
+	display: flex !important;
 }
 
 .flex-column {
@@ -124,8 +124,8 @@
 }
 
 .flex-baseline {
-	display: flex;
-	align-items: baseline;
+	display: flex !important;
+	align-items: baseline !important;
 }
 
 .inline-flex {

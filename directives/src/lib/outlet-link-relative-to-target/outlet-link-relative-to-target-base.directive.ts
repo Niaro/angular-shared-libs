@@ -16,6 +16,12 @@ export class OutletLinkRelativeToTargetBaseDirective {
 	}
 
 	@Input()
+	set outletLinkRelativeToRootFirstChild(outlets: Dictionary<any[]>) {
+		this._setCommands(outlets);
+		this._relativeTo = this._route.root.firstChild;
+	}
+
+	@Input()
 	set outletLinkRelativeToRoot(outlets: Dictionary<any[]>) {
 		this._setCommands(outlets);
 		this._relativeTo = this._route.root;

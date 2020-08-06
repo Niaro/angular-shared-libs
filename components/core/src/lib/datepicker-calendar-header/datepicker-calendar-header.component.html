@@ -17,7 +17,7 @@
 		<button
 			mat-icon-button
 			type="button"
-			title="Clear the field"
+			bpTooltip="Clear the field"
 			class="mat-calendar-clear-button"
 			[disabled]="!this.pickerContent._getSelected()"
 			(click)="clear()"
@@ -31,12 +31,11 @@
 			class="mat-calendar-previous-button"
 			[disabled]="!previousEnabled()"
 			(click)="previousClicked()"
-			[attr.aria-label]="prevButtonLabel"
 		></button>
 
 		<button
 			mat-icon-button
-			title="Show the pane with today"
+			bpTooltip="Show the pane with today"
 			type="button"
 			class="mat-calendar-previous-button mat-calendar-today-button"
 			(click)="moveToToday()"
@@ -48,7 +47,6 @@
 			class="mat-calendar-next-button"
 			[disabled]="!nextEnabled()"
 			(click)="nextClicked()"
-			[attr.aria-label]="nextButtonLabel"
 		></button>
 	</div>
 </div>

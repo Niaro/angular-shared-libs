@@ -7,7 +7,7 @@
 	(valueChange)="select($event)"
 >
 	<mat-option>-- Period --</mat-option>
-	<mat-option *ngFor="let shortcut of dateRangeShortcuts" [value]="shortcut" [attr.title]="shortcut.description">
+	<mat-option *ngFor="let shortcut of dateRangeShortcuts" [value]="shortcut" [bpTooltip]="shortcut.description">
 		{{ shortcut.displayName }}
 	</mat-option>
 </bp-select>
@@ -16,7 +16,7 @@
 	<button
 		*ngFor="let shortcut of dateRangeShortcuts"
 		class="link interactive"
-		[attr.title]="shortcut.description"
+		[bpTooltip]="shortcut.description"
 		[class.active]="shortcut === selected"
 		(click)="select(shortcut)"
 	>

@@ -40,7 +40,7 @@
 
 		&.disabled {
 			cursor: not-allowed;
-			color: fade-out($color-semi-dark, 0.7);
+			color: fade-out($mediumgray, 0.7);
 
 			:ng-deep > * {
 				pointer-events: none;

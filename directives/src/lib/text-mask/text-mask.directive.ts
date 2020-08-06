@@ -133,7 +133,7 @@ export class TextMaskDirective implements OnInit, AfterViewInit, OnChanges, Cont
 
 		if (this.value === value)
 			return;
-		value = isNil(value) ? '' : value.toString();
+		value = isNil(value) ? '' : value.toLocaleString();
 
 		if (this._textMaskInputManager) {
 			value = this._activeConfig instanceof NumberMaskConfig ? this._formatDecimalValue(value) : value;
