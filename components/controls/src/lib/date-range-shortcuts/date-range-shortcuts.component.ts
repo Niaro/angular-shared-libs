@@ -31,7 +31,7 @@ export class DateRangeShortcutsComponent extends ControlComponent<DateRange | nu
 
 	@HostBinding('class.interactive-links') get isInteractiveLinks() { return !this.asSelect; }
 
-	dateRangeShortcuts: DateRangeShortcut[] = DateRangeShortcut.list();
+	@Input() dateRangeShortcuts: DateRangeShortcut[] = DateRangeShortcut.list();
 
 	selected!: DateRangeShortcut | null;
 
